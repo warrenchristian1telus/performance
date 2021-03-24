@@ -1,0 +1,1 @@
+<x-button icon="eye" size="xs" :href="route('goal.show', $row['id'])"></x-button>

@@ -7,8 +7,15 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
+<<<<<<< HEAD
 RUN composer update
 
 CMD php artisan serve --host=0.0.0.0 --port=8181
 EXPOSE 8181
 
+=======
+RUN composer install
+
+CMD php artisan serve --host=0.0.0.0 --port=8181
+EXPOSE 8181
+>>>>>>> 2e6016d5b9b92a8858d0d0a85e678e0ff870e48f

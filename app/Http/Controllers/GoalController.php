@@ -8,6 +8,7 @@ use App\Models\Goal;
 use App\Models\GoalType;
 use Illuminate\Support\Facades\Auth;
 use App\DataTables\GoalsDataTable;
+use App\Models\GoalComment;
 
 class GoalController extends Controller
 {
@@ -16,9 +17,20 @@ class GoalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(GoalsDataTable $goalDataTable)
+    public function index(GoalsDataTable $goalDataTable, Request $request)
     {
-        return $goalDataTable->render('goal.index');
+        $query = Goal::where('user_id', Auth::id())
+            ->with('user')
+            ->with('goalType');
+        if ($request->is("goal/current")) {
+            $goals = $query->where('status', 'active')
+                ->paginate(4);
+
+            return view('goal.index', compact('goals'));
+        }
+        $goals = $query->where('status', '<>', 'active')
+            ->paginate(4);
+        return view('goal.index', compact('goals'));
     }
     
     /**
@@ -60,7 +72,9 @@ class GoalController extends Controller
         $goal = Goal::where('user_id', Auth::id())
                     ->where('id', $id)
                     ->with('goalType')
+                    ->with('comments')
                     ->firstOrFail();
+        
         return view('goal.show', compact('goal'));
     }
 
@@ -72,7 +86,15 @@ class GoalController extends Controller
      */
     public function edit($id)
     {
-        //
+        $goal = Goal::where('user_id', Auth::id())
+            ->where('id', $id)
+            ->with('goalType')
+            ->firstOrFail();
+            
+        $goaltypes = GoalType::all(['id', 'name']);
+        
+        return view('goal.edit', compact("goal", "goaltypes"));
+        // return redirect()->route('goal.edit', $id);
     }
 
     /**
@@ -82,9 +104,14 @@ class GoalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateGoalRequest $request, $id)
     {
-        //
+        $goal = Goal::findOrFail($id);
+        $input = $request->validated();
+
+        $goal->update($input);
+
+        return redirect()->route('goal.index');
     }
 
     /**
@@ -96,5 +123,31 @@ class GoalController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+
+    public function addComment(Request $request, $id) {
+        //TODO: Who can add comment ?
+        $goal = Goal::findOrFail($id);
+        $comment = new GoalComment;
+
+
+        $comment->goal_id = $goal->id;
+        $comment->user_id = Auth::id();
+
+        $comment->comment = $request->comment;
+
+        $comment->save();
+
+        return redirect()->back();
+    }
+
+    public function updateStatus($id, $status) {
+        $goal = Goal::findOrFail($id);
+        $goal->status = $status;
+
+        $goal->save();
+        return redirect()->back();
     }
 }

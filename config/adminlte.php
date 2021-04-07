@@ -232,7 +232,7 @@ return [
         ],
         [
             'text' => 'Goals',
-            'url'  => 'goal',
+            'url'  => 'goal/current',
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['goal/*'],
         ]

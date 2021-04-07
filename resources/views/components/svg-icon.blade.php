@@ -1,0 +1,1 @@
+<img src="{{asset("img/svg/$icon.svg")}}" alt="" style="width:16px;">

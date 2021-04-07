@@ -23,7 +23,22 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('goal', GoalController::class);
+
+    Route::get('goal/current', [GoalController::class, 'index'])->name('goal.current');
+    Route::get('goal/past', [GoalController::class, 'index'])->name('goal.past');
+    
+    Route::get('goal', function () {
+        return redirect()->route('goal.current');
+    })->name('goal.index');
+
+    Route::resource('goal', GoalController::class)->except([
+        'index','destroy'
+    ]);
+
+    // Route::get('goal/{goal}/comment', [GoalController::class, 'getComments'])->name('get-comments');
+    Route::post('goal/{goal}/comment', [GoalController::class, 'addComment'])->name('goal.add-comment');
+    Route::get('goal/{goal}/status/{status}', [GoalController::class, 'updateStatus'])->name('goal.update-status');
+    
 });
 
 Route::get('/my-performance', function () {

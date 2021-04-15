@@ -13,7 +13,6 @@
                 <div class="col-12">
                     <x-dropdown :list="$goaltypes" label="Goal Type" name="goal_type_id" />
                     <x-input label="Goal" name="title" value="{{ old('title') }}"/>
-                    <x-textarea label="Description" name="description" :value="old('description')" />
                     <x-textarea label="What" name="what" :value="old('what')" />
                     <x-textarea label="Why" name="why" :value="old('why')" />
                     <x-textarea label="How" name="how" :value="old('how')"/>

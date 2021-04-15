@@ -1,4 +1,4 @@
-FROM aro.jfrog.io/artifactory/performance-app/php/7.3
+FROM aro.jfrog.io/performance-app/php:7.3
 RUN apt-get update -y && apt-get install -y openssl zip unzip git \
     libpng-dev \
     libonig-dev \

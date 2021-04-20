@@ -1,7 +1,10 @@
-@props(['disabled' => false, 'showError' => true, 'label' => '', 'value' => '', 'info'=> ''])
+@props(['disabled' => false, 'showError' => true, 'label' => '', 'value' => '', 'info'=> '','tooltip'=>''])
 
 <label>
     {{ __($label) }}
+     @if($tooltip != '')
+    <i class="fas fa-info-circle"  data-toggle="popover" data-placement="right" data-html="true" data-content="{{ $tooltip }}"></i>
+    @endif
     <textarea {!! $attributes->merge(['class' => 'form-control']) !!}>{{$value}}</textarea>
     @if ($info != '')
     <small class="text-muted">

@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-12">
                     <x-dropdown :list="$goaltypes" label="Goal Type" name="goal_type_id" />
-                    <x-input label="Goal" name="title" :value="$goal->title"/>
+                    <x-input label="Goal Title" name="title" :value="$goal->title"/>
                     <x-textarea label="What" name="what" :value="$goal->what" />
                     <x-textarea label="Why" name="why" :value="$goal->why" />
                     <x-textarea label="How" name="how" :value="$goal->how"/>

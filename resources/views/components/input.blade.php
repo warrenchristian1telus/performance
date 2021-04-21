@@ -1,6 +1,9 @@
-@props(['disabled' => false, 'showError' => true, 'label' => '', 'info' => ''])
+@props(['disabled' => false, 'showError' => true, 'label' => '', 'info' => '','tooltip'=>''])
 <label>
     {{ __($label) }}
+    @if($tooltip != '')
+    <i class="fas fa-info-circle"  data-toggle="popover" data-placement="right" data-html="true" data-content="{{ $tooltip }}"></i>
+    @endif
     @if ($info != '')
     <small class="text-muted">
         {{ __($info) }}

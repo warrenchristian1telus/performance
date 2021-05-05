@@ -235,6 +235,12 @@ return [
             'url'  => 'goal/current',
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['goal/*'],
+        ],
+        [
+            'text' => 'Conversation',
+            'url'  => 'conversation/upcoming',
+            'icon' => 'fas fa-fw fa-bullseye',
+            'active' => ['conversation/*'],
         ]
     ],
 
@@ -294,7 +300,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

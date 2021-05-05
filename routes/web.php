@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\ConversationInfoCommentController;
 use App\Http\Controllers\GoalController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +25,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-
     Route::get('goal/current', [GoalController::class, 'index'])->name('goal.current');
     Route::get('goal/past', [GoalController::class, 'index'])->name('goal.past');
     Route::get('goal/library', [GoalController::class, 'library'])->name('goal.library');
@@ -34,10 +35,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('goal.index');
 
     Route::resource('goal', GoalController::class)->except([
-        'index', 'destroy'
+        'index', 'destroy',
     ]);
-
-
 
     // Route::get('goal/{goal}/comment', [GoalController::class, 'getComments'])->name('get-comments');
     Route::post('goal/{goal}/comment', [GoalController::class, 'addComment'])->name('goal.add-comment');
@@ -45,12 +44,20 @@ Route::middleware(['auth'])->group(function () {
 
     // Link Employee to Supervisor goals
     Route::post('link-goal', [GoalController::class, 'linkGoal'])->name('goal.link');
+
+    // Conversations
+    Route::get('conversation/upcoming', [ConversationController::class, 'index'])->name('conversation.upcoming');
+    Route::get('conversation/past', [ConversationController::class, 'index'])->name('conversation.past');
+    Route::get('conversation/{conversation}', [ConversationController::class, 'show'])->name('conversation.show');
+    Route::post('conversation/sign-off/{conversation}', [ConversationController::class, 'signOff'])->name('conversation.signoff');
+    Route::post('conversation', [ConversationController::class, 'store'])->name('conversation.store');
+    Route::put('conversation/{conversation}', [ConversationController::class, 'update'])->name('conversation.update');
+    Route::delete('conversation/{conversation}', [ConversationController::class, 'destroy'])->name('conversation.destroy');
+    Route::post('conversation-info-comment', [ConversationInfoCommentController::class, 'store'])->name('conversation-info-comment.store');
 });
 
 Route::get('/my-performance', function () {
     return view('my-performance');
 })->middleware(['auth'])->name('my-performance');
 
-
-
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

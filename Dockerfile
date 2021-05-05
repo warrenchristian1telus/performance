@@ -8,10 +8,11 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
 COPY .env /app
-RUN composer update --ignore-platform-reqs
-EXPOSE 8000
-
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app
 USER 1001
+
+RUN composer update --ignore-platform-reqs
+EXPOSE 8000
+
 CMD php artisan serve --host=0.0.0.0 --port=8000

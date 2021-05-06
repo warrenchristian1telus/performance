@@ -14,7 +14,7 @@
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
                 <div class="callout callout-info">
-                    <h6>{{ $c->topic->name }} @if($c->date->isPast())<i class="fas fa-exclamation-triangle text-danger ml-2" data-toggle="tooltip" title="Conversation is past due. Employee signoff is required" tooltip="Conversation is Past"></i>@endif</h6>
+                    <h6>{{ $c->topic->name }} @if($c->date_time->isPast())<i class="fas fa-exclamation-triangle text-danger ml-2" data-toggle="tooltip" title="Conversation is past due. Employee signoff is required" tooltip="Conversation is Past"></i>@endif</h6>
                     <span class="mr-2">Supervisor and Employee</span> |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
                     <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span>
@@ -35,7 +35,7 @@
                     <span class="mr-2">Supervisor and Employee</span> |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
                     <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span>
-                  
+
                 </div>
             </div>
             @endforeach
@@ -53,13 +53,38 @@
 
     <x-slot name="js">
         <script>
+            $("#participant_id").select2();
             var conversation_id = 0;
-            $('#participant_id').select2({});
+            $('#conv_participant_edit').select2({
+
+                ajax: {
+                    url: '/participant'
+                    , dataType: 'json'
+                    , delay: 250
+                    , data: function(params) {
+
+                        var query = {
+                            'search': params.term
+                        , }
+                        return query;
+                    }
+                    , processResults: function(data) {
+
+                        return {
+                            results: $.map(data.data.data, function(item) {
+                                item.text = item.name;
+                                return item;
+                            })
+                        };
+                    }
+                    , cache: false
+                }
+            });
 
             $(function() {
                 $('[data-toggle="tooltip"]').tooltip()
             })
-            $('#conv_participant_edit').select2({});
+          
             $(document).on('click', '.btn-submit', function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -91,6 +116,7 @@
                 $('.btn-conv-save').filter("[data-name=" + elementName + "]").removeClass("d-none");
                 $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").removeClass("d-none");
                 $('.btn-conv-edit').filter("[data-name=" + elementName + "]").addClass("d-none");
+                $('.btn-conv-edit').prop('disabled', true);
                 // Enable Edit.
                 // Disable view
             });
@@ -127,7 +153,8 @@
                     }
                     , complete: function() {
                         // Remove Spinner
-                        $(that).html('Save')
+                        $(that).html('Save');
+                        $('.btn-conv-edit').prop('disabled', false);
                     }
                 });
             });
@@ -140,13 +167,12 @@
                 $.ajax({
                     url: '/conversation/sign-off/' + conversation_id
                     , type: 'POST'
-                    , data: $('#sign_off_form').serialize()+'&'
-                    +
-                    $.param({ 
-                        'employee_id': $('#employee_id').val() 
-                    })
+                    , data: $('#sign_off_form').serialize() + '&' +
+                        $.param({
+                            'employee_id': $('#employee_id').val()
+                        })
                     , success: function(result) {
-                        if(result.success){
+                        if (result.success) {
                             location.reload();
                         }
                     }
@@ -154,7 +180,7 @@
                         const errors = error.responseJSON.errors;
                         const errorElements = Object.keys(errors);
                         errorElements.forEach((element) => {
-                            $("span.error").filter('[data-error-for="'+element+'"]').html(errors[element][0]);
+                            $("span.error").filter('[data-error-for="' + element + '"]').html(errors[element][0]);
                         });
                     }
                     , complete: function() {
@@ -171,6 +197,7 @@
                 $('.btn-conv-save').filter("[data-name=" + elementName + "]").addClass("d-none");
                 $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").addClass("d-none");
                 $('.btn-conv-edit').filter("[data-name=" + elementName + "]").removeClass("d-none");
+                $('.btn-conv-edit').prop('disabled', false);
             });
 
             $(document).on('click', '.btn-view-conversation', function(e) {
@@ -210,8 +237,17 @@
                         $('#info_comment3_edit').text(result.info_comment3);
                         $('#info_comment4').text(result.info_comment4);
                         $('#info_comment4_edit').text(result.info_comment4);
+                        $('#info_comment5').text(result.info_comment4);
+                        $('#info_comment5_edit').text(result.info_comment4);
 
                         $('#questions-to-consider').html('');
+                        if(result.topic.id == 4){
+                        $('#info_to_capture').removeClass('d-none');
+                        }else{
+                                $('#info_to_capture').addClass('d-none');
+
+                        }
+
                         result.questions?.forEach((question) => {
                             $('#questions-to-consider').append('<li>' + question + '</li>');
                         });

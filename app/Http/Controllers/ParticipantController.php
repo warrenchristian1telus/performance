@@ -14,7 +14,11 @@ class ParticipantController extends Controller
      */
     public function index()
     {
-        //
+        $request = request();
+        $list = new Participant();
+        $list = $list->paginate(10);
+
+        return response()->json(['data' => $list, 'message' => __('Participant list')], 200);
     }
 
     /**
@@ -24,62 +28,50 @@ class ParticipantController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Participant  $participant
      * @return \Illuminate\Http\Response
      */
     public function show(Participant $participant)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Participant  $participant
      * @return \Illuminate\Http\Response
      */
     public function edit(Participant $participant)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Participant  $participant
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Participant $participant)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Participant  $participant
      * @return \Illuminate\Http\Response
      */
     public function destroy(Participant $participant)
     {
-        //
     }
 }

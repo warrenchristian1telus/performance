@@ -32,13 +32,13 @@
                     <small class="text-danger error-participant_id"></small>
                     </div>
                        <div class="col-6 col-md-6 mt-1">
-                          <label> Date</label>
-                         <x-input class="error-date" type="date" name="date"  />
+                        <label> Date</label>
+                        <x-input class="error-date" type="date" name="date" :min="Carbon\Carbon::now()->toDateString()"  />
                     <small class="text-danger error-date"></small>
                     </div>
                        <div class="col-6 col-md-6 mt-1">
                           <label> Time</label>
-                        <x-input  class="error-date" type="time" name="time"  />
+                        <x-input  class="error-date" type="time" name="time" step="900"  />
                        
                     <small class="text-danger error-time"></small>
                     </div>

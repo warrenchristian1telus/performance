@@ -55,17 +55,21 @@ return [
                     "In what areas do you want to grow?",
                     "What do you need to learn so your knowledge and skills are current?",
                     "What is important about this role/opportunity? How will it help you along your path?",
+                    "What one thing could your supervisor do to better support your career development?" ,
+                    "What one thing could I do to better support my own career development?" ,
                 ]
             ],
             "4" => [
                 "questions" => [
-                    "Where do you see yourself in x years?",
-                    "How would you define “success” for your career?",
-                    "What impact do you want to have in your work?",
-                    "What kind of leadership style challenges you to be your best?",
-                    "In what areas do you want to grow?",
-                    "What do you need to learn so your knowledge and skills are current?",
-                    "What is important about this role/opportunity? How will it help you along your path?",
+                    "What are the expectations for the position? Are they consistent with the employee’s classification, job description, and work done by similar employees?",
+                    "Have the expectations been clearly articulated? Does the employee understand them?",
+                    "What expectations aren’t being met?",
+                    "What challenges is the employee facing?",
+                    "What are the employee’s strengths and interests? What about the current role doesn’t play to those strengths? How can the role draw more on those strengths?",
+                    "Does the employee have the necessary skills and resources? What is lacking, or could be provided to support success?",
+                    "What one thing can the supervisor do to better support employee development?",
+                    "What one thing can the employee do to better support their own performance?",
+                    "How will you measure improvement? What is the time frame?",
                 ]
             ]
         ]

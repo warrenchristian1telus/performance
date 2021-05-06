@@ -3,6 +3,7 @@
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\ConversationInfoCommentController;
 use App\Http\Controllers\GoalController;
+use App\Http\Controllers\ParticipantController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('conversation/{conversation}', [ConversationController::class, 'update'])->name('conversation.update');
     Route::delete('conversation/{conversation}', [ConversationController::class, 'destroy'])->name('conversation.destroy');
     Route::post('conversation-info-comment', [ConversationInfoCommentController::class, 'store'])->name('conversation-info-comment.store');
+
+    Route::get('participant', [ParticipantController::class, 'index'])->name('participant.index');
 });
 
 Route::get('/my-performance', function () {

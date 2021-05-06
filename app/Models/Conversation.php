@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
-
+use Carbon\Carbon;
 class Conversation extends Model
 {
     use HasFactory;
 
     protected $with = ['topic', 'conversationParticipants', 'conversationParticipants.participant'];
-    protected $appends = ['c_date', 'c_time', 'questions'];
+    protected $appends = ['c_date', 'c_time', 'questions','date_time'];
 
     protected $casts = [
         'date' => 'datetime:Y-m-d',
@@ -35,6 +35,11 @@ class Conversation extends Model
     public function getCTimeAttribute()
     {
         return $this->time->format('h:i A');
+    }
+
+    public function getDateTimeAttribute()
+    {
+        return Carbon::parse($this->date->format('M d, Y') .' '. $this->time->format('h:i A')); // $this->time->format('h:i A');
     }
 
     public function getQuestionsAttribute()

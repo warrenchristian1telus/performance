@@ -9,7 +9,7 @@
             <div class="modal-body p-4">
                 <div class="row">
                     <div class="col-6 col-md-6">
-                        <div class="d-flex align-items-end">
+                        <div class="d-flex align-items-end row">
                             <div>
                                 <label>Topic</label>
                                 <span id="conv_title" class="conv_title"></span>
@@ -19,49 +19,54 @@
                         </div>
                     </div>
                     <div class="col-6 col-md-6">
-                        <div class="d-flex align-items-end">
-                            <div>
+                        <div class="d-flex align-items-end row">
+                            <div class="col-md-9">
                                 <label>Participants</label>
                                 <span id="conv_participant" class="conv_participant font-weight-bold"></span>
-                                <div class=" conv_participant  d-none">
-                                    <select class="form-control  select2" style="width:80%;" multiple name="conversation_participant_id[]" id="conv_participant_edit">
+                                <div class="conv_participant  d-none">
+                                    <select class="form-control conv_participant_edit select2 w-100" style="width:100%" multiple name="conversation_participant_id[]" id="conv_participant_edit">
+
                                     </select>
                                 </div>
                             </div>
-                            <div>
+                            <div class="col-md-3">
                                 <x-edit-cancel-save name="conversation_participant_id" id="conv_participant" />
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-md-6 mt-1">
                         <div class="d-flex align-items-end">
-                            <div>
+                            <div class="col-md-9">
                                 <x-input id="conv_date_edit" class="conv_date d-none" type="date" name="date" label="Conversation Date" />
                                 <span id="conv_date" class="conv_date"></span>
                             </div>
-                            <div>
+                            <div class="col-md-3">
                                 <x-edit-cancel-save name="date" id="conv_date" />
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-md-6 mt-1">
                         <div class="d-flex align-items-end">
-                            <div>
+                            <div class="col-md-9">
+
                                 <x-input id="conv_time_edit" class="conv_time d-none" type="time" name="time" label="Conversation Time" />
                                 <span id="conv_time" class="conv_time"></span>
                             </div>
-                            <div>
+                            <div class="col-md-3">
+
                                 <x-edit-cancel-save name="time" id="conv_time" />
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-md-6 mt-1">
                         <div class="d-flex align-items-end">
-                            <div>
+                            <div class="col-md-9">
+
                                 <x-textarea id="conv_comment_edit" class="conv_comment d-none" name="comment" label="Comments" />
                                 <span id="conv_comment" class="conv_comment"></span>
                             </div>
-                            <div>
+                            <div class="col-md-3">
+
                                 <x-edit-cancel-save name="comment" id="conv_comment" />
                             </div>
                         </div>
@@ -78,31 +83,76 @@
 
                     </ul>
                 </div>
-                <div>
+                <div class="d-none" id="info_to_capture">
                     <h6><u>Information to Capture</u></h6>
-                    <h6>What one thing could your supervisor do to better support your career development?</h6>
-                    <textarea class="form-control info_comment1 mb-4 d-none" name="info_comment1" id="info_comment1_edit"></textarea>
-                    <span id="info_comment1" class="info_comment1"></span>
-                    <x-edit-cancel-save name="info_comment1" id="info_comment1" />
+                    <h6>What must the employee accomplish? By when?</h6>
 
-                    <h6>thing could I do to better support my own career development?</h6>
-                    <textarea class="form-control info_comment2 mb-4 d-none" name="info_comment2" id="info_comment2_edit"></textarea>
-                    <span id="info_comment2" class="info_comment2"></span>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <textarea class="form-control info_comment1 mb-4 d-none" name="info_comment1" id="info_comment1_edit"></textarea>
+                            <textarea class="form-control info_comment1 mb-4" name="info_comment1" id="info_comment1" disabled></textarea>
+                            <span id="info_comment1" class="info_comment1"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <x-edit-cancel-save name="info_comment1" id="info_comment1" />
+                        </div>
+                    </div>
 
-                    <x-edit-cancel-save name="info_comment2" id="info_comment2" />
+                    <h6>What support will the supervisor (and others) provide?</h6>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <textarea class="form-control info_comment2 mb-4 d-none" name="info_comment2" id="info_comment2_edit"></textarea>
+                            <textarea class="form-control info_comment2 mb-4" name="info_comment2" id="info_comment2" disabled></textarea>
+                            <span id="info_comment2" class="info_comment2"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <x-edit-cancel-save name="info_comment2" id="info_comment2" />
+                        </div>
+                    </div>
+
+                    <h6>How will success be measured and celebrated?</h6>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <textarea class="form-control info_comment3 mb-4 d-none" name="info_comment3" id="info_comment3_edit"></textarea>
+                            <textarea class="form-control info_comment3 mb-4" name="info_comment3" id="info_comment3" disabled></textarea>
+
+                        </div>
+                        <div class="col-md-4">
+                            <x-edit-cancel-save name="info_comment3" id="info_comment3" />
+                        </div>
+                    </div>
+                     </div>
+                   
+                     <div>
 
                     <h6><u>Comments</u></h6>
+
                     <h6>Employee Comments</h6>
-                    <textarea class="form-control info_comment3 mb-4 d-none" name="info_comment3" id="info_comment3_edit"></textarea>
-                    <span id="info_comment4" class="info_comment4"></span>
-                    <x-edit-cancel-save name="info_comment3" id="info_comment3" />
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <textarea class="form-control info_comment4 mb-4 d-none" name="info_comment4" id="info_comment4_edit"></textarea>
+                            <textarea class="form-control info_comment4 mb-4" name="info_comment4" id="info_comment4" disabled></textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <x-edit-cancel-save name="info_comment4" id="info_comment4" />
+                        </div>
+                    </div>
                     <h6> Comments</h6>
-                    <textarea class="form-control info_comment4 mb-4 d-none" name="info_comment4" id="info_comment4_edit"></textarea>
-                    <span id="info_comment4" class="info_comment4"></span>
-
-                    <x-edit-cancel-save name="info_comment4" id="info_comment4" />
-
-
+                    <div class="row">
+                        <div class="col-md-8">
+                            <textarea class="form-control info_comment5 mb-4 d-none" name="info_comment5" id="info_comment5_edit"></textarea>
+                            <textarea class="form-control info_comment5 mb-4" name="info_comment5" id="info_comment5" disabled></textarea>
+                            <span id="info_comment5" class="info_comment5"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <x-edit-cancel-save name="info_comment5" id="info_comment5" />
+                        </div>
+                    </div>
+                    </div>
+                    <hr>
+                    <div>
                     <h6><u>Sign Off</u></h6>
                     <form id="sign_off_form" method="post">
                         @csrf
@@ -134,7 +184,7 @@
                         with the content of this record of conversation
                         <br>
                         <span class="text-danger error" data-error-for="agreement"></span>
-                      
+
                     </form>
 
                 </div>

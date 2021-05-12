@@ -207,7 +207,8 @@ return [
     |
     */
 
-    'enabled_laravel_mix' => false,
+    'enabled_laravel_mix_css' => true,  // Custom
+    'enabled_laravel_mix_js' => false,  // Custom
     'laravel_mix_css_path' => 'css/app.css',
     'laravel_mix_js_path' => 'js/app.js',
 
@@ -279,6 +280,27 @@ return [
     */
 
     'plugins' => [
+        'FontAwesome' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/fontawesome-free/css/all.min.css'
+                ]
+            ]
+        ],
+        'Fonts' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic'
+                ]
+            ]
+        ],
+        
         'Datatables' => [
             'active' => true,
             'files' => [

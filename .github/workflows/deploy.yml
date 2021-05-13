@@ -3,13 +3,10 @@
 name: Static Deploy on OpensShift
   
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, closed]
-    branches:
-      # - dev
-      # - prod
-      # - test
-      - master
+  # https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows
+  push:
+    # Edit to the branch(es) you want to build and deploy on each push.
+    branches: [ master ]
 
 jobs:
   # Print variables for logging and debugging purposes

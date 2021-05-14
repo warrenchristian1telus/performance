@@ -48,4 +48,14 @@ jobs:
       # Build the api images
       - name: Build and deploy the app
         run: | 
-          oc -n 332842-dev start-build bc/performance-docker-app
+          oc project 332842-dev
+          export NAMESPACE="$(oc project -q)"
+          echo "Current namespace is $NAMESPACE"
+          oc start-build bc/performance-docker-app
+          oc logs -f bc/performance-docker-app
+          echo "Getting deployment status..."
+          oc rollout status deployment/performance-docker-app
+          echo "Listing pods.."
+          oc get pods|grep performance-docker-app
+          export ROUTE="$(oc get route performance-docker-app -o jsonpath='{.spec.host}')"
+          echo "performance-docker-app is exposed at $ROUTE"      

@@ -12,48 +12,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-7">
                         <div class="card">
-                            <div class="card-header">
-                                <h3>{{$goal->title}}</h3>
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <small class="text-muted">Start working on this goal on</small>
-                                        <br>
-                                        <b>{{$goal->start_date_human}}</b>
-                                    </div>
-                                    <div>
-                                        <small class="text-muted">Meet this goal by</small>
-                                        <br>
-                                        <b>{{$goal->target_date_human}}</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <b>{{__("Type")}}</b>
-                                <div class="form-control-plaintext">
-                                    {{$goal->goalType['name']}}
-                                </div>
-                                <b>{{__("Goal")}}</b>
-                                <div class="form-control-plaintext">
-                                    {{$goal['title']}}
-                                </div>
-                                <b>{{__("What")}}</b>
-                                <div class="form-control-plaintext">
-                                    {{$goal['what']}}
-                                </div>
-                                <b>{{__("Why")}}</b>
-                                <div class="form-control-plaintext">
-                                    {{$goal['why']}}
-                                </div>
-                                <b>{{__("How")}}</b>
-                                <div class="form-control-plaintext">
-                                    {{$goal['how']}}
-                                </div>
-                                
-                                <b>{{__("Measure of success")}}</b>
-                                <div class="form-control-plaintext">
-                                    {{$goal['measure_of_success']}}
-                                </div>
-                            </div>
+                            @include("goal.partials.show")
                             <hr>
                             <div class="px-3">
                                 {{ $goal->user->name}}
@@ -127,58 +86,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
-<div class="modal fade" id="supervisorGoalModal" tabindex="-1" aria-labelledby="supervisorGoalModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header bg-primary">
-        <h5 class="modal-title" id="supervisorGoalModalLabel">Public Goals</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body p-0">
-       <div class="goal-list-container">
-       @forelse($supervisorGoals as $sg)
-           <div class="border-bottom">
-                <div class="card-body pb-0">
-                    <p class="h5">
-                        {{ $sg->title }}
-                    </p>
-                    <p>
-                        {{ $sg->what }}
-                    </p>
-                </div>
-                <div class="px-3 pb-3">
-                    {{ $sg->user->name}}
-                    <span></span>
-                    <span>| {{$sg->target_date_human}}</span>
-                    <span class="float-right">
-                        <button class="btn btn-outline-primary btn-link btn-sm" id="goal_{{ $sg->id }}" data-id="{{ $sg->id }}">Link</button>
-                    </span>
-                </div>
-            </div>
-        @empty
-          <div class="card-body pb-0">
-        <p>No Goals To Link</p>
-        </p>
-            @endforelse
-         
-       </div>
-      </div>
-      <div class="modal-footer">
-        <form action="{{ route('goal.link') }}" method="POST">
-        @csrf
-        
-        <input type="hidden" name="current_goal_id" id="current_goal_id" value="{{ $goal->id }}">
-        <input type="hidden" name="linked_goal_id" id="linked_goal_id" value="">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+
     @push('js')
         <script>
             $('form').keydown(function (event) {
@@ -189,19 +97,7 @@
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
-            var linkedGoals = [];
-            $('.btn-link').on('click',function(e){
-                   console.log(e.target.innerText);
-                   if(e.target.innerText == 'Link'){
-                        linkedGoals.push(e.target.getAttribute('data-id'));
-                       e.target.innerText = 'Unlink';
-                   }else{
-                       linkedGoals.pop(e.target.getAttribute('data-id'));
-                        e.target.innerText = 'Link';
-                   }
-                   console.log(linkedGoals);
-                   $('#linked_goal_id').val(linkedGoals);
-            });
+            
         </script>
     @endpush
 </x-side-layout>

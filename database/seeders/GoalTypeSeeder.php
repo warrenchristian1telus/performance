@@ -17,16 +17,12 @@ class GoalTypeSeeder extends Seeder
     {
         $goal_types = [
             [
-                'name' => 'Core',
-                'description' => 'Core Goals are foundational or required for your current position (in your current role). '
+                'name' => 'Work',
+                'description' => 'Work Goals are foundational / required for your current position (in current role).'
             ],
             [
-                'name' => 'Growth',
-                'description' => 'Growth Goals are desirable, but not required in order to improve and grow professionally.'
-            ],
-            [
-                'name' => 'Career',
-                'description' => 'Career Goals are future-oriented, whether they are strategic or long-term.'
+                'name' => 'Career Development',
+                'description' => 'Career Development Goals are desirable but not required (in order to improve and grow) and can be strategic or long-term'
             ],
             [
                 'name' => 'Learning',

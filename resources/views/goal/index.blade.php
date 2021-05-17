@@ -3,7 +3,7 @@
         @include('goal.partials.tabs')
     </x-slot>
     <x-button icon="plus-circle" data-toggle="modal" data-target="#addGoalModal">
-        Add new goal
+        Create new Goal
     </x-button>
                                 
     <x-button icon="clone" href="{{ route('goal.library') }}">
@@ -29,12 +29,13 @@
         {{ $goals->links() }}
     </div>
 
-
+@include('goal.partials.supervisor-goal')
+@include('goal.partials.goal-detail-modal')
 <div class="modal fade" id="addGoalModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header bg-primary">
-        <h5 class="modal-title" id="addGoalModalLabel">Add New Goal</h5>
+        <h5 class="modal-title" id="addGoalModalLabel">Create new Goal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -64,7 +65,7 @@
                     <small class="text-danger error-what"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Why" name="why" tooltip='Define why this goal is important to you and organisation (value of achievement). For example, <i>&#8221;This will improve the  consistency and quality of the employee experience across BCPS.&#8221;</i>'  />
+                    <x-textarea label="Why" name="why" tooltip='Define why this goal is important to you and organization (value of achievement). For example, <i>&#8221;This will improve the  consistency and quality of the employee experience across BCPS.&#8221;</i>'  />
                     <small class="text-danger error-why"></small>
                    </div>
                        <div class="col-6">
@@ -85,8 +86,8 @@
                 </div>
                 <div class="col-12">
                     <div class="card mt-3 p-3">
-                        <a href="https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides" target="_blank">Supporting Material</a>
-                        <a href="https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides" target="_blank">https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides</a>
+                        <span>Supporting Material</span>
+                        <a href="https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides" target="_blank">This is a placeholder for a link to relevant contacts and support documentation for this process. Content to follow.</a>
                     </div>
                 </div>
                 <div class="col-12 text-left pb-5 mt-3">
@@ -99,7 +100,7 @@
     </div>
   </div>
 </div>
-
+    
     <x-slot name="js">
         {{-- {{$dataTable->scripts()}} --}}
     <script>
@@ -108,7 +109,7 @@
         trigger: 'hover',
     });
 
-     $('select[name="goal_type_id"]').trigger('change');
+    $('select[name="goal_type_id"]').trigger('change');
 
     $('select[name="goal_type_id"]').on('change',function(e){
         console.log(this);
@@ -122,7 +123,7 @@
         e.preventDefault();
         $.ajax({
             url:'/goal',
-             type : 'POST',
+            type : 'POST',
             data: $('#goal_form').serialize(),
             success: function (result) {
                 console.log(result);
@@ -143,7 +144,31 @@
         });
      
     });
+    $(document).on('click', ".link-goal", function () {
+        $.get('/goal/supervisor/'+$(this).data('id'), function (data) {
+            $("#supervisorGoalModal").find('.data-placeholder').html(data);
+            $("#supervisorGoalModal").modal('show');
+        });
+    });
 
+    $(document).on('click', '.show-goal-detail', function(e) {
+        $.get('/goal/library/'+$(this).data('id'), function (data) {
+            $("#goal-detail-modal").find('.data-placeholder').html(data);
+            $("#goal-detail-modal").modal('show');
+        });
+    });
+
+    $(document).on('click', '.btn-link', function(e) {
+        let linkedGoals = [];
+        if(e.target.innerText == 'Link'){
+            linkedGoals.push(e.target.getAttribute('data-id'));
+            e.target.innerText = 'Unlink';
+        }else{
+            linkedGoals.pop(e.target.getAttribute('data-id'));
+            e.target.innerText = 'Link';
+        }
+        $('#linked_goal_id').val(linkedGoals);
+    });
     
     </script>
     </x-slot>

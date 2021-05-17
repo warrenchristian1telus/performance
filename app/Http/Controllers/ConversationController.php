@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Conversation\ConversationRequest;
 use App\Http\Requests\Conversation\SignoffRequest;
+use App\Http\Requests\Conversation\UnSignoffRequest;
 use App\Models\Conversation;
 use App\Models\ConversationParticipant;
 use App\Models\ConversationTopic;
@@ -20,6 +21,7 @@ class ConversationController extends Controller
      */
     public function index(Request $request)
     {
+        $showWarning = Conversation::hasNotDoneAtleastOnceIn4Months();
         $conversationTopics = ConversationTopic::all();
         $participants = Participant::all();
         $query = new Conversation();
@@ -31,7 +33,7 @@ class ConversationController extends Controller
             $conversations = $query->whereNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
         }
 
-        return view('conversation.index', compact('type', 'conversations', 'conversationTopics', 'participants'));
+        return view('conversation.index', compact('type', 'conversations', 'conversationTopics', 'participants', 'showWarning'));
     }
 
     /**
@@ -132,5 +134,14 @@ class ConversationController extends Controller
         $conversation->update();
 
         return response()->json(['success' => true, 'Message' => 'Sign Off Successfull', 'data' => $conversation]);
+    }
+
+    public function unsignOff(UnSignoffRequest $request, Conversation $conversation)
+    {
+        $conversation->signoff_user_id = null;
+        $conversation->update();
+
+        return
+        response()->json(['success' => true, 'Message' => 'UnSign Successfull', 'data' => $conversation]);;
     }
 }

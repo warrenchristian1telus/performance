@@ -48,4 +48,13 @@ class Conversation extends Model
     {
         return Config::get('global.conversation.topic.' . $this->conversation_topic_id . '.questions');
     }
+
+    public static function hasNotDoneAtleastOnceIn4Months() 
+    {
+        $latestPastConversation = self::whereNotNull('signoff_user_id')->orderBy('date', 'DESC')->first();
+        if ($latestPastConversation) {
+            return $latestPastConversation->date_time->addDays(122)->isPast();
+        }
+        return true;
+    }
 }

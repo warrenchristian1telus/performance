@@ -1,5 +1,16 @@
 <x-side-layout>
-
+    @if ($showWarning)
+    <div class="mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-default-danger alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                  <span class="h5"><i class="icon fas fa-exclamation-circle"></i>Your last performance conversation was completed more than 4 months ago. Conversations must be scheduled every four months, at minimum.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
         <div class="col-md-4 text-right">
@@ -8,6 +19,7 @@
             </x-button>
         </div>
     </div>
+    
     <div class="mt-4">
         <div class="row">
             @if ($type == 'upcoming')
@@ -35,7 +47,9 @@
                     <span class="mr-2">Supervisor and Employee</span> |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
                     <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span>
-
+                    <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                        View
+                    </button>
                 </div>
             </div>
             @endforeach
@@ -49,7 +63,9 @@
 
     @include('conversation.partials.add-conversation-modal')
     @include('conversation.partials.view-conversation-modal')
-    @include('conversation.partials.delete-hidden-form')
+    @if ($type == 'upcoming')
+        @include('conversation.partials.delete-hidden-form')
+    @endif
 
     <x-slot name="js">
         <script>
@@ -160,17 +176,18 @@
             });
 
             $(document).on('click', '.btn-sign-off', function(e) {
-
+                const url = ($(this).data('action') === 'unsignoff') ? '/conversation/unsign-off/' + conversation_id : '/conversation/sign-off/' + conversation_id;
+                const data = ($(this).data('action') === 'unsignoff') ? $('#unsign-off-form').serialize() : $('#sign_off_form').serialize() + '&' +
+                        $.param({
+                            'employee_id': $('#employee_id').val()
+                        });
                 $(this).html("<div class='spinner-border spinner-border-sm' role='status'></div>");
                 const that = this;
                 $("span.error").html("");
                 $.ajax({
-                    url: '/conversation/sign-off/' + conversation_id
+                    url: url
                     , type: 'POST'
-                    , data: $('#sign_off_form').serialize() + '&' +
-                        $.param({
-                            'employee_id': $('#employee_id').val()
-                        })
+                    , data: data 
                     , success: function(result) {
                         if (result.success) {
                             location.reload();
@@ -184,7 +201,8 @@
                         });
                     }
                     , complete: function() {
-                        $(that).html('Sign with my employee ID')
+                        const btnText = ($(that).data('action') === 'unsignoff') ? 'Unsign' : 'Sign with my employee ID';
+                        $(that).html(btnText)
                     }
                 });
 
@@ -240,12 +258,13 @@
                         $('#info_comment5').text(result.info_comment4);
                         $('#info_comment5_edit').text(result.info_comment4);
 
+                        $('#unsign-off-form').attr('action', $('#unsign-off-form').data('action-url').replace('xxx', conversation_id));
+
                         $('#questions-to-consider').html('');
                         if(result.topic.id == 4){
-                        $('#info_to_capture').removeClass('d-none');
+                            $('#info_to_capture').removeClass('d-none');
                         }else{
-                                $('#info_to_capture').addClass('d-none');
-
+                            $('#info_to_capture').addClass('d-none');
                         }
 
                         result.questions?.forEach((question) => {

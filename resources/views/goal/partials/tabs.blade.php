@@ -6,7 +6,7 @@
     </div>
     <div class="px-4 py-1 border-bottom {{Route::current()->getName() == 'goal.past' ? 'border-primary' : ''}}">
         <x-button :href="route('goal.past')" style="">
-            Past
+            Past Goals
         </x-button>
     </div>
 </div>

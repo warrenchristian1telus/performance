@@ -81,16 +81,27 @@ class GoalController extends Controller
 
         $linkedGoalsIds = LinkedGoal::where('user_goal_id', $id)->pluck('supervisor_goal_id');
 
-        $supervisorGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
+        /* $supervisorGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
             ->whereNotIn('id', $linkedGoalsIds)
-            ->with('comments')->get();
+            ->with('comments')->get(); */
         $linkedGoals
             = Goal::with('goalType', 'comments')
             ->whereIn('id', $linkedGoalsIds)
             ->get();
 
 
-        return view('goal.show', compact('goal', 'linkedGoals', 'supervisorGoals'));
+        return view('goal.show', compact('goal', 'linkedGoals'));
+    }
+
+    public function getSupervisorGoals($id) {
+        $goal = Goal::findOrFail($id);
+        $linkedGoalsIds = LinkedGoal::where('user_goal_id', $id)->pluck('supervisor_goal_id');
+
+        $supervisorGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
+            ->whereNotIn('id', $linkedGoalsIds)
+            ->with('comments')->get();
+        
+        return view('goal.partials.supervisor-goal-content', compact('goal', 'supervisorGoals'));
     }
 
     /**
@@ -137,15 +148,44 @@ class GoalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $goal = Goal::find($id);
+        if (!$goal) {
+            abort(404);
+        }
+        if ($goal->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $goal->delete();
+
+        return redirect()->back();
     }
 
-    public function library()
+    public function library(Request $request)
     {
+        // Goal Library
+        $query = Goal::whereIn('id', [997, 998, 999]);
+        $currentSearch = "";
+        if($request->has('search') && $request->search != '') {
+            $query->where(function ($q) use ($request) {
+                $q->orWhere('title', 'LIKE', '%' . $request->search . '%');
+                $q->orWhere('what', 'LIKE', '%' . $request->search . '%');
+                $q->orWhere('why', 'LIKE', '%' . $request->search . '%');
+                $q->orWhere('how', 'LIKE', '%' . $request->search . '%');
+                $q->orWhere('measure_of_success', 'LIKE', '%' . $request->search . '%');
+            });
+            
+            $currentSearch = $request->search;
+        }
 
-        $organisationGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
-            ->with('comments')->get();
-        return view('goal.library', compact('organisationGoals'));
+        $organizationGoals = $query->with('goalType')
+                            ->with('comments')->get();
+        return view('goal.library', compact('organizationGoals', 'currentSearch'));
+    }
+
+    public function showForLibrary($id) {
+        $goal = Goal::find($id);
+        return view('goal.partials.show', compact('goal'));
     }
 
     public function saveFromLibrary(Request $request)

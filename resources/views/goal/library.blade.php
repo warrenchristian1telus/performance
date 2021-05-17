@@ -4,11 +4,12 @@
             <div class="col-md-6 col-6">
                 <x-slot name="header">
                     <small><a href="{{ route('goal.index') }}">back</a></small>
-
-                    <div class="position-relative w-50">
-                        <input type="text" class="form-control float-left" name="search_library">
-                        <button class="btn btn-primary btn-sm position-absolute" style="right:0;margin:3px;height:2rem">Search</button>
-                    </div>
+                    <form action="">
+                        <div class="position-relative w-50">
+                            <input type="text" class="form-control float-left" name="search" value={{ $currentSearch ?? '' }}>
+                            <button class="btn btn-primary btn-sm position-absolute" style="right:0;margin:3px;height:2rem">Search</button>
+                        </div>
+                    </form>
                 </x-slot>
             </div>
         </div>
@@ -22,13 +23,13 @@
                 <div class="card">
                     <div class="card-header" id="headingOne">
                         <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Your organisation <i class="fas fa-minus-circle float-right "></i>
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                Your organization <i class="fas fa-plus-circle float-right "></i>
                             </button>
                         </h2>
                     </div>
 
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <div class="card-body">
                             <table class="table table-borderless">
                                 <thead>
@@ -38,10 +39,12 @@
                                     <th style="width:20%"> Created By</th>
                                 </thead>
                                 <tbody>
-                                    @foreach($organisationGoals as $o)
+                                    @foreach($organizationGoals as $o)
                                     <tr>
                                         <td style="width:50px"> <input type="radio" name="selected_goal" value="{{ $o->id }}"></td>
-                                        <td style="width:50%"> {{ $o->title }}</td>
+                                        <td style="width:50%">
+                                            <a href="#" class="show-goal-detail" data-id="{{$o->id}}">{{ $o->title }}</a>
+                                        </td>
                                         <td style="width:20%">{{ $o->created_at->format('M d, Y') }} </td>
                                         <td style="width:20%">Supervisor </td>
                                     </tr>
@@ -70,10 +73,12 @@
                                     <th style="width:20%"> Created By</th>
                                 </thead>
                                 <tbody>
-                                    @foreach($organisationGoals as $o)
+                                    @foreach($organizationGoals as $o)
                                     <tr>
                                         <td style="width:50px"> <input type="radio" name="selected_goal" value="{{ $o->id }}"></td>
-                                        <td style="width:50%"> {{ $o->title }}</td>
+                                        <td style="width:50%">
+                                            <a href="#" class="show-goal-detail" data-id="{{$o->id}}">{{ $o->title }}</a>
+                                        </td>
                                         <td style="width:20%">{{ $o->created_at->format('M d, Y') }} </td>
                                         <td style="width:20%">Supervisor </td>
                                     </tr>
@@ -89,6 +94,7 @@
             </x-button>
         </form>
     </div>
+    @include('goal.partials.goal-detail-modal')
     <div class="modal fade" id="addGoalModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
@@ -145,6 +151,14 @@
                     }
                 });
 
+            });
+
+            $(document).on('click', '.show-goal-detail', function(e) {
+                e.preventDefault();
+                $.get('/goal/library/'+$(this).data('id'), function (data) {
+                    $("#goal-detail-modal").find('.data-placeholder').html(data);
+                    $("#goal-detail-modal").modal('show');
+                });
             });
 
         </script>

@@ -51,9 +51,8 @@
                 <div class="col-6 col-md-6">
                    <label> Supporting Material</label>
                     <div class="card p-3">
-                    
-                        <a href="https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides" target="_blank">Supporting Material</a>
-                        <a href="https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides" target="_blank">https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides</a>
+                        <span>Supporting Material</span>
+                        <a href="https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides" target="_blank">This is a placeholder for a link to relevant contacts and support documentation for this process. Content to follow.</a>
                     </div>
                 </div>
                 <div class="col-12 text-left pb-5 mt-3">

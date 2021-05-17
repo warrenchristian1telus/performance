@@ -30,7 +30,9 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
+                            @if ($type == 'upcoming') 
                                 <x-edit-cancel-save name="conversation_participant_id" id="conv_participant" />
+                            @endif
                             </div>
                         </div>
                     </div>
@@ -41,7 +43,9 @@
                                 <span id="conv_date" class="conv_date"></span>
                             </div>
                             <div class="col-md-3">
+                            @if ($type == 'upcoming') 
                                 <x-edit-cancel-save name="date" id="conv_date" />
+                            @endif
                             </div>
                         </div>
                     </div>
@@ -53,8 +57,9 @@
                                 <span id="conv_time" class="conv_time"></span>
                             </div>
                             <div class="col-md-3">
-
+                            @if ($type == 'upcoming') 
                                 <x-edit-cancel-save name="time" id="conv_time" />
+                            @endif
                             </div>
                         </div>
                     </div>
@@ -66,8 +71,9 @@
                                 <span id="conv_comment" class="conv_comment"></span>
                             </div>
                             <div class="col-md-3">
-
+                            @if ($type == 'upcoming') 
                                 <x-edit-cancel-save name="comment" id="conv_comment" />
+                            @endif
                             </div>
                         </div>
                     </div>
@@ -94,7 +100,9 @@
                             <span id="info_comment1" class="info_comment1"></span>
                         </div>
                         <div class="col-md-4">
+                        @if ($type == 'upcoming') 
                             <x-edit-cancel-save name="info_comment1" id="info_comment1" />
+                        @endif
                         </div>
                     </div>
 
@@ -107,7 +115,9 @@
                             <span id="info_comment2" class="info_comment2"></span>
                         </div>
                         <div class="col-md-4">
+                        @if ($type == 'upcoming') 
                             <x-edit-cancel-save name="info_comment2" id="info_comment2" />
+                        @endif
                         </div>
                     </div>
 
@@ -119,7 +129,9 @@
 
                         </div>
                         <div class="col-md-4">
+                        @if ($type == 'upcoming') 
                             <x-edit-cancel-save name="info_comment3" id="info_comment3" />
+                        @endif
                         </div>
                     </div>
                      </div>
@@ -136,7 +148,9 @@
                             <textarea class="form-control info_comment4 mb-4" name="info_comment4" id="info_comment4" disabled></textarea>
                         </div>
                         <div class="col-md-4">
+                        @if ($type == 'upcoming') 
                             <x-edit-cancel-save name="info_comment4" id="info_comment4" />
+                        @endif
                         </div>
                     </div>
                     <h6> Comments</h6>
@@ -147,53 +161,69 @@
                             <span id="info_comment5" class="info_comment5"></span>
                         </div>
                         <div class="col-md-4">
+                        @if ($type == 'upcoming') 
                             <x-edit-cancel-save name="info_comment5" id="info_comment5" />
+                        @endif
                         </div>
                     </div>
                     </div>
                     <hr>
+                    @if ($type == 'upcoming')
                     <div>
-                    <h6><u>Sign Off</u></h6>
-                    <form id="sign_off_form" method="post">
-                        @csrf
-                        <div class="form-check">
-                            <input class="form-check-input" name="check_one" type="checkbox" id="defaultCheck1">
-                            <label class="form-check-label" for="defaultCheck1">
-                                My supervisor and I reviewed progress of my goals and adjusted as necessary.
-                            </label>
-                            <span class="text-danger error" data-error-for="check_one"></span>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" name="check_two" type="checkbox" id="defaultCheck2">
-                            <label class="form-check-label" for="defaultCheck2">
-                                I received guidance from my supervisor and understand what is expected of me between now and
-                                our next
-                                scheduled meeting.
-                            </label>
-                            <span class="text-danger error" data-error-for="check_two"></span>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            I
-                            <input class="form-check-input ml-2" type="radio" name="agreement" id="inlineRadio1" value="yes">
-                            <label class="form-check-label" for="inlineRadio1">Agree</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="agreement" id="inlineRadio2" value="no">
-                            <label class="form-check-label" for="inlineRadio2">Disagree</label>
-                        </div>
-                        with the content of this record of conversation
+                        <h6><u>Sign Off</u></h6>
+                        
+                        <form id="sign_off_form" method="post">
+                            @csrf
+                            <div class="form-check">
+                                <input class="form-check-input" name="check_one" type="checkbox" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    My supervisor and I reviewed progress of my goals and adjusted as necessary.
+                                </label>
+                                <span class="text-danger error" data-error-for="check_one"></span>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" name="check_two" type="checkbox" id="defaultCheck2">
+                                <label class="form-check-label" for="defaultCheck2">
+                                    I received guidance from my supervisor and understand what is expected of me between now and
+                                    our next
+                                    scheduled meeting.
+                                </label>
+                                <span class="text-danger error" data-error-for="check_two"></span>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                I
+                                <input class="form-check-input ml-2" type="radio" name="agreement" id="inlineRadio1" value="yes">
+                                <label class="form-check-label" for="inlineRadio1">Agree</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="agreement" id="inlineRadio2" value="no">
+                                <label class="form-check-label" for="inlineRadio2">Disagree</label>
+                            </div>
+                            with the content of this record of conversation
+                            <br>
+                            <span class="text-danger error" data-error-for="agreement"></span>
+
+                        </form>
+
+                        <div class="my-2">Enter employee ID to sign:</div>
+
+                        <input type="text" id="employee_id" class="form-control d-inline w-50">
+                        <button class="btn btn-primary btn-sign-off ml-2" type="button">Sign with my employee ID</button>
                         <br>
-                        <span class="text-danger error" data-error-for="agreement"></span>
+                        <span class="text-danger error" data-error-for="employee_id"></span>
 
+                    </div>
+                @endif
+                @if ($type == 'past') 
+                    <div class="my-2">Enter employee ID to unsign:</div>
+                    <form id="unsign-off-form" data-action-url="{{ route('conversation.unsignoff', 'xxx')}}" method="post">
+                        @csrf
+                        <input type="text" name="employee_id" id="employee_id" class="form-control d-inline w-50"> 
+                        <button data-action="unsignoff" class="btn btn-primary btn-sign-off ml-2" type="button">Un-Sign</button>
+                        <br>
+                        <span class="text-danger error" data-error-for="employee_id"></span>
                     </form>
-
-                </div>
-                <div class="my-2">Enter employee ID to sign:</div>
-
-                <input type="text" id="employee_id" class="form-control d-inline w-50"><button class="btn btn-primary btn-sign-off ml-2" type="button">Sign with my employee ID</button>
-                <br>
-                <span class="text-danger error" data-error-for="employee_id"></span>
-
+                @endif
             </div>
         </div>
 

@@ -3,13 +3,10 @@
 name: Static Deploy on OpensShift
   
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, closed]
-    branches:
-      # - dev
-      # - prod
-      # - test
-      - master
+  # https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows
+  push:
+    # Edit to the branch(es) you want to build and deploy on each push.
+    branches: [ master ]
 
 jobs:
   # Print variables for logging and debugging purposes
@@ -46,6 +43,19 @@ jobs:
       # Note: The secrets needed to log in are NOT available if the PR comes from a FORK.
       # PR's must originate from a branch off the original repo or else all openshift `oc` commands will fail.
       - name: Log in to OpenShift
-        run: oc login --token=${{ secrets.SA_TOKEN }} --server=https://api.silver.devops.gov.bc.ca:6443
+        run: |
+          oc login --token=${{ secrets.SA_TOKEN }} --server=https://api.silver.devops.gov.bc.ca:6443
       # Build the api images
-      - run: oc -n 332842-dev start-build bc/performance-docker-app
+      - name: Build and deploy the app
+        run: | 
+          oc project 332842-dev
+          export NAMESPACE="$(oc project -q)"
+          echo "Current namespace is $NAMESPACE"
+          oc start-build bc/performance-docker-app
+          oc logs -f bc/performance-docker-app
+          echo "Getting deployment status..."
+          oc rollout status deployment/performance-docker-app
+          echo "Listing pods.."
+          oc get pods|grep performance-docker-app
+          export ROUTE="$(oc get route performance-docker-app -o jsonpath='{.spec.host}')"
+          echo "performance-docker-app is exposed at $ROUTE"      

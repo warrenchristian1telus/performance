@@ -159,6 +159,7 @@
                     $("#goal-detail-modal").find('.data-placeholder').html(data);
                     $("#goal-detail-modal").modal('show');
                 });
+                $(this).parents('tr').find('input').attr('checked', true).prop('checked', true);
             });
 
         </script>

@@ -114,12 +114,16 @@
                     }
                     , error: function(error) {
                         var errors = error.responseJSON.errors;
+                        $('.error-date-alert').hide();
                         $('.text-danger').each(function(i, obj) {
                             $('.text-danger').text('');
                         });
                         Object.entries(errors).forEach(function callback(value, index) {
                             var className = '.error-' + value[0];
                             $(className).text(value[1]);
+                            if (value[0] === 'date') {
+                                $('.error-date-alert').show();
+                            }
                         });
                     }
                 });
@@ -176,6 +180,9 @@
             });
 
             $(document).on('click', '.btn-sign-off', function(e) {
+                if ($(this).data('action') === 'unsignoff' && !confirm('Are you sure you want to unsign off the conversation ?')) {
+                    return;
+                }
                 const url = ($(this).data('action') === 'unsignoff') ? '/conversation/unsign-off/' + conversation_id : '/conversation/sign-off/' + conversation_id;
                 const data = ($(this).data('action') === 'unsignoff') ? $('#unsign-off-form').serialize() : $('#sign_off_form').serialize() + '&' +
                         $.param({

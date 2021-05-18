@@ -9,13 +9,19 @@
         </button>
       </div>
       <div class="modal-body p-4">
+        <div class="alert alert-default-danger error-date-alert" style="display:none">
+          <span class="h5"><i class="icon fas fa-exclamation-circle"></i>
+          <span class="error-date">
+            Conversations must be scheduled every four months, at minimum.</span>
+          </span>
+        </div>
         <form id="conversation_form" action="{{ route ('conversation.store')}}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-6 col-md-6">
                     <label>
                        Topic </label>
-                        <select class="form-control" name="conversation_topic_id">
+                        <select class="form-control" name="conversation_topic_id" required>
                             @foreach ($conversationTopics as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
@@ -33,8 +39,7 @@
                     </div>
                        <div class="col-6 col-md-6 mt-1">
                         <label> Date</label>
-                        <x-input class="error-date" type="date" name="date" :min="Carbon\Carbon::now()->toDateString()"  />
-                    <small class="text-danger error-date"></small>
+                        <x-input class="error-date" type="date" name="date" :min="Carbon\Carbon::now()->toDateString()" required />
                     </div>
                        <div class="col-6 col-md-6 mt-1">
                           <label> Time</label>

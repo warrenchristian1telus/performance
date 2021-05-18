@@ -26,10 +26,16 @@ class ConversationRequest extends FormRequest
         return [
             'conversation_topic_id' => 'required|exists:conversation_topics,id',
             'participant_id' => 'required',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today|before:'. \Carbon\Carbon::now()->addDays(122),
             'time' => 'required',
             'comment' => 'required',
+        ];
+    }
 
+    public function messages()
+    {
+        return [
+            'date.*' => 'Conversations must be scheduled every four months, at minimum.'
         ];
     }
 }

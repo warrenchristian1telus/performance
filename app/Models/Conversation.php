@@ -51,10 +51,14 @@ class Conversation extends Model
 
     public static function hasNotDoneAtleastOnceIn4Months() 
     {
-        $latestPastConversation = self::whereNotNull('signoff_user_id')->orderBy('date', 'DESC')->first();
+        $latestPastConversation = self::latestPastConversation();
         if ($latestPastConversation) {
             return $latestPastConversation->date_time->addDays(122)->isPast();
         }
         return true;
+    }
+    public static function latestPastConversation() 
+    {
+        return self::whereNotNull('signoff_user_id')->orderBy('date', 'DESC')->first();
     }
 }

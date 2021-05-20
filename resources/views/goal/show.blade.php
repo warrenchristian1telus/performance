@@ -24,7 +24,7 @@
                              <div class="px-3">
                                <b>Linked Goals</b>
                                 <span class="float-right">
-                                 <button class="btn  btn-sm" data-toggle="modal" data-target="#supervisorGoalModal"> <i class="fa fa-plus"></i></button>
+                                 <button class="btn  btn-sm link-goal" data-id="{{ $goal->id }}" data-toggle="modal" data-target="#supervisorGoalModal"> <i class="fa fa-plus"></i></button>
                                   
                                 </span>
                             </div>
@@ -53,7 +53,7 @@
                               
                                 <p class="text-center">No Goals to Display</p>
                                 <p class="text-center font-weight-bold">Start linking to your supervisor's goal</p>
-                                <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#supervisorGoalModal">Link Goals</button>
+                                <button class="btn btn-outline-primary btn-sm link-goal" data-id="{{ $goal->id }}" data-toggle="modal" data-target="#supervisorGoalModal">Link Goals</button>
                             </div>
                             @endforelse
 
@@ -86,6 +86,7 @@
             </div>
         </div>
     </div>
+    @include('goal.partials.supervisor-goal')
 
     @push('js')
         <script>
@@ -97,7 +98,26 @@
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
-            
+            $(document).on('click', ".link-goal", function () {
+                $.get('/goal/supervisor/'+$(this).data('id'), function (data) {
+                    $("#supervisorGoalModal").find('.data-placeholder').html(data);
+                    $("#supervisorGoalModal").modal('show');
+                });
+            });
+
+            let linkedGoals = [];
+            $(document).on('click','.btn-link', function(e){
+                   console.log(e.target.innerText);
+                   if(e.target.innerText == 'Link'){
+                        linkedGoals.push(e.target.getAttribute('data-id'));
+                       e.target.innerText = 'Unlink';
+                   }else{
+                       linkedGoals.pop(e.target.getAttribute('data-id'));
+                        e.target.innerText = 'Link';
+                   }
+                   console.log(linkedGoals);
+                   $('#linked_goal_id').val(linkedGoals);
+            });
         </script>
     @endpush
 </x-side-layout>

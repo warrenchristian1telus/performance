@@ -9,7 +9,7 @@
                     </p>
                 </a>
                 <div class="flex-fill"></div>
-                <x-button icon="link" class="text-light link-goal" data-id="{{$goal->id}}"  tooltip="Link to Supervisor’s goals <br> A new addition to the performance application is the ability for employees to link their goals with the goals of their supervisors. This is meant to help employees see how their work relates to the priorities of the team and the organization and offers a foundation to discuss progress towards common objectives and outcomes and allows supervisors to see how employee goals are aligned across the entire organization.">
+                <x-button icon="link" class="text-light link-goal" data-id="{{$goal->id}}"  tooltip="You can link this goal to your supervisor’s goals (if they have been shared with you) to create a connection and demonstrate how your work relates to the priorities of your team or organization.">
                 </x-button>
                 <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this goal?')">
                     @csrf

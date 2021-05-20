@@ -265,8 +265,9 @@
                         $('#info_comment5').text(result.info_comment4);
                         $('#info_comment5_edit').text(result.info_comment4);
 
-                        $('#unsign-off-form').attr('action', $('#unsign-off-form').data('action-url').replace('xxx', conversation_id));
-
+                        if(!!$('#unsign-off-form').length) {
+                            $('#unsign-off-form').attr('action', $('#unsign-off-form').data('action-url').replace('xxx', conversation_id));
+                        }
                         $('#questions-to-consider').html('');
                         if(result.topic.id == 4){
                             $('#info_to_capture').removeClass('d-none');

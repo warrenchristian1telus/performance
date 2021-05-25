@@ -22,7 +22,7 @@ jobs:
           echo OC CLI Version: $(oc version)
   # Build the API
   build:
-    name: Build API and APP
+    name: Build and deploy APP to Dev environment
     runs-on: ubuntu-latest
     # if: ${{ github.event.pull_request.merged == true}}
     # env:
@@ -30,6 +30,14 @@ jobs:
     #   BUILD_NAMESPACE: 332842-tools
     #   BRANCH: ${{ github.base_ref }}
     #   #KC_AUTH_URL: https://dev.oidc.gov.bc.ca/auth/
+    environment: DEV
+    env:
+      BUILD_ID: ${{ github.event.number }}
+      NAMESPACE: 332842-dev
+      BUILD_NAMESPACE: 332842-dev
+      BRANCH: master
+      APP: performance-docker-app
+      APP_HOST: performance-docker-app-332842-dev.apps.silver.devops.gov.bc.ca
     steps:
       # Checkout the PR branch
       # - name: Print env
@@ -48,9 +56,8 @@ jobs:
       # Build the api images
       - name: Build and deploy the app
         run: | 
-          oc project 332842-dev
-          export NAMESPACE="$(oc project -q)"
-          echo "Current namespace is $NAMESPACE"
+          oc project ${NAMESPACE}
+          echo "Current namespace is ${NAMESPACE}"
           oc start-build bc/performance-docker-app
           oc logs -f bc/performance-docker-app
           echo "Getting deployment status..."
@@ -59,3 +66,62 @@ jobs:
           oc get pods|grep performance-docker-app
           export ROUTE="$(oc get route performance-docker-app -o jsonpath='{.spec.host}')"
           echo "performance-docker-app is exposed at $ROUTE"      
+
+
+  # Deploy Test
+  deployTest:
+    name: Deploy to Test environment
+    runs-on: ubuntu-latest
+    environment: TEST
+    # if: ${{ github.event.pull_request.merged == true && github.base_ref == 'test'}}
+    env:
+      BUILD_ID: ${{ github.event.number }}
+      NAMESPACE: 332842-test
+      BUILD_NAMESPACE: 332842-test
+      BRANCH: master
+      APP: performance-docker-app
+      APP_HOST: performance-docker-app-332842-test.apps.silver.devops.gov.bc.ca
+      HOST_PREFIX: test-
+      # KC_AUTH_URL: https://oidc.gov.bc.ca/auth/
+      # DEPLOYMENT_ENV: test
+      # DEPLOYMENT_ENV_HIDDEN_FLAG: prod
+      # MAP_BOX_TOKEN : ${{ secrets.MAP_BOX_TOKEN }}
+      # GOOGLE_API_KEY : ${{ secrets.GOOGLE_API_KEY }}
+    # needs:
+    #   - build
+    steps:
+      - name: Print env
+        run: |
+          echo BUILD ID: $BUILD_ID
+          echo BUILD NAMESPACE: $BUILD_NAMESPACE
+          echo NAMESPACE: $NAMESPACE
+          echo BRANCH: $BRANCH
+          echo HOST_PREFIX: $HOST_PREFIX
+      # Checkout the PR branch
+      - name: Checkout Target Branch
+        uses: actions/checkout@v1
+
+      # Log in to OpenShift.
+      # Note: The secrets needed to log in are NOT available if the PR comes from a FORK.
+      # PR's must originate from a branch off the original repo or else all openshift `oc` commands will fail.
+      - name: Log in to OpenShift
+        run: |
+          oc login --token=${{ secrets.SA_TOKEN }} --server=https://api.silver.devops.gov.bc.ca:6443     
+      - name: Deploy APP
+        working-directory: "./devops/"
+        run: |
+          test -n "${NAMESPACE}"
+          test -n "${BUILD_NAMESPACE}"
+          test -n "${BRANCH}"
+          @echo "+\n++ Deploying APP with tag: $(BUILD_TAG)\n+"
+          echo "Current namespace is $NAMESPACE"
+          @oc -n ${NAMESPACE} process -f openshift/app-template.yaml \
+            -p NAME=${APP} \
+            -p HOST_NAME=${APP_HOST} \
+            -p BUILD_NAMESPACE=${BUILD_NAMESPACE]" | oc -n ${NAMESPACE} apply -f -
+          $(call rollout_and_wait,dc/${APP}) 
+          oc project ${NAMESPACE}     
+          echo "Listing pods.."
+          oc get pods|grep ${APP}
+          export ROUTE="$(oc get route ${APP} -o jsonpath='{.spec.host}')"
+          echo "${APP} is exposed at 'https://'$ROUTE"      

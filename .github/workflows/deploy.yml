@@ -30,7 +30,6 @@ jobs:
     #   BUILD_NAMESPACE: 332842-tools
     #   BRANCH: ${{ github.base_ref }}
     #   #KC_AUTH_URL: https://dev.oidc.gov.bc.ca/auth/
-    environment: DEV
     env:
       BUILD_ID: ${{ github.event.number }}
       NAMESPACE: 332842-dev

@@ -116,7 +116,7 @@ jobs:
           oc -n ${NAMESPACE} process -f openshift/app-template.yaml \
             -p NAME=${APP} \
             -p HOST_NAME=${APP_HOST} \
-            -p BUILD_NAMESPACE=${BUILD_NAMESPACE]" | oc -n ${NAMESPACE} apply -f -
+            -p BUILD_NAMESPACE=${BUILD_NAMESPACE} | oc -n ${NAMESPACE} apply -f -
           $(call rollout_and_wait,dc/${APP}) 
           oc project ${NAMESPACE}     
           echo "Listing pods.."

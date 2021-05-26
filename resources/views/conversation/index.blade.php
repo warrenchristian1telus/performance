@@ -137,6 +137,7 @@
                 $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").removeClass("d-none");
                 $('.btn-conv-edit').filter("[data-name=" + elementName + "]").addClass("d-none");
                 $('.btn-conv-edit').prop('disabled', true);
+                $(element_id).focus();
                 // Enable Edit.
                 // Disable view
             });
@@ -191,6 +192,7 @@
                 $(this).html("<div class='spinner-border spinner-border-sm' role='status'></div>");
                 const that = this;
                 $("span.error").html("");
+                $(".alert.common-error").hide();
                 $.ajax({
                     url: url
                     , type: 'POST'
@@ -203,9 +205,19 @@
                     , error: function(error) {
                         const errors = error.responseJSON.errors;
                         const errorElements = Object.keys(errors);
-                        errorElements.forEach((element) => {
-                            $("span.error").filter('[data-error-for="' + element + '"]').html(errors[element][0]);
-                        });
+                        if (errorElements.includes('employee_id')) {
+                            errorElements.forEach((element) => {
+                                $("span.error").filter('[data-error-for="' + element + '"]').html(errors[element][0]);
+                            });
+                        } 
+                        delete errors['employee_id'];
+                        const commonErrorMessage = Object.values(errors)[0];
+                        if (commonErrorMessage) {
+                            $(".alert.common-error").find('span').html(commonErrorMessage);
+                            $(".alert.common-error").show();
+                        }
+
+
                     }
                     , complete: function() {
                         const btnText = ($(that).data('action') === 'unsignoff') ? 'Unsign' : 'Sign with my employee ID';

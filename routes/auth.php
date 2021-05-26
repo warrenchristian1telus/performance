@@ -1,15 +1,28 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
+/* use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\VerifyEmailController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\VerifyEmailController; */
 
+use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+
+/*
+Route::get('/login', function () {
+    return Socialite::driver('azure')
+    ->scopes(['openid', 'email'])
+    ->redirect();
+})->name('login');
+
+Route::get('/login/microsoft/callback', function () {
+    $user = Socialite::driver('azure')->user();
+    dd($user);
+});/*
 
 /* 
 Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -17,8 +30,8 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
-                ->middleware('guest'); */
-
+                ->middleware('guest'); 
+*/ 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
                 ->middleware('guest')
                 ->name('login');

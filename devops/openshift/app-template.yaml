@@ -109,9 +109,7 @@ parameters:
   - name: REPLICAS
     value: "2"
   - name: PORT
-    value: "8000"
-  - name: IMAGE_STREAM_TAG
-    required: true  
+    value: "8000" 
   - name: BUILD_NAMESPACE
     required: true
   - name: IMAGE_REGISTRY

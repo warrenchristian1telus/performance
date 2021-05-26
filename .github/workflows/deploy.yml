@@ -112,7 +112,6 @@ jobs:
           test -n "${NAMESPACE}"
           test -n "${BUILD_NAMESPACE}"
           test -n "${BRANCH}"
-          echo "+\n++ Deploying APP with tag: latest\n+"
           echo "Current namespace is $NAMESPACE"
           oc -n ${NAMESPACE} process -f openshift/app-template.yaml \
             -p NAME=${APP} \

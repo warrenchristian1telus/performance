@@ -19,9 +19,12 @@ objects:
       revisionHistoryLimit: 10
       selector:
         matchLabels:
-          deployment: ${NAME}
+          deployment: ${NAME}     
       strategy:
-        type: Rolling
+       rollingUpdate:
+         maxSurge: 25%
+         maxUnavailable: 25%
+       type: RollingUpdate
       template:
         metadata:
           labels:

@@ -25,18 +25,19 @@ class SignoffRequest extends FormRequest
     {
         return [
             'employee_id' => 'required|digits:6',
-            'check_one' => 'accepted',
-            'check_two' => 'accepted',
-            'agreement' => 'accepted'
+            'check_one' => 'required|boolean',
+            'check_two' => 'required|boolean',
+            'check_three' => 'required|boolean'
         ];
     }
 
     public function messages() 
     {
+        $message = __('You should discuss performance expectations, adjust goals, and capture significant conversation outcomes as part of this process. Please indicate if you agree or disagree with each of the statements before signing off');
         return [
-            'check_one.*' => 'please select all the fields',
-            'check_two.*' => 'please select all the fields',
-            'agreement.*' => 'Please click on agree to signoff the conversation',
+            'check_one.*' => $message,
+            'check_two.*' => $message,
+            'check_three.*' => $message,
             'employee_id.*' => 'Please enter your employee ID to complete the signoff'
         ];
     }

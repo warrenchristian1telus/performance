@@ -96,12 +96,12 @@
                     <div class="row">
                         <div class="col-md-8">
                             <textarea class="form-control info_comment1 mb-4 d-none" name="info_comment1" id="info_comment1_edit"></textarea>
-                            <textarea class="form-control info_comment1 mb-4" name="info_comment1" id="info_comment1" disabled></textarea>
+                            <textarea class="form-control info_comment1 mb-4 btn-conv-edit" name="info_comment1" id="info_comment1" data-id="info_comment1" data-name="info_comment1"></textarea>
                             <span id="info_comment1" class="info_comment1"></span>
                         </div>
                         <div class="col-md-4">
                         @if ($type == 'upcoming') 
-                            <x-edit-cancel-save name="info_comment1" id="info_comment1" />
+                            <x-edit-cancel-save name="info_comment1" id="info_comment1" hideEdit="true" />
                         @endif
                         </div>
                     </div>
@@ -111,12 +111,12 @@
                     <div class="row">
                         <div class="col-md-8">
                             <textarea class="form-control info_comment2 mb-4 d-none" name="info_comment2" id="info_comment2_edit"></textarea>
-                            <textarea class="form-control info_comment2 mb-4" name="info_comment2" id="info_comment2" disabled></textarea>
+                            <textarea class="form-control info_comment2 mb-4 btn-conv-edit" name="info_comment2" id="info_comment2" data-id="info_comment2" data-name="info_comment2"></textarea>
                             <span id="info_comment2" class="info_comment2"></span>
                         </div>
                         <div class="col-md-4">
                         @if ($type == 'upcoming') 
-                            <x-edit-cancel-save name="info_comment2" id="info_comment2" />
+                            <x-edit-cancel-save name="info_comment2" id="info_comment2" hideEdit="true" />
                         @endif
                         </div>
                     </div>
@@ -125,12 +125,12 @@
                     <div class="row">
                         <div class="col-md-8">
                             <textarea class="form-control info_comment3 mb-4 d-none" name="info_comment3" id="info_comment3_edit"></textarea>
-                            <textarea class="form-control info_comment3 mb-4" name="info_comment3" id="info_comment3" disabled></textarea>
+                            <textarea class="form-control info_comment3 mb-4 btn-conv-edit" name="info_comment3" id="info_comment3" data-id="info_comment3" data-name="info_comment3"></textarea>
 
                         </div>
                         <div class="col-md-4">
                         @if ($type == 'upcoming') 
-                            <x-edit-cancel-save name="info_comment3" id="info_comment3" />
+                            <x-edit-cancel-save name="info_comment3" id="info_comment3" hideEdit="true"  />
                         @endif
                         </div>
                     </div>
@@ -145,11 +145,11 @@
                     <div class="row">
                         <div class="col-md-8">
                             <textarea class="form-control info_comment4 mb-4 d-none" name="info_comment4" id="info_comment4_edit"></textarea>
-                            <textarea class="form-control info_comment4 mb-4" name="info_comment4" id="info_comment4" disabled></textarea>
+                            <textarea class="form-control info_comment4 mb-4 btn-conv-edit" data-name="info_comment4" data-id="info_comment4" name="info_comment4" id="info_comment4"></textarea>
                         </div>
                         <div class="col-md-4">
                         @if ($type == 'upcoming') 
-                            <x-edit-cancel-save name="info_comment4" id="info_comment4" />
+                            <x-edit-cancel-save name="info_comment4" id="info_comment4" hideEdit="true" />
                         @endif
                         </div>
                     </div>
@@ -157,12 +157,12 @@
                     <div class="row">
                         <div class="col-md-8">
                             <textarea class="form-control info_comment5 mb-4 d-none" name="info_comment5" id="info_comment5_edit"></textarea>
-                            <textarea class="form-control info_comment5 mb-4" name="info_comment5" id="info_comment5" disabled></textarea>
+                            <textarea class="form-control info_comment5 mb-4 btn-conv-edit" name="info_comment5" id="info_comment5" data-id="info_comment5" data-name="info_comment5"></textarea>
                             <span id="info_comment5" class="info_comment5"></span>
                         </div>
                         <div class="col-md-4">
                         @if ($type == 'upcoming') 
-                            <x-edit-cancel-save name="info_comment5" id="info_comment5" />
+                            <x-edit-cancel-save name="info_comment5" id="info_comment5" hideEdit="true"/>
                         @endif
                         </div>
                     </div>
@@ -170,39 +170,36 @@
                     <hr>
                     @if ($type == 'upcoming')
                     <div>
-                        <h6><u>Sign Off</u></h6>
-                        
+                        <h5><u>Sign-off</u></h5>
+                        <div class="alert alert-default-danger common-error" style="display:none">
+                            <span class="h5">
+                                
+                            </span>
+                        </div>
                         <form id="sign_off_form" method="post">
                             @csrf
-                            <div class="form-check">
-                                <input class="form-check-input" name="check_one" type="checkbox" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    My supervisor and I reviewed progress of my goals and adjusted as necessary.
-                                </label>
-                                <span class="text-danger error" data-error-for="check_one"></span>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" name="check_two" type="checkbox" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    I received guidance from my supervisor and understand what is expected of me between now and
-                                    our next
-                                    scheduled meeting.
-                                </label>
-                                <span class="text-danger error" data-error-for="check_two"></span>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                I
-                                <input class="form-check-input ml-2" type="radio" name="agreement" id="inlineRadio1" value="yes">
-                                <label class="form-check-label" for="inlineRadio1">Agree</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agreement" id="inlineRadio2" value="no">
-                                <label class="form-check-label" for="inlineRadio2">Disagree</label>
-                            </div>
-                            with the content of this record of conversation
-                            <br>
-                            <span class="text-danger error" data-error-for="agreement"></span>
-
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th></th>
+                                    <th>Agree</th>
+                                    <th>Disagree</th>
+                                </tr>
+                                <tr>
+                                    <td>My supervisor and I reviewed progress of my goals and adjusted as necessary.</td>
+                                    <td class="text-center"><input type="radio" name="check_one" value="1"></td>
+                                    <td class="text-center"><input type="radio" name="check_one" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>I received guidance from my supervisor and understand what is expected of me between now and our next scheduled meeting.</td>
+                                    <td class="text-center"><input type="radio" name="check_two" value="1"></td>
+                                    <td class="text-center"><input type="radio" name="check_two" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>I accept the content of this record of conversation.</td>
+                                    <td class="text-center"><input type="radio" name="check_three" value="1"></td>
+                                    <td class="text-center"><input type="radio" name="check_three" value="0"></td>
+                                </tr>
+                            </table>
                         </form>
 
                         <div class="my-2">Enter employee ID to sign:</div>

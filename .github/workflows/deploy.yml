@@ -9,62 +9,62 @@ on:
     branches: [ master ]
 
 jobs:
-  # Print variables for logging and debugging purposes
-  # checkEnv:
-  #   name: Check Env variables
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Print Env Vars
-  #       run: |
-  #         echo Git Base Ref: ${{ github.base_ref }}
-  #         echo Git Build ID: ${{ github.event.number }}
-  #         echo Git Pull Request Ref: ${{ github.event.pull_request.head.sha }}
-  #         echo OC CLI Version: $(oc version)
-  # # Build the API
-  # build:
-  #   name: Build and deploy APP to Dev environment
-  #   runs-on: ubuntu-latest
-  #   # if: ${{ github.event.pull_request.merged == true}}
-  #   # env:
-  #   #   BUILD_ID: ${{ github.event.number }}
-  #   #   BUILD_NAMESPACE: 332842-tools
-  #   #   BRANCH: ${{ github.base_ref }}
-  #   #   #KC_AUTH_URL: https://dev.oidc.gov.bc.ca/auth/
-  #   env:
-  #     BUILD_ID: ${{ github.event.number }}
-  #     NAMESPACE: 332842-dev
-  #     BUILD_NAMESPACE: 332842-dev
-  #     BRANCH: master
-  #     APP: performance-docker-app
-  #     APP_HOST: performance-docker-app-332842-dev.apps.silver.devops.gov.bc.ca
-  #   steps:
-  #     # Checkout the PR branch
-  #     # - name: Print env
-  #     #   run: |
-  #     #     echo BUILD ID: $BUILD_ID
-  #     #     echo BUILD NAMESPACE: $BUILD_NAMESPACE
-  #     #     echo BRANCH: $BRANCH
-  #     - name: Checkout Target Branch
-  #       uses: actions/checkout@v1
-  #     # Log in to OpenShift.
-  #     # Note: The secrets needed to log in are NOT available if the PR comes from a FORK.
-  #     # PR's must originate from a branch off the original repo or else all openshift `oc` commands will fail.
-  #     - name: Log in to OpenShift
-  #       run: |
-  #         oc login --token=${{ secrets.SA_TOKEN }} --server=https://api.silver.devops.gov.bc.ca:6443
-  #     # Build the api images
-  #     - name: Build and deploy the app
-  #       run: | 
-  #         oc project ${NAMESPACE}
-  #         echo "Current namespace is ${NAMESPACE}"
-  #         oc start-build bc/performance-docker-app
-  #         oc logs -f bc/performance-docker-app
-  #         echo "Getting deployment status..."
-  #         oc rollout status deployment/performance-docker-app
-  #         echo "Listing pods.."
-  #         oc get pods|grep performance-docker-app
-  #         export ROUTE="$(oc get route performance-docker-app -o jsonpath='{.spec.host}')"
-  #         echo "performance-docker-app is exposed at $ROUTE"      
+  Print variables for logging and debugging purposes
+  checkEnv:
+    name: Check Env variables
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Env Vars
+        run: |
+          echo Git Base Ref: ${{ github.base_ref }}
+          echo Git Build ID: ${{ github.event.number }}
+          echo Git Pull Request Ref: ${{ github.event.pull_request.head.sha }}
+          echo OC CLI Version: $(oc version)
+  # Build the API
+  build:
+    name: Build and deploy APP to Dev environment
+    runs-on: ubuntu-latest
+    # if: ${{ github.event.pull_request.merged == true}}
+    # env:
+    #   BUILD_ID: ${{ github.event.number }}
+    #   BUILD_NAMESPACE: 332842-tools
+    #   BRANCH: ${{ github.base_ref }}
+    #   #KC_AUTH_URL: https://dev.oidc.gov.bc.ca/auth/
+    env:
+      BUILD_ID: ${{ github.event.number }}
+      NAMESPACE: 332842-dev
+      BUILD_NAMESPACE: 332842-dev
+      BRANCH: master
+      APP: performance-docker-app
+      APP_HOST: performance-docker-app-332842-dev.apps.silver.devops.gov.bc.ca
+    steps:
+      # Checkout the PR branch
+      # - name: Print env
+      #   run: |
+      #     echo BUILD ID: $BUILD_ID
+      #     echo BUILD NAMESPACE: $BUILD_NAMESPACE
+      #     echo BRANCH: $BRANCH
+      - name: Checkout Target Branch
+        uses: actions/checkout@v1
+      # Log in to OpenShift.
+      # Note: The secrets needed to log in are NOT available if the PR comes from a FORK.
+      # PR's must originate from a branch off the original repo or else all openshift `oc` commands will fail.
+      - name: Log in to OpenShift
+        run: |
+          oc login --token=${{ secrets.SA_TOKEN }} --server=https://api.silver.devops.gov.bc.ca:6443
+      # Build the api images
+      - name: Build and deploy the app
+        run: | 
+          oc project ${NAMESPACE}
+          echo "Current namespace is ${NAMESPACE}"
+          oc start-build bc/performance-docker-app
+          oc logs -f bc/performance-docker-app
+          echo "Getting deployment status..."
+          oc rollout status deployment/performance-docker-app
+          echo "Listing pods.."
+          oc get pods|grep performance-docker-app
+          export ROUTE="$(oc get route performance-docker-app -o jsonpath='{.spec.host}')"
+          echo "performance-docker-app is exposed at $ROUTE"      
 
 
   # Deploy Test

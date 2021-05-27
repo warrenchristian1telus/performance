@@ -12,17 +12,17 @@ use App\Http\Controllers\Auth\VerifyEmailController; */
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
-/*
-Route::get('/login', function () {
+
+Route::get('/login/microsoft', function () {
     return Socialite::driver('azure')
     ->scopes(['openid', 'email'])
     ->redirect();
-})->name('login');
+})->name('ms-login');
 
 Route::get('/login/microsoft/callback', function () {
     $user = Socialite::driver('azure')->user();
     dd($user);
-});/*
+});
 
 /* 
 Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -31,7 +31,8 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
                 ->middleware('guest'); 
-*/ 
+*/
+
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
                 ->middleware('guest')
                 ->name('login');

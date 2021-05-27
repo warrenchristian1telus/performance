@@ -34,7 +34,7 @@ objects:
             - env:
                 - name: PORT
                   value: "${PORT}"
-              image: image-registry.openshift-image-registry.svc:5000/332842-dev/performance-docker-app
+              image: ${IMAGE_REGISTRY}/332842-dev/performance-docker-app
               imagePullPolicy: Always
               name: ${NAME}
               ports:

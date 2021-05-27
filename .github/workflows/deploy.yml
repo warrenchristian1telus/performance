@@ -9,7 +9,7 @@ on:
     branches: [ master ]
 
 jobs:
-  Print variables for logging and debugging purposes
+  #Print variables for logging and debugging purposes
   checkEnv:
     name: Check Env variables
     runs-on: ubuntu-latest
@@ -20,7 +20,7 @@ jobs:
           echo Git Build ID: ${{ github.event.number }}
           echo Git Pull Request Ref: ${{ github.event.pull_request.head.sha }}
           echo OC CLI Version: $(oc version)
-  # Build the API
+  #Build the API
   build:
     name: Build and deploy APP to Dev environment
     runs-on: ubuntu-latest

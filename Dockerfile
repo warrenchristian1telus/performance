@@ -7,9 +7,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
-COPY .env /app
 
 RUN composer update --ignore-platform-reqs
+
 EXPOSE 8000
 
 RUN chgrp -R 0 /app && \

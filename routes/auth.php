@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\AzureLoginController;
 /* use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -13,16 +14,9 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
 
-Route::get('/login/microsoft', function () {
-    return Socialite::driver('azure')
-    ->scopes(['openid', 'email'])
-    ->redirect();
-})->name('ms-login');
+Route::get('/login/microsoft', [AzureLoginController::class, 'login'])->name('ms-login');
 
-Route::get('/login/microsoft/callback', function () {
-    $user = Socialite::driver('azure')->user();
-    dd($user);
-});
+Route::get('/login/microsoft/callback', [AzureLoginController::class, 'handleCallback'])->name('ms-callback');
 
 /* 
 Route::get('/register', [RegisteredUserController::class, 'create'])

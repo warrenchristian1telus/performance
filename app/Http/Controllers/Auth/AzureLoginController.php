@@ -19,7 +19,6 @@ class AzureLoginController extends SocialiteBaseController {
     public function login()
     {
         return Socialite::driver($this->provider)
-			->stateless()
             ->scopes(['openid', 'email'])
             ->redirect();
     }
@@ -27,7 +26,7 @@ class AzureLoginController extends SocialiteBaseController {
     public function handleCallback() {
         try {
 
-            $user =  Socialite::driver($this->provider)->stateless()->user();
+            $user =  Socialite::driver($this->provider)->user();
             $isUser = User::where($this->col, $user->id)->first();
 
             if ($isUser) {

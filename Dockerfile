@@ -30,11 +30,8 @@ WORKDIR /app
 COPY . /app
 
 RUN composer update --ignore-platform-reqs
-<<<<<<< HEAD
 RUN php artisan config:clear
-=======
 
->>>>>>> bb66013a2880d939ffaae4c0a499844ba53b9223
 EXPOSE 8000
 
 RUN chgrp -R 0 /app && \

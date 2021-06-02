@@ -27,8 +27,7 @@
             </p>
         </div>
         <div class="card-footer">
-            {{ $goal->user->name}}
-
+            <b>Goal created by: </b>{{ $goal->user->name}}
             <span class="float-right">
                 @include('goal.partials.status-change')
             </span>

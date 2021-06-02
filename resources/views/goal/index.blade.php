@@ -3,7 +3,7 @@
         @include('goal.partials.tabs')
     </x-slot>
     <x-button icon="plus-circle" data-toggle="modal" data-target="#addGoalModal">
-        Create new Goal
+        Create New Goal
     </x-button>
                                 
     <x-button icon="clone" href="{{ route('goal.library') }}">
@@ -22,7 +22,7 @@
             @endforeach
             @else
              <div class="col-12 col-sm-12">
-                    @include('goal.partials.target-table',['goals'=>$goals])
+                @include('goal.partials.target-table',['goals'=>$goals])
             </div>
             @endif
         </div>
@@ -35,7 +35,7 @@
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header bg-primary">
-        <h5 class="modal-title" id="addGoalModalLabel">Create new Goal</h5>
+        <h5 class="modal-title" id="addGoalModalLabel">Create New Goal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -57,23 +57,23 @@
                     <small class="goal_type_text">@if($goaltypes) {{ $goaltypes[0]->description }} @endif</small>
                     </div>
                        <div class="col-6">
-                    <x-input label="Goal Title" name="title" tooltip='This is a descriptive title of a Goal. For example, <i>&#8221;My Performance&#8221;</i>' />
+                    <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
                     <small class="text-danger error-title"></small>
                     </div>
                        <div class="col-6">
-                    <x-textarea label="What" name="what" tooltip='This should be a concise opening statement of what you plan to achive. For example, <i>&#8221;My goal is to deliver informative MyPerformance sessions to ministry audiences&#8221;</i>'  />
+                    <x-textarea label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
                     <small class="text-danger error-what"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Why" name="why" tooltip='Define why this goal is important to you and organization (value of achievement). For example, <i>&#8221;This will improve the  consistency and quality of the employee experience across BCPS.&#8221;</i>'  />
+                    <x-textarea label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".'  />
                     <small class="text-danger error-why"></small>
                    </div>
                        <div class="col-6">
-                    <x-textarea label="How" name="how" tooltip='This should describe your plan of the steps you intent to take to achieve your goal. For example, <i>&#8221;I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle.&#8221;</i>' />
+                    <x-textarea label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' />
                     <small class="text-danger error-how"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Measure of success" name="measure_of_success" tooltip='This is a qualitative and quantitative measure of the success of your goal. For example, <i>&#8221;Deliver a minimum of 2 sessions per month that reach at least 100 people&#8221;</i>'  />
+                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people".'  />
                     <small class="text-danger error-measure_of_success"></small>
                 </div>
                 <div class="col-sm-6">
@@ -170,6 +170,15 @@
         $('#linked_goal_id').val(linkedGoals);
     });
     
+    $(document).on('click', '.goal-change a', function (e) {
+        const movingToPastMessage = "Changing the status of this goal will move it to your Past Goals tab. You can click there to make the goal active again at any time. Proceed?";
+        const movingToCurrentMessage = "Changing the status of this goal will move it to your Current Goals tab. You can click there to access the goal again at any time. Proceed?";
+        if($(this).data('current-status') === 'active' && !confirm(movingToPastMessage)) {
+        e.preventDefault();
+        } else if($(this).data('status') === 'active' && !confirm(movingToCurrentMessage)) {
+        e.preventDefault();
+        }
+    });
     </script>
     </x-slot>
 

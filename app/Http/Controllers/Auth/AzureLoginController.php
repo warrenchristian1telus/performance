@@ -26,7 +26,7 @@ class AzureLoginController extends SocialiteBaseController {
     public function handleCallback() {
         try {
 
-            $user =  Socialite::driver($this->provider)->user();
+            $user = Socialite::driver($this->provider)->user();
             $isUser = User::where($this->col, $user->id)->first();
 
             if ($isUser) {

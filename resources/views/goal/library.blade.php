@@ -6,8 +6,9 @@
                     <small><a href="{{ route('goal.index') }}">back</a></small>
                     <form action="">
                         <div class="position-relative w-50">
-                            <input type="text" class="form-control float-left" name="search" value={{ $currentSearch ?? '' }}>
+                            
                             <button class="btn btn-primary btn-sm position-absolute" style="right:0;margin:3px;height:2rem">Search</button>
+                            <div class="form-control input clearfix float-left" id="search-input" name="search"></div>
                         </div>
                     </form>
                 </x-slot>
@@ -19,17 +20,17 @@
         <p>Click below to add goals to your profile that were suggested by:</p>
         <form id="goal_form" method="POST" action="{{ route('goal.library') }}">
             @csrf
-            <div class="accordion" id="accordionExample">
+            <div class="accordion" id="accordionLibrary">
                 <div class="card">
                     <div class="card-header" id="headingOne">
                         <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                Your organization <i class="fas fa-plus-circle float-right "></i>
+                            <button class="btn btn-link btn-block text-left  {{$expanded ? '' : 'collapsed'}}" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="{{$expanded ? 'true' : 'false'}}" aria-controls="collapseOne">
+                                Your organization <i class="fas fa-{{ $expanded ? 'minus' : 'plue' }}-circle float-right "></i>
                             </button>
                         </h2>
                     </div>
 
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div id="collapseOne" class="collapse {{$expanded ? 'show' : ''}}" aria-labelledby="headingOne" data-parent="#accordionLibrary">
                         <div class="card-body">
                             <table class="table table-borderless">
                                 <thead>
@@ -43,7 +44,7 @@
                                     <tr>
                                         <td style="width:50px"> <input type="radio" name="selected_goal" value="{{ $o->id }}"></td>
                                         <td style="width:50%">
-                                            <a href="#" class="show-goal-detail" data-id="{{$o->id}}">{{ $o->title }}</a>
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$o->id}}">{{ $o->title }}</a>
                                         </td>
                                         <td style="width:20%">{{ $o->created_at->format('M d, Y') }} </td>
                                         <td style="width:20%">Supervisor </td>
@@ -57,18 +58,18 @@
                 <div class="card">
                     <div class="card-header" id="headingTwo">
                         <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Your supervisor <i class="fas fa-plus-circle float-right "></i>
+                            <button class="btn btn-link btn-block text-left {{$expanded ? '' : 'collapsed'}} " type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="{{$expanded ? 'true' : 'false'}}" aria-controls="collapseTwo">
+                                Your supervisor <i class="fas fa-{{ $expanded ? 'minus' : 'plue' }}-circle float-right "></i>
 
                             </button>
                         </h2>
                     </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div id="collapseTwo" class="collapse {{$expanded ? 'show' : ''}}" aria-labelledby="headingTwo" data-parent="#accordionLibrary">
                         <div class="card-body">
                             <table class="table table-borderless">
                                 <thead>
                                     <th style="width:50px"> Select Goal</th>
-                                    <th style="width:50%"> Goal Title</th>
+                                    <th style="width:50%""> Goal Title</th>
                                     <th style="width:20%"> Date Added</th>
                                     <th style="width:20%"> Created By</th>
                                 </thead>
@@ -77,7 +78,7 @@
                                     <tr>
                                         <td style="width:50px"> <input type="radio" name="selected_goal" value="{{ $o->id }}"></td>
                                         <td style="width:50%">
-                                            <a href="#" class="show-goal-detail" data-id="{{$o->id}}">{{ $o->title }}</a>
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$o->id}}">{{ $o->title }}</a>
                                         </td>
                                         <td style="width:20%">{{ $o->created_at->format('M d, Y') }} </td>
                                         <td style="width:20%">Supervisor </td>
@@ -124,8 +125,44 @@
             </div>
         </div>
     </div>
+    @push('css')
+        <link rel="stylesheet" href="{{asset('css/taggle.css')}}">
+    @endpush
     <x-slot name="js">
+        <script src="{{asset('js/taggle.js')}}"> </script>
+        <script>
+            let searchString = '{{ $currentSearch ?? ''}}';
+            new Taggle("search-input", {
+                placeholder: '',
+                hiddenInputName: 'search',
+                tags: (searchString) ? searchString.split(' ') : []
+            });
+        </script>
+        @if ($expanded)
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            let markInstance = new Mark(document.querySelectorAll(".highlighter"));
 
+            (function performMark() {
+
+                // Read the keyword
+                var keyword = '{{ request()->search}}';
+
+                // Determine selected options
+                var options = {
+                    separateWordSearch: true
+                };
+
+                // Remove previous marked elements and mark
+                // the new keyword inside the context
+                markInstance.unmark({
+                    done: function(){
+                        markInstance.mark(keyword, options);
+                    }
+                });
+            })();
+        </script>
+        @endif
         <script>
             $('.card-header').click(function() {
                 $(this).find('i').toggleClass('fas fa-plus-circle fas fa-minus-circle');

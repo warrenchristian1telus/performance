@@ -175,8 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
-		SocialiteProviders\Manager\ServiceProvider::class, // add
-
+        SocialiteProviders\Manager\ServiceProvider::class, // add
     ],
 
     /*

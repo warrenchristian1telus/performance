@@ -35,7 +35,7 @@
         {{$goal['how']}}
     </div>
     
-    <b>{{__("Measure of success")}}</b>
+    <b>{{__("Measures of Success")}}</b>
     <div class="form-control-plaintext">
         {{$goal['measure_of_success']}}
     </div>

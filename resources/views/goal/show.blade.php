@@ -4,7 +4,7 @@
             {{ $goal['title'] }}
             <x-button icon="edit" :href="route('goal.edit', $goal->id)">Edit</x-button>
         </h2>
-        <small><a href="{{ route('goal.index') }}">Back to list</a></small>
+        <small><a href="{{ url()->previous() === url()->current() ? route('goal.index') : url()->previous() }}">Back to list</a></small>
     </x-slot>
     <div class="container-fluid">
         <div class="card">

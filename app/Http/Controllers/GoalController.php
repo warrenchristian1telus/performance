@@ -165,6 +165,7 @@ class GoalController extends Controller
     {
         // Goal Library
         $query = Goal::whereIn('id', [997, 998, 999]);
+        $expanded = false;
         $currentSearch = "";
         if($request->has('search') && $request->search != '') {
             $query->where(function ($q) use ($request) {
@@ -174,13 +175,13 @@ class GoalController extends Controller
                 $q->orWhere('how', 'LIKE', '%' . $request->search . '%');
                 $q->orWhere('measure_of_success', 'LIKE', '%' . $request->search . '%');
             });
-            
+            $expanded = true;
             $currentSearch = $request->search;
         }
 
         $organizationGoals = $query->with('goalType')
                             ->with('comments')->get();
-        return view('goal.library', compact('organizationGoals', 'currentSearch'));
+        return view('goal.library', compact('organizationGoals', 'currentSearch', 'expanded'));
     }
 
     public function showForLibrary($id) {

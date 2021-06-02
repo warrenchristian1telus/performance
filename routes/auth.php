@@ -13,11 +13,11 @@ use App\Http\Controllers\Auth\VerifyEmailController; */
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
-
+ 
 Route::get('/login/microsoft', [AzureLoginController::class, 'login'])->name('ms-login');
 
 Route::get('/login/microsoft/callback', [AzureLoginController::class, 'handleCallback'])->name('ms-callback');
-
+ 
 /* 
 Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')

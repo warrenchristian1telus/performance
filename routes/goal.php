@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('goal/current', [GoalController::class, 'index'])->name('goal.current');
 Route::get('goal/past', [GoalController::class, 'index'])->name('goal.past');
+Route::get('goal/supervisor', [GoalController::class, 'index'])->name('goal.my-supervisor');
 Route::get('goal/library', [GoalController::class, 'library'])->name('goal.library');
 Route::post('goal/library', [GoalController::class, 'saveFromLibrary'])->name('goal.library');
 Route::get('goal/library/{id}', [GoalController::class, 'showForLibrary'])->name('goal.library.detail');

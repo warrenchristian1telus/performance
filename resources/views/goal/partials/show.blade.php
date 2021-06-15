@@ -1,5 +1,15 @@
 <div class="card-header">
-    <h3>{{$goal->title}}</h3>
+    <h3>
+        {{$goal->title}}
+        @if ($showAddBtn ?? false) 
+        <div class="float-right">
+            <x-button type="button" class="float-right" icon="plus-circle" data-toggle="modal" data-target="#addGoalModal">
+                Add goal
+            </x-button>
+        </div>
+        @endif
+    </h3>
+    @if (!($showAddBtn ?? false))
     <div class="d-flex justify-content-between">
         <div>
             <small class="text-muted">Start working on this goal on</small>
@@ -12,6 +22,7 @@
             <b>{{$goal->target_date_human}}</b>
         </div>
     </div>
+    @endif
 </div>
 <div class="card-body">
     <b>{{__("Type")}}</b>

@@ -35,7 +35,7 @@ class ConversationRequest extends FormRequest
             'participant_id' => 'required',
             'date' => 'required|date|after_or_equal:today|before:'. $date,
             'time' => 'required',
-            'comment' => 'required',
+            'comment' => 'nullable',
         ];
     }
 

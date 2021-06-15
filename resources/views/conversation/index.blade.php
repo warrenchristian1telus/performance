@@ -27,7 +27,12 @@
             <div class="col-12 col-md-12">
                 <div class="callout callout-info">
                     <h6>{{ $c->topic->name }} @if($c->date_time->isPast())<i class="fas fa-exclamation-triangle text-danger ml-2" data-toggle="tooltip" title="Conversation is past due. Employee signoff is required" tooltip="Conversation is Past"></i>@endif</h6>
-                    <span class="mr-2">Supervisor and Employee</span> |
+                    <span class="mr-2">
+                        With
+                        @foreach ($c->conversationParticipants as $p)
+                            {{$p->participant->name}}&nbsp;
+                        @endforeach
+                    </span> |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
                     <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span>
                     <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
@@ -44,7 +49,12 @@
             <div class="col-12 col-md-12">
                 <div class="callout callout-info">
                     <h6>{{ $c->topic->name }} </h6>
-                    <span class="mr-2">Supervisor and Employee</span> |
+                    <span class="mr-2">
+                        With
+                        @foreach ($c->conversationParticipants as $p)
+                            {{$p->participant->name}}&nbsp;
+                        @endforeach
+                    </span> |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
                     <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span>
                     <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
@@ -71,6 +81,7 @@
         <script>
             $("#participant_id").select2();
             var conversation_id = 0;
+            var toReloadPage = false;
             $('#conv_participant_edit').select2({
 
                 ajax: {
@@ -155,6 +166,7 @@
                         value: $("#" + $(that).data('id') + '_edit').val()
                     }
                     , success: function(result) {
+                        toReloadPage = true;
                         // Disable Edit. 
                         $("." + $(that).data('id')).toggleClass('d-none');
                         const elementName = $(that).data('name');
@@ -251,6 +263,11 @@
                     , $('#delete-conversation-form').data('action').replace('xxx', $(this).data('id'))
                 ).submit();
             });
+            $(document).on('hide.bs.modal', '#viewConversationModal', function() {
+                if (toReloadPage) {
+                    window.location.reload();
+                }
+            })
 
             function updateConversation(conversation_id) {
                 $.ajax({

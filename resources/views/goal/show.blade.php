@@ -14,13 +14,17 @@
                         <div class="card">
                             @include("goal.partials.show")
                             <hr>
-                            <div class="px-3">
+                            <div class="px-3 pb-3">
                                 {{ $goal->user->name}}
                                 <span class="float-right">
-                                    @include("goal.partials.status-change")
+                                    @if ($goal->user_id === Auth::id())
+                                        @include("goal.partials.status-change")
+                                    @else
+                                        <x-goal-status :status="$goal->status"></x-goal-status>
+                                    @endif
                                 </span>
                             </div>
-                            <hr>
+                            {{--<hr>
                              <div class="px-3">
                                <b>Linked Goals</b>
                                 <span class="float-right">
@@ -55,7 +59,7 @@
                                 <p class="text-center font-weight-bold">Start linking to your supervisor's goal</p>
                                 <button class="btn btn-outline-primary btn-sm link-goal" data-id="{{ $goal->id }}" data-toggle="modal" data-target="#supervisorGoalModal">Link Goals</button>
                             </div>
-                            @endforelse
+                            @endforelse --}}
 
 
                         </div>

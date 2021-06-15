@@ -24,7 +24,7 @@ class ConversationController extends Controller
         $showWarning = Conversation::hasNotDoneAtleastOnceIn4Months();
         $conversationTopics = ConversationTopic::all();
         $participants = Participant::all();
-        $query = new Conversation();
+        $query = Conversation::with('conversationParticipants');
         $type = 'upcoming';
         if ($request->is('conversation/past')) {
             $conversations = $query->whereNotNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
@@ -56,7 +56,7 @@ class ConversationController extends Controller
     {
         $conversation = new Conversation();
         $conversation->conversation_topic_id = $request->conversation_topic_id;
-        $conversation->comment = $request->comment;
+        $conversation->comment = $request->comment ?? '';
         $conversation->date = $request->date;
         $conversation->time = $request->time;
         $conversation->save();

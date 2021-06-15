@@ -9,7 +9,7 @@
         {{ __($info) }}
     </small>
     @endif
-    <input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-control']) !!}>
+    <input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-control']) !!} autocomplete="off">
     @if ($showError !== 'false') 
         <small class="text-danger">{{ $errors->first($attributes['name']) }}</small>
     @endif

@@ -9,27 +9,33 @@
                     </p>
                 </a>
                 <div class="flex-fill"></div>
-                <x-button icon="link" class="text-light link-goal" data-id="{{$goal->id}}"  tooltip="You can link this goal to your supervisor’s goals (if they have been shared with you) to create a connection and demonstrate how your work relates to the priorities of your team or organization.">
-                </x-button>
+                @if ($type !== 'supervisor')
                 <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this goal?')">
                     @csrf
                     @method('DELETE')
                     <x-button icon='trash' class="text-light"></x-button>
                 </form>
+                @endif
             </div>
         </div>
-        <div class="card-body">
-            <p class="h5">
-                {{ $goal->title }}
-            </p>
-            <p>
-                {{ $goal->what }}
-            </p>
+        <div class="card-body" style="min-height:135px">
+            <a href="{{route("goal.show", $goal->id)}}" class="text-dark">
+                <p class="h5">
+                    {{ $goal->title }}
+                </p>
+                <p>
+                    {{ $goal->what }}
+                </p>
+            </a>
         </div>
         <div class="card-footer">
             <b>Goal created by: </b>{{ $goal->user->name}}
             <span class="float-right">
-                @include('goal.partials.status-change')
+                @if($type !== 'supervisor')
+                    @include('goal.partials.status-change')
+                @else
+                    <x-goal-status :status="$goal->status"></x-goal-status>
+                @endif
             </span>
         </div>
         <!-- /.card-footer -->

@@ -30,6 +30,13 @@ class GoalController extends Controller
                 ->paginate(4);
             $type = 'current';
             return view('goal.index', compact('goals', 'type', 'goaltypes'));
+        } else if ($request->is("goal/supervisor")) {
+            $query = Goal::with('user')
+                            ->with('goalType');
+            $goals = $query->whereIn('id', [995,996])->where('is_shared', 1)
+                ->paginate(4);
+            $type = 'supervisor';
+            return view('goal.index', compact('goals', 'type', 'goaltypes'));
         }
         $goals = $query->where('status', '<>', 'active')
             ->paginate(4);
@@ -72,8 +79,9 @@ class GoalController extends Controller
      */
     public function show($id)
     {
-        $goal = Goal::where('user_id', Auth::id())
-            ->where('id', $id)
+        // TODO: Manage Auth when we are clear with Supervisor Logic.
+        $goal = Goal::/* where('user_id', Auth::id())
+            -> */where('id', $id)
             ->with('goalType')
             ->with('comments')
             ->firstOrFail();
@@ -168,25 +176,39 @@ class GoalController extends Controller
         $expanded = false;
         $currentSearch = "";
         if($request->has('search') && $request->search != '') {
-            $query->where(function ($q) use ($request) {
-                $q->orWhere('title', 'LIKE', '%' . $request->search . '%');
-                $q->orWhere('what', 'LIKE', '%' . $request->search . '%');
-                $q->orWhere('why', 'LIKE', '%' . $request->search . '%');
-                $q->orWhere('how', 'LIKE', '%' . $request->search . '%');
-                $q->orWhere('measure_of_success', 'LIKE', '%' . $request->search . '%');
+            // $searchText = explode(' ', $request->search);
+            $searchText = $request->search;
+            $query->Where(function ($qq) use ($searchText) {
+                foreach ($searchText as $search) {
+                    $qq->orWhere(function ($q) use ($search) {
+                        $q->orWhere('title', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('what', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('why', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('how', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('measure_of_success', 'LIKE', '%' . $search . '%');
+                    });
+                }
             });
+            
             $expanded = true;
-            $currentSearch = $request->search;
+            $currentSearch = implode(' ',$request->search);
         }
+        $sQuery = clone $query;
 
-        $organizationGoals = $query->with('goalType')
+        $supervisorGoals = $sQuery->whereIn('id', [998])->with('goalType')
                             ->with('comments')->get();
-        return view('goal.library', compact('organizationGoals', 'currentSearch', 'expanded'));
+        $organizationGoals = $query->whereIn('id', [997, 999])->with('goalType')
+                            ->with('comments')->get();
+
+        return view('goal.library', compact('organizationGoals', 'supervisorGoals', 'currentSearch', 'expanded'));
     }
 
-    public function showForLibrary($id) {
+    public function showForLibrary(Request $request, $id) {
+        if ($request->has("add") && $request->add) {
+            $showAddBtn = true;
+        }
         $goal = Goal::find($id);
-        return view('goal.partials.show', compact('goal'));
+        return view('goal.partials.show', compact('goal', 'showAddBtn'));
     }
 
     public function saveFromLibrary(Request $request)

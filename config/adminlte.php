@@ -238,7 +238,7 @@ return [
             'active' => ['goal/*'],
         ],
         [
-            'text' => 'Conversation',
+            'text' => 'Conversations',
             'url'  => 'conversation/upcoming',
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['conversation/*'],

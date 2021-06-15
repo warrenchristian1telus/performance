@@ -11,7 +11,7 @@
             @csrf
             <div class="row">
                 <div class="col-12">
-                    <x-dropdown :list="$goaltypes" label="Goal Type" name="goal_type_id" />
+                    <x-dropdown :list="$goaltypes" label="Goal Type" name="goal_type_id"/>
                     <x-input label="Goal Title" name="title" value="{{ old('title') }}"/>
                     <x-textarea label="What" name="what" :value="old('what')" />
                     <x-textarea label="Why" name="why" :value="old('why')" />

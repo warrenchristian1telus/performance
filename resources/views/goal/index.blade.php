@@ -2,6 +2,7 @@
     <x-slot name="header">
         @include('goal.partials.tabs')
     </x-slot>
+    @if($type != 'supervisor')
     <x-button icon="plus-circle" data-toggle="modal" data-target="#addGoalModal">
         Create New Goal
     </x-button>
@@ -9,10 +10,17 @@
     <x-button icon="clone" href="{{ route('goal.library') }}">
         Add from Library
     </x-button>
+    @endif
     <div class="mt-4">
         {{-- {{$dataTable->table()}} --}}
+        
         <div class="row">
-         @if ($type == 'current')
+         @if ($type == 'current' || $type == 'supervisor')
+            @if($type == 'supervisor')
+                <div class="col-12 mb-4">
+                    These goals have been shared with you by your supervisor and reflect current priorities. Consider these goals when creating your own.
+                </div>
+            @endif
             @foreach ($goals as $goal)
             
                 <div class="col-12 col-sm-6">
@@ -73,7 +81,7 @@
                     <small class="text-danger error-how"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people".'  />
+                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='An increase in X by Y%'  />
                     <small class="text-danger error-measure_of_success"></small>
                 </div>
                 <div class="col-sm-6">

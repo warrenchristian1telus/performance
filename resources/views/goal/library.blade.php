@@ -4,7 +4,7 @@
             <div class="col-md-6 col-6">
                 <x-slot name="header">
                     <small><a href="{{ route('goal.index') }}">back</a></small>
-                    <form action="">
+                    <form action="" id="search-form">
                         <div class="position-relative w-50">
                             
                             <button class="btn btn-primary btn-sm position-absolute" style="right:0;margin:3px;height:2rem">Search</button>
@@ -20,12 +20,13 @@
         <p>Click below to add goals to your profile that were suggested by:</p>
         <form id="goal_form" method="POST" action="{{ route('goal.library') }}">
             @csrf
+            <input type="hidden" name="selected_goal" value="">
             <div class="accordion" id="accordionLibrary">
                 <div class="card">
                     <div class="card-header" id="headingOne">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left  {{$expanded ? '' : 'collapsed'}}" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="{{$expanded ? 'true' : 'false'}}" aria-controls="collapseOne">
-                                Your organization <i class="fas fa-{{ $expanded ? 'minus' : 'plue' }}-circle float-right "></i>
+                                Your organization <i class="fas fa-{{ $expanded ? 'minus' : 'plus' }}-circle float-right "></i>
                             </button>
                         </h2>
                     </div>
@@ -34,7 +35,6 @@
                         <div class="card-body">
                             <table class="table table-borderless">
                                 <thead>
-                                    <th style="width:50px"> Select Goal</th>
                                     <th style="width:50%"> Goal Title</th>
                                     <th style="width:20%"> Date Added</th>
                                     <th style="width:20%"> Created By</th>
@@ -42,12 +42,11 @@
                                 <tbody>
                                     @foreach($organizationGoals as $o)
                                     <tr>
-                                        <td style="width:50px"> <input type="radio" name="selected_goal" value="{{ $o->id }}"></td>
                                         <td style="width:50%">
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$o->id}}">{{ $o->title }}</a>
                                         </td>
                                         <td style="width:20%">{{ $o->created_at->format('M d, Y') }} </td>
-                                        <td style="width:20%">Supervisor </td>
+                                        <td style="width:20%">Division X</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -59,7 +58,7 @@
                     <div class="card-header" id="headingTwo">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left {{$expanded ? '' : 'collapsed'}} " type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="{{$expanded ? 'true' : 'false'}}" aria-controls="collapseTwo">
-                                Your supervisor <i class="fas fa-{{ $expanded ? 'minus' : 'plue' }}-circle float-right "></i>
+                                Your supervisor <i class="fas fa-{{ $expanded ? 'minus' : 'plus' }}-circle float-right "></i>
 
                             </button>
                         </h2>
@@ -68,15 +67,13 @@
                         <div class="card-body">
                             <table class="table table-borderless">
                                 <thead>
-                                    <th style="width:50px"> Select Goal</th>
                                     <th style="width:50%""> Goal Title</th>
                                     <th style="width:20%"> Date Added</th>
                                     <th style="width:20%"> Created By</th>
                                 </thead>
                                 <tbody>
-                                    @foreach($organizationGoals as $o)
+                                    @foreach($supervisorGoals as $o)
                                     <tr>
-                                        <td style="width:50px"> <input type="radio" name="selected_goal" value="{{ $o->id }}"></td>
                                         <td style="width:50%">
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$o->id}}">{{ $o->title }}</a>
                                         </td>
@@ -90,9 +87,6 @@
                     </div>
                 </div>
             </div>
-            <x-button type="button" class="float-right" icon="plus-circle" data-toggle="modal" data-target="#addGoalModal">
-                Add goal
-            </x-button>
         </form>
     </div>
     @include('goal.partials.goal-detail-modal')
@@ -131,17 +125,25 @@
     <x-slot name="js">
         <script src="{{asset('js/taggle.js')}}"> </script>
         <script>
-            let searchString = '{{ $currentSearch ?? ''}}';
-            new Taggle("search-input", {
-                placeholder: '',
-                hiddenInputName: 'search',
-                tags: (searchString) ? searchString.split(' ') : []
-            });
+            (function () {let searchString = '{{ $currentSearch ?? ''}}';
+                new Taggle("search-input", {
+                    placeholder: '',
+                    hiddenInputName: 'search[]',
+                    tags: (searchString) ? searchString.split(' ') : [],
+                    onTagAdd: performSearch,
+                    onTagRemove: performSearch
+                });
+
+                function performSearch() {
+                    debugger;
+                    $("#search-form").submit();
+                };
+            })();
         </script>
         @if ($expanded)
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
-            let markInstance = new Mark(document.querySelectorAll(".highlighter"));
+            {{-- let markInstance = new Mark(document.querySelectorAll(".highlighter"));
 
             (function performMark() {
 
@@ -160,7 +162,7 @@
                         markInstance.mark(keyword, options);
                     }
                 });
-            })();
+            })(); --}}
         </script>
         @endif
         <script>
@@ -192,11 +194,12 @@
 
             $(document).on('click', '.show-goal-detail', function(e) {
                 e.preventDefault();
-                $.get('/goal/library/'+$(this).data('id'), function (data) {
+                $("#goal_form").find('input[name=selected_goal]').val($(this).data('id'));
+
+                $.get('/goal/library/'+$(this).data('id')+'?add=true', function (data) {
                     $("#goal-detail-modal").find('.data-placeholder').html(data);
                     $("#goal-detail-modal").modal('show');
                 });
-                $(this).parents('tr').find('input').attr('checked', true).prop('checked', true);
             });
 
         </script>

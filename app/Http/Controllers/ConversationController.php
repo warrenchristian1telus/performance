@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Conversation\ConversationRequest;
 use App\Http\Requests\Conversation\SignoffRequest;
 use App\Http\Requests\Conversation\UnSignoffRequest;
+use App\Http\Requests\Conversation\UpdateRequest;
 use App\Models\Conversation;
 use App\Models\ConversationParticipant;
 use App\Models\ConversationTopic;
@@ -97,7 +98,7 @@ class ConversationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Conversation $conversation)
+    public function update(UpdateRequest $request, Conversation $conversation)
     {
         if ($request->field != 'conversation_participant_id') {
             $conversation->{$request->field} = $request->value;

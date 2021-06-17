@@ -156,6 +156,8 @@
             $(document).on('click', '.btn-conv-save', function(e) {
                 // Show Loader Spinner...
                 $(this).html("<div class='spinner-border spinner-border-sm' role='status'></div>");
+                $(".error-date-alert").hide();
+
                 const that = this;
                 $.ajax({
                     url: '/conversation/' + conversation_id
@@ -181,8 +183,12 @@
                         }
                     }
                     , error: function(error) {
-                        var errors = error.responseJSON.errors;
+                        let errors = error.responseJSON.errors;
                         // Ignore for now.
+                        if (errors && errors.value && errors.value[0]) {
+                            // alert(errors.value[0]);
+                            $(".error-date-alert").show();
+                        }
                     }
                     , complete: function() {
                         // Remove Spinner
@@ -267,7 +273,7 @@
                 if (toReloadPage) {
                     window.location.reload();
                 }
-            })
+            });
 
             function updateConversation(conversation_id) {
                 $.ajax({

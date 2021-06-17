@@ -12,7 +12,7 @@
         <div class="alert alert-default-danger error-date-alert" style="display:none">
           <span class="h5"><i class="icon fas fa-exclamation-circle"></i>
           <span class="error-date">
-            Conversations must be scheduled every four months, at minimum.</span>
+            Conversations must be scheduled every four months, at minimum.
           </span>
         </div>
         <form id="conversation_form" action="{{ route ('conversation.store')}}" method="POST">

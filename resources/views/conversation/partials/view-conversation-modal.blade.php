@@ -8,6 +8,16 @@
             </div>
             <div class="modal-body p-4">
                 <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-default-danger error-date-alert" style="display:none">
+                            <span class="h5"><i class="icon fas fa-exclamation-circle"></i>
+                            <span class="error-date">
+                                Conversations must be scheduled every four months, at minimum.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-6 col-md-6">
                         <div class="d-flex align-items-end row">
                             <div>

@@ -10,6 +10,17 @@
             </div>
         </div>
     </div>
+    @elseif ($freshWarning)
+    <div class="mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-default-warning alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                  <span class="h5"><i class="icon fas fa-exclamation-circle"></i>You have yet to complete a performance conversation. Conversations must be scheduled once every 4 months at minimum.</span>
+                </div>
+            </div>
+        </div>
+    </div>
     @endif
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
@@ -199,7 +210,10 @@
             });
 
             $(document).on('click', '.btn-sign-off', function(e) {
-                if ($(this).data('action') === 'unsignoff' && !confirm('Are you sure you want to unsign off the conversation ?')) {
+                const confirmMessage = ($(this).data('action') === 'unsignoff') ? 
+                    'Un-signing will move this record back to the Upcoming Conversations tab. You can click there to access and edit it. Continue?' :
+                    'Signing off will move this record to the Past Conversations tab. You can click there to access it again at any time. Continue?';
+                if (!confirm(confirmMessage)) {
                     return;
                 }
                 const url = ($(this).data('action') === 'unsignoff') ? '/conversation/unsign-off/' + conversation_id : '/conversation/sign-off/' + conversation_id;

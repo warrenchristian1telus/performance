@@ -81,7 +81,7 @@
                     <small class="text-danger error-how"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people".'  />
+                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='An increase in X by Y%'  />
                     <small class="text-danger error-measure_of_success"></small>
                 </div>
                 <div class="col-sm-6">

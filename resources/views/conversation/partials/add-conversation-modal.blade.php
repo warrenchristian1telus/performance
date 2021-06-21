@@ -41,18 +41,12 @@
                         <label> Date</label>
                         <x-input class="error-date" type="date" name="date" :min="Carbon\Carbon::now()->toDateString()" required />
                     </div>
-                       <div class="col-6 col-md-6 mt-1">
+                    <div class="col-6 col-md-6 mt-1">
                           <label> Time</label>
                         <x-input  class="error-date" type="time" name="time" step="900"  />
                        
-                    <small class="text-danger error-time"></small>
-                    </div>
-                       <div class="col-6 col-md-6">
-                          <label> Comments</label>
-                    <x-textarea  name="comment"/>
-                    <small class="text-danger error-comment"></small>
-                  </div>
-                   
+                      <small class="text-danger error-time"></small>
+                    </div>                   
                 <div class="col-6 col-md-6">
                    <label> Supporting Material</label>
                     <div class="card p-3">

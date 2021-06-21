@@ -45,18 +45,17 @@ class NotMoreThan4Month implements Rule
         if ($date2) array_push($dates, $date2->date);
         // Sort
         sort($dates);
-        
+        // dd($dates[0]->diffInDays($dates[1]));
         // If different of 0-1 or 1-2 is more than 122 days return false
         if (count($dates) === 3) {
-            
-            if ($dates[0]->diffInDays($dates[1]) > 122 || $dates[1]->diffInDays($dates[2]) > 122)
+            if ($dates[0]->diffInDays($dates[1]) > 122 || $dates[1]->diffInDays($dates[2]) > 122) {
                 return false;
+            }
         } else {
-            
-            if ($dates[0]->diffInDays($dates[1]) > 122)
+            if ($dates[0]->diffInDays($dates[1]) > 122) {
                 return false;
+            }
         }
-        // dd($dates[0]->diffInDays($dates[1]));
         return true;
     }
 

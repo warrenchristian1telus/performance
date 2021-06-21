@@ -73,20 +73,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-md-6 mt-1">
-                        <div class="d-flex align-items-end">
-                            <div class="col-md-9">
-
-                                <x-textarea id="conv_comment_edit" class="conv_comment d-none" name="comment" label="Comments" />
-                                <span id="conv_comment" class="conv_comment"></span>
-                            </div>
-                            <div class="col-md-3">
-                            @if ($type == 'upcoming') 
-                                <x-edit-cancel-save name="comment" id="conv_comment" />
-                            @endif
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
 
@@ -163,7 +149,7 @@
                         @endif
                         </div>
                     </div>
-                    <h6> Comments</h6>
+                    <h6>Supervisor Comments</h6>
                     <div class="row">
                         <div class="col-md-8">
                             <textarea class="form-control info_comment5 mb-4 d-none" name="info_comment5" id="info_comment5_edit"></textarea>

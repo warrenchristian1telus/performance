@@ -16,9 +16,9 @@ class CreateConversationsTable extends Migration
         Schema::create('conversations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('conversation_topic_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->date('date');
             $table->time('time');
-            $table->text('comment');
             $table->text('info_comment1')->nullable();
             $table->text('info_comment2')->nullable();
             $table->text('info_comment3')->nullable();

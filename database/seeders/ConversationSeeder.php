@@ -18,41 +18,40 @@ class ConversationSeeder extends Seeder
         $list = [
             [
                 'conversation_topic_id' => 1,
+                'user_id' => 1,
                 'date' => Carbon::now()->addDays(10),
-                'time' => Carbon::now(),
-                'comment' => 'Nice Conversation lets continue tomorrow',
+                'time' => Carbon::now()
             ],
             [
                 'conversation_topic_id' => 2,
+                'user_id' => 1,
                 'date' => Carbon::now()->addDays(14),
-                'time' => Carbon::now(),
-                'comment' => 'Nice Conversation lets continue tomorrow',
+                'time' => Carbon::now()
             ],
             [
                 'conversation_topic_id' => 3,
+                'user_id' => 1,
                 'date' => Carbon::now()->addDays(8),
-                'time' => Carbon::now(),
-                'comment' => 'Nice Conversation lets continue tomorrow',
+                'time' => Carbon::now()
             ],
             [
                 'conversation_topic_id' => 1,
+                'user_id' => 1,
                 'date' => Carbon::now()->subDays(10),
-                'time' => Carbon::now(),
-                'comment' => 'Nice Conversation lets continue tomorrow',
+                'time' => Carbon::now()
             ],
             [
                 'conversation_topic_id' => 2,
+                'user_id' => 1,
                 'date' => Carbon::now()->subDays(14),
-                'time' => Carbon::now(),
-                'comment' => 'Nice Conversation lets continue tomorrow',
+                'time' => Carbon::now()
             ],
             [
                 'conversation_topic_id' => 3,
+                'user_id' => 1,
                 'date' => Carbon::now()->subDays(8),
-                'time' => Carbon::now(),
-                'comment' => 'Nice Conversation lets continue tomorrow',
-            ],
-
+                'time' => Carbon::now()
+            ]
         ];
 
         foreach ($list as $l) {

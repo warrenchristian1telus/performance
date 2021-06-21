@@ -57,6 +57,12 @@ class Conversation extends Model
         }
         return true;
     }
+
+    public static function hasNotYetScheduledConversation($user_id)
+    {
+        return !self::where('user_id', $user_id)->count() > 0;
+    }
+
     public static function latestPastConversation() 
     {
         return self::whereNotNull('signoff_user_id')->orderBy('date', 'DESC')->first();

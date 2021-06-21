@@ -237,12 +237,6 @@ return [
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['goal/*'],
         ],
-        [
-            'text' => 'Conversations',
-            'url'  => 'conversation/upcoming',
-            'icon' => 'fas fa-fw fa-bullseye',
-            'active' => ['conversation/*'],
-        ]
     ],
 
     /*

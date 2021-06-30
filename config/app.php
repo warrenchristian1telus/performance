@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class, // add
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

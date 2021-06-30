@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TopicSeeder::class);
         $this->call(ParticipantSeeder::class);
         $this->call(ConversationSeeder::class);
+        $this->call(AdditionalUsersTableSeeder::class);
+        $this->call(UserRoleSeeder::class);
     }
 }

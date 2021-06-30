@@ -1,8 +1,8 @@
-@props(['style' => 'primary', 'icon' => '', 'size' => 'md', 'tooltip' => ''])
+@props(['style' => 'primary', 'icon' => '', 'size' => 'md', 'tooltip' => '', 'tooltipPosition' => 'right'])
 
 <{{($attributes['href'] ?? '' ? 'a' : 'button')}} 
     @if ($tooltip) 
-        data-toggle="popover" data-placement="right" data-html="true" data-content="{{ $tooltip }}"
+        data-toggle="popover" data-placement="{{ $tooltipPosition }}" data-html="true" data-content="{{ $tooltip }}" data-trigger="hover"
     @endif
     {{ $attributes->merge(['class' => 'btn btn-'.$style. ' btn-'.$size]) }}
     >

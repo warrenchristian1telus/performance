@@ -24,6 +24,7 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth'])->group(function () {
     require __DIR__ . '/goal.php';
     require __DIR__ . '/conversation.php';
+    require __DIR__ . '/my-team.php';
 });
 
 Route::get('/my-performance', function () {

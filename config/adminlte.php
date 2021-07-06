@@ -229,22 +229,22 @@ return [
             'text' => 'Home',
             'url'  => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
-            'active' => ['dashboard'],
-            'can' => ['dashboard']
+            'active' => ['dashboard']/* ,
+            'can' => ['dashboard'] */
         ],
         [
             'text' => 'Goals',
             'url'  => 'goal/current',
             'icon' => 'fas fa-fw fa-bullseye',
-            'active' => ['goal/*'],
-            'can' => ['goals']
+            'active' => ['goal/*']/* ,
+            'can' => ['goals'] */
         ],
         [
             'text' => 'Conversations',
             'url'  => 'conversation/upcoming',
             'icon' => 'fas fa-fw fa-bullseye',
-            'active' => ['conversation/*'],
-            'can' => ['conversions']
+            'active' => ['conversation/*']/* ,
+            'can' => ['conversions'] */
         ],
         [
             'text' => 'My Team',

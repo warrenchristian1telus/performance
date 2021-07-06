@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\MyEmployeesDataTable;
+use App\Models\Goal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MyTeamController extends Controller
 {
@@ -15,15 +17,24 @@ class MyTeamController extends Controller
     public function myEmployees(MyEmployeesDataTable $myEmployeesDataTable)
     {
         // return view('my-team/my-employees');
-        return $myEmployeesDataTable->render('my-team/my-employees');
+        $goals = Goal::where('user_id', Auth::id())
+            ->with('user')
+            ->with('goalType')->get();
+        return $myEmployeesDataTable->render('my-team/my-employees',compact('goals'));
     }
 
     public function performanceStatistics()
     {
-        return view('my-team/performance-statistics');
+        $goals = Goal::where('user_id', Auth::id())
+            ->with('user')
+            ->with('goalType')->get();
+        return view('my-team/performance-statistics', compact('goals'));
     }
     public function goalsHierarchy()
     {
-        return view('my-team/goals-hierarchy');
+        $goals = Goal::where('user_id', Auth::id())
+            ->with('user')
+            ->with('goalType')->get();
+        return view('my-team/goals-hierarchy', compact('goals'));
     }
 }

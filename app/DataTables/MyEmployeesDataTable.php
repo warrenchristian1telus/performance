@@ -57,7 +57,7 @@ class MyEmployeesDataTable extends DataTable
         return $this->builder()
             ->setTableId('my-employees-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->minifiedAjax(route('my-team.my-employee'))
             ->dom('Bfrtip')
             ->orderBy(0, 'desc')
             ->searching(true)
@@ -90,7 +90,7 @@ class MyEmployeesDataTable extends DataTable
                 ->printable(false)
                 ->addClass('text-center'),
             Column::computed('latestConversation')
-                ->title('Last Conversation')
+                ->title('Latest Conversation')
                 ->exportable(false)
                 ->printable(false)
                 ->addClass('text-center'),

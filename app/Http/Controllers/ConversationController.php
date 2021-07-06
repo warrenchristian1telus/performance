@@ -61,7 +61,8 @@ class ConversationController extends Controller
     {
         $conversation = new Conversation();
         $conversation->conversation_topic_id = $request->conversation_topic_id;
-        $conversation->comment = $request->comment ?? '';
+        // $conversation->comment = $request->comment ?? '';
+        $conversation->user_id = Auth::id();
         $conversation->date = $request->date;
         $conversation->time = $request->time;
         $conversation->save();

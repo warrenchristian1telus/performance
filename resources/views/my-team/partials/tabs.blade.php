@@ -9,9 +9,4 @@
             {{__('Performance Statistics')}}
         </x-button>
     </div>
-    <!-- <div class="px-4 py-1 border-bottom {{Route::current()->getName() == 'my-team.goals-hierarchy' ? 'border-primary' : ''}}">
-        <x-button :href="route('my-team.goals-hierarchy')" style="">
-            {{__('Goal Hierarchy')}}
-        </x-button>
-    </div> -->
 </div>

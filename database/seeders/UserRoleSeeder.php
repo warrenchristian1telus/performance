@@ -78,9 +78,9 @@ class UserRoleSeeder extends Seeder
         $query = new User;
         
         if ($userIdsNotIn) {
-            $query->whereNotIn("id", $userIds);
+            $query = $query->whereNotIn("id", $userIds);
         } else {
-            $query->whereIn("id", $userIds);
+            $query = $query->whereIn("id", $userIds);
         }
 
         $users = $query->get();

@@ -24,11 +24,13 @@
     @endif
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
+        @if(!$disableEdit)
         <div class="col-md-4 text-right">
             <x-button icon="plus-circle" data-toggle="modal" data-target="#addConversationModal">
                 Schedule New
             </x-button>
         </div>
+        @endif
     </div>
     
     <div class="mt-4">

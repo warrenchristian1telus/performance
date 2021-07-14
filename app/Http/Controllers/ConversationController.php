@@ -22,7 +22,9 @@ class ConversationController extends Controller
      */
     public function index(Request $request)
     {
-        $freshWarning = Conversation::hasNotYetScheduledConversation(Auth::id());
+        $authId = Auth::id();
+
+        $freshWarning = Conversation::hasNotYetScheduledConversation($authId);
         $showWarning = false;
         if (!$freshWarning) {
             $showWarning = Conversation::hasNotDoneAtleastOnceIn4Months();
@@ -32,10 +34,10 @@ class ConversationController extends Controller
         $query = Conversation::with('conversationParticipants');
         $type = 'upcoming';
         if ($request->is('conversation/past')) {
-            $conversations = $query->whereNotNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
+            $conversations = $query->where('user_id', $authId)->whereNotNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
             $type = 'past';
         } else {
-            $conversations = $query->whereNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
+            $conversations = $query->where('user_id', $authId)->whereNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
         }
 
         return view('conversation.index', compact('type', 'conversations', 'conversationTopics', 'participants', 'showWarning', 'freshWarning'));

@@ -75,11 +75,27 @@
 
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data')>
+<body class="@yield('classes_body')" @yield('body_data') data-panel-auto-height="-63">
+    @if(session()->has('view-profile-as'))
+    <div class="top-message-bar p-3 text-center bg-warning d-flex justify-content-center align-items-center">
+        <span class="flex-fill"></span>
+        <span>
+            <i class="icon fas fa-exclamation-circle"></i> You are viewing {{$viewingProfileAs->name}}'s profile.
+        </span>
+        <span class="flex-fill"></span>
 
+        <div class="form-inline" style="position:absolute; right:0">
+            <select name="" class="form-control form-control-sm" id="view-profile-as">
+                @foreach ($listOfEmployee as $employee)
+                    <option value="{{$employee->id}}" {{ ($viewingProfileAs->id === $employee->id) ? 'selected' : ''}}>{{$employee->name}}</option>
+                @endforeach
+            </select>
+            <x-button :href="route('my-team.return-to-my-view')" size="sm" style="light" class="mx-2">Return to my profile</x-button>
+        </div>
+    </div>
+    @endif
     {{-- Body Content --}}
     @yield('body')
-
     {{-- Base Scripts --}}
     @if(!config('adminlte.enabled_laravel_mix_js'))
         <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
@@ -105,7 +121,12 @@
 
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
-
+    <script>
+        $(document).on('change', '#view-profile-as', function () {
+            const url = '{{ route('my-team.view-profile-as', '')}}';
+            window.location = url + "/" + $(this).val();
+        });
+    </script>
 </body>
 
 </html>

@@ -12,6 +12,9 @@ class MyEmployeesDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('name', function ($row) {
+                return view('my-team.partials.link-to-profile', compact(['row']));
+            })
             ->addColumn('action', function ($row) {
                 return view('goal.partials.action', compact(["row"])); // $row['id'];
             })->editColumn('active_goals_count', function ($row) {

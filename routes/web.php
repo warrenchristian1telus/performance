@@ -13,23 +13,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    Route::get('/', function () {
+        return view('welcome');
+    });
 
-Route::middleware(['auth'])->group(function () {
-    require __DIR__ . '/goal.php';
-    require __DIR__ . '/conversation.php';
-    require __DIR__ . '/my-team.php';
-});
+    
 
-Route::get('/my-performance', function () {
-    return view('my-performance');
-})->middleware(['auth'])->name('my-performance');
+    Route::middleware(['ViewShare'])->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->middleware(['auth'])->name('dashboard');
+        Route::middleware(['auth'])->group(function () {
+            require __DIR__ . '/goal.php';
+            require __DIR__ . '/conversation.php';
+            require __DIR__ . '/my-team.php';
+        });
+    });
+
+    Route::get('/my-performance', function () {
+        return view('my-performance');
+    })->middleware(['auth'])->name('my-performance');
 
 
-require __DIR__.'/auth.php';
+    require __DIR__.'/auth.php';

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\DataTables\GoalsDataTable;
 use App\Models\GoalComment;
 use App\Models\LinkedGoal;
+use Illuminate\Contracts\Session\Session;
 
 class GoalController extends Controller
 {
@@ -20,8 +21,9 @@ class GoalController extends Controller
      */
     public function index(GoalsDataTable $goalDataTable, Request $request)
     {
+        $authId = Auth::id();
         $goaltypes = GoalType::all();
-        $query = Goal::where('user_id', Auth::id())
+        $query = Goal::where('user_id', $authId)
             ->with('user')
             ->with('goalType');
         $type = 'past';

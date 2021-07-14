@@ -9,7 +9,7 @@
                     </p>
                 </a>
                 <div class="flex-fill"></div>
-                @if ($type !== 'supervisor')
+                @if ($type !== 'supervisor' && !$disableEdit)
                 <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this goal?')">
                     @csrf
                     @method('DELETE')
@@ -31,7 +31,7 @@
         <div class="card-footer">
             <b>Goal created by: </b>{{ $goal->user->name}}
             <span class="float-right">
-                @if($type !== 'supervisor')
+                @if($type !== 'supervisor' && !$disableEdit)
                     @include('goal.partials.status-change')
                 @else
                     <x-goal-status :status="$goal->status"></x-goal-status>

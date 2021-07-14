@@ -2,7 +2,7 @@
     <x-slot name="header">
         @include('goal.partials.tabs')
     </x-slot>
-    @if($type != 'supervisor')
+    @if($type != 'supervisor' && !$disableEdit)
     <x-button icon="plus-circle" data-toggle="modal" data-target="#addGoalModal">
         Create New Goal
     </x-button>

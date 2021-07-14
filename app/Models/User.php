@@ -70,4 +70,9 @@ class User extends Authenticatable
     {
         return $this->conversations()->whereNotNull('signoff_user_id')->orderBy('date', 'DESC')->limit(1);
     }
+
+    public function sharedGoals()
+    {
+        return $this->belongsToMany('App\Models\Goal', 'goals_shared_with', 'goal_id', 'user_id');
+    }
 }

@@ -67,4 +67,9 @@ class Goal extends Model implements Auditable
   {
     return $this->target_date->format('F d, Y');
   }
+
+  public function sharedWith() 
+  {
+    return $this->belongsToMany('App\Models\User', 'goals_shared_with', 'goal_id', 'user_id')->withTimestamps();
+  }
 }

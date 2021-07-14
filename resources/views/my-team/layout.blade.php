@@ -21,6 +21,23 @@
             $(document).on('click', '#share-my-goals-btn', function () {
                 $("#shareMyGoalsModal").modal('show');
             });
+            $(".search-users").select2({
+                multiple:true
+            });
+            $(document).on('change', '.is-shared', function (e) {
+                let confirmMessage = "Making this goal private will hide it from all employees. Continue?";
+                if (this.checked) {
+                    confirmMessage = "Sharing this goal will make it visible to the selected employees. Continue?"
+                }
+                if (!confirm(confirmMessage)) {
+                    this.checked = !this.checked;
+                    e.preventDefault();
+                    return;
+                }
+                $(this).parents("label").find("span").html(this.checked ? "Shared" : "Private");
+                const goalId = $(this).data('goal-id');
+                $("#search-users-" + goalId).attr('disabled', !this.checked);
+            });
         })();
     </script>
     @endpush

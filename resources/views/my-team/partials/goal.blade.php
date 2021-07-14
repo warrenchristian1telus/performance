@@ -1,29 +1,46 @@
-<div class="col-12 col-sm-8">
-    <h4>
-        {{ $goal->title }}
-    </h4>
-    <p>
-        {{ $goal->what }}
-    </p>
-    <span class="d-flex flex-row align-items-center">
-        <span class="pr-2 mr-2 border-right">
-            <x-profile-pic size="20"></x-profile-pic> {{ Auth::user()->name}} 
+<div class="row border-bottom py-2">
+    <div class="col-12 col-sm-8">
+        <h4>
+            {{ $goal->title }}
+        </h4>
+        <p>
+            {{ $goal->what }}
+        </p>
+        <span class="d-flex flex-row align-items-center">
+            <span class="pr-2 mr-2 border-right">
+                <x-profile-pic size="20"></x-profile-pic> {{ Auth::user()->name}} 
+            </span>
+            <span class="pr-2 mr-2 border-right">
+                <x-goal-status :status="$goal->status"></x-goal-status>
+            </span>
+            <span class="pr-2 mr-2 border-right">{{ $goal->target_date_human }}</span>
+            <span class="pr-2 mr-2">
+                <div class="form-check form-switch p-0">
+                    <label class="form-check-label" for="is_shared_{{$goal->id}}">
+                        <input class="form-check-input is-shared" type="checkbox" id="is_shared_{{$goal->id}}"  name="is_shared[{{ $goal->id }}]" data-goal-id="{{ $goal->id }}" {{ count($goal->sharedWith) > 0 ? 'checked' : ''}}>
+                        <i></i><span>{{count($goal->sharedWith) > 0 ? 'Shared' : 'Private'}}</span>
+                    </label>
+                </div>
+            </span>
         </span>
-        <span class="pr-2 mr-2 border-right">
-            <x-goal-status :status="$goal->status"></x-goal-status>
-        </span>
-        <span class="pr-2 mr-2 border-right">{{$goal->target_date_human}}</span>
-        <span class="pr-2 mr-2">
-            <label class="d-block mb-0">
-                <input type="checkbox">
-                Private
-            </label>
-        </span>
-    </span>
-</div>
-<div class="col-12 col-sm-4">
-    <label>
-        Share with:
-        <input type="search" class="form-control">
-    </label>
+    </div>
+    <div class="col-12 col-sm-4">
+        <label>
+            Share with: <br>
+            <select multiple class="form-control search-users" id="search-users-{{$goal->id}}" name="share_with[{{$goal->id}}][]"  {{ count($goal->sharedWith) > 0 ? '' : 'disabled'}}>
+                @php
+                    $alreadyAdded = [];
+                @endphp
+                @foreach ($goal->sharedWith as $employee)
+                    <option value="{{ $employee->id }}" selected> {{$employee->name}}</option>
+                    @php array_push($alreadyAdded, $employee->id) @endphp
+                @endforeach
+                @foreach ($employees as $employee)
+                    @if (!in_array($employee->id, $alreadyAdded))
+                        <option value="{{ $employee->id }}"> {{$employee->name}}</option>
+                    @endif
+                @endforeach
+            </select>
+        </label>
+    </div>
 </div>

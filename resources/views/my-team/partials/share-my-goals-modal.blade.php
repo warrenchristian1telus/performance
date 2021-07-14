@@ -9,11 +9,18 @@
         </button>
       </div>
       <div class="modal-body p-4">
-        <div class="row">
-            @foreach ($goals as $goal)
-                @include('my-team.partials.goal')
-            @endforeach
-        </div>
+        <form action="{{ route('my-team.sync-goals')}}" method="POST">
+          @csrf
+          @foreach ($goals as $goal)
+              @include('my-team.partials.goal')
+          @endforeach
+          <div class="row">
+            <div class="col-12 text-right">
+              <button type="submit" class="btn btn-primary mt-3">Save</button>
+              <button type="button" class="btn btn-primary mt-3" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </form>
       </div>
     
     </div>

@@ -2,7 +2,9 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ $goal['title'] }}
-            <x-button icon="edit" :href="route('goal.edit', $goal->id)">Edit</x-button>
+            @if(!$disableEdit)
+                <x-button icon="edit" :href="route('goal.edit', $goal->id)">Edit</x-button>
+            @endif
         </h2>
         <small><a href="{{ url()->previous() === url()->current() ? route('goal.index') : url()->previous() }}">Back to list</a></small>
     </x-slot>

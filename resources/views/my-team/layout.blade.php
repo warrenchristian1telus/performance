@@ -15,15 +15,27 @@
     <div class="col-md-8"> @include('my-team.partials.tabs')</div>
     @yield('tab-content')
     @include('my-team.partials.share-my-goals-modal')
+    @push('css')
+        <link rel="stylesheet" href="{{asset('css/filter_multi_select.css')}}">
+    @endpush
     @push('js')
+    <script src="{{asset('js/filter-multi-select-bundle.js')}}"></script>
     <script>
         (function () {
             $(document).on('click', '#share-my-goals-btn', function () {
                 $("#shareMyGoalsModal").modal('show');
             });
-            $(".search-users").select2({
+            {{-- $(".search-users").select2({
                 multiple:true
-            });
+            }); --}}
+            var filterMultiDropdown = {};
+            $(".search-users").each(function() {
+                const goalId = $(this).data('goal-id');
+                const a = $(this).filterMultiSelect({
+                    selectAllText: 'All Direct Report'
+                });
+                filterMultiDropdown[goalId] = a;
+            })
             $(document).on('change', '.is-shared', function (e) {
                 let confirmMessage = "Making this goal private will hide it from all employees. Continue?";
                 if (this.checked) {
@@ -36,7 +48,12 @@
                 }
                 $(this).parents("label").find("span").html(this.checked ? "Shared" : "Private");
                 const goalId = $(this).data('goal-id');
-                $("#search-users-" + goalId).attr('disabled', !this.checked);
+                // $("#search-users-" + goalId).attr('disabled', !this.checked);
+                if (this.checked) {
+                    filterMultiDropdown[goalId].enable();
+                } else {
+                    filterMultiDropdown[goalId].disable()
+                }
             });
         })();
     </script>

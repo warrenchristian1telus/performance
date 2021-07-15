@@ -17,7 +17,8 @@
             <span class="pr-2 mr-2">
                 <div class="form-check form-switch p-0">
                     <label class="form-check-label" for="is_shared_{{$goal->id}}">
-                        <input class="form-check-input is-shared" type="checkbox" id="is_shared_{{$goal->id}}"  name="is_shared[{{ $goal->id }}]" data-goal-id="{{ $goal->id }}" {{ count($goal->sharedWith) > 0 ? 'checked' : ''}}>
+                        <input type="hidden" name="is_shared[{{ $goal->id }}]" value="0">
+                        <input class="form-check-input is-shared" type="checkbox" id="is_shared_{{$goal->id}}"  name="is_shared[{{ $goal->id }}]" data-goal-id="{{ $goal->id }}" {{ count($goal->sharedWith) > 0 ? 'checked' : ''}} value="1">
                         <i></i><span>{{count($goal->sharedWith) > 0 ? 'Shared' : 'Private'}}</span>
                     </label>
                 </div>
@@ -27,7 +28,7 @@
     <div class="col-12 col-sm-4">
         <label>
             Share with: <br>
-            <select multiple class="form-control search-users" id="search-users-{{$goal->id}}" name="share_with[{{$goal->id}}][]"  {{ count($goal->sharedWith) > 0 ? '' : 'disabled'}}>
+            <select multiple class="form-control search-users filter-multi-select" id="search-users-{{$goal->id}}" name="share_with[{{$goal->id}}][]"  {{ count($goal->sharedWith) > 0 ? '' : 'disabled'}} data-goal-id="{{$goal->id}}">
                 @php
                     $alreadyAdded = [];
                 @endphp
@@ -37,7 +38,7 @@
                 @endforeach
                 @foreach ($employees as $employee)
                     @if (!in_array($employee->id, $alreadyAdded))
-                        <option value="{{ $employee->id }}"> {{$employee->name}}</option>
+                        <option value="{{ $employee->id }}" {{ count($alreadyAdded) === 0 ? 'selected' : ''}}> {{$employee->name}}</option>
                     @endif
                 @endforeach
             </select>

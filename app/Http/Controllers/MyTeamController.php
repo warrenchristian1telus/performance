@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\MyEmployeesDataTable;
+use App\Http\Requests\ShareMyGoalRequest;
 use App\Models\Goal;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -50,13 +51,24 @@ class MyTeamController extends Controller
         return view('my-team/goals-hierarchy', compact('goals', 'employees'));
     }
 
-    public function syncGoals(Request $request) {
+    public function syncGoals(ShareMyGoalRequest $request) {
+        $input = $request->validated();
         if($request->has("share_with")) {
             $shareWith = $request->share_with;
             foreach ($shareWith as $goalId => $userIds) {
                 $goal = Goal::find($goalId);
-                $goal->sharedWith()->sync($userIds);
+                $goal->sharedWith()->sync(array_filter($userIds));
             }
+        }
+        if($request->has("is_shared")) {
+            $isSharedArray = $input['is_shared'];
+            foreach ($isSharedArray as $goalId => $isShared) {
+                if (!(bool) $isShared) {
+                    $goal = Goal::find($goalId);
+                    $goal->sharedWith()->detach();
+                }
+            }
+            // dd((bool)$input['is_shared'][995]); 
         }
         return redirect()->back();
     }
@@ -65,12 +77,12 @@ class MyTeamController extends Controller
         // TODO: Get it from Database.
         if(in_array($id, [1,2,3])) {
             session()->put('view-profile-as', $id);
-            if(!session()->has('original-auth-id')) {
+            if (!session()->has('original-auth-id')) {
                 session()->put('original-auth-id', Auth::id());
             }
             Auth::loginUsingId($id);
         }
-        return (url()->previous() === Route('my-team.my-employee')) ? redirect()->route('dashboard') : redirect()->back();
+        return (url()->previous() === Route('my-team.my-employee')) ? redirect()->route('goal.current') : redirect()->back();
     }
 
     public function returnToMyProfile() {

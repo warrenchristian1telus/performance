@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
         return view('welcome');
     });
 
-    
+
 
     Route::middleware(['ViewShare'])->group(function () {
         Route::get('/dashboard', function () {
@@ -37,3 +37,4 @@ use Illuminate\Support\Facades\Route;
 
 
     require __DIR__.'/auth.php';
+    require __DIR__.'/resources.php';

@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
         Route::middleware(['auth'])->group(function () {
             require __DIR__ . '/goal.php';
             require __DIR__ . '/conversation.php';
+            require __DIR__ . '/resources.php';
             require __DIR__ . '/my-team.php';
         });
     });
@@ -37,4 +38,3 @@ use Illuminate\Support\Facades\Route;
 
 
     require __DIR__.'/auth.php';
-    require __DIR__.'/resources.php';

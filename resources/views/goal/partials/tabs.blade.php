@@ -4,12 +4,11 @@
             My Current Goals
         </x-button>
     </div>
-    <div class="px-4 py-1 border-bottom {{Route::current()->getName() == 'goal.past' ? 'border-primary' : ''}}">
+    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'goal.past' ? 'border-primary' : ''}}">
         <x-button :href="route('goal.past')" style="">
             My Past Goals
         </x-button>
     </div>
-
     <div class="px-4 py-1 border-bottom {{Route::current()->getName() == 'goal.my-supervisor' ? 'border-primary' : ''}}">
         <x-button :href="route('goal.my-supervisor')" style="">
             My Supervisor's Goals

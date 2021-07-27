@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\MyEmployeesDataTable;
+use App\Http\Requests\Goals\AddGoalToLibraryRequest;
 use App\Http\Requests\ShareMyGoalRequest;
 use App\Models\Goal;
+use App\Models\GoalType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MyTeamController extends Controller
 {
@@ -18,14 +21,14 @@ class MyTeamController extends Controller
      */
     public function myEmployees(MyEmployeesDataTable $myEmployeesDataTable)
     {
-        // return view('my-team/my-employees');
+        $goaltypes = GoalType::all();
         $goals = Goal::where('user_id', Auth::id())
             ->with('user')
             ->with('sharedWith')
             ->with('goalType')->get();
         $employees = $this->myEmployeesAjax();
         // dd($goals[0]->sharedWith);
-        return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees'));
+        return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes'));
     }
 
     public function myEmployeesAjax() {
@@ -39,7 +42,7 @@ class MyTeamController extends Controller
             ->with('user')
             ->with('goalType')->get();
         $employees = $this->myEmployeesAjax();
-        return view('my-team/performance-statistics', compact('goals', 'employees'));
+        return view('my-team/performance-statistics', compact('goals','employees', 'goaltypes'));
     }
     public function goalsHierarchy()
     {
@@ -48,7 +51,7 @@ class MyTeamController extends Controller
             ->with('goalType')->get();
         $employees = $this->myEmployeesAjax();
         
-        return view('my-team/goals-hierarchy', compact('goals', 'employees'));
+        return view('my-team/goals-hierarchy', compact('goals','employees', 'goaltypes'));
     }
 
     public function syncGoals(ShareMyGoalRequest $request) {
@@ -90,5 +93,20 @@ class MyTeamController extends Controller
         session()->forget('original-auth-id');
         session()->forget('view-profile-as');
         return redirect()->route('my-team.my-employee');
+    }
+
+    public function addGoalToLibrary(AddGoalToLibraryRequest $request) {
+        $input = $request->validated();
+        $input['user_id'] = Auth::id();
+        $input['is_library'] = true;
+        $share_with = $input['share_with'];
+
+        unset($input['share_with']);
+        DB::beginTransaction();
+        $goal = Goal::create($input);
+        $goal = $goal->sharedWith()->sync($share_with);
+        DB::commit();
+        return response()->json(['success' => true, 'message' => 'Goal added to library successfully']);
+        // return redirect()->back();
     }
 }

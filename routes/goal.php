@@ -10,6 +10,7 @@ Route::get('goal/library', [GoalController::class, 'library'])->name('goal.libra
 Route::post('goal/library', [GoalController::class, 'saveFromLibrary'])->name('goal.library');
 Route::get('goal/library/{id}', [GoalController::class, 'showForLibrary'])->name('goal.library.detail');
 Route::get('goal/supervisor/{id}', [GoalController::class, 'getSupervisorGoals'])->name('goal.supervisor');
+Route::post('goal/supervisor/{id}/copy', [GoalController::class, 'copyGoal'])->name('goal.supervisor.copy');
 
 Route::get('goal', function () {
     return redirect()->route('goal.current');

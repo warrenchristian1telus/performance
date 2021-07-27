@@ -73,6 +73,6 @@ class User extends Authenticatable
 
     public function sharedGoals()
     {
-        return $this->belongsToMany('App\Models\Goal', 'goals_shared_with', 'goal_id', 'user_id');
+        return $this->belongsToMany('App\Models\Goal', 'goals_shared_with', 'user_id', 'goal_id');
     }
 }

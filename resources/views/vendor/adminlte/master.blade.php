@@ -75,7 +75,7 @@
 
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data') data-panel-auto-height="-63">
+<body class="@yield('classes_body')" @yield('body_data') data-panel-auto-height="{{session()->has('view-profile-as') ? -63 : 0}}">
     @if(session()->has('view-profile-as'))
     <div class="top-message-bar p-3 text-center bg-warning d-flex justify-content-center align-items-center">
         <span class="flex-fill"></span>

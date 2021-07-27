@@ -28,7 +28,7 @@
     <div class="col-12 col-sm-4">
         <label>
             Share with: <br>
-            <select multiple class="form-control search-users filter-multi-select" id="search-users-{{$goal->id}}" name="share_with[{{$goal->id}}][]"  {{ count($goal->sharedWith) > 0 ? '' : 'disabled'}} data-goal-id="{{$goal->id}}">
+            <select multiple class="form-control search-users" id="search-users-{{$goal->id}}" name="share_with[{{$goal->id}}][]"  {{ count($goal->sharedWith) > 0 ? '' : 'disabled'}} data-goal-id="{{$goal->id}}">
                 @php
                     $alreadyAdded = [];
                 @endphp

@@ -28,15 +28,32 @@
                 </p>
             </a>
         </div>
-        <div class="card-footer">
-            <b>Goal created by: </b>{{ $goal->user->name}}
-            <span class="float-right">
+        <div class="card-footer d-flex align-items-center">
+            <b>Goal created by:&nbsp;</b>{{ $goal->user->name}}
+            <div class="flex-fill"></div>
+            <div>
                 @if($type !== 'supervisor' && !$disableEdit)
                     @include('goal.partials.status-change')
                 @else
                     <x-goal-status :status="$goal->status"></x-goal-status>
                 @endif
-            </span>
+            </div>
+            <x-button
+                :href='route("goal.show", $goal->id)' 
+                :tooltip="__('Click to view the details of this goal.')"
+                tooltipPosition="bottom" class="ml-2">{{__('View')}}</x-button>
+            @if($type === 'supervisor' && !$disableEdit)
+                <form action="{{route('goal.supervisor.copy', $goal->id)}}" method="post" onSubmit="return confirm('This goal will be copied to your Current Goals tab. You can access and edit it there without impacting your supervisor\'s goal. Continue?');">
+                    @csrf
+                    <x-button
+                        :data-id="$goal->id"
+                        class="ml-2 copy-goal" 
+                        style="outline-primary" 
+                        :tooltip="__('Click to copy this goal to your Current Goals tab and make it your own.')"
+                        tooltipPosition="bottom">{{__('Copy')}}</x-button>
+                </form>
+            @endif
+            
         </div>
         <!-- /.card-footer -->
     </div>

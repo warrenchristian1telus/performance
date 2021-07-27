@@ -17,8 +17,8 @@ class CreateGoalsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->date('start_date');
-            $table->date('target_date');
+            $table->date('start_date')->nullable();
+            $table->date('target_date')->nullable();
             $table->text('what');
             $table->text('why');
             $table->text('how');

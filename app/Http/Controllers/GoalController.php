@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\DataTables\GoalsDataTable;
 use App\Models\GoalComment;
 use App\Models\LinkedGoal;
+use App\Models\User;
+use App\Scopes\NonLibraryScope;
 use Illuminate\Contracts\Session\Session;
 
 class GoalController extends Controller
@@ -33,10 +35,11 @@ class GoalController extends Controller
             $type = 'current';
             return view('goal.index', compact('goals', 'type', 'goaltypes'));
         } else if ($request->is("goal/supervisor")) {
-            $query = Goal::with('user')
-                            ->with('goalType');
-            $goals = $query->whereIn('id', [995,996])->where('is_shared', 1)
-                ->paginate(4);
+            $user = Auth::user();
+            // TO remove already copied goals.
+            $referencedGoals = Goal::where('user_id', $authId)->whereNotNull('referenced_from')->pluck('referenced_from');
+            $goals = $user->sharedGoals()->whereNotIn('goals.id', $referencedGoals )->paginate(4);
+            
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes'));
         }
@@ -173,7 +176,6 @@ class GoalController extends Controller
 
     public function library(Request $request)
     {
-        // Goal Library
         $query = Goal::whereIn('id', [997, 998, 999]);
         $expanded = false;
         $currentSearch = "";
@@ -197,11 +199,35 @@ class GoalController extends Controller
         }
         $sQuery = clone $query;
 
-        $supervisorGoals = $sQuery->whereIn('id', [998])->with('goalType')
-                            ->with('comments')->get();
+        /* $supervisorGoals = $sQuery->whereIn('id', [998])->with('goalType')
+                            ->with('comments')->get(); */
         $organizationGoals = $query->whereIn('id', [997, 999])->with('goalType')
                             ->with('comments')->get();
 
+        $user = Auth::user();
+        $sQuery = $user->sharedGoals()->withoutGlobalScope(NonLibraryScope::class);
+
+        // TODO: remove duplicate if once we resolve organizational goals
+        if ($request->has('search') && $request->search != '') {
+            // $searchText = explode(' ', $request->search);
+            $searchText = $request->search;
+            $sQuery->Where(function ($qq) use ($searchText) {
+                foreach ($searchText as $search) {
+                    $qq->orWhere(function ($q) use ($search) {
+                        $q->orWhere('title', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('what', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('why', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('how', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('measure_of_success', 'LIKE', '%' . $search . '%');
+                    });
+                }
+            });
+
+            $expanded = true;
+            $currentSearch = implode(' ', $request->search);
+        };
+        $supervisorGoals = $sQuery->where('is_library', 1)->with('goalType')
+        ->with('comments')->get();
         return view('goal.library', compact('organizationGoals', 'supervisorGoals', 'currentSearch', 'expanded'));
     }
 
@@ -209,13 +235,13 @@ class GoalController extends Controller
         if ($request->has("add") && $request->add) {
             $showAddBtn = true;
         }
-        $goal = Goal::find($id);
+        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->find($id);
         return view('goal.partials.show', compact('goal', 'showAddBtn'));
     }
 
     public function saveFromLibrary(Request $request)
     {
-        $goal = Goal::find($request->selected_goal);
+        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->find($request->selected_goal);
         $newGoal = new Goal;
         $newGoal->title = $goal->title;
         $newGoal->why = $goal->why;
@@ -273,5 +299,22 @@ class GoalController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function copyGoal(Request $request, $id) {
+        $goal = Goal::findOrFail($id);
+        $userId = Auth::Id();
+
+        if (!$goal->sharedWith()->where('users.id', $userId)->exists()) {
+            abort(403, __('You do not have access to the resource'));
+        }
+
+        $newGoal = $goal->replicate();
+        $newGoal->user_id = $userId;
+        $newGoal->is_shared = 0;
+        $newGoal->referenced_from = $goal->id;
+        $newGoal->save();
+
+        return redirect()->route('goal.current');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\NonLibraryScope;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -26,7 +27,8 @@ class Goal extends Model implements Auditable
     'status',
     'user_id',
     'created_at',
-    'updated_at'
+    'updated_at',
+    'is_library'
   ];
 
 
@@ -45,6 +47,23 @@ class Goal extends Model implements Auditable
     'target_date' => 'datetime',
   ];
 
+  /* public function newQuery($excludeDeleted = true, $excludeLibrary = true)
+  {
+    if ($excludeLibrary) {
+      return parent::newQuery($excludeDeleted)
+      ->where('is_library', '=', 0);
+    }
+    return parent::newQuery($excludeDeleted);
+  } */
+
+  protected static function boot()
+  {
+    parent::boot();
+
+    static::addGlobalScope(new NonLibraryScope);
+  }
+
+
   public function goalType() {
     return $this->belongsTo('App\Models\GoalType')->select('name', 'id');
   }
@@ -60,12 +79,12 @@ class Goal extends Model implements Auditable
   }
 
   public function getStartDateHumanAttribute() {
-    return $this->start_date->format('F d, Y');
+    return ($this->start_date) ?  $this->start_date->format('F d, Y') : null;
   }
   
   public function getTargetDateHumanAttribute()
   {
-    return $this->target_date->format('F d, Y');
+    return ($this->start_date) ? $this->target_date->format('F d, Y') : null;
   }
 
   public function sharedWith() 

@@ -4,7 +4,7 @@
             <h1>Hi {{ Auth::user()->name }}</h1>
         </div>
         <div class="col-12 col-sm-6 text-right">
-            <x-button tooltip="Create a goal for your employees to use in their own profile." tooltipPosition="bottom">
+            <x-button id="add-goal-to-library-btn" tooltip="Create a goal for your employees to use in their own profile." tooltipPosition="bottom">
                 Add Goal to Library
             </x-button>
             <x-button id="share-my-goals-btn" tooltip="Choose which of your goals are visible to your employees" tooltipPosition="bottom">
@@ -15,27 +15,28 @@
     <div class="col-md-8"> @include('my-team.partials.tabs')</div>
     @yield('tab-content')
     @include('my-team.partials.share-my-goals-modal')
+    @include('my-team.partials.add-goal-to-library-modal')
     @push('css')
-        <link rel="stylesheet" href="{{asset('css/filter_multi_select.css')}}">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
     @endpush
     @push('js')
-    <script src="{{asset('js/filter-multi-select-bundle.js')}}"></script>
+    <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
     <script>
         (function () {
             $(document).on('click', '#share-my-goals-btn', function () {
                 $("#shareMyGoalsModal").modal('show');
             });
-            {{-- $(".search-users").select2({
-                multiple:true
-            }); --}}
-            var filterMultiDropdown = {};
+            $(document).on('click', '#add-goal-to-library-btn', function () {
+                $("#addGoalToLibraryModal").modal('show');
+            });
             $(".search-users").each(function() {
                 const goalId = $(this).data('goal-id');
-                const a = $(this).filterMultiSelect({
-                    selectAllText: 'All Direct Report'
+                $(this).multiselect({
+                    allSelectedText: 'All Direct Report',
+                    selectAllText: 'All Direct Report',
+                    includeSelectAllOption: true
                 });
-                filterMultiDropdown[goalId] = a;
-            })
+            });
             $(document).on('change', '.is-shared', function (e) {
                 let confirmMessage = "Making this goal private will hide it from all employees. Continue?";
                 if (this.checked) {
@@ -48,12 +49,7 @@
                 }
                 $(this).parents("label").find("span").html(this.checked ? "Shared" : "Private");
                 const goalId = $(this).data('goal-id');
-                // $("#search-users-" + goalId).attr('disabled', !this.checked);
-                if (this.checked) {
-                    filterMultiDropdown[goalId].enable();
-                } else {
-                    filterMultiDropdown[goalId].disable()
-                }
+                $("#search-users-" + goalId).multiselect(this.checked ? 'enable' : 'disable');
             });
         })();
     </script>

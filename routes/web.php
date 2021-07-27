@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
         return view('welcome');
     });
 
-    
+
 
     Route::middleware(['ViewShare'])->group(function () {
         Route::get('/dashboard', function () {
@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
         Route::middleware(['auth'])->group(function () {
             require __DIR__ . '/goal.php';
             require __DIR__ . '/conversation.php';
+            require __DIR__ . '/resources.php';
             require __DIR__ . '/my-team.php';
         });
     });

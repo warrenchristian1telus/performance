@@ -38,6 +38,7 @@ class MyTeamController extends Controller
 
     public function performanceStatistics()
     {
+        $goaltypes = GoalType::all();
         $goals = Goal::where('user_id', Auth::id())
             ->with('user')
             ->with('goalType')->get();

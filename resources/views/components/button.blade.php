@@ -1,6 +1,7 @@
-@props(['style' => 'primary', 'icon' => '', 'size' => 'md', 'tooltip' => '', 'tooltipPosition' => 'right'])
+@props(['style' => 'primary', 'icon' => '', 'size' => 'md', 'tooltip' => '', 'tooltipPosition' => 'right', 'role' => 'button'])
 
 <{{($attributes['href'] ?? '' ? 'a' : 'button')}} 
+    role="{{$role}}"
     @if ($tooltip) 
         data-toggle="popover" data-placement="{{ $tooltipPosition }}" data-html="true" data-content="{{ $tooltip }}" data-trigger="hover"
     @endif

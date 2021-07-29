@@ -248,19 +248,18 @@ return [
             'can' => ['conversions']
         ],
         [
-            'text' => 'Resources',
-            'url'  => 'resources/user-guide',
-            'icon' => 'fas fa-fw fa-bullseye',
-            'active' => ['resources/*']
-        ],
-        [
             'text' => 'My Team',
             'url'  => 'my-team/my-employees',
             'icon' => 'fas fa-fw fa-users',
             'active' => ['my-team/*'],
             'can' => ['my team']
         ],
-
+        [
+            'text' => 'Resources',
+            'url'  => 'resources/user-guide',
+            'icon' => 'fas fa-fw fa-bullseye',
+            'active' => ['resources/*']
+        ]
     ],
 
     /*

@@ -37,8 +37,10 @@ class GoalController extends Controller
         } else if ($request->is("goal/supervisor")) {
             $user = Auth::user();
             // TO remove already copied goals.
-            $referencedGoals = Goal::where('user_id', $authId)->whereNotNull('referenced_from')->pluck('referenced_from');
-            $goals = $user->sharedGoals()->whereNotIn('goals.id', $referencedGoals )->paginate(4);
+            // $referencedGoals = Goal::where('user_id', $authId)->whereNotNull('referenced_from')->pluck('referenced_from');
+            $goals = $user->sharedGoals()
+                /* ->whereNotIn('goals.id', $referencedGoals ) */
+                ->paginate(4);
             
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes'));

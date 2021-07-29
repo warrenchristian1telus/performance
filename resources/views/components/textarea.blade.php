@@ -3,7 +3,7 @@
 <label>
     {{ __($label) }}
      @if($tooltip != '')
-    <i class="fas fa-info-circle"  data-toggle="popover" data-placement="right" data-html="true" data-content="{{ $tooltip }}"></i>
+    <i class="fas fa-info-circle" data-trigger="hover" data-toggle="popover" data-placement="right" data-html="true" data-content="{{ $tooltip }}"></i>
     @endif
     <textarea {!! $attributes->merge(['class' => 'form-control']) !!}>{{$value}}</textarea>
     @if ($info != '')

@@ -37,6 +37,12 @@ class UserTableSeeder extends Seeder
         'password' => 'employee3@123'
       ],
       [
+        'id' => 998,
+        'email' => 'supervisor2@example.com',
+        'name' => 'Supervisor2',
+        'password' => 'supervisor2@123',
+      ],
+      [
         'id' => 999,
         'email' => 'supervisor@example.com',
         'name' => 'Supervisor',

@@ -18,17 +18,19 @@ class MyEmployeesDataTable extends DataTable
             ->addColumn('action', function ($row) {
                 return view('goal.partials.action', compact(["row"])); // $row['id'];
             })->editColumn('active_goals_count', function ($row) {
-                return $row['active_goals_count']. " Goals";
+                $text = $row['active_goals_count'] . " Goals";
+                return view('my-team.partials.link-to-profile', compact(['row', 'text']));
             })->addColumn('latestConversation', function ($row) {
                 $conversation = $row->latestConversation[0] ?? null;
-                return view('my-team.partials.conversation', compact(["conversation"]));
+                return view('my-team.partials.conversation', compact(["row", "conversation"]));
             })->addColumn('upcomingConversation', function ($row) {
+                $removeBlankLink = true;
                 $conversation = $row->upcomingConversation[0] ?? null;
-                return view('my-team.partials.conversation', compact(["conversation"]));
+                return view('my-team.partials.conversation', compact(["row", "conversation", 'removeBlankLink']));
             })
             ->addColumn('shared', function ($row) {
-                $yesOrNo = ($row->id % 2 === 0) ? 'Yes' : 'No';
-                return view('my-team.partials.switch', compact(["yesOrNo"])); // $row['id'];
+                // $yesOrNo = ($row->id % 2 === 0) ? 'Yes' : 'No';
+                return view('my-team.partials.view-btn', compact(["row"])); // $row['id'];
             })
             ->addColumn('excused', function ($row) {
                 $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
@@ -93,7 +95,7 @@ class MyEmployeesDataTable extends DataTable
                 ->printable(false)
                 ->addClass('text-center'),
             Column::computed('latestConversation')
-                ->title('Latest Conversation')
+                ->title('Last Conversation')
                 ->exportable(false)
                 ->printable(false)
                 ->addClass('text-center'),

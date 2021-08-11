@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\DataTables\MyEmployeesDataTable;
 use App\Http\Requests\Goals\AddGoalToLibraryRequest;
+use App\Http\Requests\MyTeams\ShareProfileRequest;
+use App\Http\Requests\MyTeams\UpdateProfileSharedWithRequest;
 use App\Http\Requests\ShareMyGoalRequest;
+use App\Models\ConversationTopic;
 use App\Models\Goal;
 use App\Models\GoalType;
+use App\Models\Participant;
+use App\Models\SharedProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,18 +27,78 @@ class MyTeamController extends Controller
     public function myEmployees(MyEmployeesDataTable $myEmployeesDataTable)
     {
         $goaltypes = GoalType::all();
+        $conversationTopics = ConversationTopic::all();
+        $participants = Participant::all();
+        
         $goals = Goal::where('user_id', Auth::id())
             ->with('user')
             ->with('sharedWith')
             ->with('goalType')->get();
         $employees = $this->myEmployeesAjax();
         // dd($goals[0]->sharedWith);
-        return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes'));
+        $type = '';
+        return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type'));
     }
 
     public function myEmployeesAjax() {
         // TODO: Map Once we have relationship
         return User::whereIn("id", [1,2,3])->get();
+    }
+
+    public function getProfileSharedWith($user_id) {
+        $sharedProfiles = SharedProfile::where('shared_id', $user_id)->with(['sharedWith' => function ($query) {
+            $query->select('id', 'name');
+        }])->get();
+
+        return view('my-team.partials.profile-shared-with', compact('sharedProfiles'));
+        // return $this->respondeWith($sharedProfiles);
+    }
+
+    public function updateProfileSharedWith($shared_profile_id, UpdateProfileSharedWithRequest $request) {
+        $sharedProfile = SharedProfile::findOrFail($shared_profile_id);
+        $input = $request->validated();
+        $update = [];
+        if ($input['action'] !== 'stop') {
+            if($input['action'] === 'comment') {
+                $update['comment'] = $input['comment'];
+            }
+            else if ($input['action'] === 'items') {
+                $update['shared_item'] = $input['shared_item'];
+            }
+            $sharedProfile->update($update);
+            /// $sharedProfile->save();
+            return $this->respondeWith($sharedProfile);
+        }
+
+        $sharedProfile->delete();
+        return $this->respondeWith('');
+    }
+
+    public function shareProfile(ShareProfileRequest $request) {
+        $input = $request->validated();
+        // dd($input);
+
+        $insert = [
+            'shared_by' => Auth::id(),
+            'shared_item' => $input['items_to_share'],
+            'shared_id' => $input['shared_id'],
+            'comment' => $input['reason']
+        ];
+
+        $sharedProfile = [];
+        DB::beginTransaction();
+        foreach ($input['share_with_users'] as $user_id) {
+            $insert['shared_with'] = $user_id;
+            array_push($sharedProfile, SharedProfile::updateOrCreate($insert));
+        }
+
+        DB::commit();
+        return $this->respondeWith($sharedProfile);
+    }
+
+    public function userList(Request $request) {
+        $search = $request->search;
+        return $this->respondeWith(User::where('name', 'LIKE', "%{$search}%")->paginate());
     }
 
     public function performanceStatistics()

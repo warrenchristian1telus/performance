@@ -1,1 +1,1 @@
-<a href="{{route('my-team.view-profile-as', $row['id'])}}">{{ $row['name'] }}</a>
+<a href="{{route('my-team.view-profile-as', $row['id'])}}">{{ $text ?? $row['name'] }}</a>

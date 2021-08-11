@@ -20,7 +20,11 @@ class AdditionalUsersTableSeeder extends Seeder
 
         $users = [];
         foreach ($departments as $dept) {
-            for ($i=1; $i <= $NO_OF_ACCOUNT_PER_DEPT; $i++) { 
+            $loopCount = $NO_OF_ACCOUNT_PER_DEPT;
+            if ($dept === 'PSA') {
+                $loopCount = 19;
+            }
+            for ($i=1; $i <= $loopCount; $i++) { 
                 $user = [
                     'email' => $dept . $i . '@example.com',
                     'name' => $dept . $i,

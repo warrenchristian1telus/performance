@@ -1,4 +1,4 @@
-@props(['disabled' => false, 'showError' => true, 'label' => '', 'info' => '','tooltip'=>''])
+@props(['disabled' => false, 'showError' => true, 'label' => '', 'info' => '','tooltip'=>'', 'size' => 'md'])
 <label>
     {{ __($label) }}
     @if($tooltip != '')
@@ -9,8 +9,10 @@
         {{ __($info) }}
     </small>
     @endif
-    <input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-control']) !!} autocomplete="off">
-    @if ($showError !== 'false') 
-        <small class="text-danger">{{ $errors->first($attributes['name']) }}</small>
-    @endif
+    <input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-control form-control-'.$size]) !!} autocomplete="off">
+    <small class="text-danger error-{{$attributes['name'] ?? ''}}">
+        @if ($showError !== 'false') 
+            {{ $errors->first($attributes['name']) }}
+        @endif
+    </small>
 </label>

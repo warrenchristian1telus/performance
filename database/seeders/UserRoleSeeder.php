@@ -66,7 +66,7 @@ class UserRoleSeeder extends Seeder
         ];
 
         $this->setupUserRolePermission(
-            [999],
+            [999, 998],
             $permissions,
             'Supervisor'
         );

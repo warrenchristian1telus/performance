@@ -42,6 +42,9 @@ class GoalController extends Controller
                 /* ->whereNotIn('goals.id', $referencedGoals ) */
                 ->paginate(4);
             
+            // For User Experience Testing
+            $goals = Goal::where('id', 995)->paginate(4);
+            
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes'));
         }
@@ -208,7 +211,8 @@ class GoalController extends Controller
 
         $user = Auth::user();
         $sQuery = $user->sharedGoals()->withoutGlobalScope(NonLibraryScope::class);
-
+        // TODO: For User Experience 
+        $sQuery = Goal::where('id', 998);
         // TODO: remove duplicate if once we resolve organizational goals
         if ($request->has('search') && $request->search != '') {
             // $searchText = explode(' ', $request->search);
@@ -228,7 +232,9 @@ class GoalController extends Controller
             $expanded = true;
             $currentSearch = implode(' ', $request->search);
         };
-        $supervisorGoals = $sQuery->where('is_library', 1)->with('goalType')
+        // TODO: For UserExperience Test
+        // $supervisorGoals = $sQuery->where('is_library', 1)->with('goalType')
+        $supervisorGoals = $sQuery->with('goalType')
         ->with('comments')->get();
         return view('goal.library', compact('organizationGoals', 'supervisorGoals', 'currentSearch', 'expanded'));
     }
@@ -307,9 +313,10 @@ class GoalController extends Controller
         $goal = Goal::findOrFail($id);
         $userId = Auth::Id();
 
-        if (!$goal->sharedWith()->where('users.id', $userId)->exists()) {
+        // TODO: For UserExperience Test
+        /* if (!$goal->sharedWith()->where('users.id', $userId)->exists()) {
             abort(403, __('You do not have access to the resource'));
-        }
+        } */
 
         $newGoal = $goal->replicate();
         $newGoal->user_id = $userId;

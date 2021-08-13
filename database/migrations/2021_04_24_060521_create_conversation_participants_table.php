@@ -15,7 +15,7 @@ class CreateConversationParticipantsTable extends Migration
     {
         Schema::create('conversation_participants', function (Blueprint $table) {
             $table->foreignId('conversation_id')->constrained();
-            $table->foreignId('participant_id')->constrained();
+            $table->foreignId('participant_id')->constrained('users');
         });
     }
 

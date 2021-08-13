@@ -42,7 +42,10 @@ class MyTeamController extends Controller
 
     public function myEmployeesAjax() {
         // TODO: Map Once we have relationship
-        return User::whereIn("id", [1,2,3])->get();
+
+        return User::whereIn("id", [1,2,3])
+                    /* ->orWhere('name', 'LIKE', 'PSA%') */
+                    ->get();
     }
 
     public function getProfileSharedWith($user_id) {

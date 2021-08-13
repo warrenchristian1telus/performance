@@ -63,7 +63,7 @@ class ConversationSeeder extends Seeder
 
             ConversationParticipant::updateOrCreate([
                 'conversation_id' => $conversation->id,
-                'participant_id' => rand(1,5)
+                'participant_id' => rand(1,3)
             ]);
         }
     }

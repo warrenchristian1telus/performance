@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\MyEmployeesDataTable;
+use App\DataTables\SharedEmployeeDataTable;
 use App\Http\Requests\Goals\AddGoalToLibraryRequest;
 use App\Http\Requests\MyTeams\ShareProfileRequest;
 use App\Http\Requests\MyTeams\UpdateProfileSharedWithRequest;
@@ -24,7 +25,7 @@ class MyTeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function myEmployees(MyEmployeesDataTable $myEmployeesDataTable)
+    public function myEmployees(MyEmployeesDataTable $myEmployeesDataTable, SharedEmployeeDataTable $sharedEmployeeDataTable)
     {
         $goaltypes = GoalType::all();
         $conversationTopics = ConversationTopic::all();
@@ -37,7 +38,18 @@ class MyTeamController extends Controller
         $employees = $this->myEmployeesAjax();
         // dd($goals[0]->sharedWith);
         $type = '';
-        return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type'));
+        $myEmpTable = $myEmployeesDataTable->html();
+        $sharedEmpTable = $sharedEmployeeDataTable->html();
+        return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'myEmpTable', 'sharedEmpTable'));
+        // return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type'));
+    }
+
+    public function myEmployeesTable(MyEmployeesDataTable $myEmployeesDataTable) {
+        return $myEmployeesDataTable->render('my-team/my-employees');
+    }
+
+    public function sharedEmployeesTable(SharedEmployeeDataTable $sharedEmployeeDataTable) {
+        return $sharedEmployeeDataTable->render('my-team/my-employees');
     }
 
     public function myEmployeesAjax() {
@@ -147,7 +159,11 @@ class MyTeamController extends Controller
 
     public function viewProfileAs($id, Request $request) {
         // TODO: Get it from Database.
-        if(in_array($id, [1,2,3])) {
+        $reporting_users = [1,2,3];
+        if (session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id() === 1901) {
+            $reporting_users = [998, 999];
+        }
+        if(in_array($id, $reporting_users)) {
             session()->put('view-profile-as', $id);
             if (!session()->has('original-auth-id')) {
                 session()->put('original-auth-id', Auth::id());
@@ -155,6 +171,16 @@ class MyTeamController extends Controller
             Auth::loginUsingId($id);
         }
         return (url()->previous() === Route('my-team.my-employee')) ? redirect()->route('goal.current') : redirect()->back();
+    }
+    public function viewDirectReport($id, Request $request) {
+        $myEmployeesDataTable = new MyEmployeesDataTable($id);
+        $myEmployeesDataTable->setRoute(route('my-team.view-profile-as.direct-report', $id));
+        if ($request->ajax()) {
+            return $myEmployeesDataTable->render('my-team/my-employees');
+        }
+        $directReports = $myEmployeesDataTable->html();
+        $userName = User::find($id)->name;
+        return view('my-team.direct-report', compact('directReports', 'userName'));
     }
 
     public function returnToMyProfile() {

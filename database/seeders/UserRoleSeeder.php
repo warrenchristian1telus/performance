@@ -37,7 +37,7 @@ class UserRoleSeeder extends Seeder
         ];
 
         $this->setupUserRolePermission(
-            [999],
+            [998, 999, 1901],
             $permissions,
             'Employee',
             true
@@ -66,7 +66,7 @@ class UserRoleSeeder extends Seeder
         ];
 
         $this->setupUserRolePermission(
-            [999, 998],
+            [999, 998, 1901],
             $permissions,
             'Supervisor'
         );

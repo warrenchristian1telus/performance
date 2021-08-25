@@ -2,28 +2,14 @@
 
 namespace App\DataTables;
 
+use App\Models\SharedProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class MyEmployeesDataTable extends DataTable
+class SharedEmployeeDataTable extends DataTable
 {
-    protected $id; 
-    protected $route;
-
-    public function __construct($id = null) {
-        $this->id = $id;
-        if($this->id == null) {
-            $this->id = Auth::id();
-        }
-        $this->route = null;
-    }
-
-    public function setRoute($route) {
-        $this->route = $route;
-    }
-
     public function dataTable($query)
     {
         return datatables()
@@ -51,9 +37,6 @@ class MyEmployeesDataTable extends DataTable
             ->addColumn('excused', function ($row) {
                 $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
                 return view('my-team.partials.switch', compact(["yesOrNo"])); // $row['id'];
-            })
-            ->addColumn('direct-reports', function($row) {
-                return view('my-team.partials.direct-report-col', compact(["row"]));
             });
     }
 
@@ -65,15 +48,7 @@ class MyEmployeesDataTable extends DataTable
      */
     public function query(User $model)
     {
-        $reporting_users = [1,2,3];
-        if ($this->id === 1901) {
-            $reporting_users = [998, 999];
-        }
-        if (in_array($this->id, [1,2,3])) {
-            $reporting_users = ['x']; // No Direct users
-        }
-
-        return $model->newQuery()->whereIn('id', $reporting_users)
+        return $model->newQuery()->whereIn('id', SharedProfile::where('shared_with', Auth::id())->pluck('shared_id') )
             ->withCount('activeGoals')
             ->with('upcomingConversation')
             ->with('latestConversation');
@@ -86,14 +61,10 @@ class MyEmployeesDataTable extends DataTable
      */
     public function html()
     {
-        $route = $this->route;
-        if (!$route) {
-            $route = route('my-team.my-employee-table');
-        }
         return $this->builder()
-            ->setTableId('my-employees-table')
+            ->setTableId('shared-employees-table')
             ->columns($this->getColumns())
-            ->minifiedAjax($route)
+            ->minifiedAjax(route('my-team.shared-employee-table'))
             ->dom('Bfrtip')
             ->orderBy(0, 'desc')
             ->searching(true)
@@ -136,11 +107,6 @@ class MyEmployeesDataTable extends DataTable
                 ->width(60)
                 ->addClass('text-center'),
             Column::computed('excused')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
-            Column::computed('direct-reports')
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)

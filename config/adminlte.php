@@ -240,26 +240,26 @@ return [
             'active' => ['goal/*'],
             'can' => ['goals']
         ],
-        // [
-        //     'text' => 'Conversations',
-        //     'url'  => 'conversation/upcoming',
-        //     'icon' => 'fas fa-fw fa-bullseye',
-        //     'active' => ['conversation/*'],
-        //     'can' => ['conversions']
-        // ],
-        // [
-        //     'text' => 'My Team',
-        //     'url'  => 'my-team/my-employees',
-        //     'icon' => 'fas fa-fw fa-users',
-        //     'active' => ['my-team/*'],
-        //     'can' => ['my team']
-        // ],
-        // [
-        //     'text' => 'Resources',
-        //     'url'  => 'resources/user-guide',
-        //     'icon' => 'fas fa-fw fa-bullseye',
-        //     'active' => ['resources/*']
-        // ]
+        [
+            'text' => 'Conversations',
+            'url'  => 'conversation/upcoming',
+            'icon' => 'fas fa-fw fa-bullseye',
+            'active' => ['conversation/*'],
+            'can' => ['conversions']
+        ],
+        [
+            'text' => 'My Team',
+            'url'  => 'my-team/my-employees',
+            'icon' => 'fas fa-fw fa-users',
+            'active' => ['my-team/*'],
+            'can' => ['my team']
+        ],
+        [
+            'text' => 'Resources',
+            'url'  => 'resources/user-guide',
+            'icon' => 'fas fa-fw fa-bullseye',
+            'active' => ['resources/*']
+        ]
     ],
 
     /*

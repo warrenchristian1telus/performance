@@ -1,0 +1,1 @@
+<a href="{{route('my-team.view-profile-as.direct-report', $row['id'])}}">View</a>

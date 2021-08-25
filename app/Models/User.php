@@ -63,12 +63,12 @@ class User extends Authenticatable
     }
 
     public function upcomingConversation() {
-        return $this->conversations()->whereNull('signoff_user_id')->orderBy('date', 'DESC')->limit(1);
+        return $this->conversations()->whereNull('signoff_user_id')->orderBy('date', 'DESC');
     }
 
     public function latestConversation()
     {
-        return $this->conversations()->whereNotNull('signoff_user_id')->orderBy('date', 'DESC')->limit(1);
+        return $this->conversations()->whereNotNull('signoff_user_id')->orderBy('date', 'DESC');
     }
 
     public function sharedGoals()

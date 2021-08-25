@@ -26,6 +26,33 @@
     <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
     <script>
         (function () {
+            $(document).on('click', '.btn-submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/conversation'
+                    , type: 'POST'
+                    , data: $('#conversation_form').serialize()
+                    , success: function(result) {
+                        if (result.success) {
+                            window.location.href = '/conversation/upcoming';
+                        }
+                    }
+                    , error: function(error) {
+                        var errors = error.responseJSON.errors;
+                        $('.error-date-alert').hide();
+                        $('.text-danger').each(function(i, obj) {
+                            $('.text-danger').text('');
+                        });
+                        Object.entries(errors).forEach(function callback(value, index) {
+                            var className = '.error-' + value[0];
+                            $(className).text(value[1]);
+                            if (value[0] === 'date') {
+                                $('.error-date-alert').show();
+                            }
+                        });
+                    }
+                });
+            });
             $(document).on('click', '#share-my-goals-btn', function () {
                 $("#shareMyGoalsModal").modal('show');
             });

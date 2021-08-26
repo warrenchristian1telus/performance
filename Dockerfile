@@ -23,7 +23,8 @@ RUN echo "deb https://packages.sury.org/php/ buster main" | tee /etc/apt/sources
 
 RUN sudo apt-get update
 RUN apt list|grep php7.3-gd
-RUN apt-get install php7.3-gd/stable -y
+#RUN apt-get install php7.3-gd/stable -y
+RUN apt-get install php7.3-gd/buster -y
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN docker-php-ext-install pdo pdo_mysql mbstring 
 WORKDIR /app

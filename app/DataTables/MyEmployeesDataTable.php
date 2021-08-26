@@ -65,14 +65,16 @@ class MyEmployeesDataTable extends DataTable
      */
     public function query(User $model)
     {
-        $reporting_users = [1,2,3];
-        if ($this->id === 1901) {
+        $reporting_users = [1,2]; // Supervisor A
+        if ($this->id == 1901) { /// Director A
             $reporting_users = [998, 999];
         }
-        if (in_array($this->id, [1,2,3])) {
+        if ($this->id == 998) { /// Supervisor B
+            $reporting_users = [3,4];
+        }
+        if (in_array($this->id, [1,2,3])) { // Employee
             $reporting_users = ['x']; // No Direct users
         }
-
         return $model->newQuery()->whereIn('id', $reporting_users)
             ->withCount('activeGoals')
             ->with('upcomingConversation')

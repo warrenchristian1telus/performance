@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class DashboardController extends Controller
 {
@@ -34,6 +35,8 @@ class DashboardController extends Controller
             $greetings = "Hello";
         }
 
-        return view('dashboard.index', compact('greetings'));
+        $tab = (Route::current()->getName() == 'dashboard.notifications') ? 'notifications' : 'todo';
+
+        return view('dashboard.index', compact('greetings', 'tab'));
     }
 }

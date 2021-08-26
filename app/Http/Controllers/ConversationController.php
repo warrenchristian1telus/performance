@@ -12,6 +12,7 @@ use App\Models\ConversationTopic;
 use App\Models\Participant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class ConversationController extends Controller
 {
@@ -61,10 +62,15 @@ class ConversationController extends Controller
      */
     public function store(ConversationRequest $request)
     {
+        $isDirectRequest = true;
+        if(route('my-team.my-employee') == url()->previous()) {
+            $isDirectRequest = false;
+        }
+
         $conversation = new Conversation();
         $conversation->conversation_topic_id = $request->conversation_topic_id;
         // $conversation->comment = $request->comment ?? '';
-        $conversation->user_id = Auth::id();
+        $conversation->user_id = $isDirectRequest ? Auth::id() : $request->owner_id ?? Auth::id();
         $conversation->date = $request->date;
         $conversation->time = $request->time;
         $conversation->save();

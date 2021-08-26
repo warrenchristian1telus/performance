@@ -178,9 +178,13 @@ class MyTeamController extends Controller
         if ($request->ajax()) {
             return $myEmployeesDataTable->render('my-team/my-employees');
         }
+        $supervisorList = [];
+        if (in_array($id, [1,2,3])) {
+            array_push($supervisorList, 'Supervisor');
+        }
         $directReports = $myEmployeesDataTable->html();
         $userName = User::find($id)->name;
-        return view('my-team.direct-report', compact('directReports', 'userName'));
+        return view('my-team.direct-report', compact('directReports', 'userName', 'supervisorList'));
     }
 
     public function returnToMyProfile() {

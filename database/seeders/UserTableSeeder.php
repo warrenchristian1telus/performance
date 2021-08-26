@@ -38,30 +38,36 @@ class UserTableSeeder extends Seeder
       ],
       [
         'id' => 4,
+        'email' => 'employee4@example.com',
+        'name' => 'Employee D',
+        'password' => 'employee4@123'
+      ],
+      [
+        'id' => 5,
         'name' => 'Simon Smith',
         'email' =>'SimonSmith@example.com',
         'password' => 'SimonSmith'
       ],
       [
-        'id' => 5,
+        'id' => 6,
         'name' => 'Jane Doe',
         'email' =>'JaneDoe@example.com',
         'password' => 'JaneDoe'
       ],
       [
-        'id' => 6,
+        'id' => 7,
         'name' => 'Susan Johnson',
         'email' =>'SusanJohnson@example.com',
         'password' => 'SusanJohnson'
       ],
       [
-        'id' => 7,
+        'id' => 8,
         'name' => 'John Smith',
         'email' =>'JohnSmith@example.com',
         'password' => 'JohnSmith'
       ],
       [
-        'id' => 8,
+        'id' => 9,
         'name' => 'Anna Adams',
         'email' =>'AnnaAdams@example.com',
         'password' => 'AnnaAdams'

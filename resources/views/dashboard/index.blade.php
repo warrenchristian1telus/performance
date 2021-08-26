@@ -37,7 +37,11 @@
             <div class="col-12">
                 <div class="p-4 bg-white border-b border-gray-200">
                     @include('dashboard.partials.tabs')
-                    @include('dashboard.partials.todo')
+                    @if ($tab == 'todo') 
+                        @include('dashboard.partials.todo')
+                    @else
+                        @include('dashboard.partials.notifications')
+                    @endif
                 </div>
             </div>
         </div>

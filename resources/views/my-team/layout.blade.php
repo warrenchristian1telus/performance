@@ -34,7 +34,7 @@
                     , data: $('#conversation_form').serialize()
                     , success: function(result) {
                         if (result.success) {
-                            window.location.href = '/conversation/upcoming';
+                            window.location.reload();
                         }
                     }
                     , error: function(error) {
@@ -195,8 +195,10 @@
 
             $(document).on('click', '.conversation-link', function(e) {
                 const id = $(this).data("id");
+                const userId = $(this).data("user-id");
                 if (id === 'new') {
                     // Open new modal
+                    $("#conversation_form").find("[name='owner_id']").val(userId);
                     return;
                 }
                 else {

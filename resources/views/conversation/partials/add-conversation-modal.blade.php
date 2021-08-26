@@ -17,6 +17,7 @@
         </div>
         <form id="conversation_form" action="{{ route ('conversation.store')}}" method="POST">
             @csrf
+            <input type="hidden" name="owner_id" value="">
             <div class="row">
                 <div class="col-6 col-md-6">
                     <label>

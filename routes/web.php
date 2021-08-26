@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Route;
 
 
     Route::middleware(['ViewShare'])->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.todo');
+        Route::get('/dashboard/notifications', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.notifications');
         Route::middleware(['auth'])->group(function () {
             require __DIR__ . '/goal.php';
             require __DIR__ . '/conversation.php';

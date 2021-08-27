@@ -21,10 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'azure_id',
-        'excused_start_date',
-        'excused_end_date',
-        'excused_reason_id'
+        'azure_id'
     ];
 
     /**
@@ -78,10 +75,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Goal', 'goals_shared_with', 'user_id', 'goal_id');
     }
-
-    public function excuseReason() {
-      return $this->belongsTo('App\Models\ExcusedReasons')->select('name', 'id');
-    }
-
-
 }

@@ -19,7 +19,6 @@
     @include('conversation.partials.add-conversation-modal')
     @include('conversation.partials.view-conversation-modal')
     @include('my-team.partials.employee-profile-sharing-modal')
-    @include('my-team.partials.employee-excused-modal')
     @push('css')
         <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
     @endpush
@@ -169,7 +168,7 @@
                     },
                     error: function (error){
                         var errors = error.responseJSON.errors;
-
+                        
                         Object.entries(errors).forEach(function callback(value, index) {
                             var className = '.error-' + value[0];
                             $form.find(className).text(value[1]);
@@ -177,7 +176,7 @@
                     }
                 });
             });
-
+            
             $(document).on('change', '.is-shared', function (e) {
                 let confirmMessage = "Making this goal private will hide it from all employees. Continue?";
                 if (this.checked) {
@@ -294,11 +293,6 @@
             $(document).on('click', '.share-profile-btn', function() {
                 const userName = $(this).data("user-name");
                 $("#employee-profile-sharing-modal").find(".user-name").html(userName);
-            });
-            
-            $(document).on('click', '.excuse-btn', function() {
-                const userName = $(this).data("user-name");
-                $("#employee-excused-modal").find(".user-name").html(userName);
             });
         })();
     </script>

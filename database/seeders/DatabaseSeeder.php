@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ConversationSeeder::class);
         $this->call(AdditionalUsersTableSeeder::class);
         $this->call(UserRoleSeeder::class);
+        $this->call(ExcusedReasonsSeeder::class);
     }
 }

@@ -16,10 +16,17 @@ Route::group(['middleware' => ['role:Supervisor']], function () {
     Route::post('my-team/share-profile', [MyTeamController::class, 'shareProfile'])->name('my-team.share-profile');
     Route::get('profile-shared-with/{user_id}', [MyTeamController::class, 'getProfileSharedWith'])->name('my-team.profile-shared-with');
     Route::post('profile-shared-with/{shared_profile_id}', [MyTeamController::class, 'updateProfileSharedWith'])->name('my-team.profile-shared-with.update');
+<<<<<<< Updated upstream
     Route::get('my-team/direct-report/{id}', [MyTeamController::class, 'viewDirectReport'])->name('my-team.view-profile-as.direct-report');
+=======
+    Route::get('employee-excused/{user_id}', [MyTeamController::class, 'getProfileExcused'])->name('my-team.employee-excused');
+    Route::post('employee-excused', [MyTeamController::class, 'updateExcuseDetails'])->name('excused.updateExcuseDetails');
+    // Route::get('excused-reasons', [MyTeamController::class, 'getExcusedReasons'])->name('ereasons');
+>>>>>>> Stashed changes
 });
 
 Route::group(['middleware' => ['ViewAsPermission']], function () {
     Route::get('my-team/view-as/{id}', [MyTeamController::class, 'viewProfileAs'])->name('my-team.view-profile-as');
     Route::get('my-team/return-to-my-view', [MyTeamController::class, 'returnToMyProfile'])->name('my-team.return-to-my-view');
+
 });

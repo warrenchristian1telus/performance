@@ -14,9 +14,11 @@ use App\Models\GoalType;
 use App\Models\Participant;
 use App\Models\SharedProfile;
 use App\Models\User;
+use App\Models\ExcusedReasons;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class MyTeamController extends Controller
 {
@@ -28,9 +30,10 @@ class MyTeamController extends Controller
     public function myEmployees(MyEmployeesDataTable $myEmployeesDataTable, SharedEmployeeDataTable $sharedEmployeeDataTable)
     {
         $goaltypes = GoalType::all();
+        $eReasons = ExcusedReasons::all();
         $conversationTopics = ConversationTopic::all();
         $participants = Participant::all();
-        
+
         $goals = Goal::where('user_id', Auth::id())
             ->with('user')
             ->with('sharedWith')
@@ -38,6 +41,7 @@ class MyTeamController extends Controller
         $employees = $this->myEmployeesAjax();
         // dd($goals[0]->sharedWith);
         $type = '';
+<<<<<<< Updated upstream
         $myEmpTable = $myEmployeesDataTable->html();
         $sharedEmpTable = $sharedEmployeeDataTable->html();
         return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'myEmpTable', 'sharedEmpTable'));
@@ -50,6 +54,9 @@ class MyTeamController extends Controller
 
     public function sharedEmployeesTable(SharedEmployeeDataTable $sharedEmployeeDataTable) {
         return $sharedEmployeeDataTable->render('my-team/my-employees');
+=======
+        return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'eReasons'));
+>>>>>>> Stashed changes
     }
 
     public function myEmployeesAjax() {
@@ -87,6 +94,35 @@ class MyTeamController extends Controller
 
         $sharedProfile->delete();
         return $this->respondeWith('');
+    }
+
+    public function getProfileExcused($user_id) {
+        $excusedreasons = ExcusedReasons::all();
+        $excusedprofile = DB::table(users)
+            ->where('id', $user_id)
+            ->select('id', 'name', 'excused_start_date', 'excused_end_date')
+            ->get();
+        return view('my-team.partials.employee-excused-modal', $excusedreasons);
+        // return $this->respondeWith($sharedProfiles);
+    }
+
+    public function updateExcuseDetails(Request $request, $id)
+    {
+        $this->validate($request, [
+            'excused_start_date' => 'nullable|date_format:Y-m-d',
+            'excused_end_date' => 'nullable|date_format:Y-m-d'
+            // if ($this->excused_start_date) {
+            //   'excused_end_date' .= '|after_or_equal:excused_start_date';
+            // }
+        ]);
+
+        $excused = User::find('id', $id);
+        $excused->excused_start_date = $request->excused_start_date;
+        $excused->excused_end_date = $request->excused_end_date;
+        $excused->excused_reason_id = $request->excused_reason_id;
+        $excused->save();
+
+        return response()->json(['success' => true, 'message' => 'Participant Excused settings updated successfully']);
     }
 
     public function shareProfile(ShareProfileRequest $request) {
@@ -131,7 +167,7 @@ class MyTeamController extends Controller
             ->with('user')
             ->with('goalType')->get();
         $employees = $this->myEmployeesAjax();
-        
+
         return view('my-team/goals-hierarchy', compact('goals','employees', 'goaltypes'));
     }
 
@@ -152,7 +188,7 @@ class MyTeamController extends Controller
                     $goal->sharedWith()->detach();
                 }
             }
-            // dd((bool)$input['is_shared'][995]); 
+            // dd((bool)$input['is_shared'][995]);
         }
         return redirect()->back();
     }
@@ -208,4 +244,5 @@ class MyTeamController extends Controller
         return response()->json(['success' => true, 'message' => 'Goal added to library successfully']);
         // return redirect()->back();
     }
+
 }

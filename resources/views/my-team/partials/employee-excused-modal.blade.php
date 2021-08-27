@@ -1,5 +1,4 @@
 <!-- Modal -->
-
 <div class="modal fade" id="employee-excused-modal" tabindex="-1" aria-labelledby="employeeExcused"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">

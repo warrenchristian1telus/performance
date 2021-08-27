@@ -3,17 +3,14 @@
 namespace App\DataTables;
 
 use App\Models\User;
-<<<<<<< Updated upstream
 use Illuminate\Support\Facades\Auth;
-=======
 use App\Models\ExcusedReasons;
->>>>>>> Stashed changes
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
 class MyEmployeesDataTable extends DataTable
 {
-    protected $id; 
+    protected $id;
     protected $route;
 
     public function __construct($id = null) {
@@ -53,19 +50,15 @@ class MyEmployeesDataTable extends DataTable
                 return view('my-team.partials.view-btn', compact(["row"])); // $row['id'];
             })
             ->addColumn('excused', function ($row) {
-<<<<<<< Updated upstream
-                $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
-                return view('my-team.partials.switch', compact(["yesOrNo"])); // $row['id'];
+                // $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
+                $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
+                $currentProfile = User::find($row->id);
+                // return view('my-team.partials.switch', compact(["yesOrNo"])); // $row['id'];
+                // return $row;
+                return view('my-team.partials.switch', compact(["row", "currentProfile"], ["yesOrNo"]));
             })
             ->addColumn('direct-reports', function($row) {
                 return view('my-team.partials.direct-report-col', compact(["row"]));
-=======
-                $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
-                // $currentProfile = User::where ('id', $row->id);
-                $currentProfile = User::find($row->id);
-                // return $currentProfile;
-                return view('my-team.partials.switch', compact(["row", "currentProfile"], ["yesOrNo"]));
->>>>>>> Stashed changes
             });
     }
 

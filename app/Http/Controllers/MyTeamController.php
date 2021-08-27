@@ -41,10 +41,9 @@ class MyTeamController extends Controller
         $employees = $this->myEmployeesAjax();
         // dd($goals[0]->sharedWith);
         $type = '';
-<<<<<<< Updated upstream
         $myEmpTable = $myEmployeesDataTable->html();
         $sharedEmpTable = $sharedEmployeeDataTable->html();
-        return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'myEmpTable', 'sharedEmpTable'));
+        return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons'));
         // return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type'));
     }
 
@@ -54,9 +53,6 @@ class MyTeamController extends Controller
 
     public function sharedEmployeesTable(SharedEmployeeDataTable $sharedEmployeeDataTable) {
         return $sharedEmployeeDataTable->render('my-team/my-employees');
-=======
-        return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'eReasons'));
->>>>>>> Stashed changes
     }
 
     public function myEmployeesAjax() {

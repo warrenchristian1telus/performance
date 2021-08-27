@@ -54,6 +54,13 @@ class MyEmployeesDataTable extends DataTable
             })
             ->addColumn('direct-reports', function($row) {
                 return view('my-team.partials.direct-report-col', compact(["row"]));
+=======
+                $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
+                // $currentProfile = User::where ('id', $row->id);
+                $currentProfile = User::find($row->id);
+                // return $currentProfile;
+                return view('my-team.partials.switch', compact(["row", "currentProfile"], ["yesOrNo"]));
+>>>>>>> Stashed changes
             });
     }
 

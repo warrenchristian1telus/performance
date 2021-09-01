@@ -29,16 +29,17 @@
         (function () {
             $(document).on('click', '.btn-submit', function(e) {
                 e.preventDefault();
+                const $form = $(this).parents('form');
                 $.ajax({
-                    url: '/conversation'
-                    , type: 'POST'
-                    , data: $('#conversation_form').serialize()
-                    , success: function(result) {
+                    url: $form.attr('action'),
+                    type: 'POST',
+                    data: $form.serialize(),
+                    success: function(result) {
                         if (result.success) {
                             window.location.reload();
                         }
-                    }
-                    , error: function(error) {
+                    },
+                    error: function(error) {
                         var errors = error.responseJSON.errors;
                         $('.error-date-alert').hide();
                         $('.text-danger').each(function(i, obj) {
@@ -285,8 +286,13 @@
                 });
             }
             $(document).on('click', '.conversation-link', function () {
+                const authId = {{ Auth::id() }};
                 if($(this).data("id") === 'new') {
-                    $("#participant_id").val($(this).data("user-id"));
+                    $("#participant_id").val();
+                    $("#participant_id").val([
+                        $(this).data("user-id"),
+                        authId
+                    ]);
                     $("#participant_id").change();
                 }
             });
@@ -299,6 +305,12 @@
             $(document).on('click', '.excused-btn', function() {
                 const userName = $(this).data("user-name");
                 $("#employee-excused-modal").find(".user-name").html(userName);
+                $("#employee-excused-modal").find("input[name=user_id]").val($(this).data('user-id'));
+                const excusedData = $(this).data("user-excused");
+                $("#employee-excused-modal").find("input[name=excused_start_date]").val(excusedData.start_date);
+                $("#employee-excused-modal").find("input[name=excused_end_date]").val(excusedData.end_date);
+                $("#employee-excused-modal").find("input[name=excused_reason_id]").val(excusedData.reason_id);
+                debugger;
             });
 
         })();

@@ -18,6 +18,7 @@ class ViewAsPermission
      */
     public function handle(Request $request, Closure $next)
     {
+        // TODO: Check If Requested id can be served to $authId; Need hierarchy level set
         $authId = Auth::id();
         if (session()->has('original-auth-id')) {
             $authId = session()->get('original-auth-id');

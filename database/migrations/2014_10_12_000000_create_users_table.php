@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('azure_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->foreignId('reporting_to')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

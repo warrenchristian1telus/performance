@@ -17,22 +17,27 @@
                 <div class="alert alert-default-warning alert-dismissible">
                   <span class="h5"><i class="icon fas fa-exclamation-triangle"></i>Note: by doing so, this employee will not show up in current and historical performance reports.</span>
                 </div>
-            <form id="excused_form" action="{{ route ('excused.updateExcuseDetails')}}" method="POST">
-                <div class="form-group">
-                    <div class="col-24 col-md-6 mt-1">
-                      <x-input class="form-control" type="date" label="From" name="excused_start_date" value="$currentProfile->excused_start_date"/>
-                   </div>
-                    <div class="col-6 col-md-6 mt-1">
-                        <x-input  class="form-control" type="date" label="To" name="excused_end_date" value="$currentProfile->excused_end_date" />
+                <form id="excused_form" action="{{ route ('excused.updateExcuseDetails')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="user_id" value="">
+                    <div class="row">
+                        <div class="col-6 mt-1">
+                            <x-input class="form-control" type="date" label="From" name="excused_start_date" value="$currentProfile->excused_start_date"/>
+                            <small class="text-danger error-excused_start_date"></small>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <x-input  class="form-control" type="date" label="To" name="excused_end_date" value="$currentProfile->excused_end_date" />
+                            <small class="text-danger error-excused_end_date"></small>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <x-dropdown :list="$eReasons" label="Reasons" name="excused_reason_id" value="$currentProfile->excused_reason_id"/>
+                            <small class="text-danger error-excused_reason_id"></small>
+                        </div>
+                        <div class="col-12 text-left pb-5 mt-3">
+                            <x-button type="button" class="btn-md btn-submit">Proceed</x-button>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-6 mt-1">
-                        <x-dropdown :list="$eReasons" label="Reasons" name="excused_reason_id" value="$currentProfile->excused_reason_id"/>
-                    </div>
-                    <div class="col-12 text-left pb-5 mt-3">
-                        <x-button type="button" class="btn-md btn-submit"> Proceed</x-button>
-                    </div>
-                </div>
-            </form>
+                </form>
         </div>
     </div>
 </div>

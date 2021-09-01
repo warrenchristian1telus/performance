@@ -6,15 +6,16 @@ use App\DataTables\MyEmployeesDataTable;
 use App\DataTables\SharedEmployeeDataTable;
 use App\Http\Requests\Goals\AddGoalToLibraryRequest;
 use App\Http\Requests\MyTeams\ShareProfileRequest;
+use App\Http\Requests\MyTeams\UpdateExcuseRequest;
 use App\Http\Requests\MyTeams\UpdateProfileSharedWithRequest;
 use App\Http\Requests\ShareMyGoalRequest;
 use App\Models\ConversationTopic;
+use App\Models\ExcusedReason;
 use App\Models\Goal;
 use App\Models\GoalType;
 use App\Models\Participant;
 use App\Models\SharedProfile;
 use App\Models\User;
-use App\Models\ExcusedReasons;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,7 @@ class MyTeamController extends Controller
     public function myEmployees(MyEmployeesDataTable $myEmployeesDataTable, SharedEmployeeDataTable $sharedEmployeeDataTable)
     {
         $goaltypes = GoalType::all();
-        $eReasons = ExcusedReasons::all();
+        $eReasons = ExcusedReason::all();
         $conversationTopics = ConversationTopic::all();
         $participants = Participant::all();
 
@@ -56,11 +57,7 @@ class MyTeamController extends Controller
     }
 
     public function myEmployeesAjax() {
-        // TODO: Map Once we have relationship
-
-        return User::whereIn("id", [1,2,3])
-                    /* ->orWhere('name', 'LIKE', 'PSA%') */
-                    ->get();
+        return User::find(Auth::id())->reportees()->get();
     }
 
     public function getProfileSharedWith($user_id) {
@@ -93,7 +90,7 @@ class MyTeamController extends Controller
     }
 
     public function getProfileExcused($user_id) {
-        $excusedreasons = ExcusedReasons::all();
+        $excusedreasons = ExcusedReason::all();
         $excusedprofile = DB::table(users)
             ->where('id', $user_id)
             ->select('id', 'name', 'excused_start_date', 'excused_end_date')
@@ -102,17 +99,9 @@ class MyTeamController extends Controller
         // return $this->respondeWith($sharedProfiles);
     }
 
-    public function updateExcuseDetails(Request $request, $id)
+    public function updateExcuseDetails(UpdateExcuseRequest $request)
     {
-        $this->validate($request, [
-            'excused_start_date' => 'nullable|date_format:Y-m-d',
-            'excused_end_date' => 'nullable|date_format:Y-m-d'
-            // if ($this->excused_start_date) {
-            //   'excused_end_date' .= '|after_or_equal:excused_start_date';
-            // }
-        ]);
-
-        $excused = User::find('id', $id);
+        $excused = User::find($request->user_id);
         $excused->excused_start_date = $request->excused_start_date;
         $excused->excused_end_date = $request->excused_end_date;
         $excused->excused_reason_id = $request->excused_reason_id;
@@ -190,19 +179,32 @@ class MyTeamController extends Controller
     }
 
     public function viewProfileAs($id, Request $request) {
-        // TODO: Get it from Database.
-        $reporting_users = [1,2,3];
-        if (session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id() === 1901) {
-            $reporting_users = [998, 999];
-        }
-        if(in_array($id, $reporting_users)) {
+        $actualAuthId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();        
+        $hasAccess = User::with('reportingManagerRecursive')->find($id)->canBeSeenBy($actualAuthId);
+
+        // If it is shared with Logged In user.
+
+        if($hasAccess || SharedProfile::where('shared_with', $actualAuthId)->where('shared_id', $id)->count() >= 1) {
             session()->put('view-profile-as', $id);
             if (!session()->has('original-auth-id')) {
                 session()->put('original-auth-id', Auth::id());
             }
             Auth::loginUsingId($id);
+            if (SharedProfile::where('shared_with', $actualAuthId)->where('shared_id', $id)->count()) {
+                $sharedItems = SharedProfile::where('shared_with', $actualAuthId)->where('shared_id', $id)->pluck('shared_item')[0];
+                // $sharedItem[0];
+                $goalsAllowed = in_array(1, $sharedItems);
+                $conversationAllowed = in_array(2, $sharedItems);
+                session()->put('GOALS_ALLOWED', $goalsAllowed);
+                session()->put('CONVERSATION_ALLOWED', $conversationAllowed);
+            } else {
+                session()->put('GOALS_ALLOWED', true);
+                session()->put('CONVERSATION_ALLOWED', true);
+            }
         }
-        return (url()->previous() === Route('my-team.my-employee')) ? redirect()->route('goal.current') : redirect()->back();
+        return (url()->previous() === Route('my-team.my-employee') || url()->previous() === Route('my-team.view-profile-as.direct-report', User::find($id)->reportingManager->id))
+            ? ((session()->has('GOALS_ALLOWED') && session()->get('GOALS_ALLOWED')) ? redirect()->route('goal.current') : redirect()->route('conversation.upcoming'))
+            : redirect()->back();
     }
     public function viewDirectReport($id, Request $request) {
         $myEmployeesDataTable = new MyEmployeesDataTable($id);
@@ -211,9 +213,10 @@ class MyTeamController extends Controller
             return $myEmployeesDataTable->render('my-team/my-employees');
         }
         $supervisorList = [];
-        if (in_array($id, [1,2,3])) {
+        $supervisorList = User::find($id)->hierarchyParentNames($supervisorList, Auth::id());
+        /* if (in_array($id, [1,2,3])) {
             array_push($supervisorList, 'Supervisor');
-        }
+        } */
         $directReports = $myEmployeesDataTable->html();
         $userName = User::find($id)->name;
         return view('my-team.direct-report', compact('directReports', 'userName', 'supervisorList'));
@@ -223,6 +226,8 @@ class MyTeamController extends Controller
         Auth::loginUsingId(session()->get('original-auth-id'));
         session()->forget('original-auth-id');
         session()->forget('view-profile-as');
+        session()->forget('GOALS_ALLOWED');
+        session()->forget('CONVERSATION_ALLOWED');
         return redirect()->route('my-team.my-employee');
     }
 

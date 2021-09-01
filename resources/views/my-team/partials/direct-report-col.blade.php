@@ -1,1 +1,1 @@
-<a href="{{route('my-team.view-profile-as.direct-report', $row['id'])}}">View</a>
+<a class="btn btn-link" href="{{route('my-team.view-profile-as.direct-report', $row['id'])}}">{{$row['reportees_count']}}</a>

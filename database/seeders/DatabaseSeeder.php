@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        $this->call(UserRoleSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(GoalTypeSeeder::class);
         $this->call(SupervisorGoalSeeder::class);
@@ -22,6 +23,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(ParticipantSeeder::class);
         $this->call(ConversationSeeder::class);
         $this->call(AdditionalUsersTableSeeder::class);
-        $this->call(UserRoleSeeder::class);
+        $this->call(ExcusedReasonSeeder::class);
     }
 }

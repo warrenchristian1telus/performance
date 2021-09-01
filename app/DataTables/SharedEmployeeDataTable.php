@@ -36,7 +36,7 @@ class SharedEmployeeDataTable extends DataTable
             })
             ->addColumn('excused', function ($row) {
                 $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
-                return view('my-team.partials.switch', compact(["yesOrNo"])); // $row['id'];
+                return view('my-team.partials.switch', compact(['row', "yesOrNo"])); // $row['id'];
             });
     }
 

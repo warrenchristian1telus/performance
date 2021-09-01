@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -22,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'azure_id',
+        'reporting_id',
         'excused_start_date',
         'excused_end_date',
         'excused_reason_id'
@@ -81,7 +83,43 @@ class User extends Authenticatable
 
     public function excuseReason()
     {
-        return $this->belongsTo('App\Models\ExcusedReasons')->select('name', 'id');
+        return $this->belongsTo('App\Models\ExcusedReason')->select('name', 'id');
     }
 
+    public function reportingManager() {
+        return $this->belongsTo('App\Models\User', 'reporting_to');
+    }
+
+    public function reportingManagerRecursive() {
+        return $this->reportingManager()->with('reportingManagerRecursive');
+    }
+
+    public function reportees() {
+        return $this->hasMany('App\Models\User', 'reporting_to');
+    }
+
+    public function reporteesCount() {
+        return $this->reportees()->count();
+    }
+
+    public function canBeSeenBy($id) {
+        if (!$this->reportingManager)
+            return false;
+        if ($this->reportingManager->id === $id)
+            return true;
+        return $this->reportingManager->canBeSeenBy($id);
+    }
+
+    public function hierarchyParentNames(&$supervisorList, $tillId) {
+        if (!$this->reportingManager)
+            return array_reverse($supervisorList);
+        if ($this->reportingManager->id === $tillId)
+            return array_reverse($supervisorList);
+        array_push($supervisorList, $this->reportingManager->name);
+        return $this->reportingManager->hierarchyParentNames($supervisorList, $tillId);
+    }
+
+    public function getReportingUserIds() {
+        return $this->reportees()->pluck('id');
+    }
 }

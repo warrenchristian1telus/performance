@@ -8,7 +8,7 @@
     @endif
     <div class="text-center my-3">
         <div class="d-flex flex-column align-items-center">
-            <img src="https://placeimg.com/90/90/people" alt="" class="rounded-circle" style="max-width:90px">
+            <img src="{{asset('img/profile-pic.png')}}" alt="" class="rounded-circle" style="max-width:90px; max-height:90px">
             <div class="text-white">
                 {{ Auth::user()->name }}
             </div>

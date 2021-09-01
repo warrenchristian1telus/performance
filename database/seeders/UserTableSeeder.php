@@ -21,97 +21,95 @@ class UserTableSeeder extends Seeder
       [
         'id' => 1,
         'email' => 'employee1@example.com',
-        'name' => 'Employee A',
-        'password' => 'employee1@123'
+        'name' => 'Employee 1',
+        'password' => 'employee1@123',
+        'reporting_to' => 7,
+        'role' => 'Employee'
       ],
       [
         'id' => 2,
         'email' => 'employee2@example.com',
-        'name' => 'Employee B',
-        'password' => 'employee2@123'
+        'name' => 'Employee 2',
+        'password' => 'employee2@123',
+        'reporting_to' => 7,
+        'role' => 'Employee'
       ],
       [
         'id' => 3,
         'email' => 'employee3@example.com',
-        'name' => 'Employee C',
-        'password' => 'employee3@123'
+        'name' => 'Employee 3',
+        'password' => 'employee3@123',
+        'reporting_to' => 8,
+        'role' => 'Employee'
       ],
       [
         'id' => 4,
         'email' => 'employee4@example.com',
-        'name' => 'Employee D',
-        'password' => 'employee4@123'
+        'name' => 'Employee 4',
+        'password' => 'employee4@123',
+        'reporting_to' => 8,
+        'role' => 'Employee'
       ],
       [
         'id' => 5,
-        'name' => 'Simon Smith',
-        'email' =>'SimonSmith@example.com',
-        'password' => 'SimonSmith'
+        'email' => 'employee5@example.com',
+        'name' => 'Employee 5',
+        'password' => 'employee5@123',
+        'reporting_to' => 9,
+        'role' => 'Employee'
       ],
       [
         'id' => 6,
-        'name' => 'Jane Doe',
-        'email' =>'JaneDoe@example.com',
-        'password' => 'JaneDoe'
+        'email' => 'employee6@example.com',
+        'name' => 'Employee 6',
+        'password' => 'employee6@123',
+        'reporting_to' => 9,
+        'role' => 'Employee'
       ],
       [
         'id' => 7,
-        'name' => 'Susan Johnson',
-        'email' =>'SusanJohnson@example.com',
-        'password' => 'SusanJohnson'
+        'email' => 'supervisor1@example.com',
+        'name' => 'Supervisor 1',
+        'password' => 'supervisor1@123',
+        'reporting_to' => 10,
+        'role' => 'Supervisor'
       ],
       [
         'id' => 8,
-        'name' => 'John Smith',
-        'email' =>'JohnSmith@example.com',
-        'password' => 'JohnSmith'
+        'email' => 'supervisor2@example.com',
+        'name' => 'Supervisor 2',
+        'password' => 'supervisor2@123',
+        'reporting_to' => 10,
+        'role' => 'Supervisor'
       ],
       [
         'id' => 9,
-        'name' => 'Anna Adams',
-        'email' =>'AnnaAdams@example.com',
-        'password' => 'AnnaAdams'
+        'email' => 'supervisor3@example.com',
+        'name' => 'Supervisor 3',
+        'password' => 'supervisor3@123',
+        'reporting_to' => 10,
+        'role' => 'Supervisor'
       ],
       [
-        'id' => 998,
-        'email' => 'supervisor2@example.com',
-        'name' => 'Supervisor2',
-        'password' => 'supervisor2@123',
-      ],
-      [
-        'id' => 999,
-        'email' => 'supervisor@example.com',
-        'name' => 'Supervisor',
-        'password' => 'supervisor@123',
-      ],
-      [
-        'id' => 1901,
-        'email' => 'director@example.com',
-        'name' => 'Director',
-        'password' => 'director@123'
-      ],
-      [
-        'id' => 1902,
-        'email' => 'director2@example.com',
-        'name' => 'Director 2',
-        'password' => 'director@123'
-      ],
-      [
-        'id' => 1903,
-        'email' => 'director3@example.com',
-        'name' => 'Director 3',
-        'password' => 'director@123'
-      ],
+        'id' => 10,
+        'email' => 'executive1@example.com',
+        'name' => 'Executive 1',
+        'password' => 'executive1@123',
+        'role' => 'Supervisor'
+      ]
     ];
 
     foreach ($users as $user) {
-      User::updateOrCreate([
+      $entry = User::updateOrCreate([
         'email' => $user['email'],
       ], [
         'id' => $user['id'],
         'name' => $user['name'],
         'password' => Hash::make($user['password']),
+        'reporting_to' => $user['reporting_to'] ?? null
       ]);
+
+      $entry->assignRole($user['role']);
     }
   }
 }

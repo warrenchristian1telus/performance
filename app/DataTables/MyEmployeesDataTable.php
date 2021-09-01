@@ -4,7 +4,6 @@ namespace App\DataTables;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Models\ExcusedReasons;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
@@ -52,10 +51,15 @@ class MyEmployeesDataTable extends DataTable
             ->addColumn('excused', function ($row) {
                 // $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
                 $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
-                $currentProfile = User::find($row->id);
+
+                $excused = json_encode([
+                    'start_date' => $row->excused_start_date,
+                    'end_date' => $row->excused_end_date,
+                    'reason_id' => $row->excused_reason_id
+                ]);
                 // return view('my-team.partials.switch', compact(["yesOrNo"])); // $row['id'];
                 // return $row;
-                return view('my-team.partials.switch', compact(["row", "currentProfile"], ["yesOrNo"]));
+                return view('my-team.partials.switch', compact(["row", "excused", "yesOrNo"]));
             })
             ->addColumn('direct-reports', function($row) {
                 return view('my-team.partials.direct-report-col', compact(["row"]));
@@ -70,20 +74,13 @@ class MyEmployeesDataTable extends DataTable
      */
     public function query(User $model)
     {
-        $reporting_users = [1,2]; // Supervisor A
-        if ($this->id == 1901) { /// Director A
-            $reporting_users = [998, 999];
-        }
-        if ($this->id == 998) { /// Supervisor B
-            $reporting_users = [3,4];
-        }
-        if (in_array($this->id, [1,2,3])) { // Employee
-            $reporting_users = ['x']; // No Direct users
-        }
+        $reporting_users = User::find($this->id)->getReportingUserIds();
+        // dd($reporting_users);
         return $model->newQuery()->whereIn('id', $reporting_users)
             ->withCount('activeGoals')
             ->with('upcomingConversation')
-            ->with('latestConversation');
+            ->with('latestConversation')
+            ->withCount('reportees');
     }
 
     /**

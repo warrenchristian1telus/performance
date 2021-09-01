@@ -21,12 +21,12 @@ class ViewShare
     {
         if(session()->has('view-profile-as')) {
             $viewingProfileAs = $request->session()->get('view-profile-as');
+            // $actualAuthId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+            // 
             // dd($viewingProfileAs);
-            // TODO: Map it via DATABASE
-            $listOfEmployee = User::whereIn('id', [1,2,3])->get();
             $employee = User::find($viewingProfileAs);
-
-
+            
+            $listOfEmployee = $employee->reportingManager->reportees()->get();
             View::share('viewingProfileAs', $employee);
             View::share('listOfEmployee', $listOfEmployee);            
             View::share('disableEdit', true);

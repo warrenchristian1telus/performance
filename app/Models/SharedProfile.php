@@ -23,4 +23,8 @@ class SharedProfile extends Model
     public function sharedWith() {
         return $this->belongsTo(User::class, 'shared_with');
     }
+
+    public function sharedWithUser() {
+        return $this->sharedWith();
+    }
 }

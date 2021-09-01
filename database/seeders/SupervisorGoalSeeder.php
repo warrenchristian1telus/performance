@@ -27,7 +27,7 @@ class SupervisorGoalSeeder extends Seeder
                 'why' => 'This will preserve the relationship and advance the economic objectives of the province and the local community.',
                 'how' => 'I will do this by building trusting relationships with all parties, acquiring knowledge in industrial land use, mapping out the remaining tasks, assessing progress and creating the negotiation document.',
                 'measure_of_success' => 'Increase X by Y%',
-                'user_id' => 999,
+                'user_id' => 7,
             ],
             [
                 'id' => 996,
@@ -41,7 +41,7 @@ class SupervisorGoalSeeder extends Seeder
                 'why' => 'This will help increase our profile in the private sector and make our work more valued.',
                 'how' => 'I will do this by connecting with local business associations.',
                 'measure_of_success' => 'Increase X by Y%',
-                'user_id' => 999,
+                'user_id' => 7,
             ],
 
             [
@@ -56,7 +56,7 @@ class SupervisorGoalSeeder extends Seeder
                 'why' => 'This will help me bring out the best in my team',
                 'how' => 'I will do this by working towards certification in the BC Public Service Supervisory Development Program, and signing up for Performance Coaching.',
                 'measure_of_success' => 'Increase X by Y%',
-                'user_id' => 999,
+                'user_id' => 7,
             ],
             [
                 'id' => 998,
@@ -70,7 +70,7 @@ class SupervisorGoalSeeder extends Seeder
                 'why' => 'This will help me influence decision making on key issues.',
                 'how' => 'I will do this by designing and delivering a consultation process and writing a report summarising my findings.',
                 'measure_of_success' => 'Increase X by Y%',
-                'user_id' => 999,
+                'user_id' => 7,
             ],
             [
                 'id' => 999,
@@ -84,7 +84,7 @@ class SupervisorGoalSeeder extends Seeder
                 'why' => 'So that all communication practices are based on the principle of two-way symmetrical communication, engaging equal input from the public and the organization.',
                 'how' => 'I will do this by creating a Culture Change Strategy, detailing all tactics (e.g. designing guidelines, processes, procedures) by the end of the second quarter.',
                 'measure_of_success' => 'Increase X by Y%',
-                'user_id' => 999,
+                'user_id' => 7,
 
             ]
         ];

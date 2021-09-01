@@ -12,6 +12,7 @@ use App\Models\ConversationTopic;
 use App\Models\Participant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 class ConversationController extends Controller
@@ -62,15 +63,18 @@ class ConversationController extends Controller
      */
     public function store(ConversationRequest $request)
     {
+        DB::beginTransaction();
         $isDirectRequest = true;
         if(route('my-team.my-employee') == url()->previous()) {
             $isDirectRequest = false;
         }
 
+        $actualOwner = $isDirectRequest ? Auth::id() : $request->owner_id ?? Auth::id();
+
         $conversation = new Conversation();
         $conversation->conversation_topic_id = $request->conversation_topic_id;
         // $conversation->comment = $request->comment ?? '';
-        $conversation->user_id = $isDirectRequest ? Auth::id() : $request->owner_id ?? Auth::id();
+        $conversation->user_id = $actualOwner;
         $conversation->date = $request->date;
         $conversation->time = $request->time;
         $conversation->save();
@@ -82,6 +86,13 @@ class ConversationController extends Controller
             ]);
         }
 
+        if(!in_array($actualOwner, $request->participant_id)) {
+            ConversationParticipant::updateOrCreate([
+                'conversation_id' => $conversation->id,
+                'participant_id' => $actualOwner,
+            ]);
+        }
+        DB::commit();
         return response()->json(['success' => true, 'message' => 'Conversation Created successfully']);
     }
 

@@ -9,25 +9,33 @@
         <div class="col-12 col-sm-4 col-md-4">
                 <strong>
                     My Current Supervisor 
-                    <i class="fa fa-info-circle"></i>
+                    <i class="fa fa-info-circle" data-trigger="hover" data-toggle="popover" data-placement="right" data-html="true" data-content="{{ $supervisorTooltip }}"></i>
                 </strong>
-                <div class="bg-white border-b rounded p-2 mt-2">
+                <div class="bg-white border-b rounded p-2 mt-2 shadow-sm">
                     <x-profile-pic></x-profile-pic>
-                    Supervisor A
+                    {{ Auth::user()->reportingManager ? Auth::user()->reportingManager->name : 'No supervisor' }}
                 </div>
             </div>
             <div class="col-12 col-sm-4 col-md-4">
                 <strong>
                     My Profile is Shared with
                 </strong>
-                <div class="bg-white border-b rounded p-2 mt-2">
-                    <div class="d-flex align-items-center">
-                        <x-profile-pic></x-profile-pic>
-                        Supervisor A and 4 others
-                        <div class="flex-fill"></div>
-                        <i class="fa fa-chevron-right"></i>
-                    </div>
-                    
+                <div class="bg-white border-b rounded p-2 mt-2 shadow-sm">
+                    <button class="btn p-0" style="width:100%" data-toggle="modal" data-target="#profileSharedWithViewModal">
+                        @if(count($sharedList) > 0)
+                        <div class="d-flex align-items-center">
+                            <x-profile-pic></x-profile-pic>
+                            {{$sharedList[0]->sharedWithUser->name}}
+                            @if(count($sharedList) > 1)
+                                and {{count($sharedList) - 1}} Others
+                            @endif
+                            <div class="flex-fill"></div>
+                            <i class="fa fa-chevron-right"></i>
+                        </div>
+                        @else
+                            No one
+                        @endif
+                    </button>
                 </div>
             </div>
         </div>
@@ -46,4 +54,12 @@
             </div>
         </div>
     </div>
+    @include('dashboard.partials.shared_with_view-modal')
+    @push('js')
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="popover"]').popover(); 
+            });
+        </script>
+    @endpush
 </x-side-layout>

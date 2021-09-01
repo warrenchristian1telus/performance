@@ -95,9 +95,9 @@ class UserRoleSeeder extends Seeder
             return $p->id;
         }, $permissionObj));
 
-        foreach ($users as $user) {
+/*         foreach ($users as $user) {
             $user->assignRole([$role->id]);
-        } 
+        }  */
     }
 
 

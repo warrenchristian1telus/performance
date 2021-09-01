@@ -19,7 +19,7 @@ Route::group(['middleware' => ['role:Supervisor']], function () {
     Route::get('my-team/direct-report/{id}', [MyTeamController::class, 'viewDirectReport'])->name('my-team.view-profile-as.direct-report');
     Route::get('employee-excused/{user_id}', [MyTeamController::class, 'getProfileExcused'])->name('my-team.employee-excused');
     Route::post('employee-excused', [MyTeamController::class, 'updateExcuseDetails'])->name('excused.updateExcuseDetails');
-    // Route::get('excused-reasons', [MyTeamController::class, 'getExcusedReasons'])->name('ereasons');
+    // Route::get('excused-reasons', [MyTeamController::class, 'getExcusedReason'])->name('ereasons');
 });
 
 Route::group(['middleware' => ['ViewAsPermission']], function () {

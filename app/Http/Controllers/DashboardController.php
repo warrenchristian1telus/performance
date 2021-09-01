@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SharedProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 class DashboardController extends Controller
@@ -36,7 +38,8 @@ class DashboardController extends Controller
         }
 
         $tab = (Route::current()->getName() == 'dashboard.notifications') ? 'notifications' : 'todo';
-
-        return view('dashboard.index', compact('greetings', 'tab'));
+        $supervisorTooltip = 'If your current supervisor within My Performance is incorrect, please have your supervisor submit an AskMyHR ticket and choose the category: <span class="text-primary">My Team of Organization > HR Software > Systems Support > Position / Reporting Updates</span>';
+        $sharedList = SharedProfile::where('shared_id', Auth::id())->with('sharedWithUser')->get();
+        return view('dashboard.index', compact('greetings', 'tab', 'supervisorTooltip', 'sharedList'));
     }
 }

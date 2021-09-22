@@ -5,7 +5,7 @@
         </div>
         <div class="col-12 col-sm-6 text-right">
             <x-button id="add-goal-to-library-btn" tooltip="Create a goal for your employees to use in their own profile." tooltipPosition="bottom">
-                Add Goal to Library
+                Suggest a Goal
             </x-button>
             <x-button id="share-my-goals-btn" tooltip="Choose which of your goals are visible to your employees" tooltipPosition="bottom">
                 Share My Goals
@@ -15,6 +15,7 @@
     <div class="col-md-8"> @include('my-team.partials.tabs')</div>
     @yield('tab-content')
     @include('my-team.partials.share-my-goals-modal')
+    @include('my-team.partials.edit-suggested-goal-modal')
     @include('my-team.partials.add-goal-to-library-modal')
     @include('conversation.partials.add-conversation-modal')
     @include('conversation.partials.view-conversation-modal')
@@ -197,6 +198,7 @@
 
             $(document).on('click', '.conversation-link', function(e) {
                 const id = $(this).data("id");
+                conversation_id = $(this).data("id");
                 const userId = $(this).data("user-id");
                 if (id === 'new') {
                     // Open new modal
@@ -313,6 +315,134 @@
                 debugger;
             });
 
+            var conversation_id = 0;
+            $(document).on('click', '.btn-conv-edit', function(e) {
+                let element_id = '.' + $(this).data('id');
+                let elementName = $(this).data('name')
+                $(element_id).toggleClass('d-none');
+                $('.btn-conv-save').filter("[data-name=" + elementName + "]").removeClass("d-none");
+                $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").removeClass("d-none");
+                $('.btn-conv-edit').filter("[data-name=" + elementName + "]").addClass("d-none");
+                $('.btn-conv-edit').prop('disabled', true);
+                $(element_id).focus();
+                // Enable Edit.
+                // Disable view
+            });
+
+            $(document).on('click', '.btn-conv-save', function(e) {
+                // Show Loader Spinner...
+                $(this).html("<div class='spinner-border spinner-border-sm' role='status'></div>");
+                $(".error-date-alert").hide();
+
+                const that = this;
+                $.ajax({
+                    url: '/conversation/' + conversation_id
+                    , type: 'PUT'
+                    , data: {
+                        _token: '{{ csrf_token() }}'
+                        , field: $(that).data('name'), // e.target.getAttribute('data-name'),
+                        value: $("#" + $(that).data('id') + '_edit').val()
+                    }
+                    , success: function(result) {
+                        toReloadPage = true;
+                        // Disable Edit. 
+                        $("." + $(that).data('id')).toggleClass('d-none');
+                        const elementName = $(that).data('name');
+                        $('.btn-conv-save').filter("[data-name=" + elementName + "]").addClass("d-none");
+                        $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").addClass("d-none");
+                        $('.btn-conv-edit').filter("[data-name=" + elementName + "]").removeClass("d-none");
+                        // Update View
+                        if ($("#" + $(that).data('id') + '_edit').is('textarea')) {
+                            $("#" + $(that).data('id')).text($("#" + $(that).data('id') + '_edit').val());
+                        } else {
+                            updateConversation(conversation_id)
+                        }
+                    }
+                    , error: function(error) {
+                        let errors = error.responseJSON.errors;
+                        // Ignore for now.
+                        if (errors && errors.value && errors.value[0]) {
+                            // alert(errors.value[0]);
+                            $(".error-date-alert").show();
+                        }
+                    }
+                    , complete: function() {
+                        // Remove Spinner
+                        $(that).html('Save');
+                        $('.btn-conv-edit').prop('disabled', false);
+                    }
+                });
+            });
+
+            $(document).on('click', '.btn-conv-cancel', function(e) {
+                $("." + $(this).data('id')).toggleClass('d-none');
+                const elementName = $(this).data('name');
+                $('.btn-conv-save').filter("[data-name=" + elementName + "]").addClass("d-none");
+                $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").addClass("d-none");
+                $('.btn-conv-edit').filter("[data-name=" + elementName + "]").removeClass("d-none");
+                $('.btn-conv-edit').prop('disabled', false);
+            });
+
+            $(document).on('click', '.btn-view-conversation', function(e) {
+                // updateConversation(conversation_id);
+            });
+            $('#conv_participant_edit').select2({
+                ajax: {
+                    url: '/participant'
+                    , dataType: 'json'
+                    , delay: 250
+                    , data: function(params) {
+
+                        var query = {
+                            'search': params.term
+                        , }
+                        return query;
+                    }
+                    , processResults: function(data) {
+
+                        return {
+                            results: $.map(data.data.data, function(item) {
+                                item.text = item.name;
+                                return item;
+                            })
+                        };
+                    }
+                    , cache: false
+                }
+            });
+
+            $(document).on('click', '.edit-suggested-goal', function () {
+                const goalId = $(this).data("goal-id");
+                $.ajax({
+                    url: '{{route("my-team.get-suggested-goal", "")}}' + '/' + goalId,
+                    success: function (response) {
+                        $editSuggestedGoalModal = $('#edit-suggested-goal-modal');
+                        result = response.data;
+                        Object.keys(result).forEach((key) => {
+                            $input = $editSuggestedGoalModal.find('[name='+key+']');
+                            if($input.length)
+                                $input.val(result[key]);
+                        });
+                        const action = $editSuggestedGoalModal.find('form').attr('action');
+                        $editSuggestedGoalModal.find('form').attr('action', action + '/' + goalId);
+                    }
+                })
+            });
+
+            $(document).on('submit', '#editSuggestedGoalModalForm', function (e) {
+                $form = $(this);
+                const data = $form.serializeArray();
+                data.push({name: 'action', value: this.submitted});
+                $.ajax({
+                    method: 'POST',
+                    url: $form.attr('action'),
+                    data: data,
+                    success: function () {
+                        window.location.reload();
+                    }
+                });
+                e.preventDefault();
+            });
         })();
     </script>
     @endpush

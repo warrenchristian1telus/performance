@@ -164,6 +164,7 @@
                     </div>
                     </div>
                     <hr>
+                    @if ($showSignoff ?? true)
                     @if ($type == 'upcoming')
                     <div>
                         <h5><u>Sign-off</u></h5>
@@ -216,6 +217,7 @@
                         <br>
                         <span class="text-danger error" data-error-for="employee_id"></span>
                     </form>
+                @endif
                 @endif
             </div>
         </div>

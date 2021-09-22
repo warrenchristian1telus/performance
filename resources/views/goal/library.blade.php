@@ -3,10 +3,9 @@
         <div class="row ">
             <div class="col-md-6 col-6">
                 <x-slot name="header">
-                    <small><a href="{{ route('goal.index') }}">back</a></small>
+                    @include('goal.partials.tabs')
                     <form action="" id="search-form">
                         <div class="position-relative w-50">
-                            
                             <button class="btn btn-primary btn-sm position-absolute" style="right:0;margin:3px;height:2rem">Search</button>
                             <div class="form-control input clearfix float-left" id="search-input" name="search"></div>
                         </div>
@@ -16,7 +15,7 @@
         </div>
     </div>
     <div class="mt-5 pb-5">
-        <h2>Goal Library</h2>
+        <h2>Suggested Goals</h2>
         <p>Click below to add goals to your profile that were suggested by:</p>
         <form id="goal_form" method="POST" action="{{ route('goal.library') }}">
             @csrf

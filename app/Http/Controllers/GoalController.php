@@ -8,6 +8,7 @@ use App\Models\Goal;
 use App\Models\GoalType;
 use Illuminate\Support\Facades\Auth;
 use App\DataTables\GoalsDataTable;
+use App\Http\Requests\Goals\EditSuggestedGoalRequest;
 use App\Models\GoalComment;
 use App\Models\LinkedGoal;
 use App\Models\User;
@@ -41,9 +42,6 @@ class GoalController extends Controller
             $goals = $user->sharedGoals()
                 /* ->whereNotIn('goals.id', $referencedGoals ) */
                 ->paginate(4);
-            
-            // For User Experience Testing
-            $goals = Goal::where('id', 995)->paginate(4);
             
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes'));
@@ -158,6 +156,20 @@ class GoalController extends Controller
         return redirect()->route('goal.index');
     }
 
+    public function getSuggestedGoal($id) {
+        return $this->respondeWith(Goal::withoutGlobalScope(NonLibraryScope::class)->findOrFail($id));
+    }
+
+    public function updateSuggestedGoal(EditSuggestedGoalRequest $request, $id)
+    {
+        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->findOrFail($id);
+        $input = $request->validated();
+
+        $goal->update($input);
+
+        return redirect()->route('my-team.suggested-goals');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -210,9 +222,11 @@ class GoalController extends Controller
                             ->with('comments')->get();
 
         $user = Auth::user();
-        $sQuery = $user->sharedGoals()->withoutGlobalScope(NonLibraryScope::class);
+        // $sQuery = $user->sharedGoals()->withoutGlobalScope(NonLibraryScope::class);
+        $sQuery = Goal::withoutGlobalScope(NonLibraryScope::class)->where('user_id', $user->reportingManager->id);
+                        
         // TODO: For User Experience 
-        $sQuery = Goal::where('id', 998);
+        // $sQuery = Goal::where('id', 998);
         // TODO: remove duplicate if once we resolve organizational goals
         if ($request->has('search') && $request->search != '') {
             // $searchText = explode(' ', $request->search);

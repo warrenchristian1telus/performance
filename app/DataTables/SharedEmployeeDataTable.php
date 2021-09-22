@@ -35,8 +35,17 @@ class SharedEmployeeDataTable extends DataTable
                 return view('my-team.partials.view-btn', compact(["row"])); // $row['id'];
             })
             ->addColumn('excused', function ($row) {
-                $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
-                return view('my-team.partials.switch', compact(['row', "yesOrNo"])); // $row['id'];
+                // $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
+                $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
+
+                $excused = json_encode([
+                    'start_date' => $row->excused_start_date,
+                    'end_date' => $row->excused_end_date,
+                    'reason_id' => $row->excused_reason_id
+                ]);
+                // return view('my-team.partials.switch', compact(["yesOrNo"])); // $row['id'];
+                // return $row;
+                return view('my-team.partials.switch', compact(["row", "excused", "yesOrNo"]));
             });
     }
 

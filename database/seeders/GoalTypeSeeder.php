@@ -18,15 +18,18 @@ class GoalTypeSeeder extends Seeder
         $goal_types = [
             [
                 'name' => 'Work',
-                'description' => 'Work Goals are foundational / required for your current position (in current role).'
+                'description' => 'Work Goals are foundational / required for your current position (in current role).',
+                'order' => 1
             ],
             [
                 'name' => 'Career Development',
-                'description' => 'Career Development Goals are desirable but not required (in order to improve and grow) and can be strategic or long-term'
+                'description' => 'Career Development Goals are desirable but not required (in order to improve and grow) and can be strategic or long-term',
+                'order' => 3
             ],
             [
                 'name' => 'Learning',
-                'description' => 'Learning Goals are formal (i.e. courses or programs) and informal (i.e. networking or mentoring) activities relevant to your role or personal development.'
+                'description' => 'Learning Goals are formal (i.e. courses or programs) and informal (i.e. networking or mentoring) activities relevant to your role or personal development.',
+                'order' => 2
             ]
         ];
 

@@ -16,6 +16,7 @@ use App\Models\GoalType;
 use App\Models\Participant;
 use App\Models\SharedProfile;
 use App\Models\User;
+use App\Scopes\NonLibraryScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -41,10 +42,11 @@ class MyTeamController extends Controller
             ->with('goalType')->get();
         $employees = $this->myEmployeesAjax();
         // dd($goals[0]->sharedWith);
-        $type = '';
+        $type = 'upcoming'; // Allow Editing
+        $showSignoff = false;
         $myEmpTable = $myEmployeesDataTable->html();
         $sharedEmpTable = $sharedEmployeeDataTable->html();
-        return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons'));
+        return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons', 'showSignoff'));
         // return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type'));
     }
 
@@ -235,15 +237,37 @@ class MyTeamController extends Controller
         $input = $request->validated();
         $input['user_id'] = Auth::id();
         $input['is_library'] = true;
-        $share_with = $input['share_with'];
+        $share_with = $input['itemsToShare'];
 
-        unset($input['share_with']);
+        unset($input['itemsToShare']);
         DB::beginTransaction();
         $goal = Goal::create($input);
         $goal = $goal->sharedWith()->sync($share_with);
         DB::commit();
         return response()->json(['success' => true, 'message' => 'Goal added to library successfully']);
         // return redirect()->back();
+    }
+
+    public function showSugggestedGoals() {
+        $goaltypes = GoalType::all();
+        $eReasons = ExcusedReason::all();
+        $conversationTopics = ConversationTopic::all();
+        $participants = Participant::all();
+        $goals = Goal::where('user_id', Auth::id())
+            ->with('user')
+            ->with('sharedWith')
+            ->with('goalType')->get();
+        $employees = $this->myEmployeesAjax();
+        $type = 'upcoming';
+        $disableEdit = false;
+        $allowEditModal = true;
+        $suggestedGoals = Goal::withoutGlobalScope(NonLibraryScope::class)->where('user_id', Auth::id())
+            ->where('status', 'active')
+            ->where('is_library', 1)
+            ->with('user')
+            ->with('goalType')
+            ->paginate(4);
+        return view('my-team.suggested-goals', compact('goals', 'goaltypes', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal'));
     }
 
 }

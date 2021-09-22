@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Conversation extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $with = ['topic', 'conversationParticipants', 'conversationParticipants.participant'];
-    protected $appends = ['c_date', 'c_time', 'questions','date_time'];
+    protected $appends = ['c_date', 'c_time', 'questions', 'date_time', 'is_current_user_participant'];
 
     protected $casts = [
         'date' => 'datetime:Y-m-d',
@@ -66,5 +67,14 @@ class Conversation extends Model
     public static function latestPastConversation() 
     {
         return self::whereNotNull('signoff_user_id')->orderBy('date', 'DESC')->first();
+    }
+
+    public function getIsCurrentUserParticipantAttribute()
+    {
+        foreach ($this->conversationParticipants->toArray() as $cp) {
+            if ($cp['participant_id'] === Auth::id())
+                return true;
+        }
+        return false;
     }
 }

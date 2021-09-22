@@ -72,6 +72,7 @@
                             <div class="d-flex flex-row my-2">
                                 <x-profile-pic></x-profile-pic>
                                 <div class="border flex-fill p-2 rounded">
+                                    <b>{{$comment->user->name}}</b> <br>
                                     {{$comment->comment}}
                                     <small class="float-right" data-toggle="tooltip" title="{{$comment->created_at}}">
                                         {{$comment->created_at->diffForHumans()}}
@@ -97,6 +98,7 @@
     @push('js')
         <script>
             $('form').keydown(function (event) {
+                debugger;
                 if (event.ctrlKey && event.keyCode === 13) {
                     $(this).trigger('submit');
                 }
@@ -123,6 +125,10 @@
                    }
                    console.log(linkedGoals);
                    $('#linked_goal_id').val(linkedGoals);
+            });
+            $('body').popover({
+                selector: '[data-toggle]',
+                trigger: 'hover',
             });
         </script>
     @endpush

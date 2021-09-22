@@ -9,6 +9,9 @@
                     </p>
                 </a>
                 <div class="flex-fill"></div>
+                @if ($allowEditModal ?? false)
+                    <x-button icon='edit' class="text-light edit-suggested-goal" data-goal-id="{{$goal->id}}" aria-label="Edit button" data-toggle="modal" data-target="#edit-suggested-goal-modal"></x-button>
+                @endif
                 @if ($type !== 'supervisor' && !$disableEdit)
                 <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this goal?')">
                     @csrf
@@ -38,10 +41,12 @@
                     <x-goal-status :status="$goal->status"></x-goal-status>
                 @endif
             </div>
+            @if (!$goal->is_library)
             <x-button
                 :href='route("goal.show", $goal->id)' 
                 :tooltip="__('Click to view the details of this goal.')"
                 tooltipPosition="bottom" class="ml-2">{{__('View')}}</x-button>
+            @endif
             @if($type === 'supervisor' && !$disableEdit)
                 <form action="{{route('goal.supervisor.copy', $goal->id)}}" method="post" onSubmit="return confirm('This goal will be copied to your Current Goals tab. You can access and edit it there without impacting your supervisor\'s goal. Continue?');">
                     @csrf

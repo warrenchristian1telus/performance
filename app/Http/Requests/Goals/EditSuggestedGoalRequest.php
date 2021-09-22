@@ -4,7 +4,7 @@ namespace App\Http\Requests\Goals;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddGoalToLibraryRequest extends FormRequest
+class EditSuggestedGoalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,15 +29,7 @@ class AddGoalToLibraryRequest extends FormRequest
             'why' => 'required',
             'how' => 'required',
             'measure_of_success' => 'required',
-            'goal_type_id' => 'required|exists:goal_types,id',
-            'itemsToShare' => 'required|array',
-            'itemsToShare.*' => 'exists:users,id'
-        ];
-    }
-
-    public function messages() {
-        return [
-            'itemsToShare.required' => 'please select at least one employee'
+            'goal_type_id' => 'required|exists:goal_types,id'
         ];
     }
 }

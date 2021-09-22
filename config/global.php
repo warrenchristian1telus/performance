@@ -3,16 +3,20 @@
 return [
     "status" => [
         "active" => [
-            "color" => "primary"
+            "color" => "primary",
+            "tooltip" => "Currently in progress or scheduled for a future date"
         ],
         "achieved" => [
-            "color" => "success"
+            "color" => "success",
+            "tooltip" => "Supervisor and employee agree objectives met"
         ],
-        "goal not met" => [
-            "color" => "danger"
+        "not met" => [
+            "color" => "danger",
+            "tooltip" => "Substantial portion incomplete by target date"
         ],
-        "cancelled" => [
-            "color" => "warning"
+        "cancelled or deferred" => [
+            "color" => "warning",
+            "tooltip" => "Shift in plans but want to archive goal for future reference"
         ]
     ],
     

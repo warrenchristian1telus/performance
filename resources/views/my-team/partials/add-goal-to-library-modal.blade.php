@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header bg-primary">
-        <h5 class="modal-title" id="addGoalToLibraryLabel">Add Goal to Library</h5>
+        <h5 class="modal-title" id="addGoalToLibraryLabel">Suggest a goal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -39,7 +39,7 @@
                     <small class="text-danger error-how"></small>
                 </div>
                 <div class="col-6">
-                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='An increase in X by Y%'  />
+                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'  />
                     <small class="text-danger error-measure_of_success"></small>
                 </div>
                 <div class="col-6">

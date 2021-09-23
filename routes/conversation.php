@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\ParticipantController;
 use Illuminate\Support\Facades\Route;
 // Conversations
 Route::get('conversation/upcoming', [ConversationController::class, 'index'])->name('conversation.upcoming');

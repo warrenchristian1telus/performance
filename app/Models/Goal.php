@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Scopes\NonLibraryScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Goal extends Model implements Auditable
 {
-  use AuditableTrait;
+  use AuditableTrait, SoftDeletes;
   /**
    * The attributes that are mass assignable.
    *

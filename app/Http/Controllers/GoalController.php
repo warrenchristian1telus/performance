@@ -178,7 +178,7 @@ class GoalController extends Controller
      */
     public function destroy($id)
     {
-        $goal = Goal::find($id);
+        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->find($id);
         if (!$goal) {
             abort(404);
         }

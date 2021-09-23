@@ -28,6 +28,7 @@ class SupervisorGoalSeeder extends Seeder
                 'how' => 'I will do this by building trusting relationships with all parties, acquiring knowledge in industrial land use, mapping out the remaining tasks, assessing progress and creating the negotiation document.',
                 'measure_of_success' => 'Increase X by Y%',
                 'user_id' => 7,
+                'last_supervisor_comment' => 'N',
             ],
             [
                 'id' => 996,
@@ -42,6 +43,7 @@ class SupervisorGoalSeeder extends Seeder
                 'how' => 'I will do this by connecting with local business associations.',
                 'measure_of_success' => 'Increase X by Y%',
                 'user_id' => 7,
+                'last_supervisor_comment' => 'Y',
             ],
 
             [
@@ -57,6 +59,7 @@ class SupervisorGoalSeeder extends Seeder
                 'how' => 'I will do this by working towards certification in the BC Public Service Supervisory Development Program, and signing up for Performance Coaching.',
                 'measure_of_success' => 'Increase X by Y%',
                 'user_id' => 7,
+                'last_supervisor_comment' => 'N',
             ],
             [
                 'id' => 998,
@@ -71,6 +74,7 @@ class SupervisorGoalSeeder extends Seeder
                 'how' => 'I will do this by designing and delivering a consultation process and writing a report summarising my findings.',
                 'measure_of_success' => 'Increase X by Y%',
                 'user_id' => 7,
+                'last_supervisor_comment' => 'N',
             ],
             [
                 'id' => 999,
@@ -85,6 +89,7 @@ class SupervisorGoalSeeder extends Seeder
                 'how' => 'I will do this by creating a Culture Change Strategy, detailing all tactics (e.g. designing guidelines, processes, procedures) by the end of the second quarter.',
                 'measure_of_success' => 'Increase X by Y%',
                 'user_id' => 7,
+                'last_supervisor_comment' => 'N',
 
             ]
         ];

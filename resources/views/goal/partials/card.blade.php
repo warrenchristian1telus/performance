@@ -31,6 +31,11 @@
                 </p>
             </a>
         </div>
+        @if ($goal->last_supervisor_comment == 'Y' and (session()->get('original-auth-id') == Auth::id() or session()->get('original-auth-id') == null ))
+          <div class="alert alert-default-warning alert-dismissible">
+          <span class="h5"><i class="icon fas fa-exclamation-triangle"></i>Your supervisor has added a comment.</span>
+          </div>
+        @endif
         <div class="card-footer d-flex align-items-center">
             <b>Goal created by:&nbsp;</b>{{ $goal->user->name}}
             <div class="flex-fill"></div>
@@ -43,7 +48,7 @@
             </div>
             @if (!$goal->is_library)
             <x-button
-                :href='route("goal.show", $goal->id)' 
+                :href='route("goal.show", $goal->id)'
                 :tooltip="__('Click to view the details of this goal.')"
                 tooltipPosition="bottom" class="ml-2">{{__('View')}}</x-button>
             @endif
@@ -52,13 +57,13 @@
                     @csrf
                     <x-button
                         :data-id="$goal->id"
-                        class="ml-2 copy-goal" 
-                        style="outline-primary" 
+                        class="ml-2 copy-goal"
+                        style="outline-primary"
                         :tooltip="__('Click to copy this goal to your Current Goals tab and make it your own.')"
                         tooltipPosition="bottom">{{__('Copy')}}</x-button>
                 </form>
             @endif
-            
+
         </div>
         <!-- /.card-footer -->
     </div>

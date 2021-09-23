@@ -42,7 +42,6 @@ class GoalController extends Controller
             $goals = $user->sharedGoals()
                 /* ->whereNotIn('goals.id', $referencedGoals ) */
                 ->paginate(4);
-            
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes'));
         }
@@ -94,7 +93,6 @@ class GoalController extends Controller
             ->with('comments')
             ->firstOrFail();
 
-
         $linkedGoalsIds = LinkedGoal::where('user_goal_id', $id)->pluck('supervisor_goal_id');
 
         /* $supervisorGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
@@ -105,6 +103,11 @@ class GoalController extends Controller
             ->whereIn('id', $linkedGoalsIds)
             ->get();
 
+            $user = User::findOrFail($goal->user_id);
+          if ($goal->last_supervisor_comment == 'Y' and ($goal->user_id == session()->get('original-auth-id') or session()->get('original-auth-id') == null)) {
+              $goal->last_supervisor_comment = 'N';
+              $goal->save();
+            }
 
         return view('goal.show', compact('goal', 'linkedGoals'));
     }
@@ -116,7 +119,7 @@ class GoalController extends Controller
         $supervisorGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
             ->whereNotIn('id', $linkedGoalsIds)
             ->with('comments')->get();
-        
+
         return view('goal.partials.supervisor-goal-content', compact('goal', 'supervisorGoals'));
     }
 
@@ -210,7 +213,7 @@ class GoalController extends Controller
                     });
                 }
             });
-            
+
             $expanded = true;
             $currentSearch = implode(' ',$request->search);
         }
@@ -286,13 +289,19 @@ class GoalController extends Controller
         $goal = Goal::findOrFail($id);
         $comment = new GoalComment;
 
-
         $comment->goal_id = $goal->id;
         $comment->user_id = Auth::id();
 
         $comment->comment = $request->comment;
 
         $comment->save();
+
+        $user = User::findOrFail($goal->user_id);
+
+        if (($goal->last_supervisor_comment != 'Y') and (session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
+          $goal->last_supervisor_comment = 'Y';
+          $goal->save();
+        }
 
         return redirect()->back();
     }
@@ -340,4 +349,5 @@ class GoalController extends Controller
 
         return redirect()->route('goal.current');
     }
+
 }

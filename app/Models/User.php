@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -50,6 +51,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'is_goal_shared_with_auth_user',
+        'is_conversation_shared_with_auth_user'
+    ];
+
     public function goals() {
         return $this->hasMany('App\Models\Goal');
     }
@@ -69,6 +75,38 @@ class User extends Authenticatable
 
     public function upcomingConversation() {
         return $this->conversations()->whereNull('signoff_user_id')->orderBy('date', 'DESC');
+    }
+
+    public function getIsGoalSharedWithAuthUserAttribute() {
+        if ($this->id === Auth::id()) {
+            return true;
+        }
+
+        $shared = SharedProfile::
+            where('shared_id', $this->id)
+            ->where('shared_with', Auth::id())
+            ->first();
+        if (!$shared) {
+            return false;
+        }
+
+        return in_array(1, $shared->shared_item);
+    }
+
+    public function getIsConversationSharedWithAuthUserAttribute() {
+        if ($this->id === Auth::id()) {
+            return true;
+        }
+
+        $shared = SharedProfile::
+            where('shared_id', $this->id)
+            ->where('shared_with', Auth::id())
+            ->first();
+        if (!$shared) {
+            return false;
+        }
+
+        return in_array(2, $shared->shared_item);
     }
 
     public function latestConversation()

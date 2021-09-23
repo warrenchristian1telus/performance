@@ -5,6 +5,7 @@
         </h2>
         <small><a href="{{ route('goal.index') }}">Back to list</a></small>
     </x-slot>
+
     <div class="container-fluid">
         <form action="{{ route ('goal.update', $goal->id)}}" method="POST" onsubmit="confirm('Are you sure you want to update Goal ?')">
             @csrf

@@ -267,7 +267,8 @@ class MyTeamController extends Controller
             ->with('user')
             ->with('goalType')
             ->paginate(4);
-        return view('my-team.suggested-goals', compact('goals', 'goaltypes', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal'));
+        $goalDeleteConfirmationText = "You are about to delete a suggested goal, meaning it will no longer be visible to your direct reports. Are you sure you want to continue?";
+        return view('my-team.suggested-goals', compact('goals', 'goaltypes', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal', 'goalDeleteConfirmationText'));
     }
 
 }

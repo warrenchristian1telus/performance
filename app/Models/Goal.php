@@ -28,8 +28,7 @@ class Goal extends Model implements Auditable
     'user_id',
     'created_at',
     'updated_at',
-    'is_library',
-    'last_supervisor_comment'
+    'is_library'
   ];
 
 
@@ -82,15 +81,14 @@ class Goal extends Model implements Auditable
   public function getStartDateHumanAttribute() {
     return ($this->start_date) ?  $this->start_date->format('F d, Y') : null;
   }
-
+  
   public function getTargetDateHumanAttribute()
   {
     return ($this->start_date) ? $this->target_date->format('F d, Y') : null;
   }
 
-  public function sharedWith()
+  public function sharedWith() 
   {
     return $this->belongsToMany('App\Models\User', 'goals_shared_with', 'goal_id', 'user_id')->withTimestamps();
   }
-
 }

@@ -3,12 +3,20 @@
         @include('goal.partials.tabs')
     </x-slot>
     @if($type != 'supervisor' && !$disableEdit)
-    <x-button icon="plus-circle" data-toggle="modal" data-target="#addGoalModal">
-        Create New Goal
-    </x-button>
-    <x-button icon="clone" href="{{ route('goal.library') }}">
-        Add Goals from List of Suggestions
-    </x-button>
+    <div class="btn-group">
+        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Actions
+        </button>
+        <div class="dropdown-menu">
+            <x-button icon="plus-circle" data-toggle="modal" data-target="#addGoalModal" class="dropdown-item">
+                Create New Goal
+            </x-button>
+            <x-button icon="clone" href="{{ route('goal.library') }}" class="dropdown-item">
+                Add Goals from List of Suggestions
+            </x-button>
+        </div>
+    </div>
+
     @endif
     <div class="mt-4">
         {{-- {{$dataTable->table()}} --}}

@@ -20,12 +20,21 @@ class SharedEmployeeDataTable extends DataTable
             ->addColumn('action', function ($row) {
                 return view('goal.partials.action', compact(["row"])); // $row['id'];
             })->editColumn('active_goals_count', function ($row) {
+                if( !$row['is_goal_shared_with_auth_user']) {
+                    return "-";
+                }
                 $text = $row['active_goals_count'] . " Goals";
                 return view('my-team.partials.link-to-profile', compact(['row', 'text']));
             })->addColumn('latestConversation', function ($row) {
+                if( !$row['is_conversation_shared_with_auth_user']) {
+                    return "-";
+                }
                 $conversation = $row->latestConversation[0] ?? null;
                 return view('my-team.partials.conversation', compact(["row", "conversation"]));
             })->addColumn('upcomingConversation', function ($row) {
+                if( !$row['is_conversation_shared_with_auth_user']) {
+                    return "-";
+                }
                 $removeBlankLink = true;
                 $conversation = $row->upcomingConversation[0] ?? null;
                 return view('my-team.partials.conversation', compact(["row", "conversation", 'removeBlankLink']));

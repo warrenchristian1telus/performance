@@ -23,7 +23,7 @@ class AddLastSupervisorCommentInGoalsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down() 
     {
         Schema::table('goals', function (Blueprint $table) {
           $table->dropColumn('last_supervisor_comment');

@@ -19,11 +19,10 @@ use Illuminate\Support\Facades\Route;
         return view('welcome');
     });
 
-
-
     Route::middleware(['ViewShare'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.todo');
         Route::get('/dashboard/notifications', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.notifications');
+        Route::delete('/dashboard/notification/{id}',[DashboardController::class, 'destroy'])->name('dashboard.destroy');
         Route::middleware(['auth'])->group(function () {
             require __DIR__ . '/goal.php';
             require __DIR__ . '/conversation.php';
@@ -35,6 +34,5 @@ use Illuminate\Support\Facades\Route;
     Route::get('/my-performance', function () {
         return view('my-performance');
     })->middleware(['auth'])->name('my-performance');
-
 
     require __DIR__.'/auth.php';

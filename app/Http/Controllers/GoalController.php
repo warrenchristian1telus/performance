@@ -13,6 +13,7 @@ use App\Models\GoalComment;
 use App\Models\LinkedGoal;
 use App\Models\User;
 use App\Scopes\NonLibraryScope;
+use App\Models\DashboardNotification;
 use Illuminate\Contracts\Session\Session;
 
 class GoalController extends Controller
@@ -291,20 +292,38 @@ class GoalController extends Controller
         $goal = Goal::findOrFail($id);
         $comment = new GoalComment;
 
-
         $comment->goal_id = $goal->id;
-        $comment->user_id = Auth::id();
+
+        //$comment->user_id = Auth::id();
+        if (session()->get('original-auth-id') != null) {
+          $comment->user_id = session()->get('original-auth-id');
+        }
+        else {
+          $comment->user_id = Auth::id();
+        }
 
         $comment->comment = $request->comment;
 
         $comment->save();
 
+        //show notification on goal tile
         $user = User::findOrFail($goal->user_id);
 
         if (($goal->last_supervisor_comment != 'Y') and (session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
+          //update flag
           $goal->last_supervisor_comment = 'Y';
           $goal->save();
-        }
+          }
+
+        if ((session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
+          //add dashboard notification
+          $newNotify = new DashboardNotification;
+          $newNotify->user_id = Auth::id();
+          $newNotify->notification_type = 'G';
+          $newNotify->comment = $comment->user->name . ' added a comment to your goal.';
+          $newNotify->related_id = $goal->id;
+          $newNotify->save();
+          }
 
         return redirect()->back();
     }

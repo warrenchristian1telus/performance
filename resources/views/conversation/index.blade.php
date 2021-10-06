@@ -170,7 +170,7 @@
                 // Show Loader Spinner...
                 $(this).html("<div class='spinner-border spinner-border-sm' role='status'></div>");
                 $(".error-date-alert").hide();
-
+                debugger;
                 const that = this;
                 $.ajax({
                     url: '/conversation/' + conversation_id
@@ -341,8 +341,9 @@
                             $('#conv_title_edit').append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
                         });
                         $.each(result.conversation_participants, function(key, value) {
+                            debugger;
                             var data = {
-                                id: value.id
+                                id: value.participant_id
                                 , text: value.participant.name
                             , };
                             var comma = ', ';
@@ -350,7 +351,7 @@
                                 comma = '';
                             }
                             participants = participants + value.participant.name + comma;
-                            var newOption = new Option(value.participant.name, value.id, true, true);
+                            var newOption = new Option(value.participant.name, value.participant_id, true, true);
                             $('#conv_participant_edit').append(newOption).trigger('change');
                             $('#conv_participant_edit').trigger({
                                 type: 'select2:select'

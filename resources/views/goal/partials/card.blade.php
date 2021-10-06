@@ -37,7 +37,16 @@
           </div>
         @endif
         <div class="card-footer d-flex align-items-center">
-            <b>Goal created by:&nbsp;</b>{{ $goal->user->name}}
+            <div>
+                <b>Goal created by:&nbsp;</b>{{ $goal->user->name}} <br>
+                @if($goal->is_library)
+                    <b>Goal suggested to:&nbsp;</b>
+                    @foreach($goal->sharedWith as $index => $sharedWith)
+                        {{ $sharedWith->name }}{{ (isset($goal->sharedWith[$index+1])) ? ',' : ''}}
+                    @endforeach
+                @endif
+            </div>
+
             <div class="flex-fill"></div>
             <div>
                 @if($type !== 'supervisor' && !$disableEdit)

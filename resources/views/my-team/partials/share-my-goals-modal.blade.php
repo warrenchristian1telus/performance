@@ -11,12 +11,14 @@
       <div class="modal-body p-4">
         <form action="{{ route('my-team.sync-goals')}}" method="POST">
           @csrf
-          @foreach ($goals as $goal)
-              @include('my-team.partials.goal')
-          @endforeach
+          @forelse ($goals as $goal)
+            @include('my-team.partials.goal')
+          @empty
+            No Goals to Share. Please <a href="{{route('goal.index')}}">create a new goal</a>
+          @endforelse
           <div class="row">
             <div class="col-12 text-right">
-              <button type="submit" class="btn btn-primary mt-3">Save</button>
+              <button type="submit" class="btn btn-primary mt-3" {{!count($goals) ? 'disabled' : ''}}>Save</button>
               <button type="button" class="btn btn-secondary mt-3" data-dismiss="modal">Cancel</button>
             </div>
           </div>

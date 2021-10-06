@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ $goal['title'] }}
-            @if(!$disableEdit && $goal->user_id === Auth::Id())
+            @if(!$goal->is_library && !$disableEdit && $goal->user_id === Auth::Id())
                 <x-button icon="edit" :href="route('goal.edit', $goal->id)">Edit</x-button>
             @endif
         </h2>
@@ -66,17 +66,37 @@
 
                         </div>
                     </div>
+                    @if (!$goal->is_library)
                     <div class="col-12 col-sm-5">
                         <b>Comments</b>
                         @foreach ($goal->comments as $comment) 
                             <div class="d-flex flex-row my-2">
                                 <x-profile-pic></x-profile-pic>
                                 <div class="border flex-fill p-2 rounded">
-                                    <b>{{$comment->user->name}}</b> <br>
+                                    <b>{{$comment->user->name}}</b> on {{$comment->created_at->format('M d, Y H:i A')}}<br>
                                     {{$comment->comment}}
-                                    <small class="float-right" data-toggle="tooltip" title="{{$comment->created_at}}">
-                                        {{$comment->created_at->diffForHumans()}}
-                                    </small>
+                                    <div>
+                                        @foreach($comment->replies as $reply)
+                                        <div class="card mt-2 p-2 d-flex flex-row bg-light">
+                                            <x-profile-pic></x-profile-pic>
+                                            <div class="flex-fill">
+                                                <b>{{$reply->user->name}}</b> on {{$reply->created_at->format('M d, Y H:i A')}}<br>
+                                                {{$reply->comment}}
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                        <x-button icon='reply' style="link" class="comment-reply" :data-comment-id="$comment->id" size="sm">Reply</x-button>
+                                        <div class="reply-box d-none">
+                                            <form action="{{route('goal.add-comment', $goal->id)}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="parent_id" value="{{$comment->id}}">
+                                                <div class="d-flex flex-row my-2">
+                                                    <x-profile-pic></x-profile-pic>
+                                                    <x-textarea label="" name="comment" placeholder="" required info="Ctrl+Enter to submit"/>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -89,6 +109,7 @@
                         </form>
                         
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -98,7 +119,6 @@
     @push('js')
         <script>
             $('form').keydown(function (event) {
-                debugger;
                 if (event.ctrlKey && event.keyCode === 13) {
                     $(this).trigger('submit');
                 }
@@ -114,17 +134,9 @@
             });
 
             let linkedGoals = [];
-            $(document).on('click','.btn-link', function(e){
-                   console.log(e.target.innerText);
-                   if(e.target.innerText == 'Link'){
-                        linkedGoals.push(e.target.getAttribute('data-id'));
-                       e.target.innerText = 'Unlink';
-                   }else{
-                       linkedGoals.pop(e.target.getAttribute('data-id'));
-                        e.target.innerText = 'Link';
-                   }
-                   console.log(linkedGoals);
-                   $('#linked_goal_id').val(linkedGoals);
+            $(document).on('click','.comment-reply', function(e){
+                const commentId = $(this).data("comment-id");
+                $(this).siblings(".reply-box").toggleClass("d-none");
             });
             $('body').popover({
                 selector: '[data-toggle]',

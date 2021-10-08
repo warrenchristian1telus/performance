@@ -29,8 +29,7 @@ class Goal extends Model implements Auditable
     'user_id',
     'created_at',
     'updated_at',
-    'is_library',
-    'last_supervisor_comment'
+    'is_library'
   ];
 
 
@@ -77,19 +76,19 @@ class Goal extends Model implements Auditable
   public function comments()
   {
     // TODO: Order of comments
-    return $this->hasMany('App\Models\GoalComment')->orderBy('created_at','ASC')->limit(10);
+    return $this->hasMany('App\Models\GoalComment')->whereNull('parent_id')->orderBy('created_at','ASC')->limit(10);
   }
 
   public function getStartDateHumanAttribute() {
     return ($this->start_date) ?  $this->start_date->format('F d, Y') : null;
   }
-
+  
   public function getTargetDateHumanAttribute()
   {
     return ($this->start_date) ? $this->target_date->format('F d, Y') : null;
   }
 
-  public function sharedWith()
+  public function sharedWith() 
   {
     return $this->belongsToMany('App\Models\User', 'goals_shared_with', 'goal_id', 'user_id')->withTimestamps();
   }

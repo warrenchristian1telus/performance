@@ -13,7 +13,6 @@ use App\Models\GoalComment;
 use App\Models\LinkedGoal;
 use App\Models\User;
 use App\Scopes\NonLibraryScope;
-use App\Models\DashboardNotification;
 use Illuminate\Contracts\Session\Session;
 
 class GoalController extends Controller
@@ -43,7 +42,7 @@ class GoalController extends Controller
             $goals = $user->sharedGoals()
                 /* ->whereNotIn('goals.id', $referencedGoals ) */
                 ->paginate(4);
-
+            
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes'));
         }
@@ -89,7 +88,7 @@ class GoalController extends Controller
     public function show($id)
     {
         // TODO: Manage Auth when we are clear with Supervisor Logic.
-        $goal = Goal::/* where('user_id', Auth::id())
+        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->/* where('user_id', Auth::id())
             -> */where('id', $id)
             ->with('goalType')
             ->with('comments')
@@ -106,11 +105,6 @@ class GoalController extends Controller
             ->whereIn('id', $linkedGoalsIds)
             ->get();
 
-            $user = User::findOrFail($goal->user_id);
-            if ($goal->last_supervisor_comment == 'Y' and ($goal->user_id == session()->get('original-auth-id') or session()->get('original-auth-id') == null)) {
-              $goal->last_supervisor_comment = 'N';
-              $goal->save();
-            }
 
         return view('goal.show', compact('goal', 'linkedGoals'));
     }
@@ -122,7 +116,7 @@ class GoalController extends Controller
         $supervisorGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
             ->whereNotIn('id', $linkedGoalsIds)
             ->with('comments')->get();
-
+        
         return view('goal.partials.supervisor-goal-content', compact('goal', 'supervisorGoals'));
     }
 
@@ -216,7 +210,7 @@ class GoalController extends Controller
                     });
                 }
             });
-
+            
             $expanded = true;
             $currentSearch = implode(' ',$request->search);
         }
@@ -230,8 +224,8 @@ class GoalController extends Controller
         $user = Auth::user();
         // $sQuery = $user->sharedGoals()->withoutGlobalScope(NonLibraryScope::class);
         $sQuery = Goal::withoutGlobalScope(NonLibraryScope::class)->where('user_id', $user->reportingManager->id);
-
-        // TODO: For User Experience
+                        
+        // TODO: For User Experience 
         // $sQuery = Goal::where('id', 998);
         // TODO: remove duplicate if once we resolve organizational goals
         if ($request->has('search') && $request->search != '') {
@@ -292,38 +286,14 @@ class GoalController extends Controller
         $goal = Goal::findOrFail($id);
         $comment = new GoalComment;
 
-        $comment->goal_id = $goal->id;
 
-        //$comment->user_id = Auth::id();
-        if (session()->get('original-auth-id') != null) {
-          $comment->user_id = session()->get('original-auth-id');
-        }
-        else {
-          $comment->user_id = Auth::id();
-        }
+        $comment->goal_id = $goal->id;
+        $comment->user_id = Auth::id();
+        $comment->parent_id = $request->parent_id ?? null;
 
         $comment->comment = $request->comment;
 
         $comment->save();
-
-        //show notification on goal tile
-        $user = User::findOrFail($goal->user_id);
-
-        if (($goal->last_supervisor_comment != 'Y') and (session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
-          //update flag
-          $goal->last_supervisor_comment = 'Y';
-          $goal->save();
-          }
-
-        if ((session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
-          //add dashboard notification
-          $newNotify = new DashboardNotification;
-          $newNotify->user_id = Auth::id();
-          $newNotify->notification_type = 'G';
-          $newNotify->comment = $comment->user->name . ' added a comment to your goal.';
-          $newNotify->related_id = $goal->id;
-          $newNotify->save();
-          }
 
         return redirect()->back();
     }

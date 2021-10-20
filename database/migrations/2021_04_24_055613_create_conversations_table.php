@@ -17,8 +17,8 @@ class CreateConversationsTable extends Migration
             $table->id();
             $table->foreignId('conversation_topic_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->date('date');
-            $table->time('time');
+            $table->date('date')->nullable();
+            $table->time('time')->nullable();
             $table->text('info_comment1')->nullable();
             $table->text('info_comment2')->nullable();
             $table->text('info_comment3')->nullable();

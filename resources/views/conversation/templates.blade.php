@@ -34,28 +34,67 @@
             </div>
         </div>
     </div>
-@include('conversation.partials.template-detail-modal')
+    @include('conversation.partials.template-detail-modal')
+    <x-slot name="js">
+        <script>
+            function loadTemplate(id, cb) {
+                $.ajax({
+                    url: '/conversation/templates/' + id
+                    , success: cb
+                });
+            }
 
-@push('js')
-    <script>
-        function loadTemplate(id, cb) {
-            $.ajax({
-                url: '/conversation/templates/' + id,
-                success: cb
+            function setTemplateModalContent(content) {
+                $("#conversationTemplateDetail").find('.modal-content').html(content);
+                $("#participant_id").select2();
+
+            }
+
+
+
+            $(document).on('click', '.template-btn', function() {
+                const id = $(this).data('id');
+                loadTemplate(id, setTemplateModalContent);
             });
-        }
-        function setTemplateModalContent(content) {
-            $("#conversationTemplateDetail").find('.modal-content').html(content);
-        }
-        $(document).on('click', '.template-btn', function () {
-            const id = $(this).data('id');
-            loadTemplate(id, setTemplateModalContent);
-        });
 
-        $(document).on('change', '#template-select', function () {
-            const id = $(this).val();
-            loadTemplate(id, setTemplateModalContent);
-        });
-    </script>
-@endpush
+            $(document).on('change', '#template-select', function() {
+                const id = $(this).val();
+                loadTemplate(id, setTemplateModalContent);
+            });
+
+            $(document).on('click', '.btn-submit', function(e) {
+                if(!confirm('This will send a notification to all participants that you would like to schedule a conversation and will move this template to your upcoming conversations tab. Would you like to continue?')){
+                    return false;
+                }
+
+                e.preventDefault();
+                $.ajax({
+                    url: '/conversation'
+                    , type: 'POST'
+                    , data: $('#conversation_form').serialize()
+                    , success: function(result) {
+                        if (result.success) {
+                            window.location.href = '/conversation/upcoming';
+                        }
+                    }
+                    , error: function(error) {
+                        var errors = error.responseJSON.errors;
+                        $('.error-date-alert').hide();
+                        $('.text-danger').each(function(i, obj) {
+                            $('.text-danger').text('');
+                        });
+                        Object.entries(errors).forEach(function callback(value, index) {
+                            var className = '.error-' + value[0];
+                            $(className).text(value[1]);
+                            if (value[0] === 'date') {
+                                $('.error-date-alert').show();
+                            }
+                        });
+                    }
+                });
+            });
+
+        </script>
+    </x-slot>
+
 </x-side-layout>

@@ -67,6 +67,7 @@ class ConversationController extends Controller
      */
     public function store(ConversationRequest $request)
     {
+      
         DB::beginTransaction();
         $isDirectRequest = true;
         if(route('my-team.my-employee') == url()->previous()) {
@@ -97,7 +98,11 @@ class ConversationController extends Controller
             ]);
         }
         DB::commit();
-        return response()->json(['success' => true, 'message' => 'Conversation Created successfully']);
+        if(request()->ajax()){
+            return response()->json(['success' => true, 'message' => 'Conversation Created successfully']);
+        }else{
+            return redirect()->route('conversation.upcoming');
+        }
     }
 
     /**
@@ -187,6 +192,8 @@ class ConversationController extends Controller
     public function templateDetail($id) {
         $template = ConversationTopic::findOrFail($id);
         $allTemplates = ConversationTopic::all();
-        return view('conversation.partials.template-detail-modal-body', compact('template','allTemplates'));
+          $participants = Participant::all();
+
+        return view('conversation.partials.template-detail-modal-body', compact('template','allTemplates','participants'));
     }
 }

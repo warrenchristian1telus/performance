@@ -8,7 +8,7 @@
         <div class="row mb-4">
         <div class="col-12 col-sm-4 col-md-4">
                 <strong>
-                    My Current Supervisor 
+                    My Current Supervisor
                     <i class="fa fa-info-circle" data-trigger="hover" data-toggle="popover" data-placement="right" data-html="true" data-content="{{ $supervisorTooltip }}"></i>
                 </strong>
                 <div class="bg-white border-b rounded p-2 mt-2 shadow-sm">
@@ -45,7 +45,7 @@
             <div class="col-12">
                 <div class="p-4 bg-white border-b border-gray-200">
                     @include('dashboard.partials.tabs')
-                    @if ($tab == 'todo') 
+                    @if ($tab == 'todo')
                         @include('dashboard.partials.todo')
                     @else
                         @include('dashboard.partials.notifications')
@@ -58,7 +58,7 @@
     @push('js')
         <script>
             $(document).ready(function(){
-                $('[data-toggle="popover"]').popover(); 
+                $('[data-toggle="popover"]').popover();
             });
         </script>
     @endpush

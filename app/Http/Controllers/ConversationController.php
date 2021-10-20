@@ -173,4 +173,20 @@ class ConversationController extends Controller
         return
         response()->json(['success' => true, 'Message' => 'UnSign Successfull', 'data' => $conversation]);;
     }
+
+    public function templates(Request $request) {
+        $query = new ConversationTopic; 
+        if ($request->has('search') && $request->search) {
+            $query = $query->where('name', 'LIKE', "%$request->search%");
+        }
+        $templates = $query->get();
+        $searchValue = $request->search ?? '';
+        return view('conversation.templates', compact('templates', 'searchValue'));
+    }
+
+    public function templateDetail($id) {
+        $template = ConversationTopic::findOrFail($id);
+        $allTemplates = ConversationTopic::all();
+        return view('conversation.partials.template-detail-modal-body', compact('template','allTemplates'));
+    }
 }

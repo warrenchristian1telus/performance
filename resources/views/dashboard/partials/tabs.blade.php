@@ -8,7 +8,7 @@
     <div class="px-4 py-1 border-bottom {{$tab == 'notifications' ? 'border-primary' : ''}}">
         <x-button style="-" :href="route('dashboard.notifications')">
             Notifications
-            <span class="badge badge-{{$tab == 'notifications' ? 'primary' : 'secondary' }}">1</span>
+            <span class="badge badge-{{$tab == 'notifications' ? 'primary' : 'secondary' }}">{{$notifications->count()}}</span>
         </x-button>
     </div>
 </div>

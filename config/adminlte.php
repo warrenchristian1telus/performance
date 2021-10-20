@@ -242,7 +242,7 @@ return [
         ],
         [
             'text' => 'Conversations',
-            'url'  => 'conversation/upcoming',
+            'url'  => 'conversation/templates',
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['conversation/*'],
             'can' => ['conversions']

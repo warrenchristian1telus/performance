@@ -46,7 +46,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-md-6 mt-1">
+                    <!-- <div class="col-6 col-md-6 mt-1">
                         <div class="d-flex align-items-end">
                             <div class="col-md-9">
                                 <x-input id="conv_date_edit" class="conv_date d-none" type="date" name="date" label="Conversation Date" />
@@ -72,7 +72,7 @@
                             @endif
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
 

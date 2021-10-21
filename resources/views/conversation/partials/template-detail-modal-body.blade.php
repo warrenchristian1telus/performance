@@ -5,11 +5,14 @@
     </button>
 </div>
 <div class="modal-body p-4">
-    <button class="btn w-100 d-flex align-items-center text-primary p-2" style="background-color: #ddd;">
+    <button class="btn w-100 d-flex align-items-center text-primary p-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#when_to_use"> 
         <strong>When to Use This Template</strong>
         <div class="flex-fill"></div>
         <i class="fa fa-chevron-right"></i>
     </button>
+    <div id="when_to_use"  class="collapse p-3 border">
+        {!!$template->when_to_use!!}
+    </div>
     <div class="rounded text-primary p-2 mt-2" style="background-color: #ddd;">
         <strong>
             Meeting info
@@ -25,7 +28,7 @@
 
                 <label style="font-weight: 400;" class="w-100">
                     Topic
-                    <select name="conversation_topic_id" class="form-control form-control-sm" id="template-select">
+                    <select name="conversation_topic_id" class="form-control" id="template-select">
 
                         @foreach($allTemplates as $topic)
                         <option value="{{$topic->id}}" {{$topic->id == $template->id ? 'selected' : ''}}>{{$topic->name}}</option>
@@ -47,7 +50,7 @@
             <div>
             <input type="hidden" name="date" value="{{ \Carbon\Carbon::now() }}">
             <input type="hidden" name="time" value="{{ \Carbon\Carbon::now() }}">
-            <x-button  size="sm" class="btn-md btn-submit">Use this template</x-button>
+            <x-button  size="md" class="mb-2">Use this template</x-button>
 
             </div>
             
@@ -57,12 +60,26 @@
 
 
     </div>
+    
     <div class="rounded text-primary p-2 mt-2">
         <h6 class="text-underline">Questions to consider</h6>
         <ul>
             @forEach($template->questions as $question) 
             <li> {{ $question }}</li>
             @endforeach
+        </ul>
+    </div>
+
+    <button class="btn w-100 d-flex align-items-center text-primary p-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#supporting_material"> 
+        <strong>Supporting Materials</strong>
+        <div class="flex-fill"></div>
+        <i class="fa fa-chevron-right"></i>
+    </button>
+    <div id="supporting_material"  class="collapse p-3 border">
+        <ul>
+            <li><a href="#">Lorem ipsum porem</a></li>
+            <li><a href="#">Lorem ipsum porem</a></li>
+            <li><a href="#">Lorem ipsum porem</a></li>
         </ul>
     </div>
 </div>

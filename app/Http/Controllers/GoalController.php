@@ -27,7 +27,6 @@ class GoalController extends Controller
     {
         $authId = Auth::id();
         $goaltypes = GoalType::all();
-        $user = Auth::user();
         $query = Goal::where('user_id', $authId)
             ->with('user')
             ->with('goalType');
@@ -36,9 +35,9 @@ class GoalController extends Controller
             $goals = $query->where('status', 'active')
                 ->paginate(4);
             $type = 'current';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes'));
         } else if ($request->is("goal/supervisor")) {
-            // $user = Auth::user();
+            $user = Auth::user();
             // TO remove already copied goals.
             // $referencedGoals = Goal::where('user_id', $authId)->whereNotNull('referenced_from')->pluck('referenced_from');
             $goals = $user->sharedGoals()
@@ -46,11 +45,11 @@ class GoalController extends Controller
                 ->paginate(4);
 
             $type = 'supervisor';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes'));
         }
         $goals = $query->where('status', '<>', 'active')
             ->paginate(4);
-        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
+        return view('goal.index', compact('goals', 'type', 'goaltypes'));
     }
 
     /**

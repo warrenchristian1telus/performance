@@ -96,5 +96,15 @@
 
         </script>
     </x-slot>
+    <x-slot name="css">
+        <style>
+            i {
+                transition: 0.2s ease-in-out;
+            }
+            [aria-expanded="true"] i{
+                transform: rotate(90deg);
+            }
+        </style>
+    </x-slot>
 
 </x-side-layout>

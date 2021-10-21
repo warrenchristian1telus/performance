@@ -1,5 +1,5 @@
 <x-side-layout>
-    @if ($showWarning)
+    @if ($showWarning && false)
     <div class="mt-4">
         <div class="row">
             <div class="col-12">
@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    @elseif ($freshWarning)
+    @elseif ($freshWarning && false)
     <div class="mt-4">
         <div class="row">
             <div class="col-12">
@@ -24,7 +24,7 @@
     @endif
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
-        @if(!$disableEdit)
+        @if(!$disableEdit && false)
         <div class="col-md-4 text-right">
             <x-button icon="plus-circle" data-toggle="modal" data-target="#addConversationModal">
                 Schedule New
@@ -45,9 +45,9 @@
                         @foreach ($c->conversationParticipants as $p)
                             {{$p->participant->name}}&nbsp;
                         @endforeach
-                    </span> |
+                    </span><!--  |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
-                    <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span>
+                    <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span> -->
                     <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
                         Delete
                     </button>

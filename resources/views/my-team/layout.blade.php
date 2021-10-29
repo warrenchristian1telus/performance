@@ -5,7 +5,7 @@
         </div>
         <div class="col-12 col-sm-6 text-right">
             <x-button id="add-goal-to-library-btn" tooltip="Create a goal for your employees to use in their own profile." tooltipPosition="bottom">
-                Suggest a Goal
+                Add Goal to Bank
             </x-button>
             <x-button id="share-my-goals-btn" tooltip="Choose which of your goals are visible to your employees" tooltipPosition="bottom">
                 Share My Goals

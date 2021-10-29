@@ -11,7 +11,7 @@
     </div>
     <div class="px-4 py-1 border-bottom {{Route::current()->getName() == 'my-team.suggested-goals' ? 'border-primary' : ''}}">
         <x-button :href="route('my-team.suggested-goals')" style="">
-            {{__('Suggested Goals')}}
+            {{__('Goal Bank')}}
         </x-button>
     </div>
 </div>

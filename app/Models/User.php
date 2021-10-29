@@ -27,7 +27,8 @@ class User extends Authenticatable
         'reporting_id',
         'excused_start_date',
         'excused_end_date',
-        'excused_reason_id'
+        'excused_reason_id',
+        'joining_date'
     ];
 
     /**
@@ -49,6 +50,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'joining_date' => 'datetime'
     ];
 
     protected $appends = [

@@ -20,7 +20,7 @@
        
        
 
-         <form id="conversation_form" action="{{ route ('conversation.store')}}" method="POST">
+         <form id="conversation_form" action="{{ route ('conversation.store')}}" method="POST" onsubmit="return confirm('This will send a notification to all participants that you would like to schedule a conversation and will move this template to your upcoming conversations tab. Would you like to continue?')">
              @csrf
               <div class="mt-2 d-flex justify-content-between align-items-end">
 
@@ -39,7 +39,7 @@
             <div>
                 <label style="font-weight: 400;" class="w-100">
                     Participants
-                   <select class="form-control w-100 select2" style="width:100%;" multiple name="participant_id[]" id="participant_id">
+                   <select class="form-control w-100 select2" style="width:100%;" multiple name="participant_id[]" id="participant_id" required>
                        @foreach($participants as $p)
                        <option value="{{ $p->id }}">{{ $p->name }}</option>
                        @endforeach

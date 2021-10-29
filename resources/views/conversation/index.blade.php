@@ -1,27 +1,16 @@
 <x-side-layout>
-    @if ($showWarning && false)
+    
     <div class="mt-4">
         <div class="row">
             <div class="col-12">
                 <div class="alert alert-default-danger alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                  <span class="h5"><i class="icon fas fa-exclamation-circle"></i>Your last performance conversation was completed more than 4 months ago. Conversations must be scheduled every four months, at minimum.</span>
+                  <span class="h5"><i class="icon fas fa-exclamation-circle"></i>{{$conversationMessage}}</span>
                 </div>
             </div>
         </div>
     </div>
-    @elseif ($freshWarning && false)
-    <div class="mt-4">
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-default-warning alert-dismissible">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                  <span class="h5"><i class="icon fas fa-exclamation-circle"></i>You have yet to complete a performance conversation. Conversations must be scheduled once every 4 months at minimum.</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
+    
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
         @if(!$disableEdit && false)

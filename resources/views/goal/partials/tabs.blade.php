@@ -16,7 +16,7 @@
     </div>
     <div class="px-4 py-1 border-bottom {{Route::current()->getName() == 'goal.library' ? 'border-primary' : ''}}">
         <x-button role="tab" :href="route('goal.library')" style="">
-            Suggested Goals
+            Goal Bank
         </x-button>
     </div>
 </div>

@@ -25,6 +25,7 @@ class CreateConversationsTable extends Migration
             $table->text('info_comment4')->nullable();
             $table->text('info_comment5')->nullable();
             $table->unsignedBigInteger('signoff_user_id')->nullable();
+            $table->dateTime('sign_off_time')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

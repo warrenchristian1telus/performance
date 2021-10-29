@@ -48,6 +48,7 @@
             </div>
 
             <div class="flex-fill"></div>
+            @if(!$goal->is_library)
             <div>
                 @if($type !== 'supervisor' && !$disableEdit)
                     @include('goal.partials.status-change')
@@ -55,6 +56,7 @@
                     <x-goal-status :status="$goal->status"></x-goal-status>
                 @endif
             </div>
+            @endif
             @if (!$goal->is_library)
             <x-button
                 :href='route("goal.show", $goal->id)'

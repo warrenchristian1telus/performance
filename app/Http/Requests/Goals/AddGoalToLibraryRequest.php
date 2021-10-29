@@ -31,7 +31,8 @@ class AddGoalToLibraryRequest extends FormRequest
             'measure_of_success' => 'required',
             'goal_type_id' => 'required|exists:goal_types,id',
             'itemsToShare' => 'required|array',
-            'itemsToShare.*' => 'exists:users,id'
+            'itemsToShare.*' => 'exists:users,id',
+            'is_mandatory' => 'required|boolean'
         ];
     }
 

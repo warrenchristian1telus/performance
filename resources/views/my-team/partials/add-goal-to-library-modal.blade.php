@@ -44,6 +44,15 @@
                 </div>
                 <div class="col-6">
                     <label>
+                        Mandatory/Suggested
+                        <select class="form-control" name="is_mandatory">
+                            <option value="1">Mandatory</option>
+                            <option value="0">Suggested</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col-6">
+                    <label>
                         Share with <br>
                         <select multiple class="form-control items-to-share" name="itemsToShare[]">
                             @foreach ($employees as $employee)

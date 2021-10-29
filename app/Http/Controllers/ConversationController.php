@@ -10,6 +10,7 @@ use App\Models\Conversation;
 use App\Models\ConversationParticipant;
 use App\Models\ConversationTopic;
 use App\Models\Participant;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,27 +27,23 @@ class ConversationController extends Controller
     {
         $authId = Auth::id();
 
-        $freshWarning = Conversation::hasNotYetScheduledConversation($authId);
-        $showWarning = false;
-        if (!$freshWarning) {
-            $showWarning = Conversation::hasNotDoneAtleastOnceIn4Months();
-        }
+        $conversationMessage = Conversation::warningMessage();
         $conversationTopics = ConversationTopic::all();
         $participants = Participant::all();
         $query = Conversation::with('conversationParticipants');
         $type = 'upcoming';
         if ($request->is('conversation/past')) {
-            $conversations = $query->where('user_id', $authId)->orWhereHas('conversationParticipants', function($query) use ($authId) {
+            $conversations = $query->where('user_id', $authId)->whereHas('conversationParticipants', function($query) use ($authId) {
                 return $query->where('participant_id', $authId);
             })->whereNotNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
             $type = 'past';
         } else {
-            $conversations = $query->where('user_id', $authId)->orWhereHas('conversationParticipants', function($query) use ($authId) {
+            $conversations = $query->where('user_id', $authId)->whereHas('conversationParticipants', function($query) use ($authId) {
                 return $query->where('participant_id', $authId);
             })->whereNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
         }
 
-        return view('conversation.index', compact('type', 'conversations', 'conversationTopics', 'participants', 'showWarning', 'freshWarning'));
+        return view('conversation.index', compact('type', 'conversations', 'conversationTopics', 'participants', 'conversationMessage'));
     }
 
     /**
@@ -165,6 +162,7 @@ class ConversationController extends Controller
     public function signOff(SignoffRequest $request, Conversation $conversation)
     {
         $conversation->signoff_user_id = Auth::id();
+        $conversation->sign_off_time = Carbon::now();
         $conversation->update();
 
         return response()->json(['success' => true, 'Message' => 'Sign Off Successfull', 'data' => $conversation]);

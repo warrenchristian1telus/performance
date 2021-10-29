@@ -197,6 +197,14 @@ class GoalController extends Controller
         return redirect()->back();
     }
 
+    public function goalBank(Request $request) {
+        $bankGoals = Goal::withoutGlobalScope(NonLibraryScope::class)
+            ->with('goalType')
+            ->with('user')
+            ->get();
+        return view('goal.bank', compact('bankGoals'));
+    }
+
     public function library(Request $request)
     {
         $query = Goal::whereIn('id', [997, 998, 999]);

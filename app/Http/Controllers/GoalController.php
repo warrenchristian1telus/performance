@@ -14,7 +14,8 @@ use App\Models\LinkedGoal;
 use App\Models\User;
 use App\Models\DashboardNotification;
 use App\Scopes\NonLibraryScope;
-use Illuminate\Contracts\Session\Session;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class GoalController extends Controller
 {
@@ -27,7 +28,6 @@ class GoalController extends Controller
     {
         $authId = Auth::id();
         $goaltypes = GoalType::all();
-        $user = Auth::user();
         $query = Goal::where('user_id', $authId)
             ->with('user')
             ->with('goalType');
@@ -36,9 +36,9 @@ class GoalController extends Controller
             $goals = $query->where('status', 'active')
                 ->paginate(4);
             $type = 'current';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes'));
         } else if ($request->is("goal/supervisor")) {
-            //$user = Auth::user();
+            $user = Auth::user();
             // TO remove already copied goals.
             // $referencedGoals = Goal::where('user_id', $authId)->whereNotNull('referenced_from')->pluck('referenced_from');
             $goals = $user->sharedGoals()
@@ -46,11 +46,11 @@ class GoalController extends Controller
                 ->paginate(4);
 
             $type = 'supervisor';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes'));
         }
         $goals = $query->where('status', '<>', 'active')
             ->paginate(4);
-        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
+        return view('goal.index', compact('goals', 'type', 'goaltypes'));
     }
 
     /**
@@ -199,11 +199,85 @@ class GoalController extends Controller
     }
 
     public function goalBank(Request $request) {
-        $bankGoals = Goal::withoutGlobalScope(NonLibraryScope::class)
+        $query = Goal::withoutGlobalScope(NonLibraryScope::class)
             ->with('goalType')
-            ->with('user')
-            ->get();
-        return view('goal.bank', compact('bankGoals'));
+            ->with('user');
+        if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
+            $query = $query->where('is_mandatory', $request->is_mandatory);
+            if (!$request->is_mandatory) {
+                $query = $query->orWhereNull('is_mandatory');
+            }
+        }
+
+        if ($request->has('goal_type') && $request->goal_type) {
+            $query = $query->whereHas('goalType', function($query) use ($request) {
+                return $query->where('id', $request->goal_type);
+            });
+        }
+
+        if ($request->has('title') && $request->title) {
+            $query = $query->where('title', "LIKE", "%$request->title%");
+        }
+
+        if ($request->has('date_added') && $request->date_added && Str::lower($request->date_added) !== 'any') {
+            $dateRange = explode("-",$request->date_added);
+            $dateRange[0] = trim($dateRange[0]);
+            $dateRange[1] = trim($dateRange[1]);
+
+            $startDate = Carbon::createFromFormat('M d, Y', $dateRange[0]);
+            $endDate = Carbon::createFromFormat('M d, Y', $dateRange[1]);
+
+            $query = $query->whereDate('created_at', '>=', $startDate);
+            $query = $query->whereDate('created_at', '<=', $endDate);
+        }
+
+        
+        $bankGoals = $query->get();
+        $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
+        return view('goal.bank', compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));
+    }
+
+    private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes) {
+        $mandatoryOrSuggested = [
+            [
+                "id" => '',
+                "name" => 'Any'
+            ],
+            [
+                "id" => '1',
+                "name" => 'Mandatory'
+            ],
+            [
+                "id" => '0',
+                "name" => 'Suggested'
+            ]
+        ];
+
+        $createdBy = [
+            [
+                "id" => "0",
+                "name" => "Any"
+            ],
+            [
+                "id" => "1",
+                "name" => "Supervisor"
+            ],
+            [
+                "id" => "2",
+                "name" => "Organization"
+            ]
+        ];
+
+
+        $goalType = GoalType::all()->pluck('name', 'id')->toArray();
+        array_unshift($goalType, "Any");
+        $goalTypes = [];
+        foreach($goalType as $id => $type) {
+            $goalTypes[] = [
+                "id" => $id,
+                "name" => $type
+            ];
+        }
     }
 
     public function library(Request $request)

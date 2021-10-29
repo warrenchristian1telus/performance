@@ -7,34 +7,36 @@
                 </x-slot>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <x-dropdown label="Mandatory/Suggested"></x-dropdown>
-            </div>
-            <div class="col">
-                <x-dropdown label="Goal Type"></x-dropdown>
-            </div>
+        <form action="" method="get">
+            <div class="row">
+                <div class="col">
+                    <x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
+                </div>
+                <div class="col">
+                    <x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type" :selected="request()->goal_type"></x-dropdown>
+                </div>
 
-            <div class="col">
-                <label>
-                    Title
-                    <input type="text" class="form-control">
-                </label>
-            </div>
-            <div class="col">
-                <label>
-                    Date Added
-                    <input type="text" class="form-control">
-                </label>
-            </div>
+                <div class="col">
+                    <label>
+                        Title
+                        <input type="text" name="title" class="form-control" value="{{request()->title}}">
+                    </label>
+                </div>
+                <div class="col">
+                    <label>
+                        Date Added
+                        <input type="text" class="form-control" name="date_added" value="{{request()->date_added ?? 'Any'}}">
+                    </label>
+                </div>
 
-            <div class="col">
-                <x-dropdown label="Created by"></x-dropdown>
+                <div class="col">
+                    <x-dropdown :list="$createdBy" label="Created by"></x-dropdown>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary mt-4 px-5">Filter</button>
+                </div>
             </div>
-            <div class="col">
-                <button class="btn btn-primary mt-4 px-5">Filter</button>
-            </div>
-        </div>
+        </form>
 
         <div class="row">
             <div class="col">
@@ -99,7 +101,25 @@
             </div>
         </div>
     </div>
+    @push('css')
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    @endpush
     @push('js')
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <script>
+            $('input[name="date_added"]').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Any',
+                    format: 'MMM DD, YYYY'
+                }
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MMM DD, YYYY') + ' - ' + picker.endDate.format('MMM DD, YYYY'));
+            }).on('cancel.daterangepicker', function(ev, picker) {
+                $('input[name="date_added"]').val('Any');
+            });
+        </script>
         <script>
             $(document).on('click', '.show-goal-detail', function(e) {
                 e.preventDefault();

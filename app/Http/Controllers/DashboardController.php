@@ -51,4 +51,16 @@ class DashboardController extends Controller
         return redirect()->back();
     }
 
+    public function destroyall(Request $request)
+    {
+        $ids = $request->ids;
+        DashboardNotification::wherein('id',explode(",",$ids))->delete();
+        //return back();
+        //window.location.reload();
+        //return route::get('dashboard.notifications');
+        //return view('dashboard.partials.notifications');
+        //return Redirect()->back();
+        return response()->json(['success'=>"Notification(s) deleted successfully."]);
+    }
+
 }

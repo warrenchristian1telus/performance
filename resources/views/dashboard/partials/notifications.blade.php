@@ -3,14 +3,14 @@
   <div class="btn-group">
 
       <div class="mr-2" size="xs" >
-        <input type="checkbox" id='checkall'> Select All
+        <input type="checkbox" id="master"> Select All
       </div>
 
       <div class="rounded shadow-sm" size="xs" >
       <x-button
           size="xs" style="danger"
           :tooltip="__('Click to delete notification.')"
-          tooltipPosition="bottom" class="btn btn-danger btn-sm float-right mr-2" id="deleteAllSelectedRecords">{{__('Delete Selected')}}
+          tooltipPosition="bottom" class="btn btn-danger btn-sm float-right mr-2 delete_all" data-url="{{url('dashboarddeleteall') }}">{{__('Delete Selected')}}
       </x-button>
     </div>
 
@@ -21,7 +21,7 @@
       <div class="p-2">
           <div class="pl-2 d-flex align-items-center justify-content-center border-left border-primary" style="border-width:3px !important" >
 
-                        <input type="checkbox" name="check[]" id="{{ $notification->id }}"/>
+            <input type='checkbox' class='sub_chk' data-id="{{ $notification->id}}">
 
               <div class="pl-3 d-flex align-items-center justify-content-center flex-row">
                   <x-profile-pic size="36"></x-profile-pic>
@@ -62,5 +62,89 @@
                 , $('#delete-notification-form').data('action').replace('xxx', $(this).data('id'))
             ).submit();
         });
+
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#master').on('click', function(e) {
+            if($(this).is(':checked',true))
+             {
+                $(".sub_chk").prop('checked', true);
+             } else {
+                $(".sub_chk").prop('checked',false);
+             }
+            });
+            $('.delete_all').on('click', function(e) {
+                var allVals = [];
+                $(".sub_chk:checked").each(function() {
+                    allVals.push($(this).attr('data-id'));
+                });
+                if(allVals.length <=0)
+                {
+                    alert("Please select row(s) to delete.");
+                }  else {
+                    var check = confirm("Are you sure you want to delete selected row(s)?");
+                    if(check == true){
+                        var join_selected_values = allVals.join(",");
+                        e.preventDefault();
+                        $.ajax({
+                            url: $(this).data('url'),
+                            type: 'DELETE',
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            data: 'ids='+join_selected_values,
+                            success: function (data) {
+                                if (data['success']) {
+                                    $(".sub_chk:checked").each(function() {
+                                        $(this).parents("tr").remove();
+                                    });
+                                    alert(data['success']);
+                                } else if (data['error']) {
+                                    alert(data['error']);
+                                } else {
+                                    //alert('Whoop Something went wrong!!');
+                                }
+                            },
+                            error: function (data) {
+                                alert(data.responseText);
+                            }
+                        });
+                      $.each(allVals, function( index, value ) {
+                          $('table tr').filter("[data-row-id='" + value + "']").remove();
+                      });
+                    }
+                }
+            });
+            $('[data-toggle=confirmation]').confirmation({
+                rootSelector: '[data-toggle=confirmation]',
+                onConfirm: function (event, element) {
+                    element.trigger('confirm');
+                }
+            });
+            $(document).on('confirm', function (e) {
+                var ele = e.target;
+                e.preventDefault();
+                $.ajax({
+                    url: ele.href,
+                    type: 'DELETE',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    success: function (data) {
+                        if (data['success']) {
+                            $("#" + data['tr']).slideUp("slow");
+                            alert(data['success']);
+                        } else if (data['error']) {
+                            alert(data['error']);
+                        } else {
+                            alert('Whoops Something went wrong!!');
+                        }
+                    },
+                    error: function (data) {
+                        alert(data.responseText);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+
 </x-slot>

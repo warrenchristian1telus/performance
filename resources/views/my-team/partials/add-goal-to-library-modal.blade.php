@@ -14,6 +14,7 @@
             <div class="row">
                 <div class="col-6">
                     <label>
+                        Goal Type
                         <select class="form-control" name="goal_type_id">
                             @foreach ($goaltypes as $item)
                                 <option value="{{ $item->id }}" data-desc="{{ $item->description }}">{{ $item->name }}</option>
@@ -41,6 +42,12 @@
                 <div class="col-6">
                     <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'  />
                     <small class="text-danger error-measure_of_success"></small>
+                </div>
+                <div class="col-sm-6">
+                    <x-input label="Start Date" type="date" name="start_date" />
+                </div>
+                <div class="col-sm-6">
+                    <x-input label="Target Date" type="date" name="target_date" />
                 </div>
                 <div class="col-6">
                     <label>

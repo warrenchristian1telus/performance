@@ -131,5 +131,34 @@
                 });
             });
         </script>
+        <script>
+            $(document).on('click', '#addBankGoalToUserBtn', function(e) {
+                const goalId = $(this).data("id");
+                e.preventDefault();
+                $.ajax({
+                    url: '/goal/library'
+                    , type: 'POST'
+                    , data: {
+                        selected_goal: goalId
+                    },
+                    beforeSend: function(request) {
+                        return request.setRequestHeader('X-CSRF-Token', $(
+                            "meta[name='csrf-token']").attr('content'));
+                    },
+
+                    success: function(result) {
+                        console.log(result);
+                        if (result.success) {
+                            window.location.href = '/goal';
+                        }
+                    }
+                    , error: function(error) {
+                        var errors = error.responseJSON.errors;
+
+                    }
+                });
+
+            });
+        </script>
     @endpush
 </x-side-layout>

@@ -3,7 +3,7 @@
         {{$goal->title}}
         @if ($showAddBtn ?? false) 
         <div class="float-right">
-            <x-button type="button" class="float-right" icon="plus-circle" data-toggle="modal" data-target="#addGoalModal">
+            <x-button type="button" class="float-right" icon="plus-circle" id="addBankGoalToUserBtn" data-id="{{$goal->id}}">
                 Add goal
             </x-button>
         </div>
@@ -44,6 +44,14 @@
     <b>{{__("How")}}</b>
     <div class="form-control-plaintext">
         {{$goal['how']}}
+    </div>
+    <b>{{__("Start Date")}}</b>
+    <div class="form-control-plaintext">
+        {{$goal['start_date_human']}}
+    </div>
+    <b>{{__("Target Date")}}</b>
+    <div class="form-control-plaintext">
+        {{$goal['target_date_human']}}
     </div>
     
     <b>{{__("Measures of Success")}}</b>

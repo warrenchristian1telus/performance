@@ -1,0 +1,6 @@
+<ul>
+<li><em>(What)</em> My goal is to develop introductory facilitation skills <em>(Why)</em> to support future project stakeholder engagement. <em>(How)</em> To do this, I will complete the first two Facilitating Results Online courses (FRO 101 &amp; 102) offered through the Learning Centre. <em>(Measure)</em> I will be successful if I complete both courses in the next four to eight months and practice my skills in a work-related environment before year end.</li>
+</ul>
+<ul>
+<li><em>(What)</em> I will set up a monthly check-in with a colleague on the Labour Relations team (<em>Why</em>) so that I better understand how collective agreements impact my day-to-day work. (<em>How</em>) We will create an informal agenda that allows half the time for my colleague to answer my questions about Labour Relations and the other half for me to answer my colleague&rsquo;s questions about my area. (<em>Measure</em>) I will know I have been successful if I can better respond to simple client requests related to Labour Relations and better understand the supports available to me to answer more complicated questions.</li>
+</ul>

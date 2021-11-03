@@ -256,9 +256,9 @@ return [
         ],
         [
             'text' => 'Resources',
-            'url'  => 'resources/user-guide',
+            'url'  => 'resource/user-guide',
             'icon' => 'fas fa-fw fa-bullseye',
-            'active' => ['resources/*']
+            'active' => ['resource/*']
         ]
     ],
 

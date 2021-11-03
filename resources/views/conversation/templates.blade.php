@@ -1,8 +1,6 @@
 <x-side-layout>
+    <h3>Conversations</h3>
     <div class="row">
-        <div class="col-12">
-            <h3>Conversations</h3>
-        </div>
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
     </div>
     <div class="mt-4">

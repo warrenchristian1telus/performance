@@ -1,5 +1,6 @@
 <x-side-layout>
     <x-slot name="header">
+        <h3>Goals</h3>
         @include('goal.partials.tabs')
     </x-slot>
     @if($type != 'supervisor' && !$disableEdit)

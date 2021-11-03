@@ -1,7 +1,7 @@
 <x-side-layout>
     <div class="row">
         <div class="col-12 col-sm-6">
-            <h1>Hi {{ Auth::user()->name }}</h1>
+            <h3>My Team</h3>
         </div>
         <div class="col-12 col-sm-6 text-right">
             <x-button id="add-goal-to-library-btn" tooltip="Create a goal for your employees to use in their own profile." tooltipPosition="bottom">

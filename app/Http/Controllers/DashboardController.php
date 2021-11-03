@@ -52,7 +52,7 @@ class DashboardController extends Controller
     }
 
     public function destroyall(Request $request)
-    {
+    { 
         $ids = $request->ids;
         DashboardNotification::wherein('id',explode(",",$ids))->delete();
         //return back();

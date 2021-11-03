@@ -232,7 +232,7 @@ class GoalController extends Controller
             $query = $query->whereDate('created_at', '<=', $endDate);
         }
 
-        
+
         $bankGoals = $query->get();
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
         return view('goal.bank', compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));

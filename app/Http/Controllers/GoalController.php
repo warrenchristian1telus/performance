@@ -45,7 +45,6 @@ class GoalController extends Controller
             $goals = $user->sharedGoals()
                 /* ->whereNotIn('goals.id', $referencedGoals ) */
                 ->paginate(4);
-
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
         }
@@ -201,6 +200,7 @@ class GoalController extends Controller
 
     public function goalBank(Request $request) {
         $query = Goal::withoutGlobalScope(NonLibraryScope::class)
+            ->where('is_library', true)
             ->with('goalType')
             ->with('user');
         if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
@@ -232,7 +232,7 @@ class GoalController extends Controller
             $query = $query->whereDate('created_at', '<=', $endDate);
         }
 
-
+        
         $bankGoals = $query->get();
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
         return view('goal.bank', compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));
@@ -360,8 +360,8 @@ class GoalController extends Controller
         $newGoal->what = $goal->what;
         $newGoal->how = $goal->how;
         $newGoal->measure_of_success = $goal->measure_of_success;
-        $newGoal->start_date = $request->start_date;
-        $newGoal->target_date = $request->target_date;
+        $newGoal->start_date = $goal->start_date;
+        $newGoal->target_date = $goal->target_date;
         $newGoal->status = $goal->status;
         $newGoal->goal_type_id = $goal->goal_type_id;
         $newGoal->user_id = Auth::id();

@@ -1,9 +1,17 @@
 <x-side-layout>
     <h3>Conversations</h3>
+    @include('conversation.partials.compliance-message')
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
     </div>
     <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <p>
+                    Select a topic below to set up a performance conversation. Templates include suggestions for when to select a given conversation topic, questions to consider when having the conversation, and an attestation and sign-off area to formalize the results.
+                </p>
+            </div>
+        </div>
         <div class="row">
             <div class="col-8">
                 <form action="" id="search-templates-form">

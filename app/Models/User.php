@@ -24,6 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'azure_id',
+        'samaccountname',
+        'guid',
         'reporting_id',
         'excused_start_date',
         'excused_end_date',

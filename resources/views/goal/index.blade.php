@@ -13,7 +13,7 @@
                 Create New Goal
             </x-button>
             <x-button icon="clone" href="{{ route('goal.library') }}" class="dropdown-item">
-                Add Goals from List of Suggestions
+                Add Goals from Goal Bank
             </x-button>
         </div>
     </div>

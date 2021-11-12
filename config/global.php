@@ -23,6 +23,7 @@ return [
 
     'conversation' => [
         'topic' => [
+            // Performance Check-in
             '1' => [
                 'questions' => [
                     'Overall, how would you describe your work since our last check-in?',
@@ -40,6 +41,7 @@ return [
                     'What (if any) concerns do you have when it comes to giving me feedback? How can I alleviate those concerns?',
                 ],
             ],
+            // Goal Setting
             '2' => [
                 'questions' => [
                     'Reflecting on our ministry, branch, and team goals, which ones are you responsible for and most interested in? How might your personal goals align with those of the organization?',
@@ -54,6 +56,7 @@ return [
                     'What are the barriers to your success? How will you overcome them?',
                 ],
             ],
+            // Career Development
             '3' => [
                 'questions' => [
                     'What are your career goals? What do you think you need to get there?',
@@ -69,6 +72,7 @@ return [
                     'Do you have specific goals you’d like to achieve in the next year, two years, longer?',
                 ],
             ],
+            // Performance Improvement
             '4' => [
                 'questions' => [
                     'Tell me about how things have been going for you in your role. ',
@@ -83,6 +87,7 @@ return [
                     'Is there anything else you would like to share with me or any other reasonable support that I can offer?',
                 ],
             ],
+            // Recognition
             '5' => [
                 'questions' => [
                     'Supervisor: Provide a verbal overview of the actions or results being celebrated. Be as specific as possible about timing, activities, and outcomes achieved. Highlight behaviours, competencies, and corporate values that you feel contributed to the success. Connect the work to the goals and/or values of the organization.',
@@ -92,6 +97,7 @@ return [
                     'How would you like to celebrate success? Do you prefer one-on-one discussions or would you like more public or team-oriented recognition?',
                 ],
             ],
+            // Onboarding
             '6' => [
                 'questions' => [
                     'Do you have a clear understanding of the expectations for this role?',

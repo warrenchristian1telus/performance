@@ -61,13 +61,14 @@
 
     </div>
     
-    <div class="rounded text-primary p-2 mt-2">
-        <h6 class="text-underline">Questions to consider</h6>
-        <ul>
-            @forEach($template->questions as $question) 
-            <li> {{ $question }}</li>
-            @endforeach
-        </ul>
+    <div class="rounded p-2 mt-2">
+        <h6 class="text-underline text-primary">Preparing for the Conversation</h6>
+        {!!$template->preparing_for_conversation!!}
+    </div>
+
+    <div class="rounded p-2 mt-2">
+        <h6 class="text-underline text-primary">Suggested Discussion Questions</h6>
+        {!!$template->question_html!!}
     </div>
 
     <button class="btn w-100 d-flex align-items-center text-primary p-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#supporting_material"> 

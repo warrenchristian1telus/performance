@@ -19,29 +19,35 @@ class AzureLoginController extends SocialiteBaseController {
     public function login()
     {
         return Socialite::driver($this->provider)
-            ->scopes(['openid', 'email'])
+            ->scopes(['openid', 'email', 'profile'])
             ->redirect();
     }
 
     public function handleCallback() {
         try {
 
-            $user = Socialite::driver($this->provider)->user();
+            // $token = Socialite::with($this->provider)->getAccessTokenResponse($request->code);
+            $user = Socialite::with($this->provider)->user();
+            
+            $idToken = $user->accessTokenResponseBody['id_token'];
+            $parsedToken = $this->parseToken($idToken);
+            
             $isUser = User::where($this->col, $user->id)->first();
-
             if ($isUser) {
                 Auth::login($isUser);
-                return redirect('/dashboard');
+                return redirect('/');
             } else {
                 $createUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
                     $this->col => $user->id,
+                    'samaccountname' => $parsedToken->samaccountname,
+                    'guid' => $parsedToken->bcgovGUID,
                     'password' => ''
                 ]);
 
                 Auth::login($createUser);
-                return redirect('/dashboard');
+                return redirect('/');
             }
         } catch (Exception $exception) {
             abort(500);

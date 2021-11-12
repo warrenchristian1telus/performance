@@ -424,8 +424,13 @@
                         result = response.data;
                         Object.keys(result).forEach((key) => {
                             $input = $editSuggestedGoalModal.find('[name='+key+']');
-                            if($input.length)
-                                $input.val(result[key]);
+                            if($input.length) {
+                                if (key === 'start_date' || key === 'target_date') {
+                                    $input.val(result[key].substring(0, 10));
+                                } else {
+                                    $input.val(result[key]);
+                                }
+                            }
                         });
                         const action = $editSuggestedGoalModal.find('form').attr('action');
                         $editSuggestedGoalModal.find('form').attr('action', action + '/' + goalId);

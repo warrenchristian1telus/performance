@@ -32,6 +32,13 @@
                         <div class="col-6">
                             <x-textarea label="Measures of Success" name="measure_of_success" />
                         </div>
+
+                        <div class="col-sm-6">
+                            <x-input label="Start Date" type="date" name="start_date" />
+                        </div>
+                        <div class="col-sm-6">
+                            <x-input label="Target Date" type="date" name="target_date" />
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer text-right">

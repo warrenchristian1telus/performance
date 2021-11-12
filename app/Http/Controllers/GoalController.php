@@ -135,7 +135,8 @@ class GoalController extends Controller
      */
     public function edit($id)
     {
-        $goal = Goal::where('user_id', Auth::id())
+        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)
+            ->where('user_id', Auth::id())
             ->where('id', $id)
             ->with('goalType')
             ->firstOrFail();
@@ -155,12 +156,12 @@ class GoalController extends Controller
      */
     public function update(CreateGoalRequest $request, $id)
     {
-        $goal = Goal::findOrFail($id);
+        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->findOrFail($id);
         $input = $request->validated();
 
         $goal->update($input);
 
-        return redirect()->route('goal.index');
+        return redirect()->route($goal->is_library ? 'my-team.suggested-goals' : 'goal.index');
     }
 
     public function getSuggestedGoal($id) {
@@ -204,9 +205,11 @@ class GoalController extends Controller
             ->with('goalType')
             ->with('user');
         if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
-            $query = $query->where('is_mandatory', $request->is_mandatory);
-            if (!$request->is_mandatory) {
-                $query = $query->orWhereNull('is_mandatory');
+            if ($request->is_mandatory == "1") {
+                $query = $query->where('is_mandatory', $request->is_mandatory);
+            }
+            else {
+                $query = $query->whereNull('is_mandatory');
             }
         }
 

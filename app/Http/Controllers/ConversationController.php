@@ -184,7 +184,8 @@ class ConversationController extends Controller
         }
         $templates = $query->get();
         $searchValue = $request->search ?? '';
-        return view('conversation.templates', compact('templates', 'searchValue'));
+        $conversationMessage = Conversation::warningMessage();
+        return view('conversation.templates', compact('templates', 'searchValue', 'conversationMessage'));
     }
 
     public function templateDetail($id) {

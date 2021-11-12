@@ -32,7 +32,9 @@ class AddGoalToLibraryRequest extends FormRequest
             'goal_type_id' => 'required|exists:goal_types,id',
             'itemsToShare' => 'required|array',
             'itemsToShare.*' => 'exists:users,id',
-            'is_mandatory' => 'required|boolean'
+            'is_mandatory' => 'required|boolean',
+            'start_date' => 'required|date',
+            'target_date' => 'required|date'
         ];
     }
 

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Carbon\Carbon;
 
 class AdditionalUsersTableSeeder extends Seeder
 {
@@ -28,19 +29,24 @@ class AdditionalUsersTableSeeder extends Seeder
                 $user = [
                     'email' => $dept . $i . '@example.com',
                     'name' => $dept . $i,
-                    'password' => $dept . $i . '@123'
+                    'password' => $dept . $i . '@123',
+                    'joining_date' => Carbon::now()->subMonths(rand(2,10))
                 ];
                 array_push($users, $user);
             }
         }
 
         foreach ($users as $user) {
-            User::updateOrCreate([
+            $entry = User::updateOrCreate([
                 'email' => $user['email'],
             ], [
                 'name' => $user['name'],
                 'password' => Hash::make($user['password']),
+                'joining_date' => $user['joining_date']
             ]);
+
+            $entry->assignRole('employee');
+
         }
     }
 }

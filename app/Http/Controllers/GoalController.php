@@ -109,9 +109,16 @@ class GoalController extends Controller
 
             $user = User::findOrFail($goal->user_id);
             if ($goal->last_supervisor_comment == 'Y' and ($goal->user_id == session()->get('original-auth-id') or session()->get('original-auth-id') == null)) {
+              
               $goal->last_supervisor_comment = 'N';
               $goal->save();
-            }
+
+              $affected = DashboardNotification::where('notification_type', 'G')
+                ->where('related_id', $goal->id)
+                ->wherenull('status')
+                ->update(['status' => 'R']);
+
+            };
 
         return view('goal.show', compact('goal', 'linkedGoals'));
     }

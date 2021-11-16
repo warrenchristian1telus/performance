@@ -12,7 +12,7 @@ class DashboardNotification extends Model
   protected $table = 'dashboard_notifications';
 
   protected $fillable = [
-      'id', 'user_id', 'notification_type', 'comment', 'related_id'
+      'id', 'user_id', 'notification_type', 'comment', 'related_id', 'status'
   ];
 
   public function relatedGoal() {

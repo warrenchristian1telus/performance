@@ -216,7 +216,10 @@ class GoalController extends Controller
                 $query = $query->where('is_mandatory', $request->is_mandatory);
             }
             else {
-                $query = $query->whereNull('is_mandatory');
+                $query = $query->where(function ($query) {
+                    $query->whereNull('is_mandatory');
+                    $query->orWhere('is_mandatory', 0);
+                });
             }
         }
 

@@ -30,7 +30,7 @@ class AdditionalUsersTableSeeder extends Seeder
                     'email' => $dept . $i . '@example.com',
                     'name' => $dept . $i,
                     'password' => $dept . $i . '@123',
-                    'joining_date' => Carbon::now()->subMonths(rand(2,10))
+                    'joining_date' => Carbon::createFromFormat('Y-m-d', '2021-11-01') // Carbon::now()->subMonths(rand(2,10))
                 ];
                 array_push($users, $user);
             }

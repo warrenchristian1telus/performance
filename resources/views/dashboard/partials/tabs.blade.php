@@ -17,10 +17,12 @@
             <span class="badge badge-{{$tab == 'notifications' ? 'primary' : 'secondary' }}">{{$unread_count}}</span>
         </x-button>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{$tab == 'poc'  ? 'border-primary' : ''}}">
-        <x-button style="-" :href="route('dashboard.poc')">
-            POC
-            <span class="badge badge-{{$tab == 'todo' ? 'primary' : 'secondary'}}"></span>
-        </x-button>
-    </div>
+    {{-- 
+        <div class="px-4 py-1 mr-2 border-bottom {{$tab == 'poc'  ? 'border-primary' : ''}}">
+            <x-button style="-" :href="route('dashboard.poc')">
+                POC
+                <span class="badge badge-{{$tab == 'todo' ? 'primary' : 'secondary'}}"></span>
+            </x-button>
+        </div>
+    --}}
 </div>

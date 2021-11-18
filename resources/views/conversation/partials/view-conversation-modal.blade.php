@@ -136,7 +136,7 @@
 
                     <h6><u>Comments</u></h6>
 
-                    <h6>Employee Comments</h6>
+                    <h6>Employee Comments and Action Items</h6>
 
                     <div class="row">
                         <div class="col-md-8">
@@ -149,7 +149,7 @@
                         @endif
                         </div>
                     </div>
-                    <h6>Supervisor Comments</h6>
+                    <h6>Supervisor Comments and Action Items</h6>
                     <div class="row">
                         <div class="col-md-8">
                             <textarea class="form-control info_comment5 mb-4 d-none" name="info_comment5" id="info_comment5_edit"></textarea>

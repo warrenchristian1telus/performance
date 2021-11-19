@@ -247,19 +247,19 @@ return [
             'active' => ['conversation/*'],
             'can' => ['conversions']
         ],
-        [
-            'text' => 'My Team',
-            'url'  => 'my-team/my-employees',
-            'icon' => 'fas fa-fw fa-users',
-            'active' => ['my-team/*'],
-            'can' => ['my team']
-        ],
-        [
-            'text' => 'Resources',
-            'url'  => 'resource/user-guide',
-            'icon' => 'fas fa-fw fa-bullseye',
-            'active' => ['resource/*']
-        ]
+        // [
+        //     'text' => 'My Team',
+        //     'url'  => 'my-team/my-employees',
+        //     'icon' => 'fas fa-fw fa-users',
+        //     'active' => ['my-team/*'],
+        //     'can' => ['my team']
+        // ],
+        // [
+        //     'text' => 'Resources',
+        //     'url'  => 'resource/user-guide',
+        //     'icon' => 'fas fa-fw fa-bullseye',
+        //     'active' => ['resource/*']
+        // ]
     ],
 
     /*

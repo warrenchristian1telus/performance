@@ -53,4 +53,9 @@ class AzureLoginController extends SocialiteBaseController {
             abort(500);
         }
     }
+
+    private function parseToken ($token) {
+        $base64Data = explode(".", $token)[1];
+        return json_decode(base64_decode($base64Data));
+    }
 }

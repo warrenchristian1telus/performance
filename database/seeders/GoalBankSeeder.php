@@ -72,7 +72,7 @@ class GoalBankSeeder extends Seeder
             ], $goal_type);
         }
         $userIds = [];
-        for ($i = 11; $i< 209; $i++) {
+        for ($i = 11; $i< 219; $i++) {
             $userIds[] = $i;
         }
 

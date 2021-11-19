@@ -80,7 +80,7 @@
                 <div>
                     <h5 id="template-title"></h5>
                     <br>
-                    <h6><u>Questions to Consider</u></h6>
+                    <h6><u>Suggested Discussion Questions</u></h6>
                     <ul id="questions-to-consider">
 
                     </ul>

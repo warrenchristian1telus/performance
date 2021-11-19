@@ -22,7 +22,7 @@ class AdditionalUsersTableSeeder extends Seeder
         $users = [];
         foreach ($departments as $dept) {
             $loopCount = $NO_OF_ACCOUNT_PER_DEPT;
-            if ($dept === 'PSA') {
+            if ($dept === 'PSA' || $dept === 'AG') {
                 $loopCount = 19;
             }
             for ($i=1; $i <= $loopCount; $i++) { 

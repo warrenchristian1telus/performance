@@ -38,8 +38,10 @@ class DashboardController extends Controller
             $greetings = "Hello";
         }
 
-        $tab = (Route::current()->getName() == 'dashboard.notifications') ? 'notifications' : 'todo';
-        $notifications = DashboardNotification::where('user_id', Auth::id())->get();
+        // $tab = (Route::current()->getName() == 'dashboard.notifications') ? 'notifications' : 'todo';
+        $tab = (Route::current()->getName() == 'dashboard.notifications') ? 'notifications' : 'notifications';
+        // $notifications = DashboardNotification::where('user_id', Auth::id())->get();
+        $notifications = DashboardNotification::where('user_id', Auth::id())->orderby('status', 'asc')->orderby('created_at', 'desc')->paginate(8);
         $supervisorTooltip = 'If your current supervisor within My Performance is incorrect, please have your supervisor submit an AskMyHR ticket and choose the category: <span class="text-primary">My Team of Organization > HR Software > Systems Support > Position / Reporting Updates</span>';
         $sharedList = SharedProfile::where('shared_id', Auth::id())->with('sharedWithUser')->get();
         return view('dashboard.index', compact('greetings', 'tab', 'supervisorTooltip', 'sharedList', 'notifications'));
@@ -52,15 +54,37 @@ class DashboardController extends Controller
     }
 
     public function destroyall(Request $request)
-    { 
+    {
         $ids = $request->ids;
         DashboardNotification::wherein('id',explode(",",$ids))->delete();
-        //return back();
+        return redirect()->back();
         //window.location.reload();
         //return route::get('dashboard.notifications');
         //return view('dashboard.partials.notifications');
-        //return Redirect()->back();
-        return response()->json(['success'=>"Notification(s) deleted successfully."]);
+        // return Redirect()->route('dashboard.notifications');
+        // return response()->json(['success'=>"Notification(s) deleted successfully."]);
+    }
+
+    public function updatestatus(Request $request)
+    {
+        $ids = $request->ids;
+        // var check = confirm($ids);
+        // dd("RESULTS: " . $ids);
+        DashboardNotification::wherein('id',explode(",",$ids))->update(['status' => 'R']);
+        // return route::get('dashboard.notifications');
+        return redirect()->back();
+        // $notification = DashboardNotification::where('id', 4)->update(['status' => 'S']);
+        // return back();
+        // return response()->json(['success'=>"Notification(s) updated successfully."]);
+    }
+
+    public function resetstatus(request $request)
+    {
+        $ids = $request->ids;
+        DashboardNotification::wherein('id',explode(",",$ids))->update(['status' => null]);
+        // DashboardNotification::where('id',5)->update(['status' => 'D']);
+        return redirect()->back();
+        // return response()->json(['success'=>"Notification(s) updated successfully."]);
     }
 
 }

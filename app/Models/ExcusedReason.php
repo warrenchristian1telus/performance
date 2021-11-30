@@ -11,6 +11,8 @@ class ExcusedReason extends Model
     protected $table = 'excused_reasons';
 
     protected $fillable = [
-        'id', 'name', 'description'
+        'id',
+        'name',
+        'description'
     ];
 }

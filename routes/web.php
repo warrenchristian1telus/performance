@@ -12,19 +12,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
     Route::get('/', function () {
-        return view('welcome');	 
+        return view('welcome');
     });
     Route::middleware(['ViewShare'])->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.todo');
-        Route::get('/dashboard/notifications', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.notifications');
-        Route::delete('/dashboard/notifications', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.notifications');
-        Route::delete('/dashboard/notification/{id}',[DashboardController::class, 'destroy'])->name('dashboard.destroy');
+        Route::match(['get', 'post', 'delete', 'put'], '/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+        Route::delete('/dashboard/{id}',[DashboardController::class, 'destroy'])->name('dashboard.destroy');
+        Route::get('/dashboarddeleteall',[DashboardController::class, 'destroyall'])->name('dashboard.destroyall');
         Route::delete('/dashboarddeleteall',[DashboardController::class, 'destroyall'])->name('dashboard.destroyall');
+        Route::get('/dashboardupdatestatus',[DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.notifications');
+        Route::post('/dashboardupdatestatus',[DashboardController::class, 'updatestatus'])->name('dashboard.updatestatus');
+        Route::get('/dashboardresetstatus', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard.notifications');
+        Route::post('/dashboardresetstatus',[DashboardController::class, 'resetstatus'])->name('dashboard.resetstatus');
         Route::middleware(['auth'])->group(function () {
             require __DIR__ . '/goal.php';
             require __DIR__ . '/conversation.php';
             require __DIR__ . '/resource.php';
             require __DIR__ . '/my-team.php';
+            require __DIR__ . '/poc.php';
         });
     });
     Route::get('/my-performance', function () {

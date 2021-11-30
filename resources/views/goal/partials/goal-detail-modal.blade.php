@@ -9,7 +9,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="data-placeholder"></div>
+            <div class="modal-body data-placeholder"></div>
         </div>
     </div>
 </div>

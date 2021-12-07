@@ -31,11 +31,10 @@
                 <label style="font-weight: 400;" class="w-100">
                     Participants
                    <select class="form-control w-100 select2" style="width:100%;" multiple name="participant_id[]" id="participant_id" required>
-                       @foreach($participants as $p)
-                       <option value="{{ $p->id }}">{{ $p->name }}</option>
-                       @endforeach
+                        @foreach($participants as $p)
+                        <option value="{{ $p->id }}">{{ $p->name }}</option>
+                        @endforeach
                    </select>
-
                 </label>
             </div>
             <div>

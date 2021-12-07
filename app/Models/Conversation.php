@@ -14,7 +14,7 @@ class Conversation extends Model
     use HasFactory, SoftDeletes;
 
     protected $with = ['topic', 'conversationParticipants', 'conversationParticipants.participant'];
-    protected $appends = ['c_date', 'c_time', 'questions', 'date_time', 'is_current_user_participant'];
+    protected $appends = ['c_date', 'c_time', 'questions', 'date_time', 'is_current_user_participant', 'is_with_supervisor'];
 
     protected $casts = [
         'date' => 'datetime:Y-m-d',
@@ -29,6 +29,19 @@ class Conversation extends Model
     public function conversationParticipants()
     {
         return $this->hasMany('App\Models\ConversationParticipant');
+    }
+
+    // If conversation is with 
+    public function getIsWithSupervisorAttribute() {
+        $reportingManager = Auth::user()->reportingManager()->first();
+        if (!$reportingManager) {
+            return false;
+        }
+        foreach ($this->conversationParticipants->toArray() as $cp) {
+            if ($cp['participant_id'] === $reportingManager->id)
+                return true;
+        }
+        return false;
     }
 
     public function getCDateAttribute()

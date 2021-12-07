@@ -10,6 +10,7 @@ use App\Models\Conversation;
 use App\Models\ConversationParticipant;
 use App\Models\ConversationTopic;
 use App\Models\Participant;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -33,14 +34,23 @@ class ConversationController extends Controller
         $query = Conversation::with('conversationParticipants');
         $type = 'upcoming';
         if ($request->is('conversation/past')) {
-            $conversations = $query->where('user_id', $authId)->whereHas('conversationParticipants', function($query) use ($authId) {
-                return $query->where('participant_id', $authId);
-            })->whereNotNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
+            $conversations = $query->where(function($query) use ($authId) {
+                $query->where('user_id', $authId)->
+                    orWhereHas('conversationParticipants', function($query) use ($authId) {
+                    return $query->where('participant_id', $authId);
+                });
+            })->whereNotNull('signoff_user_id')->whereNotNull('supervisor_signoff_id')->orderBy('date', 'asc')->paginate(10);
             $type = 'past';
         } else {
-            $conversations = $query->where('user_id', $authId)->whereHas('conversationParticipants', function($query) use ($authId) {
-                return $query->where('participant_id', $authId);
-            })->whereNull('signoff_user_id')->orderBy('date', 'asc')->paginate(10);
+            $conversations = $query->where(function($query) use ($authId) {
+                $query->where('user_id', $authId)->
+                    orWhereHas('conversationParticipants', function($query) use ($authId) {
+                        return $query->where('participant_id', $authId);
+                    });
+            })->where(function($query) {
+                $query->whereNull('signoff_user_id')
+                    ->orWhereNull('supervisor_signoff_id');
+            })->orderBy('date', 'asc')->paginate(10);
         }
 
         return view('conversation.index', compact('type', 'conversations', 'conversationTopics', 'participants', 'conversationMessage'));
@@ -161,8 +171,14 @@ class ConversationController extends Controller
 
     public function signOff(SignoffRequest $request, Conversation $conversation)
     {
-        $conversation->signoff_user_id = Auth::id();
-        $conversation->sign_off_time = Carbon::now();
+        $user = User::find(Auth::id());
+        if ($user->hasRole('Supervisor')) {
+            $conversation->supervisor_signoff_id = Auth::id();
+            $conversation->supervisor_signoff_time = Carbon::now();
+        } else {
+            $conversation->signoff_user_id = Auth::id();
+            $conversation->sign_off_time = Carbon::now();
+        }
         $conversation->update();
 
         return response()->json(['success' => true, 'Message' => 'Sign Off Successfull', 'data' => $conversation]);
@@ -191,8 +207,9 @@ class ConversationController extends Controller
     public function templateDetail($id) {
         $template = ConversationTopic::findOrFail($id);
         $allTemplates = ConversationTopic::all();
-          $participants = Participant::all();
-
-        return view('conversation.partials.template-detail-modal-body', compact('template','allTemplates','participants'));
+        $participants = Auth::user()->reportees()->get();
+        $reportingManager = Auth::user()->reportingManager()->get();
+        $participants = $participants->toBase()->merge($reportingManager);
+        return view('conversation.partials.template-detail-modal-body', compact('template','allTemplates','participants','reportingManager'));
     }
 }

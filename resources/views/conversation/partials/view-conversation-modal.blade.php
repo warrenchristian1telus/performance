@@ -165,15 +165,15 @@
                     </div>
                     <hr>
                     @if ($showSignoff ?? true)
-                    @if ($type == 'upcoming')
-                    <div>
+                    <div id="signoff-form-block">
+                    <div id="employee-signoff-questions" class="d-none">
                         <h5><u>Sign-off</u></h5>
                         <div class="alert alert-default-danger common-error" style="display:none">
                             <span class="h5">
                                 
                             </span>
                         </div>
-                        <form id="sign_off_form" method="post">
+                        <form id="employee-sign_off_form" method="post">
                             @csrf
                             <table class="table table-borderless">
                                 <tr>
@@ -199,17 +199,52 @@
                             </table>
                         </form>
 
-                        <div class="my-2">Enter employee ID to sign:</div>
-
-                        <input type="text" id="employee_id" class="form-control d-inline w-50">
-                        <button class="btn btn-primary btn-sign-off ml-2" type="button">Sign with my employee ID</button>
-                        <br>
-                        <span class="text-danger error" data-error-for="employee_id"></span>
+                    </div>
+                    <div id="supervisor-signoff-questions" class="d-none">
+                        <h5><u>Sign-off</u></h5>
+                        <div class="alert alert-default-danger common-error" style="display:none">
+                            <span class="h5">
+                                
+                            </span>
+                        </div>
+                        <form id="supervisor-sign_off_form" method="post">
+                            @csrf
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th></th>
+                                    <th>Agree</th>
+                                    <th>Disagree</th>
+                                </tr>
+                                <tr>
+                                    <td>My employee and I reviewed the progress of goals and adjusted as necessary.</td>
+                                    <td class="text-center"><input type="radio" name="check_one" value="1"></td>
+                                    <td class="text-center"><input type="radio" name="check_one" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>I clearly communicated what is expected of my employee between now and our next scheduled meeting.</td>
+                                    <td class="text-center"><input type="radio" name="check_two" value="1"></td>
+                                    <td class="text-center"><input type="radio" name="check_two" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>I accept the content of this record of conversation.</td>
+                                    <td class="text-center"><input type="radio" name="check_three" value="1"></td>
+                                    <td class="text-center"><input type="radio" name="check_three" value="0"></td>
+                                </tr>
+                            </table>
+                        </form>
 
                     </div>
-                @endif
-                @if ($type == 'past') 
-                    <div class="my-2">Enter employee ID to unsign:</div>
+
+                    <div class="my-2">Enter 6 digit employee ID to sign:</div>
+
+                    <input type="text" id="employee_id" class="form-control d-inline w-50">
+                    <button class="btn btn-primary btn-sign-off ml-2" type="button">Sign with my employee ID</button>
+                    <br>
+                    <span class="text-danger error" data-error-for="employee_id"></span>
+                </div>
+               
+                <div id="unsignoff-form-block">
+                    <div class="my-2">Enter 6 digit employee ID to unsign:</div>
                     <form id="unsign-off-form" data-action-url="{{ route('conversation.unsignoff', 'xxx')}}" method="post">
                         @csrf
                         <input type="text" name="employee_id" id="employee_id" class="form-control d-inline w-50"> 
@@ -217,8 +252,14 @@
                         <br>
                         <span class="text-danger error" data-error-for="employee_id"></span>
                     </form>
+                </div>
                 @endif
-                @endif
+                <div class="mt-3 alert alert-default-warning alert-dismissible" id="supervisor-signoff-message">
+                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i>Your supervisor has <b class="not d-none">not</b> signed this record of conversation</span>
+                </div>
+                <div class="mt-3 alert alert-default-warning alert-dismissible" id="employee-signoff-message">
+                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i>Your employee has <b class="not d-none">not</b> signed this record of conversation</span>
+                </div>
             </div>
         </div>
 

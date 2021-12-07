@@ -18,7 +18,7 @@
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
                 <div class="callout callout-info">
-                    <h6>{{ $c->topic->name }}</h6>
+                    <h6>{{ $c->topic->name }} @if($c->date_time->isPast())<i class="fas fa-exclamation-triangle text-danger ml-2" data-toggle="tooltip" title="Conversation is past due. Employee signoff is required" tooltip="Conversation is Past"></i>@endif</h6>
                     <span class="mr-2">
                         With
                         @foreach ($c->conversationParticipants as $p)
@@ -72,6 +72,7 @@
     <x-slot name="js">
         <script>
             $("#participant_id").select2();
+            var isSupervisor = {{Auth::user()->hasRole('Supervisor') ? 'true' : 'false'}};
             var conversation_id = 0;
             var toReloadPage = false;
             $('#conv_participant_edit').select2({
@@ -191,17 +192,34 @@
             });
 
             $(document).on('click', '.btn-sign-off', function(e) {
-                const confirmMessage = ($(this).data('action') === 'unsignoff') ? 
-                    'Un-signing will move this record back to the Upcoming Conversations tab. You can click there to access and edit it. Continue?' :
-                    'Signing off will move this record to the Past Conversations tab. You can click there to access it again at any time. Continue?';
+                const supervisorSignOffDone = !!$('#viewConversationModal').data('supervisor-signoff');
+                const employeeSignOffDone = !!$('#viewConversationModal').data('employee-signoff');
+                const isUnsignOff = $(this).data('action') === 'unsignoff';
+                let confirmMessage = '';
+
+                if (isUnsignOff) {
+                    confirmMessage = 'Un-signing will move this record back to the Upcoming Conversations tab. You can click there to access and edit it. Continue?';
+                } else {
+                    if ((isSupervisor && employeeSignOffDone) || (!isSupervisor && supervisorSignOffDone)) {
+                        confirmMessage = "Signing off will move this record to the Past Conversations tab. You can click there to access it again at any time. Continue?";
+                    }
+                    else if (isSupervisor && !employeeSignOffDone) {
+                        confirmMessage = "Signing off will lock the content of this record. Employee signature is still required.";
+                    }
+                    else if (!isSupervisor && !supervisorSignOffDone) {
+                        confirmMessage = "Signing off will lock the content of this record. Supervisor signature is still required.";
+                    }
+                }
+
                 if (!confirm(confirmMessage)) {
                     return;
                 }
+                const formType = isSupervisor ? 'supervisor-' : 'employee-';
                 const url = ($(this).data('action') === 'unsignoff') ? '/conversation/unsign-off/' + conversation_id : '/conversation/sign-off/' + conversation_id;
-                const data = ($(this).data('action') === 'unsignoff') ? $('#unsign-off-form').serialize() : $('#sign_off_form').serialize() + '&' +
-                        $.param({
-                            'employee_id': $('#employee_id').val()
-                        });
+                const data = ($(this).data('action') === 'unsignoff') ? $('#unsign-off-form').serialize() : $('#'+formType+'sign_off_form').serialize() + '&' +
+                    $.param({
+                        'employee_id': $('#employee_id').val()
+                    });
                 $(this).html("<div class='spinner-border spinner-border-sm' role='status'></div>");
                 const that = this;
                 $("span.error").html("");
@@ -274,6 +292,7 @@
                 $.ajax({
                     url: '/conversation/' + conversation_id
                     , success: function(result) {
+                        isSupervisor = !result.is_with_supervisor;
                         $('#conv_participant_edit').val('');
                         $('#conv_participant').val('');
                         $('#conv_title').text(result.topic.name);
@@ -294,7 +313,43 @@
                         $('#info_comment4_edit').text(result.info_comment4);
                         $('#info_comment5').text(result.info_comment4);
                         $('#info_comment5_edit').text(result.info_comment4);
+                        if (!isSupervisor) {
+                            $('#employee-signoff-questions').removeClass('d-none');
+                            $('#supervisor-signoff-questions').addClass('d-none');
+                            $('#employee-signoff-message').addClass('d-none');
+                            $('#supervisor-signoff-message').removeClass('d-none');
 
+                        } else {
+                            $('#employee-signoff-questions').addClass('d-none');
+                            $('#supervisor-signoff-questions').removeClass('d-none');
+                            $('#employee-signoff-message').removeClass('d-none');
+                            $('#supervisor-signoff-message').addClass('d-none');
+                        }
+
+                        if (!!result.supervisor_signoff_id) {
+                            $('#supervisor-signoff-message').find('.not').addClass('d-none');
+                            $('#viewConversationModal').data('supervisor-signoff', 1);
+                        }
+                        else {
+                            $('#supervisor-signoff-message').find('.not').removeClass('d-none');
+                            $('#viewConversationModal').data('supervisor-signoff', 0);
+                        }
+                        if (!!result.signoff_user_id) {
+                            $('#employee-signoff-message').find('.not').addClass('d-none');
+                            $('#viewConversationModal').data('employee-signoff', 1);
+                        } else {
+                            $('#employee-signoff-message').find('.not').removeClass('d-none');
+                            $('#viewConversationModal').data('employee-signoff', 0);
+                        }
+                        const currentEmpSignoffDone = isSupervisor ? !!result.supervisor_signoff_id : !!result.signoff_user_id
+                        if (currentEmpSignoffDone) {
+                            $("#signoff-form-block").hide();
+                            $("#unsignoff-form-block").show();
+                        } else {
+                            $("#unsignoff-form-block").hide();
+                            $("#signoff-form-block").show();
+                        }
+                        
                         if(!!$('#unsign-off-form').length) {
                             $('#unsign-off-form').attr('action', $('#unsign-off-form').data('action-url').replace('xxx', conversation_id));
                         }
@@ -320,7 +375,6 @@
                             $('#conv_title_edit').append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
                         });
                         $.each(result.conversation_participants, function(key, value) {
-                            debugger;
                             var data = {
                                 id: value.participant_id
                                 , text: value.participant.name

@@ -18,7 +18,7 @@
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
                 <div class="callout callout-info">
-                    <h6>{{ $c->topic->name }} @if($c->date_time->isPast())<i class="fas fa-exclamation-triangle text-danger ml-2" data-toggle="tooltip" title="Conversation is past due. Employee signoff is required" tooltip="Conversation is Past"></i>@endif</h6>
+                    <h6>{{ $c->topic->name }} </h6>
                     <span class="mr-2">
                         With
                         @foreach ($c->conversationParticipants as $p)

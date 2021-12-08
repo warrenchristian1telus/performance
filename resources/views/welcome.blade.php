@@ -29,6 +29,8 @@
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Log in</a>
 
+                        <div> <a href="{{ 'login/graph' }}" class="text-sm text-gray-700 underline">Log in with Azure ID</a> </div>
+
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
                         @endif

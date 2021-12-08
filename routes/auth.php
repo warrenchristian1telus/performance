@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AzureLoginController;
+use App\Http\Controllers\Auth\MicrosoftGraphLoginController;
 /* use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -12,11 +13,30 @@ use App\Http\Controllers\Auth\VerifyEmailController; */
 
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
+use App\MicrosoftGraph\SendMail;
 
 
 Route::get('/login/microsoft', [AzureLoginController::class, 'login'])->name('ms-login');
 
-Route::get('/login/microsoft/callback', [AzureLoginController::class, 'handleCallback'])->name('ms-callback');
+// Route::get('/login/microsoft/callback', [AzureLoginController::class, 'handleCallback'])->name('ms-callback');
+
+// MS Graph API Authenication -- composer require league/oauth2-client  microsoft/microsoft-graph
+Route::get('/login/microsoft/callback', [MicrosoftGraphLoginController::class, 'callback']);
+Route::get('/login/graph', [MicrosoftGraphLoginController::class, 'signin'])
+                 ->middleware('guest')
+                 ->name('login');
+Route::post('/logout', [MicrosoftGraphLoginController::class, 'destroy'])
+                ->middleware('auth')
+                ->name('logout');
+// Test function                 
+Route::get('/graph/sendmail', function() {
+
+    $sendMail = new SendMail();
+    $response = $sendMail->send(['james.poon@telus.com', 'myphd2@gmail.com'],   "test email from BC Govt",
+         "this is for testing purpose");
+    return view('dashboard');
+
+})->middleware('auth')->name('sendmail');
 
 /* 
 Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -69,6 +89,8 @@ Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])
 Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store'])
                 ->middleware('auth');
  */
+/*
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('logout');
+*/

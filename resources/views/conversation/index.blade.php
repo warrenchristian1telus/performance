@@ -47,8 +47,7 @@
                             {{$p->participant->name}}&nbsp;
                         @endforeach
                     </span> |
-                    <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
-                    <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span>
+                    <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span>
                     <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
                         View
                     </button>
@@ -73,6 +72,7 @@
         <script>
             $("#participant_id").select2();
             var isSupervisor = {{Auth::user()->hasRole('Supervisor') ? 'true' : 'false'}};
+            var currentUser = {{Auth::Id()}};
             var conversation_id = 0;
             var toReloadPage = false;
             $('#conv_participant_edit').select2({
@@ -150,7 +150,6 @@
                 // Show Loader Spinner...
                 $(this).html("<div class='spinner-border spinner-border-sm' role='status'></div>");
                 $(".error-date-alert").hide();
-                debugger;
                 const that = this;
                 $.ajax({
                     url: '/conversation/' + conversation_id
@@ -282,10 +281,18 @@
                     , $('#delete-conversation-form').data('action').replace('xxx', $(this).data('id'))
                 ).submit();
             });
-            $(document).on('hide.bs.modal', '#viewConversationModal', function() {
+            $(document).on('hide.bs.modal', '#viewConversationModal', function(e) {
                 if (toReloadPage) {
                     window.location.reload();
+                } else {
+                    if (!confirm("If you continue you will lose any unsaved information.")) {
+                        e.preventDefault();
+                    }
                 }
+            });
+
+            $(document).on('show.bs.modal', '#viewConversationModal', function(e) {
+                $("#viewConversationModal").find("textarea").val('');
             });
 
             function updateConversation(conversation_id) {
@@ -313,17 +320,25 @@
                         $('#info_comment4_edit').text(result.info_comment4);
                         $('#info_comment5').text(result.info_comment4);
                         $('#info_comment5_edit').text(result.info_comment4);
+                        
+                        user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
+                        user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
+                        
                         if (!isSupervisor) {
                             $('#employee-signoff-questions').removeClass('d-none');
                             $('#supervisor-signoff-questions').addClass('d-none');
-                            $('#employee-signoff-message').addClass('d-none');
+                            //$('#employee-signoff-message').addClass('d-none');
                             $('#supervisor-signoff-message').removeClass('d-none');
-
+                            $('#supervisor-signoff-message').find('.name').html(user2.participant.name);
+                            $('#employee-signoff-message').find('.name').html(user1.participant.name);
                         } else {
                             $('#employee-signoff-questions').addClass('d-none');
                             $('#supervisor-signoff-questions').removeClass('d-none');
                             $('#employee-signoff-message').removeClass('d-none');
-                            $('#supervisor-signoff-message').addClass('d-none');
+                            // $('#supervisor-signoff-message').addClass('d-none');
+                            $('#supervisor-signoff-message').find('.name').html(user1.participant.name);
+                            $('#employee-signoff-message').find('.name').html(user2.participant.name);
+
                         }
 
                         if (!!result.supervisor_signoff_id) {

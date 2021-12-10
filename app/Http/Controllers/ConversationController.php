@@ -171,8 +171,7 @@ class ConversationController extends Controller
 
     public function signOff(SignoffRequest $request, Conversation $conversation)
     {
-        $user = User::find(Auth::id());
-        if ($user->hasRole('Supervisor')) {
+        if (!$conversation->is_with_supervisor) {
             $conversation->supervisor_signoff_id = Auth::id();
             $conversation->supervisor_signoff_time = Carbon::now();
         } else {
@@ -186,7 +185,13 @@ class ConversationController extends Controller
 
     public function unsignOff(UnSignoffRequest $request, Conversation $conversation)
     {
-        $conversation->signoff_user_id = null;
+        if (!$conversation->is_with_supervisor) {
+            $conversation->supervisor_signoff_id = null;
+            $conversation->supervisor_signoff_time = null;
+        } else {
+            $conversation->signoff_user_id = null;
+            $conversation->sign_off_time = null;
+        }
         $conversation->update();
 
         return

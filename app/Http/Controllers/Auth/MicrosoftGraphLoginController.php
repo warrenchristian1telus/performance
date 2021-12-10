@@ -64,7 +64,7 @@ class MicrosoftGraphLoginController extends Controller
              ->with('error', 'Invalid auth state')
              ->with('errorDetail', 'The provided auth state did not match the expected value');
          }
-     
+
          // Authorization code should be in the "code" query param
          $authCode = $request->query('code');
          if (isset($authCode)) {
@@ -128,8 +128,8 @@ class MicrosoftGraphLoginController extends Controller
 
                 if (!($isUser->guid)) {
                   if (array_key_exists('bcgovGUID', $parsedToken)) {
-                      $isUser->samaccountname = array_key_exists('samaccountname', $parsedToken) ? $parsedToken->samaccountname : null;
-                      $isUser->guid = array_key_exists('bcgovGUID', $parsedToken) ? $parsedToken->bcgovGUID : null;
+                      $isUser->samaccountname = property_exists($parsedToken, 'samaccountname') ? $parsedToken->samaccountname : null;
+                      $isUser->guid = property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null;
                       $isUser->save();
                   }
                 }
@@ -144,8 +144,8 @@ class MicrosoftGraphLoginController extends Controller
                     'email' => $user->getMail(),
                     'azure_id' => $user->getId(),
                     'password' => Hash::make('WatchDog'),
-                    'samaccountname' => array_key_exists('samaccountname', $parsedToken) ? $parsedToken->samaccountname : null,
-                    'guid' => array_key_exists('bcgovGUID', $parsedToken) ? $parsedToken->bcgovGUID : null,
+                    'samaccountname' => property_exists($parsedToken, 'samaccountname') ? $parsedToken->samaccountname : null,
+                    'guid' => property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null,
                 ]);
 
                 // assign default role 'employee'

@@ -255,10 +255,10 @@
                 </div>
                 @endif
                 <div class="mt-3 alert alert-default-warning alert-dismissible" id="supervisor-signoff-message">
-                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i>Your supervisor has <b class="not d-none">not</b> signed this record of conversation</span>
+                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i><b class="name"></b> has <b class="not d-none">not</b> signed this record of conversation</span>
                 </div>
                 <div class="mt-3 alert alert-default-warning alert-dismissible" id="employee-signoff-message">
-                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i>Your employee has <b class="not d-none">not</b> signed this record of conversation</span>
+                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i><b class="name"></b> has <b class="not d-none">not</b> signed this record of conversation</span>
                 </div>
             </div>
         </div>

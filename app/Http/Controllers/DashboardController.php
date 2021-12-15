@@ -42,9 +42,10 @@ class DashboardController extends Controller
         $tab = (Route::current()->getName() == 'dashboard.notifications') ? 'notifications' : 'notifications';
         // $notifications = DashboardNotification::where('user_id', Auth::id())->get();
         $notifications = DashboardNotification::where('user_id', Auth::id())->orderby('status', 'asc')->orderby('created_at', 'desc')->paginate(8);
+        $notifications_unread = DashboardNotification::where('user_id', Auth::id())->where('status', null);
         $supervisorTooltip = 'If your current supervisor within My Performance is incorrect, please have your supervisor submit an AskMyHR ticket and choose the category: <span class="text-primary">My Team of Organization > HR Software > Systems Support > Position / Reporting Updates</span>';
         $sharedList = SharedProfile::where('shared_id', Auth::id())->with('sharedWithUser')->get();
-        return view('dashboard.index', compact('greetings', 'tab', 'supervisorTooltip', 'sharedList', 'notifications'));
+        return view('dashboard.index', compact('greetings', 'tab', 'supervisorTooltip', 'sharedList', 'notifications', 'notifications_unread'));
     }
 
     public function destroy($id)

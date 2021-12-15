@@ -1,7 +1,7 @@
 @extends('poc.layout')
 @section('tab-content')
 <div class="row-container">
-  <p>Proof of Concept</p>
+  <p>BI Dashboard Samples</p>
   <p>https://analytics-test.psa.gov.bc.ca/</p>
     <iframe src="https://analytics-test.psa.gov.bc.ca/" frameborder="0" scrolling="no" style="overflow:hidden;height:40vh;width:60vh" >
     </iframe>

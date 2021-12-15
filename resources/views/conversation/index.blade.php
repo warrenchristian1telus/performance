@@ -133,14 +133,39 @@
                 });
             });
 
+            function checkIfItIsLocked() {
+                $modal = $("#viewConversationModal");
+                if ($modal.data('is-frozen') == 1){
+                    const supervisorSignOffDone = $modal.data('supervisor-signoff') == 1;
+                    const employeeSignOffDone = $modal.data('supervisor-signoff') == 1;
+                    let message = "must un-sign before changes can be made to this record of conversation";
+                    const supervisor = $("#supervisor-signoff-message").find('.name').html();
+                    const emp = $("#employee-signoff-message").find('.name').html();
+                    if (supervisorSignOffDone && employeeSignOffDone) {
+                        message = `${supervisor} and ${emp} ${message}`;
+                    } else if (supervisorSignOffDone) {
+                        message = `${supervisor} ` + message;
+                    } else {
+                        message = `${emp} ` + message;
+                    }
+                    alert(message);
+                    return true;
+                }
+                return false;
+            }
+
             $(document).on('click', '.btn-conv-edit', function(e) {
+                if(checkIfItIsLocked()) {
+                    return;
+                }
                 let element_id = '.' + $(this).data('id');
                 let elementName = $(this).data('name')
                 $(element_id).toggleClass('d-none');
                 $('.btn-conv-save').filter("[data-name=" + elementName + "]").removeClass("d-none");
                 $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").removeClass("d-none");
                 $('.btn-conv-edit').filter("[data-name=" + elementName + "]").addClass("d-none");
-                $('.btn-conv-edit').prop('disabled', true);
+                $('.btn-conv-edit').prop('readonly', true);
+                $(element_id).val($("[data-name=" + elementName + "]").val());
                 $(element_id).focus();
                 // Enable Edit.
                 // Disable view
@@ -169,7 +194,7 @@
                         $('.btn-conv-edit').filter("[data-name=" + elementName + "]").removeClass("d-none");
                         // Update View
                         if ($("#" + $(that).data('id') + '_edit').is('textarea')) {
-                            $("#" + $(that).data('id')).text($("#" + $(that).data('id') + '_edit').val());
+                            $("#" + $(that).data('id')).val($("#" + $(that).data('id') + '_edit').val());
                         } else {
                             updateConversation(conversation_id)
                         }
@@ -185,7 +210,8 @@
                     , complete: function() {
                         // Remove Spinner
                         $(that).html('Save');
-                        $('.btn-conv-edit').prop('disabled', false);
+                        $('.btn-conv-edit').prop('readonly', false);
+                        $('.enable-not-allowed').prop('readonly', true);
                     }
                 });
             });
@@ -264,7 +290,8 @@
                 $('.btn-conv-save').filter("[data-name=" + elementName + "]").addClass("d-none");
                 $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").addClass("d-none");
                 $('.btn-conv-edit').filter("[data-name=" + elementName + "]").removeClass("d-none");
-                $('.btn-conv-edit').prop('disabled', false);
+                $('.btn-conv-edit').prop('readonly', false);
+                $('.enable-not-allowed').prop('readonly', true);
             });
 
             $(document).on('click', '.btn-view-conversation', function(e) {
@@ -299,6 +326,7 @@
                 $.ajax({
                     url: '/conversation/' + conversation_id
                     , success: function(result) {
+                        $("#viewConversationModal").find('textarea').prop('disable', false);
                         isSupervisor = !result.is_with_supervisor;
                         $('#conv_participant_edit').val('');
                         $('#conv_participant').val('');
@@ -310,16 +338,16 @@
                         $('#conv_time_edit').val(result.time);
                         $('#conv_comment').text(result.comment);
                         $('#conv_comment_edit').text(result.comment);
-                        $('#info_comment1').text(result.info_comment1);
-                        $('#info_comment1_edit').text(result.info_comment1);
-                        $('#info_comment2').text(result.info_comment2);
-                        $('#info_comment2_edit').text(result.info_comment2);
-                        $('#info_comment3').text(result.info_comment3);
-                        $('#info_comment3_edit').text(result.info_comment3);
-                        $('#info_comment4').text(result.info_comment4);
-                        $('#info_comment4_edit').text(result.info_comment4);
-                        $('#info_comment5').text(result.info_comment4);
-                        $('#info_comment5_edit').text(result.info_comment4);
+                        $('#info_comment1').val(result.info_comment1);
+                        $('#info_comment1_edit').val(result.info_comment1);
+                        $('#info_comment2').val(result.info_comment2);
+                        $('#info_comment2_edit').val(result.info_comment2);
+                        $('#info_comment3').val(result.info_comment3);
+                        $('#info_comment3_edit').val(result.info_comment3);
+                        $('#info_comment4').val(result.info_comment4);
+                        $('#info_comment4_edit').val(result.info_comment4);
+                        $('#info_comment5').val(result.info_comment5);
+                        $('#info_comment5_edit').val(result.info_comment5);
                         
                         user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
                         user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
@@ -331,6 +359,9 @@
                             $('#supervisor-signoff-message').removeClass('d-none');
                             $('#supervisor-signoff-message').find('.name').html(user2.participant.name);
                             $('#employee-signoff-message').find('.name').html(user1.participant.name);
+                            $('#employee-signoff-message').find('.time').html("on " + result.sign_off_time);
+                            $('#supervisor-signoff-message').find('.time').html("on " + result.supervisor_signoff_time);
+                            $("textarea.supervisor-comment").addClass('enable-not-allowed').prop('readonly', true);
                         } else {
                             $('#employee-signoff-questions').addClass('d-none');
                             $('#supervisor-signoff-questions').removeClass('d-none');
@@ -338,23 +369,40 @@
                             // $('#supervisor-signoff-message').addClass('d-none');
                             $('#supervisor-signoff-message').find('.name').html(user1.participant.name);
                             $('#employee-signoff-message').find('.name').html(user2.participant.name);
+                            $('#employee-signoff-message').find('.time').html("on " + result.sign_off_time);
+                            $('#supervisor-signoff-message').find('.time').html("on " + result.supervisor_signoff_time);
+                            $("textarea.employee-comment").addClass('enable-not-allowed').prop('readonly', true);
 
                         }
 
                         if (!!result.supervisor_signoff_id) {
                             $('#supervisor-signoff-message').find('.not').addClass('d-none');
+                            $('#supervisor-signoff-message').find('.time').removeClass('d-none');
                             $('#viewConversationModal').data('supervisor-signoff', 1);
+
                         }
                         else {
                             $('#supervisor-signoff-message').find('.not').removeClass('d-none');
+                            $('#supervisor-signoff-message').find('.time').addClass('d-none');
                             $('#viewConversationModal').data('supervisor-signoff', 0);
                         }
                         if (!!result.signoff_user_id) {
                             $('#employee-signoff-message').find('.not').addClass('d-none');
+                            $('#employee-signoff-message').find('.time').removeClass('d-none');
                             $('#viewConversationModal').data('employee-signoff', 1);
                         } else {
                             $('#employee-signoff-message').find('.not').removeClass('d-none');
+                            $('#employee-signoff-message').find('.time').addClass('d-none');
                             $('#viewConversationModal').data('employee-signoff', 0);
+                        }
+
+                        if (result.signoff_user_id || result.supervisor_signoff_id) {
+                            // Freeze content.
+                            $("button.btn-conv-edit").hide();
+                            $("button.btn-conv-save").hide();
+                            $("button.btn-conv-cancel").hide();
+                            $("#viewConversationModal").find('textarea').each((index, e) => $(e).prop('readonly', true));
+                            $('#viewConversationModal').data('is-frozen', 1);
                         }
                         const currentEmpSignoffDone = isSupervisor ? !!result.supervisor_signoff_id : !!result.signoff_user_id
                         if (currentEmpSignoffDone) {

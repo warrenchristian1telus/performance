@@ -140,8 +140,8 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <textarea class="form-control info_comment4 mb-4 d-none" name="info_comment4" id="info_comment4_edit"></textarea>
-                            <textarea class="form-control info_comment4 mb-4 btn-conv-edit" data-name="info_comment4" data-id="info_comment4" name="info_comment4" id="info_comment4"></textarea>
+                            <textarea class="form-control info_comment4 mb-4 employee-comment d-none" name="info_comment4" id="info_comment4_edit"></textarea>
+                            <textarea class="form-control info_comment4 mb-4 employee-comment btn-conv-edit" data-name="info_comment4" data-id="info_comment4" name="info_comment4" id="info_comment4"></textarea>
                         </div>
                         <div class="col-md-4">
                         @if ($type == 'upcoming') 
@@ -152,8 +152,8 @@
                     <h6>Supervisor Comments and Action Items</h6>
                     <div class="row">
                         <div class="col-md-8">
-                            <textarea class="form-control info_comment5 mb-4 d-none" name="info_comment5" id="info_comment5_edit"></textarea>
-                            <textarea class="form-control info_comment5 mb-4 btn-conv-edit" name="info_comment5" id="info_comment5" data-id="info_comment5" data-name="info_comment5"></textarea>
+                            <textarea class="form-control info_comment5 mb-4 supervisor-comment d-none" name="info_comment5" id="info_comment5_edit"></textarea>
+                            <textarea class="form-control info_comment5 mb-4 supervisor-comment btn-conv-edit" name="info_comment5" id="info_comment5" data-id="info_comment5" data-name="info_comment5"></textarea>
                             <span id="info_comment5" class="info_comment5"></span>
                         </div>
                         <div class="col-md-4">
@@ -255,10 +255,10 @@
                 </div>
                 @endif
                 <div class="mt-3 alert alert-default-warning alert-dismissible" id="supervisor-signoff-message">
-                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i><b class="name"></b> has <b class="not d-none">not</b> signed this record of conversation</span>
+                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i><b class="name"></b> has <b class="not d-none">not</b> signed this record of conversation <span class="time"></span></span>
                 </div>
                 <div class="mt-3 alert alert-default-warning alert-dismissible" id="employee-signoff-message">
-                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i><b class="name"></b> has <b class="not d-none">not</b> signed this record of conversation</span>
+                    <span class="h5"><i class="icon fas fa-exclamation-circle"></i><b class="name"></b> has <b class="not d-none">not</b> signed this record of conversation <span class="time"></span></span>
                 </div>
             </div>
         </div>

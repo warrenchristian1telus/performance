@@ -19,7 +19,8 @@ class Conversation extends Model
     protected $casts = [
         'date' => 'datetime:Y-m-d',
         'time' => 'datetime:H:i:s',
-        'sign_off_time' => 'datetime'
+        'sign_off_time' => 'datetime:Y-m-d',
+        'supervisor_signoff_time' => 'datetime:Y-m-d'
     ];
 
     public function topic()

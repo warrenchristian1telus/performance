@@ -137,7 +137,7 @@
                 $modal = $("#viewConversationModal");
                 if ($modal.data('is-frozen') == 1){
                     const supervisorSignOffDone = $modal.data('supervisor-signoff') == 1;
-                    const employeeSignOffDone = $modal.data('supervisor-signoff') == 1;
+                    const employeeSignOffDone = $modal.data('employee-signoff') == 1;
                     let message = "must un-sign before changes can be made to this record of conversation";
                     const supervisor = $("#supervisor-signoff-message").find('.name').html();
                     const emp = $("#employee-signoff-message").find('.name').html();

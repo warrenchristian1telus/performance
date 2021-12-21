@@ -16,7 +16,7 @@
                 <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}')">
                     @csrf
                     @method('DELETE')
-                    <x-button icon='trash' class="text-light" aria-label="Delete button"></x-button>
+                    <x-button icon='trash' class="text-light" aria-label="Delete button" tooltip="Click to permanently delete this goal"></x-button>
                 </form>
                 @endif
             </div>

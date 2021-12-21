@@ -6,12 +6,12 @@
     </div>
     <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'conversation.upcoming' ? 'border-primary' : ''}}">
         <x-button :href="route('conversation.upcoming')" style="">
-            Upcoming Conversations
+            Open Conversations
         </x-button>
     </div>
     <div class="px-4 py-1 border-bottom {{Route::current()->getName() == 'conversation.past' ? 'border-primary' : ''}}">
         <x-button :href="route('conversation.past')" style="">
-            Past Conversations
+            Completed Conversations
         </x-button>
     </div>
 </div>

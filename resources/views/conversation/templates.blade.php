@@ -32,7 +32,7 @@
                         <button class="btn d-flex align-items-center w-100 template-btn" data-toggle="modal" data-target="#conversationTemplateDetail" data-id="{{$template->id}}">
                             <strong>{{$template->name}}</strong>
                             <div class="flex-fill"></div>
-                            <i class="fa fa-chevron-right"></i>
+                            <span class="btn btn-primary btn-sm">View</span>
                         </button>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
             });
 
             $(document).on('click', '.btn-submit', function(e) {
-                if(!confirm('This will send a notification to all participants that you would like to schedule a conversation and will move this template to your upcoming conversations tab. Would you like to continue?')){
+                if(!confirm('This will send a notification to all participants that you would like to schedule a conversation and will move this template to your Open Conversations tab. Would you like to continue?')){
                     return false;
                 }
 
@@ -108,7 +108,7 @@
                 transition: 0.2s ease-in-out;
             }
             [aria-expanded="true"] i{
-                transform: rotate(90deg);
+                transform: rotate(180deg);
             }
         </style>
     </x-slot>

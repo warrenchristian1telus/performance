@@ -1,6 +1,6 @@
 @if($conversation != null)
     <x-button style="link" data-id="{{$conversation->id}}" data-user-id="{{$conversation->user_id}}" class="conversation-link" data-toggle="modal" data-target="#viewConversationModal">
-        {{ $conversation->c_date }} - {{ $conversation->topic->name }}
+        {{ $conversation->topic->name }}
     </x-button>
 @else
     @if($removeBlankLink ?? false)

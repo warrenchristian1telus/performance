@@ -226,7 +226,7 @@
                     confirmMessage = 'Un-signing will move this record back to the Upcoming Conversations tab. You can click there to access and edit it. Continue?';
                 } else {
                     if ((isSupervisor && employeeSignOffDone) || (!isSupervisor && supervisorSignOffDone)) {
-                        confirmMessage = "Signing off will move this record to the Past Conversations tab. You can click there to access it again at any time. Continue?";
+                        confirmMessage = "Signing off will move this record to the Completed Conversations tab. You can click there to access it again at any time. Continue?";
                     }
                     else if (isSupervisor && !employeeSignOffDone) {
                         confirmMessage = "Signing off will lock the content of this record. Employee signature is still required.";

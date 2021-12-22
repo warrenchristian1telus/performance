@@ -223,7 +223,7 @@
                 let confirmMessage = '';
 
                 if (isUnsignOff) {
-                    confirmMessage = 'Un-signing will move this record back to the Upcoming Conversations tab. You can click there to access and edit it. Continue?';
+                    confirmMessage = 'Un-signing will move this record back to the Open Conversations tab. You can click there to access and edit it. Continue?';
                 } else {
                     if ((isSupervisor && employeeSignOffDone) || (!isSupervisor && supervisorSignOffDone)) {
                         confirmMessage = "Signing off will move this record to the Completed Conversations tab. You can click there to access it again at any time. Continue?";
@@ -292,6 +292,8 @@
                 $('.btn-conv-edit').filter("[data-name=" + elementName + "]").removeClass("d-none");
                 $('.btn-conv-edit').prop('readonly', false);
                 $('.enable-not-allowed').prop('readonly', true);
+                if ($("#"+elementName+"_edit").is('textarea'))
+                    $("#"+elementName+"_edit").val($("#"+elementName).val());
             });
 
             $(document).on('click', '.btn-view-conversation', function(e) {
@@ -312,7 +314,7 @@
                 if (toReloadPage) {
                     window.location.reload();
                 } else {
-                    if (!confirm("If you continue you will lose any unsaved information.")) {
+                    if (isContentModified() && !confirm("If you continue you will lose any unsaved information.")) {
                         e.preventDefault();
                     }
                 }
@@ -321,6 +323,17 @@
             $(document).on('show.bs.modal', '#viewConversationModal', function(e) {
                 $("#viewConversationModal").find("textarea").val('');
             });
+
+            function isContentModified() {
+                const commentCount = 5;
+                for(let i=1; i <= commentCount; i++) {
+                    debugger;
+                    if ($("textarea#info_comment"+i).val() != $("textarea#info_comment"+i+"_edit").val()) {
+                        return true;
+                    }
+                }
+                return false;
+            }
 
             function updateConversation(conversation_id) {
                 $.ajax({
@@ -457,6 +470,7 @@
                             });
                         });
                         $('#conv_participant').text(participants);
+                        //originalData = result.info_comment1+result.info_comment2+result.info_comment3+result.info_comment4+result.info_comment5+'';
                     }
                     , error: function(error) {
                         var errors = error.responseJSON.errors;

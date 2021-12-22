@@ -32,6 +32,31 @@ class Conversation extends Model
         return $this->hasMany('App\Models\ConversationParticipant');
     }
 
+    public function getInfoComment1Attribute() {
+        if($this->attributes['info_comment1'] === null) return '';
+        return $this->attributes['info_comment1'];
+    }
+
+    public function getInfoComment2Attribute() {
+        if($this->attributes['info_comment2'] === null) return '';
+        return $this->attributes['info_comment2'];
+    }
+
+    public function getInfoComment3Attribute() {
+        if($this->attributes['info_comment3'] === null) return '';
+        return $this->attributes['info_comment3'];
+    }
+
+    public function getInfoComment4Attribute() {
+        if($this->attributes['info_comment4'] === null) return '';
+        return $this->attributes['info_comment4'];
+    }
+
+    public function getInfoComment5Attribute() {
+        if($this->attributes['info_comment5'] === null) return '';
+        return $this->attributes['info_comment5'];
+    }
+
     // If conversation is with 
     public function getIsWithSupervisorAttribute() {
         $reportingManager = Auth::user()->reportingManager()->first();

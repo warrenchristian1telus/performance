@@ -43,12 +43,14 @@
                   </div>
               </div>
               <div class="flex-fill"></div>
-              <x-button
-                  size="xs"
-                  :href='route("goal.show", $notification->relatedGoal->id)'
-                  :tooltip="__('Click to view the details of this goal.')"
-                  tooltipPosition="bottom" class="mr-2">{{__('View')}}
-              </x-button>
+              @if ($notification->notification_type == 'GC' or $notification->notification_type == 'GR')
+                <x-button
+                    size="xs"
+                    :href='route("goal.show", $notification->relatedGoal->id)'
+                    :tooltip="__('Click to view the details of this goal.')"
+                    tooltipPosition="bottom" class="mr-2">{{__('View')}}
+                </x-button>
+              @endif
               <x-button
                   size="xs" style="danger"
                   :tooltip="__('Click to delete notification.')"

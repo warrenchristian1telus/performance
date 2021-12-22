@@ -16,6 +16,7 @@ use App\Models\DashboardNotification;
 use App\Scopes\NonLibraryScope;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\MicrosoftGraph\SendMail;
 
 class GoalController extends Controller
 {
@@ -109,7 +110,7 @@ class GoalController extends Controller
 
             $user = User::findOrFail($goal->user_id);
             if ($goal->last_supervisor_comment == 'Y' and ($goal->user_id == session()->get('original-auth-id') or session()->get('original-auth-id') == null)) {
-              
+
               $goal->last_supervisor_comment = 'N';
               $goal->save();
 
@@ -413,16 +414,33 @@ class GoalController extends Controller
           $goal->save();
           }
 
-        if ((session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
-          //add dashboard notification
-          $newNotify = new DashboardNotification;
-          $newNotify->user_id = Auth::id();
-          $newNotify->notification_type = 'G';
-          $newNotify->comment = $comment->user->name . ' added a comment to your goal.';
-          $newNotify->related_id = $goal->id;
-          $newNotify->save();
+        if ($request->parent_id != null) {
+          $original_comment = GoalComment::findOrFail($request->parent_id);
+          if ($original_comment->user_id != Auth::id()) {
+            //user replying to somebody else's comment
+            $newNotify = new DashboardNotification;
+            $newNotify->user_id = Auth::id();
+            $newNotify->notification_type = 'GR';
+            $newNotify->comment = $user->name . ' replied to your Goal comment.';
+            $newNotify->related_id = $goal->id;
+            $newNotify->save();
           }
-
+        }
+        else {
+          if ((session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
+            //add dashboard notification
+            $newNotify = new DashboardNotification;
+            $newNotify->user_id = Auth::id();
+            $newNotify->notification_type = 'GC';
+            $newNotify->comment = $comment->user->name . ' added a comment to your goal.';
+            $newNotify->related_id = $goal->id;
+            $newNotify->save();
+            //send email notification to employee
+            // $sendMail = new SendMail();
+            // $response = $sendMail->send(['email here'],   "Supervisor Added Goal Comment",
+            //      "Your Supervisor have added comment to your goal.");
+            }
+        }
         return redirect()->back();
     }
 

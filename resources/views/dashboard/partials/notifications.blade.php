@@ -30,7 +30,7 @@
         <div class="pl-2 d-flex align-items-center justify-content-center {{$notification->status === null ? "border-left" : ""}}  border-primary" style="border-width:3px !important" id="tr_{{$notification->id}}">
 
             <input type='checkbox' class='sub_chk' data-id="{{$notification->id}}">
-
+            <div style="cursor:pointer;" onclick="window.location.href = '{{route("goal.show", $notification->relatedGoal->id)}}'">
               <div class="pl-3 d-flex align-items-center justify-content-center flex-row">
                   <x-profile-pic size="36"></x-profile-pic>
                   <div class="d-flex flex-column">
@@ -42,19 +42,20 @@
                       </div>
                   </div>
               </div>
+              </div>
               <div class="flex-fill"></div>
-              @if ($notification->notification_type == 'GC' or $notification->notification_type == 'GR')
-                <x-button
-                    size="xs"
-                    :href='route("goal.show", $notification->relatedGoal->id)'
-                    :tooltip="__('Click to view the details of this goal.')"
-                    tooltipPosition="bottom" class="mr-2">{{__('View')}}
-                </x-button>
-              @endif
+            @if ($notification->notification_type == 'GC' or $notification->notification_type == 'GR')
               <x-button
-                  size="xs" style="danger"
+                  size="sm"
+                  :href='route("goal.show", $notification->relatedGoal->id)'
+                  :tooltip="__('Click to view the details of this goal.')"
+                  tooltipPosition="bottom" class="mr-2">{{__('View')}}
+              </x-button>
+            @endif
+              <x-button
+                  size="sm" style="danger" icon="trash"
                   :tooltip="__('Click to delete notification.')"
-                  tooltipPosition="bottom" class="btn btn-danger btn-sm float-right mr-2 delete-notification-btn" data-id="{{ $notification->id }}">{{__('Delete')}}
+                  tooltipPosition="bottom" class="btn btn-danger btn-sm float-right mr-2 delete-notification-btn" data-id="{{ $notification->id }}">
               </x-button>
           </div>
       </div>

@@ -17,7 +17,7 @@
             @if ($type == 'upcoming')
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
-                <div class="callout callout-info">
+                <div class="callout callout-info btn-view-conversation" style="cursor: pointer;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
                     <h6>{{ $c->topic->name }} </h6>
                     <span class="mr-2">
                         With
@@ -28,7 +28,7 @@
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
                     <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span> -->
                     <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
-                        Delete
+                        <i class="fa-trash fa"></i>
                     </button>
                     <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
                         View
@@ -39,7 +39,7 @@
             @else
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
-                <div class="callout callout-info">
+                <div class="callout callout-info btn-view-conversation" style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
                     <h6>{{ $c->topic->name }} </h6>
                     <span class="mr-2">
                         With

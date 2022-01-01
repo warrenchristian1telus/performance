@@ -16,12 +16,12 @@
           @empty
             No Goals to Share. Please <a href="{{route('goal.index')}}">create a new goal</a>
           @endforelse
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-12 text-right">
               <button type="submit" class="btn btn-primary mt-3" {{!count($goals) ? 'disabled' : ''}}>Save</button>
               <button type="button" class="btn btn-secondary mt-3" data-dismiss="modal">Cancel</button>
             </div>
-          </div>
+          </div> -->
         </form>
       </div>
     

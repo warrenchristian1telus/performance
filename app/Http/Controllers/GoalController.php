@@ -29,7 +29,7 @@ class GoalController extends Controller
     {
         $authId = Auth::id();
         $goaltypes = GoalType::all();
-        $user = Auth::user();
+        $user = User::find($authId);
         $query = Goal::where('user_id', $authId)
             ->with('user')
             ->with('goalType');

@@ -48,6 +48,9 @@
                         @endforeach
                     </span> |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span>
+                    <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
+                        <i class="fa-trash fa"></i>
+                    </button>
                     <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
                         View
                     </button>
@@ -64,9 +67,8 @@
 
     @include('conversation.partials.add-conversation-modal')
     @include('conversation.partials.view-conversation-modal')
-    @if ($type == 'upcoming')
+    
         @include('conversation.partials.delete-hidden-form')
-    @endif
 
     <x-slot name="js">
         <script>
@@ -169,7 +171,7 @@
                 $(element_id).focus();
                 // Enable Edit.
                 // Disable view
-            });
+            })
 
             $(document).on('click', '.btn-conv-save', function(e) {
                 // Show Loader Spinner...

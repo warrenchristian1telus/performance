@@ -37,6 +37,7 @@ class MyTeamController extends Controller
         $participants = Participant::all();
 
         $goals = Goal::where('user_id', Auth::id())
+            ->where('status', 'active')
             ->with('user')
             ->with('sharedWith')
             ->with('goalType')->get();
@@ -142,11 +143,19 @@ class MyTeamController extends Controller
     public function performanceStatistics()
     {
         $goaltypes = GoalType::all();
+        $eReasons = ExcusedReason::all();
+        $conversationTopics = ConversationTopic::all();
+        $participants = Participant::all();
+
         $goals = Goal::where('user_id', Auth::id())
+            ->where('status', 'active')
             ->with('user')
             ->with('goalType')->get();
         $employees = $this->myEmployeesAjax();
-        return view('my-team/performance-statistics', compact('goals','employees', 'goaltypes'));
+        $type = 'upcoming';
+        // return view('my-team/performance-statistics', compact('goals','employees', 'goaltypes'));
+        return view('my-team/performance-statistics', compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'eReasons'));
+        
     }
     public function goalsHierarchy()
     {
@@ -177,7 +186,9 @@ class MyTeamController extends Controller
             }
             // dd((bool)$input['is_shared'][995]);
         }
-        return redirect()->back();
+        if ($request->ajax()) {
+            return redirect()->back();
+        }
     }
 
     public function viewProfileAs($id, Request $request) {
@@ -254,6 +265,7 @@ class MyTeamController extends Controller
         $conversationTopics = ConversationTopic::all();
         $participants = Participant::all();
         $goals = Goal::where('user_id', Auth::id())
+            ->where('status', 'active')
             ->with('user')
             ->with('sharedWith')
             ->with('goalType')->get();

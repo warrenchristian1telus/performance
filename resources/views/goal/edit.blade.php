@@ -23,7 +23,7 @@
                     <x-input label="Start Date" type="date" name="start_date" :value="$goal->start_date ? $goal->start_date->format('Y-m-d') : ''" />
                 </div>
                 <div class="col-sm-6">
-                    <x-input label="Target Date" type="date" name="target_date" :value="$goal->target_date ? $goal->target_date->format('Y-m-d') : ''" />
+                    <x-input label="End Date" type="date" name="target_date" :value="$goal->target_date ? $goal->target_date->format('Y-m-d') : ''" />
                 </div>
                 <div class="col-12 text-center">
                     <x-button type="submit" class="btn-lg"> Save </x-button>

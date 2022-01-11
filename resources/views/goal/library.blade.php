@@ -106,7 +106,7 @@
                             <small class="text-danger error-start_date"></small>
                         </div>
                         <div class="col-sm-6">
-                            <x-input label="Target Date " class="error-target" type="date" id="target_date" />
+                            <x-input label="End Date " class="error-target" type="date" id="target_date" />
                             <small class="text-danger error-target_date"></small>
                         </div>
 

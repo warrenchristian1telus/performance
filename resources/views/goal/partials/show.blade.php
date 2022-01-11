@@ -1,7 +1,7 @@
 <div class="card-header">
     <h3>
         {{$goal->title}}
-        @if ($showAddBtn ?? false) 
+        @if ($showAddBtn ?? false)
         <div class="float-right">
             <x-button type="button" class="float-right" icon="plus-circle" id="addBankGoalToUserBtn" data-id="{{$goal->id}}">
                 Add goal
@@ -49,11 +49,11 @@
     <div class="form-control-plaintext">
         {{$goal['start_date_human']}}
     </div>
-    <b>{{__("Target Date")}}</b>
+    <b>{{__("End Date")}}</b>
     <div class="form-control-plaintext">
         {{$goal['target_date_human']}}
     </div>
-    
+
     <b>{{__("Measures of Success")}}</b>
     <div class="form-control-plaintext">
         {{$goal['measure_of_success']}}

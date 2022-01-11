@@ -12,7 +12,7 @@ return [
         ],
         'not met' => [
             'color' => 'danger',
-            'tooltip' => 'Substantial portion incomplete by target date',
+            'tooltip' => 'Substantial portion incomplete by end date',
         ],
         'cancelled or deferred' => [
             'color' => 'warning',

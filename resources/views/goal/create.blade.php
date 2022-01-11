@@ -22,7 +22,7 @@
                     <x-input label="Start Date" type="date" name="start_date" :value="old('start_date')" />
                 </div>
                 <div class="col-sm-6">
-                    <x-input label="Target Date" type="date" name="target_date" :value="old('target_date')" />
+                    <x-input label="End Date" type="date" name="target_date" :value="old('target_date')" />
                 </div>
                 <div class="col-6">
                 <a href="https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides" target="_blank">Related Document Guide</a>

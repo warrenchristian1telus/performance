@@ -37,7 +37,7 @@
                             <x-input label="Start Date" type="date" name="start_date" />
                         </div>
                         <div class="col-sm-6">
-                            <x-input label="Target Date" type="date" name="target_date" />
+                            <x-input label="End Date" type="date" name="target_date" />
                         </div>
                     </div>
                 </div>

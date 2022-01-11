@@ -46,7 +46,29 @@ class ResourceController extends Controller
     }
     public function conversations()
     {
-         return view('resource.conversations');
+      $data = [
+          [
+              'question' => 'What is a performance development conversation?',
+              'answer' => 'Any conversation about an employee and their work can be considered a performance development conversation. They can be informal check-ins, regular 1-on-1’s, recognition for a job well done, feedback, or more formal conversations when trying to modify an employee’s behaviour.'
+          ],
+          [
+              'question' => 'Why are conversations important?',
+              'answer_file' => '2'
+          ],
+          [
+              'question' => 'When are conversations effective?',
+              'answer_file' => '3'
+          ],
+          [
+              'question' => 'Elements of a meaningful conversation',
+              'answer_file' => '4'
+          ],
+          [
+              'question' => 'Elements of effective feedback',
+              'answer_file' => '5'
+          ],
+      ];
+         return view('resource.conversations', compact('data'));
     }
     public function contact()
     {

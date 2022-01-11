@@ -260,12 +260,12 @@ return [
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['resource/*']
         ],
-        [
-            'text' => 'POC',
-            'url'  => 'poc/bidashboard',
-            'icon' => 'fas fa-fw fa-lightbulb',
-            'active' => ['POC/*']
-        ]
+        // [
+        //     'text' => 'POC',
+        //     'url'  => 'poc/bidashboard',
+        //     'icon' => 'fas fa-fw fa-lightbulb',
+        //     'active' => ['POC/*']
+        // ]
     ],
 
     /*

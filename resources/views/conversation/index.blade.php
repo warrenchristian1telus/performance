@@ -11,7 +11,7 @@
         </div>
         @endif
     </div>
-    
+
     <div class="mt-4">
         <div class="row">
             @if ($type == 'upcoming')
@@ -48,9 +48,9 @@
                         @endforeach
                     </span> |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span>
-                    <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
+                    <!-- <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
                         <i class="fa-trash fa"></i>
-                    </button>
+                    </button> -->
                     <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
                         View
                     </button>
@@ -67,7 +67,7 @@
 
     @include('conversation.partials.add-conversation-modal')
     @include('conversation.partials.view-conversation-modal')
-    
+
         @include('conversation.partials.delete-hidden-form')
 
     <x-slot name="js">
@@ -106,7 +106,7 @@
             $(function() {
                 $('[data-toggle="tooltip"]').tooltip()
             })
-          
+
             $(document).on('click', '.btn-submit', function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -188,7 +188,7 @@
                     }
                     , success: function(result) {
                         toReloadPage = true;
-                        // Disable Edit. 
+                        // Disable Edit.
                         $("." + $(that).data('id')).toggleClass('d-none');
                         const elementName = $(that).data('name');
                         $('.btn-conv-save').filter("[data-name=" + elementName + "]").addClass("d-none");
@@ -254,7 +254,7 @@
                 $.ajax({
                     url: url
                     , type: 'POST'
-                    , data: data 
+                    , data: data
                     , success: function(result) {
                         if (result.success) {
                             location.reload();
@@ -267,7 +267,7 @@
                             errorElements.forEach((element) => {
                                 $("span.error").filter('[data-error-for="' + element + '"]').html(errors[element][0]);
                             });
-                        } 
+                        }
                         delete errors['employee_id'];
                         const commonErrorMessage = Object.values(errors)[0];
                         if (commonErrorMessage) {
@@ -363,10 +363,10 @@
                         $('#info_comment4_edit').val(result.info_comment4);
                         $('#info_comment5').val(result.info_comment5);
                         $('#info_comment5_edit').val(result.info_comment5);
-                        
+
                         user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
                         user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
-                        
+
                         if (!isSupervisor) {
                             $('#employee-signoff-questions').removeClass('d-none');
                             $('#supervisor-signoff-questions').addClass('d-none');
@@ -427,7 +427,7 @@
                             $("#unsignoff-form-block").hide();
                             $("#signoff-form-block").show();
                         }
-                        
+
                         if(!!$('#unsign-off-form').length) {
                             $('#unsign-off-form').attr('action', $('#unsign-off-form').data('action-url').replace('xxx', conversation_id));
                         }

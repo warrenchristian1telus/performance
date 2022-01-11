@@ -1,14 +1,14 @@
        <div class="card card-primary">
 
    <table class="table ">
- 
+
   <thead>
     <tr>
       <th scope="col">Title</th>
       <th scope="col">Start Date</th>
-      <th scope="col">Target Date</th>
+      <th scope="col">End Date</th>
       <th scope="col">Status</th>
-      <th>Action</th>
+      <th> </th>
     </tr>
   </thead>
   <tbody>
@@ -21,7 +21,7 @@
       </th>
       <td onclick="window.location.href = '{{route("goal.show", $goal->id)}}';" style="cursor: pointer">{{ $goal->start_date_human }}</td>
       <td onclick="window.location.href = '{{route("goal.show", $goal->id)}}';" style="cursor: pointer">{{ $goal->target_date_human }}</td>
-      <td> 
+      <td>
         @include('goal.partials.status-change')
       </td>
       <td>

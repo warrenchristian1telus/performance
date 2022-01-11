@@ -58,10 +58,28 @@
                                     <td>
                                         <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->title }}</a>
                                     </td>
-                                    <td>{{$goal->goalType->name}}</td>
-                                    <td>{{ $goal->created_at->format('M d, Y') }}</td>
-                                    <td>{{ $goal->user->name }}</td>
-                                    <td>{{ $goal->is_mandatory ? 'Mandatory' : 'Suggested' }}</td>
+                                    <!-- <td>{{$goal->goalType->name}}</td> -->
+                                    <td>
+                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{$goal->goalType->name}}</a>
+                                    </td>
+                                    <!-- <td>{{ $goal->created_at->format('M d, Y') }}</td> -->
+                                    <td>
+                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at->format('M d, Y') }}</a>
+                                    </td>
+                                    <!-- <td>{{ $goal->user->name }}</td> -->
+                                    <td>
+                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->user->name }}</a>
+                                    </td>
+                                    <!-- <td>{{ $goal->is_mandatory ? 'Mandatory' : 'Suggested' }}</td> -->
+                                    <td>
+                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->is_mandatory ? 'Mandatory' : 'Suggested' }}</a>
+                                    </td>
+                                    <td>
+                                      <!-- <button class="btn btn-primary btn-sm float-right ml-2 btn-view-goal" data-id="{{$goal->id}}" data-toggle="modal" data-target="#viewConversationModal"> -->
+                                      <button class="btn btn-primary btn-sm float-right ml-2 btn-view-goal show-goal-detail highlighter" data-id="{{$goal->id}}" data-toggle="modal" data-target="#viewGoal">
+                                          View
+                                      </button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -89,7 +107,7 @@
                             <small class="text-danger error-start_date"></small>
                         </div>
                         <div class="col-sm-6">
-                            <x-input label="Target Date " class="error-target" type="date" id="target_date" />
+                            <x-input label="End Date " class="error-target" type="date" id="target_date" />
                             <small class="text-danger error-target_date"></small>
                         </div>
 

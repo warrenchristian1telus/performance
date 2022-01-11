@@ -2,7 +2,8 @@
 @section('tab-content')
 <ul>
 	<li>
-		<a href="{{ asset('storage/user-guide.pdf') }}"" target="_blank" >User Guide Here</a>
+		User Guide is under development.
+		<!-- <a href="{{ asset('storage/user-guide.pdf') }}"" target="_blank" >User Guide Here</a> -->
 	</li>
 </u>
 @endsection

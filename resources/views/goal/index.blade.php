@@ -9,14 +9,14 @@
         Create New Goal
     </x-button>
     <x-button icon="clone" href="{{ route('goal.library') }}">
-        Add Goals from Goal Bank
+        Add Goal from Goal Bank
     </x-button>
     @endif
 
     @endif
     <div class="mt-4">
         {{-- {{$dataTable->table()}} --}}
-        
+
         <div class="row">
          @if ($type == 'current' || $type == 'supervisor')
             @if($type == 'supervisor')
@@ -25,11 +25,11 @@
                 </div>
             @endif
             @foreach ($goals as $goal)
-            
+
                 <div class="col-12 col-sm-6">
                     @include('goal.partials.card')
                 </div>
-              
+
             @endforeach
             @else
              <div class="col-12 col-sm-12">
@@ -56,7 +56,7 @@
             @csrf
             <div class="row">
                 <div class="col-6">
-                   
+
                     <label>
                         Goal Type
                         <select class="form-control" name="goal_type_id">
@@ -92,13 +92,13 @@
                     <small  class="text-danger error-start_date"></small>
                 </div>
                 <div class="col-sm-6">
-                    <x-input label="Target Date " class="error-target" type="date" name="target_date"  />
+                    <x-input label="End Date " class="error-target" type="date" name="target_date"  />
                      <small  class="text-danger error-target_date"></small>
                 </div>
                 <div class="col-12">
                     <div class="card mt-3 p-3">
                         <span>Supporting Material</span>
-                        <a href="https://www2.gov.bc.ca/gov/content/careers-myhr/all-employees/career-development/myperformance/myperformance-guides" target="_blank">This is a placeholder for a link to relevant contacts and support documentation for this process. Content to follow.</a>
+                        <a href="{{route('resource.goal-setting')}}" target="_blank">Goal Setting Resources</a>
                     </div>
                 </div>
                 <div class="col-12 text-left pb-5 mt-3">
@@ -107,11 +107,11 @@
             </div>
         </form>
       </div>
-    
+
     </div>
   </div>
 </div>
-    
+
     <x-slot name="js">
         {{-- {{$dataTable->scripts()}} --}}
     <script>
@@ -153,7 +153,7 @@
                 });
             }
         });
-     
+
     });
     $(document).on('click', ".link-goal", function () {
         $.get('/goal/supervisor/'+$(this).data('id'), function (data) {
@@ -180,7 +180,7 @@
         }
         $('#linked_goal_id').val(linkedGoals);
     });
-    
+
     $(document).on('click', '.goal-change a', function (e) {
         const movingToPastMessage = "Changing the status of this goal will move it to your Past Goals tab. You can click there to make the goal active again at any time. Proceed?";
         const movingToCurrentMessage = "Changing the status of this goal will move it to your Current Goals tab. You can click there to access the goal again at any time. Proceed?";
@@ -194,5 +194,3 @@
     </x-slot>
 
 </x-side-layout>
-
-   

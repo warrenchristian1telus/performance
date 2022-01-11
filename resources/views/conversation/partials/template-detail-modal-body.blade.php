@@ -6,8 +6,19 @@
 </div>
 
 
+<div class="mt-4 p-3">
+    <div class="row">
+        <div class="col-12">
+            <p>
+                Review the information below to determine if this is the best template for you to use. Then select participants and hit "Use this template" to alert participants you want to meet. Conversations will still need to be scheduled independently in your Outlook calendar.
+            </p>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal-body p-3">
-    <button class="btn w-100 d-flex align-items-center text-primary p-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#when_to_use"> 
+    <button class="btn w-100 d-flex align-items-center text-primary p-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#when_to_use">
         <strong>When to Use This Template</strong>
         <div class="flex-fill"></div>
         <i class="fa fa-chevron-down"></i>
@@ -15,9 +26,9 @@
     <div id="when_to_use"  class="collapse p-3 border">
         {!!$template->when_to_use!!}
     </div>
-    
 
-    <button class="btn w-100 d-flex align-items-center text-primary p-2 mt-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#preparing_for_conversation"> 
+
+    <button class="btn w-100 d-flex align-items-center text-primary p-2 mt-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#preparing_for_conversation">
         <strong>Preparing for the Conversation</strong>
         <div class="flex-fill"></div>
         <i class="fa fa-chevron-down"></i>
@@ -25,8 +36,8 @@
     <div id="preparing_for_conversation"  class="collapse p-3 border">
         {!!$template->preparing_for_conversation!!}
     </div>
-    
-    <button class="btn w-100 d-flex align-items-center text-primary p-2 mt-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#question_html"> 
+
+    <button class="btn w-100 d-flex align-items-center text-primary p-2 mt-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#question_html">
         <strong>Suggested Discussion Questions</strong>
         <div class="flex-fill"></div>
         <i class="fa fa-chevron-down"></i>
@@ -35,17 +46,18 @@
         {!!$template->question_html!!}
     </div>
 
-    <button class="btn w-100 d-flex align-items-center text-primary p-2 mt-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#supporting_material"> 
+    <button class="btn w-100 d-flex align-items-center text-primary p-2 mt-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#supporting_material">
         <strong>Supporting Materials</strong>
         <div class="flex-fill"></div>
         <i class="fa fa-chevron-down"></i>
     </button>
     <div id="supporting_material"  class="collapse p-3 border">
-        <ul>
+      <p><a target="_blank" href="{{route('resource.conversations')}}">Learn more about effective performance conversations</a></p>
+        <!-- <ul>
             <li><a href="#">Lorem ipsum porem</a></li>
             <li><a href="#">Lorem ipsum porem</a></li>
             <li><a href="#">Lorem ipsum porem</a></li>
-        </ul>
+        </ul> -->
     </div>
     <div class="rounded text-primary p-2 mt-2" style="background-color: #ddd;">
         <strong>
@@ -83,7 +95,7 @@
             <x-button  size="md" class="mb-2">Use this template</x-button>
 
             </div>
-            
+
 
         </div>
         </form>

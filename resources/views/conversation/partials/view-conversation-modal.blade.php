@@ -40,39 +40,12 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                            @if ($type == 'upcoming') 
+                            @if ($type == 'upcoming')
                                 <x-edit-cancel-save name="conversation_participant_id" id="conv_participant" />
                             @endif
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-6 col-md-6 mt-1">
-                        <div class="d-flex align-items-end">
-                            <div class="col-md-9">
-                                <x-input id="conv_date_edit" class="conv_date d-none" type="date" name="date" label="Conversation Date" />
-                                <span id="conv_date" class="conv_date"></span>
-                            </div>
-                            <div class="col-md-3">
-                            @if ($type == 'upcoming') 
-                                <x-edit-cancel-save name="date" id="conv_date" />
-                            @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-6 mt-1">
-                        <div class="d-flex align-items-end">
-                            <div class="col-md-9">
-
-                                <x-input id="conv_time_edit" class="conv_time d-none" type="time" name="time" label="Conversation Time" />
-                                <span id="conv_time" class="conv_time"></span>
-                            </div>
-                            <div class="col-md-3">
-                            @if ($type == 'upcoming') 
-                                <x-edit-cancel-save name="time" id="conv_time" />
-                            @endif
-                            </div>
-                        </div>
-                    </div> -->
 
                 </div>
 
@@ -96,7 +69,7 @@
                             <span id="info_comment1" class="info_comment1"></span>
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming') 
+                        @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment1" id="info_comment1" hideEdit="true" />
                         @endif
                         </div>
@@ -111,7 +84,7 @@
                             <span id="info_comment2" class="info_comment2"></span>
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming') 
+                        @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment2" id="info_comment2" hideEdit="true" />
                         @endif
                         </div>
@@ -125,13 +98,13 @@
 
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming') 
+                        @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment3" id="info_comment3" hideEdit="true"  />
                         @endif
                         </div>
                     </div>
                      </div>
-                   
+
                      <div>
 
                     <h6><u>Comments</u></h6>
@@ -144,7 +117,7 @@
                             <textarea class="form-control info_comment4 mb-4 employee-comment btn-conv-edit" data-name="info_comment4" data-id="info_comment4" name="info_comment4" id="info_comment4"></textarea>
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming') 
+                        @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment4" id="info_comment4" hideEdit="true" />
                         @endif
                         </div>
@@ -157,7 +130,7 @@
                             <span id="info_comment5" class="info_comment5"></span>
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming') 
+                        @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment5" id="info_comment5" hideEdit="true"/>
                         @endif
                         </div>
@@ -170,7 +143,7 @@
                         <h5><u>Sign-off</u></h5>
                         <div class="alert alert-default-danger common-error" style="display:none">
                             <span class="h5">
-                                
+
                             </span>
                         </div>
                         <form id="employee-sign_off_form" method="post">
@@ -204,7 +177,7 @@
                         <h5><u>Sign-off</u></h5>
                         <div class="alert alert-default-danger common-error" style="display:none">
                             <span class="h5">
-                                
+
                             </span>
                         </div>
                         <form id="supervisor-sign_off_form" method="post">
@@ -242,12 +215,12 @@
                     <br>
                     <span class="text-danger error" data-error-for="employee_id"></span>
                 </div>
-               
+                @else
                 <div id="unsignoff-form-block">
                     <div class="my-2">Enter 6 digit employee ID to unsign:</div>
                     <form id="unsign-off-form" data-action-url="{{ route('conversation.unsignoff', 'xxx')}}" method="post">
                         @csrf
-                        <input type="text" name="employee_id" id="employee_id" class="form-control d-inline w-50"> 
+                        <input type="text" name="employee_id" id="employee_id" class="form-control d-inline w-50">
                         <button data-action="unsignoff" class="btn btn-primary btn-sign-off ml-2" type="button">Un-Sign</button>
                         <br>
                         <span class="text-danger error" data-error-for="employee_id"></span>

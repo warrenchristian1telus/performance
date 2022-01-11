@@ -48,9 +48,6 @@
                         @endforeach
                     </span> |
                     <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span>
-                    <!-- <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
-                        <i class="fa-trash fa"></i>
-                    </button> -->
                     <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
                         View
                     </button>

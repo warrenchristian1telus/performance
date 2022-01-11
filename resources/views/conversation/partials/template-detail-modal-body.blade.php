@@ -53,11 +53,6 @@
     </button>
     <div id="supporting_material"  class="collapse p-3 border">
       <p><a target="_blank" href="{{route('resource.conversations')}}">Learn more about effective performance conversations</a></p>
-        <!-- <ul>
-            <li><a href="#">Lorem ipsum porem</a></li>
-            <li><a href="#">Lorem ipsum porem</a></li>
-            <li><a href="#">Lorem ipsum porem</a></li>
-        </ul> -->
     </div>
     <div class="rounded text-primary p-2 mt-2" style="background-color: #ddd;">
         <strong>

@@ -24,9 +24,7 @@
                         @foreach ($c->conversationParticipants as $p)
                             {{$p->participant->name}}&nbsp;
                         @endforeach
-                    </span><!--  |
-                    <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span> |
-                    <span class="mx-2"> <i class="far fa-clock text-primary mr-2"></i> {{ $c->c_time }}</span> -->
+                    </span>
                     <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
                         <i class="fa-trash fa"></i>
                     </button>

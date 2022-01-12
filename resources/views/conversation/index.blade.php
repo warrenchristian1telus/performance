@@ -17,13 +17,16 @@
             @if ($type == 'upcoming')
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
-                <div class="callout callout-info btn-view-conversation" style="cursor: pointer;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
-                    <h6>{{ $c->topic->name }} </h6>
+                <div class="callout callout-info">
+                    <h6>
+                      <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">{{ $c->topic->name }}</a>
+                    </h6>
                     <span class="mr-2">
-                        With
+                        <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">With
                         @foreach ($c->conversationParticipants as $p)
                             {{$p->participant->name}}&nbsp;
                         @endforeach
+                        </a>
                     </span>
                     <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
                         <i class="fa-trash fa"></i>
@@ -37,15 +40,22 @@
             @else
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
-                <div class="callout callout-info btn-view-conversation" style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
-                    <h6>{{ $c->topic->name }} </h6>
+                <div class="callout callout-info">
+                  <h6>
+                    <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">{{ $c->topic->name }}</a>
+                  </h6>
                     <span class="mr-2">
-                        With
+                      <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">With
                         @foreach ($c->conversationParticipants as $p)
                             {{$p->participant->name}}&nbsp;
                         @endforeach
+                      </a>
                     </span> |
-                    <span class="mx-2"><i class="fa fa-calendar text-primary mr-2"></i> {{ $c->c_date }}</span>
+                    <span class="mx-2">
+                      <i class="fa fa-calendar text-primary mr-2"></i>
+                      <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                        {{ $c->c_date }}</span>
+                      </a>
                     <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
                         View
                     </button>

@@ -37,7 +37,7 @@
                 </div>
             </div>
             @endforeach
-            @else
+          @else
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
                 <div class="callout callout-info">
@@ -444,7 +444,8 @@
                         }
 
                         result.questions?.forEach((question) => {
-                            $('#questions-to-consider').append('<li>' + question + '</li>');
+                          // $('#questions-to-consider').append('<li>' + question + '</li>');
+                          $('#questions-to-consider').append(question);
                         });
                         $('#template-title').text(result.topic.name + ' Template');
                         // $('#conv_participant_edit').next(".select2-container").hide();

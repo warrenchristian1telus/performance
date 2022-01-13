@@ -254,7 +254,8 @@
                         }
 
                         result.questions?.forEach((question) => {
-                            $('#questions-to-consider').append('<li>' + question + '</li>');
+                          // $('#questions-to-consider').append('<li>' + question + '</li>');
+                          $('#questions-to-consider').append(question);
                         });
                         $('#template-title').text(result.topic.name + ' Template');
                         // $('#conv_participant_edit').next(".select2-container").hide();
@@ -355,7 +356,7 @@
                     }
                     , success: function(result) {
                         toReloadPage = true;
-                        // Disable Edit. 
+                        // Disable Edit.
                         $("." + $(that).data('id')).toggleClass('d-none');
                         const elementName = $(that).data('name');
                         $('.btn-conv-save').filter("[data-name=" + elementName + "]").addClass("d-none");

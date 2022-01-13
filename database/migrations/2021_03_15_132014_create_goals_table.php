@@ -20,9 +20,9 @@ class CreateGoalsTable extends Migration
             $table->date('start_date')->nullable();
             $table->date('target_date')->nullable();
             $table->text('what');
-            $table->text('why');
-            $table->text('how');
-            $table->text('measure_of_success');
+            $table->text('why')->nullable();
+            $table->text('how')->nullable();
+            $table->text('measure_of_success')->nullable();
             $table->foreignId('goal_type_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();

@@ -117,7 +117,7 @@
                             <textarea class="form-control info_comment4 mb-4 employee-comment btn-conv-edit" data-name="info_comment4" data-id="info_comment4" name="info_comment4" id="info_comment4"></textarea>
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming')
+                          @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment4" id="info_comment4" hideEdit="true" />
                         @endif
                         </div>
@@ -215,7 +215,7 @@
                     <br>
                     <span class="text-danger error" data-error-for="employee_id"></span>
                 </div>
-                @else
+
                 <div id="unsignoff-form-block">
                     <div class="my-2">Enter 6 digit employee ID to unsign:</div>
                     <form id="unsign-off-form" data-action-url="{{ route('conversation.unsignoff', 'xxx')}}" method="post">

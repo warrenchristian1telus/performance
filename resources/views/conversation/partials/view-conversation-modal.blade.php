@@ -63,7 +63,7 @@
                 <div class="d-none" id="info_to_capture">
                     <h6><u>Information to Capture</u></h6>
 
-                      <h6>What date will a follow up meeting occur?</h6>
+                      <h6 id="info_capture1">What date will a follow up meeting occur?</h6>
 
                     <div class="row">
                         <div class="col-md-8">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
 
-                    <h6>What must the employee accomplish? By when?</h6>
+                    <h6 id="info_capture2">What must the employee accomplish? By when?</h6>
 
                     <div class="row">
                         <div class="col-md-8">
@@ -93,7 +93,7 @@
                         </div>
                     </div>
 
-                    <h6>What support will the supervisor (and others) provide? By when?</h6>
+                    <h6 id="info_capture3">What support will the supervisor (and others) provide? By when?</h6>
                     <div class="row">
                         <div class="col-md-8">
                             <textarea class="form-control info_comment3 mb-4 d-none" name="info_comment3" id="info_comment3_edit"></textarea>

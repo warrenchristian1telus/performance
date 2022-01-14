@@ -445,6 +445,18 @@
                             $('#info_to_capture').addClass('d-none');
                         }
 
+                        //Additional Info to Capture
+                        if (result.conversation_topic_id == 1) {
+                          $("#info_capture1").html("Appreciation – highlight what has gone well");
+                          $("#info_capture2").html("Coaching – identify areas where things could be (even) better");
+                          $("#info_capture3").html("Evaluation – provide an overall summary of performance");
+                        }
+                        if (result.conversation_topic_id == 4) {
+                          $("#info_capture1").html("What date will a follow up meeting occur?");
+                          $("#info_capture2").html("What must the employee accomplish? By when?");
+                          $("#info_capture3").html("What support will the supervisor (and others) provide? By when?");
+                        }
+
                         result.questions?.forEach((question) => {
                           // $('#questions-to-consider').append('<li>' + question + '</li>');
                           $('#questions-to-consider').append(question);

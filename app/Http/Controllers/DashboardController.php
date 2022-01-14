@@ -59,7 +59,10 @@ class DashboardController extends Controller
         $ids = $request->ids;
         DashboardNotification::wherein('id',explode(",",$ids))->delete();
         return redirect()->back();
-        //window.location.reload();
+        // return redirect()->to('/route');
+        // header("Refresh:0");
+        // return back();
+        // window.location.reload();
         //return route::get('dashboard.notifications');
         //return view('dashboard.partials.notifications');
         // return Redirect()->route('dashboard.notifications');
@@ -75,6 +78,9 @@ class DashboardController extends Controller
         // return route::get('dashboard.notifications');
         return redirect()->back();
         // $notification = DashboardNotification::where('id', 4)->update(['status' => 'S']);
+        // window.location.reload();
+        // return redirect()->to('/route');
+        // header("Refresh:0");
         // return back();
         // return response()->json(['success'=>"Notification(s) updated successfully."]);
     }
@@ -84,6 +90,10 @@ class DashboardController extends Controller
         $ids = $request->ids;
         DashboardNotification::wherein('id',explode(",",$ids))->update(['status' => null]);
         // DashboardNotification::where('id',5)->update(['status' => 'D']);
+        // header("Refresh:0");
+        // return back();
+        // window.location.reload();
+        // return redirect()->to('/route');
         return redirect()->back();
         // return response()->json(['success'=>"Notification(s) updated successfully."]);
     }

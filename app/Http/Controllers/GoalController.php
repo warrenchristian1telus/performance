@@ -109,17 +109,16 @@ class GoalController extends Controller
             ->get();
 
             $user = User::findOrFail($goal->user_id);
-            if ($goal->last_supervisor_comment == 'Y' and ($goal->user_id == session()->get('original-auth-id') or session()->get('original-auth-id') == null)) {
+            if (($goal->last_supervisor_comment == 'Y') and (($goal->user_id == session()->get('original-auth-id')) or (session()->get('original-auth-id') == null))) {
 
               $goal->last_supervisor_comment = 'N';
               $goal->save();
+            };
 
-              $affected = DashboardNotification::where('notification_type', 'G')
+              $affected = DashboardNotification::wherein('notification_type', ['GC', 'GR'])
                 ->where('related_id', $goal->id)
                 ->wherenull('status')
                 ->update(['status' => 'R']);
-
-            };
 
         return view('goal.show', compact('goal', 'linkedGoals'));
     }
@@ -386,10 +385,8 @@ class GoalController extends Controller
 
     public function addComment(Request $request, $id)
     {
-        //TODO: Who can add comment ?
         $goal = Goal::findOrFail($id);
         $comment = new GoalComment;
-
 
         $comment->goal_id = $goal->id;
         $comment->user_id = Auth::id();
@@ -407,6 +404,7 @@ class GoalController extends Controller
         $comment->save();
 
         $user = User::findOrFail($goal->user_id);
+        $curr_user = User::findOrFail(Auth::id());
 
         if (($goal->last_supervisor_comment != 'Y') and (session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
           //update flag
@@ -416,7 +414,7 @@ class GoalController extends Controller
 
         if ($request->parent_id != null) {
           $original_comment = GoalComment::findOrFail($request->parent_id);
-          if ($original_comment->user_id != Auth::id()) {
+          if (($original_comment->user_id != Auth::id()) and ($goal->user_id != Auth::id())) {
             //user replying to somebody else's comment
             $newNotify = new DashboardNotification;
             $newNotify->user_id = Auth::id();
@@ -441,6 +439,17 @@ class GoalController extends Controller
             //      "Your Supervisor have added comment to your goal.");
             }
         }
+
+          if (($curr_user->reporting_to == $goal->user_id) and ($goal->user_id != Auth::id())) {
+            //add notification in Supervisor's Dashboard
+            $newNotify = new DashboardNotification;
+            $newNotify->user_id = $curr_user->reporting_to;
+            $newNotify->notification_type = 'GC';
+            $newNotify->comment = $curr_user->name . ' added a comment to your goal.';
+            $newNotify->related_id = $goal->id;
+            $newNotify->save();
+            }
+
         return redirect()->back();
     }
 

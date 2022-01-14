@@ -1,6 +1,6 @@
 <x-side-layout>
     <h3>Conversations</h3>
-    @include('conversation.partials.compliance-message')
+    <!-- @include('conversation.partials.compliance-message') -->
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
         @if(!$disableEdit && false)
@@ -439,7 +439,9 @@
                         $('#questions-to-consider').html('');
                         if(result.topic.id == 4){
                             $('#info_to_capture').removeClass('d-none');
-                        }else{
+                        }else if(result.topic.id == 1){
+                            $('#info_to_capture').removeClass('d-none');
+                        }else {
                             $('#info_to_capture').addClass('d-none');
                         }
 

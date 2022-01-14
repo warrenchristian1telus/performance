@@ -57,7 +57,7 @@ class Conversation extends Model
         return $this->attributes['info_comment5'];
     }
 
-    // If conversation is with 
+    // If conversation is with
     public function getIsWithSupervisorAttribute() {
         $reportingManager = Auth::user()->reportingManager()->first();
         if (!$reportingManager) {
@@ -91,7 +91,7 @@ class Conversation extends Model
     }
 
     // Should not be used.
-    public static function hasNotDoneAtleastOnceIn4Months() 
+    public static function hasNotDoneAtleastOnceIn4Months()
     {
         $latestPastConversation = self::latestPastConversation();
         if ($latestPastConversation) {
@@ -121,7 +121,7 @@ class Conversation extends Model
         return "You have not completed any performance conversations. You must complete your first performance conversation by " . $user->joining_date->addMonths(4)->format('d-M-y');
     }
 
-    public static function latestPastConversation() 
+    public static function latestPastConversation()
     {
         return self::whereNotNull('signoff_user_id')->orderBy('date', 'DESC')->first();
     }

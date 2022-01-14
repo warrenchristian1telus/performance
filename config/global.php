@@ -46,6 +46,10 @@ return [
                     '<li>How do you prefer to receive feedback and/or recognition for your work?</li>',
                     '<li>What (if any) concerns do you have when it comes to giving me feedback? How can I alleviate those concerns?</li>',
                   ],
+                'capture1' => ['Appreciation – highlight what has gone well'],
+                'capture2' => ['Coaching – identify areas where things could be (even) better'],
+                'capture3' => ['Evaluation – provide an overall summary of performance'],
+                'capture4' => [''],
             ],
             // Goal Setting
             '2' => [
@@ -62,6 +66,10 @@ return [
                     '<ul><li>How do your personal goals align with our team goas or those of the organization?</li></ul>',
                     '<li>What support do you need to meet your goals?</li>',
                 ],
+                'capture1' => [''],
+                'capture2' => [''],
+                'capture3' => [''],
+                'capture4' => [''],
             ],
             // Career Development
             '3' => [
@@ -80,6 +88,10 @@ return [
                     '<li>What is one thing I can do to support your career development?</li>',
                     '<li>What is one thing you can do to support your own career development?</li>',
                 ],
+                'capture1' => [''],
+                'capture2' => [''],
+                'capture3' => [''],
+                'capture4' => [''],
             ],
             // Performance Improvement
             '4' => [
@@ -94,6 +106,10 @@ return [
                     '<li>We will follow up on these areas and discuss your progress during our next meeting. If needed, we can discuss an action plan for improvement in each of those areas when we meet again.</li>',
                     '<li>Is there anything else you would like to share with me or any other reasonable support that I can offer?</li></ul>',
                 ],
+                'capture1' => ['What date will a follow up meeting occur?'],
+                'capture2' => ['What must the employee accomplish? By when?'],
+                'capture3' => ['What support will the supervisor (and others) provide? By when?'],
+                'capture4' => [''],
             ],
             // Recognition
             // '5' => [

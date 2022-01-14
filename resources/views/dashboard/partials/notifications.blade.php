@@ -44,7 +44,7 @@
               </div>
               </div>
               <div class="flex-fill"></div>
-            @if ($notification->notification_type == 'GC' or $notification->notification_type == 'GR')
+            @if (($notification->notification_type == 'GC') or ($notification->notification_type == 'GR'))
               <x-button
                   size="sm"
                   :href='route("goal.show", $notification->relatedGoal->id)'
@@ -138,7 +138,7 @@
                               $('table tr').filter("[data-row-id='" + value + "']").remove();
                           });
                         }
-                        location.reload();
+                        // location.reload();
 
                     }
                 });
@@ -200,7 +200,7 @@
                                     data: {'ids':join_selected_values
                                     }
                                 });
-                                location.reload();
+                                // location.reload();
                         }
                     });
 
@@ -233,7 +233,7 @@
                                         data: {'ids':join_selected_values
                                         }
                                     });
-                                    location.reload();
+                                    // location.reload();
                             }
                         });
 

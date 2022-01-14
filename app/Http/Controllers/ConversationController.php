@@ -74,7 +74,7 @@ class ConversationController extends Controller
      */
     public function store(ConversationRequest $request)
     {
-      
+
         DB::beginTransaction();
         $isDirectRequest = true;
         if(route('my-team.my-employee') == url()->previous()) {
@@ -199,7 +199,7 @@ class ConversationController extends Controller
     }
 
     public function templates(Request $request) {
-        $query = new ConversationTopic; 
+        $query = new ConversationTopic;
         if ($request->has('search') && $request->search) {
             $query = $query->where('name', 'LIKE', "%$request->search%");
         }

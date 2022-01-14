@@ -249,7 +249,9 @@
                         $('#questions-to-consider').html('');
                         if(result.topic.id == 4){
                             $('#info_to_capture').removeClass('d-none');
-                        }else{
+                        }else if(result.topic.id == 1){
+                            $('#info_to_capture').removeClass('d-none');
+                        }else {
                             $('#info_to_capture').addClass('d-none');
                         }
 

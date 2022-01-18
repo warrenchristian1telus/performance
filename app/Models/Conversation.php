@@ -87,7 +87,8 @@ class Conversation extends Model
 
     public function getQuestionsAttribute()
     {
-        return Config::get('global.conversation.topic.' . $this->conversation_topic_id . '.questions');
+        // return Config::get('global.conversation.topic.' . $this->conversation_topic_id . '.questions');
+        return ConversationTopic::find($this->conversation_topic_id)->question_html;
     }
 
     // Should not be used.

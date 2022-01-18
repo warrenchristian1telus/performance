@@ -447,20 +447,23 @@
 
                         //Additional Info to Capture
                         if (result.conversation_topic_id == 1) {
-                          $("#info_capture1").html("Appreciation – highlight what has gone well");
-                          $("#info_capture2").html("Coaching – identify areas where things could be (even) better");
-                          $("#info_capture3").html("Evaluation – provide an overall summary of performance");
+                          $("#info_capture1").html('<span>Appreciation - highlight what has gone well </span><i class="fas fa-info-circle"  data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide an overview of the actions or results being celebrated. Be as specific as possible about timing, activities, and outcomes achieved. Highlight behaviours, competencies, and corporate values that you feel contributed to the success." ></i>');
+                          $("#info_capture2").html('<span>Coaching - identify areas where things could be (even) better </span><i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide specific examples of actions, outcomes or behaviours where there is opportunity for growth. Capture information on any additional assistance or training offered to support improvement."></i>');
+                          $("#info_capture3").html('<span>Evaluation - provide an overall summary of performance</span> <i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Be as specific as possible, use examples, and focus on observable behaviours and business results"></i>');
                         }
                         if (result.conversation_topic_id == 4) {
                           $("#info_capture1").html("What date will a follow up meeting occur?");
                           $("#info_capture2").html("What must the employee accomplish? By when?");
                           $("#info_capture3").html("What support will the supervisor (and others) provide? By when?");
                         }
-
-                        result.questions?.forEach((question) => {
+                        $('[data-toggle="popover"]').popover();
+                        /* result.questions?.forEach((question) => {
                           // $('#questions-to-consider').append('<li>' + question + '</li>');
                           $('#questions-to-consider').append(question);
-                        });
+                        }); */
+                        $('#questions-to-consider').append(result.questions);
+
+                        // result.questions
                         $('#template-title').text(result.topic.name + ' Template');
                         // $('#conv_participant_edit').next(".select2-container").hide();
 

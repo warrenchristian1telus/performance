@@ -24,12 +24,12 @@ class CreateConversationsTable extends Migration
             $table->text('info_comment3')->nullable();
             $table->text('info_comment4')->nullable();
             $table->text('info_comment5')->nullable();
-            $table->text('empl_agree1')->nullable();
-            $table->text('empl_agree2')->nullable();
-            $table->text('empl_agree3')->nullable();
-            $table->text('supv_agree1')->nullable();
-            $table->text('supv_agree2')->nullable();
-            $table->text('supv_agree3')->nullable();
+            $table->boolean('empl_agree1')->nullable();
+            $table->boolean('empl_agree2')->nullable();
+            $table->boolean('empl_agree3')->nullable();
+            $table->boolean('supv_agree1')->nullable();
+            $table->boolean('supv_agree2')->nullable();
+            $table->boolean('supv_agree3')->nullable();
             $table->unsignedBigInteger('signoff_user_id')->nullable();
             $table->dateTime('sign_off_time')->nullable();
             $table->timestamps();

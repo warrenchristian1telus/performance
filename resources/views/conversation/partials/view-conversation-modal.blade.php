@@ -55,9 +55,9 @@
                     <h5 id="template-title"></h5>
                     <br>
                     <h6><u>Suggested Discussion Questions</u></h6>
-                    <ul id="questions-to-consider">
+                    <div id="questions-to-consider" class="p-3">
 
-                    </ul>
+                    </div>
                 </div>
 
                 <div class="d-none" id="info_to_capture">

@@ -11,9 +11,9 @@
                     <div class="col-12">
                         <div class="alert alert-default-danger error-date-alert" style="display:none">
                             <span class="h5"><i class="icon fas fa-exclamation-circle"></i>
-                            <span class="error-date">
-                                Conversations must be scheduled every four months, at minimum.
-                            </span>
+                                <span class="error-date">
+                                    Conversations must be scheduled every four months, at minimum.
+                                </span>
                         </div>
                     </div>
                 </div>
@@ -41,9 +41,9 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                            @if ($type == 'upcoming')
+                                @if ($type == 'upcoming')
                                 <x-edit-cancel-save name="conversation_participant_id" id="conv_participant" />
-                            @endif
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -60,21 +60,21 @@
                     </div>
                 </div>
 
-                <div class="d-none" id="info_to_capture">
+                <div class=" d-none" id="info_to_capture">
                     <h6><u>Information to Capture</u></h6>
 
-                      <h6 id="info_capture1">What date will a follow up meeting occur?</h6>
+                    <h6 id="info_capture1">What date will a follow up meeting occur?</h6>
 
                     <div class="row">
                         <div class="col-md-8">
-                            <textarea class="form-control info_comment1 mb-4 d-none" name="info_comment1" id="info_comment1_edit"></textarea>
-                            <textarea class="form-control info_comment1 mb-4 btn-conv-edit" name="info_comment1" id="info_comment1" data-id="info_comment1" data-name="info_comment1"></textarea>
+                            <textarea class="form-control supervisor-comment info_comment1 mb-4 d-none" name="info_comment1" id="info_comment1_edit"></textarea>
+                            <textarea class="form-control supervisor-comment info_comment1 mb-4 btn-conv-edit" name="info_comment1" id="info_comment1" data-id="info_comment1" data-name="info_comment1"></textarea>
                             <span id="info_comment1" class="info_comment1"></span>
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming')
+                            @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment1" id="info_comment1" hideEdit="true" />
-                        @endif
+                            @endif
                         </div>
                     </div>
 
@@ -82,33 +82,33 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <textarea class="form-control info_comment2 mb-4 d-none" name="info_comment2" id="info_comment2_edit"></textarea>
-                            <textarea class="form-control info_comment2 mb-4 btn-conv-edit" name="info_comment2" id="info_comment2" data-id="info_comment2" data-name="info_comment2"></textarea>
+                            <textarea class="form-control supervisor-comment info_comment2 mb-4 d-none" name="info_comment2" id="info_comment2_edit"></textarea>
+                            <textarea class="form-control supervisor-comment info_comment2 mb-4 btn-conv-edit" name="info_comment2" id="info_comment2" data-id="info_comment2" data-name="info_comment2"></textarea>
                             <span id="info_comment2" class="info_comment2"></span>
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming')
+                            @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment2" id="info_comment2" hideEdit="true" />
-                        @endif
+                            @endif
                         </div>
                     </div>
 
                     <h6 id="info_capture3">What support will the supervisor (and others) provide? By when?</h6>
                     <div class="row">
                         <div class="col-md-8">
-                            <textarea class="form-control info_comment3 mb-4 d-none" name="info_comment3" id="info_comment3_edit"></textarea>
-                            <textarea class="form-control info_comment3 mb-4 btn-conv-edit" name="info_comment3" id="info_comment3" data-id="info_comment3" data-name="info_comment3"></textarea>
+                            <textarea class="form-control supervisor-comment info_comment3 mb-4 d-none" name="info_comment3" id="info_comment3_edit"></textarea>
+                            <textarea class="form-control supervisor-comment info_comment3 mb-4 btn-conv-edit" name="info_comment3" id="info_comment3" data-id="info_comment3" data-name="info_comment3"></textarea>
 
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming')
-                            <x-edit-cancel-save name="info_comment3" id="info_comment3" hideEdit="true"  />
-                        @endif
+                            @if ($type == 'upcoming')
+                            <x-edit-cancel-save name="info_comment3" id="info_comment3" hideEdit="true" />
+                            @endif
                         </div>
                     </div>
-                     </div>
+                </div>
 
-                     <div>
+                <div>
 
                     <h6><u>Comments</u></h6>
 
@@ -120,9 +120,9 @@
                             <textarea class="form-control info_comment4 mb-4 employee-comment btn-conv-edit" data-name="info_comment4" data-id="info_comment4" name="info_comment4" id="info_comment4"></textarea>
                         </div>
                         <div class="col-md-4">
-                          @if ($type == 'upcoming')
+                            @if ($type == 'upcoming')
                             <x-edit-cancel-save name="info_comment4" id="info_comment4" hideEdit="true" />
-                        @endif
+                            @endif
                         </div>
                     </div>
                     <h6>Supervisor Comments and Action Items</h6>
@@ -133,15 +133,15 @@
                             <span id="info_comment5" class="info_comment5"></span>
                         </div>
                         <div class="col-md-4">
-                        @if ($type == 'upcoming')
-                            <x-edit-cancel-save name="info_comment5" id="info_comment5" hideEdit="true"/>
-                        @endif
+                            @if ($type == 'upcoming')
+                            <x-edit-cancel-save name="info_comment5" id="info_comment5" hideEdit="true" />
+                            @endif
                         </div>
                     </div>
-                    </div>
-                    <hr>
-                    @if ($showSignoff ?? true)
-                    <div id="signoff-form-block">
+                </div>
+                <hr>
+                @if ($showSignoff ?? true)
+                <div id="signoff-form-block">
                     <div id="employee-signoff-questions" class="d-none">
                         <h5><u>Sign-off</u></h5>
                         <div class="alert alert-default-danger common-error" style="display:none">

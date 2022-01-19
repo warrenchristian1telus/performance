@@ -167,6 +167,9 @@
                 }
                 let element_id = '.' + $(this).data('id');
                 let elementName = $(this).data('name')
+                if($(this).attr("readonly")) {
+                    return;
+                }
                 $(element_id).toggleClass('d-none');
                 $('.btn-conv-save').filter("[data-name=" + elementName + "]").removeClass("d-none");
                 $('.btn-conv-cancel').filter("[data-name=" + elementName + "]").removeClass("d-none");
@@ -334,7 +337,6 @@
             function isContentModified() {
                 const commentCount = 5;
                 for(let i=1; i <= commentCount; i++) {
-                    debugger;
                     if ($("textarea#info_comment"+i).val() != $("textarea#info_comment"+i+"_edit").val()) {
                         return true;
                     }
@@ -392,9 +394,17 @@
                             $('#employee-signoff-message').find('.time').html("on " + result.sign_off_time);
                             $('#supervisor-signoff-message').find('.time').html("on " + result.supervisor_signoff_time);
                             $("textarea.employee-comment").addClass('enable-not-allowed').prop('readonly', true);
-
                         }
 
+                        $("#employee-sign_off_form").find('input:radio[name="check_one"][value="'+result.empl_agree1+'"]').prop('checked', true);
+                        $("#employee-sign_off_form").find('input:radio[name="check_two"][value="'+result.empl_agree2+'"]').prop('checked', true);
+                        $("#employee-sign_off_form").find('input:radio[name="check_three"][value="'+result.empl_agree3+'"]').prop('checked', true);
+
+                        $("#supervisor-signoff-questions").find('input:radio[name="check_one"][value="'+result.supv_agree1+'"]').prop('checked', true);
+                        $("#supervisor-signoff-questions").find('input:radio[name="check_two"][value="'+result.supv_agree2+'"]').prop('checked', true);
+                        $("#supervisor-signoff-questions").find('input:radio[name="check_three"][value="'+result.supv_agree3+'"]').prop('checked', true);
+
+                        
                         if (!!result.supervisor_signoff_id) {
                             $('#supervisor-signoff-message').find('.not').addClass('d-none');
                             $('#supervisor-signoff-message').find('.time').removeClass('d-none');

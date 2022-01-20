@@ -1,6 +1,6 @@
 <x-side-layout>
     <h3>Conversations</h3>
-    <!-- @include('conversation.partials.compliance-message') -->
+    @include('conversation.partials.compliance-message')
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
         @if(!$disableEdit && false)
@@ -227,9 +227,19 @@
             });
 
             $(document).on('click', '.btn-sign-off', function(e) {
+                const formType = isSupervisor ? 'supervisor-' : 'employee-';
+                const isUnsignOff = $(this).data('action') === 'unsignoff';
+
+                const agreements = [
+                    $('#'+formType+'sign_off_form').find('input:radio[name="check_one"]:checked').val(),
+                    $('#'+formType+'sign_off_form').find('input:radio[name="check_two"]:checked').val(),
+                    $('#'+formType+'sign_off_form').find('input:radio[name="check_three"]:checked').val()
+                ];
+                if (!isUnsignOff && agreements.includes("0") && !confirm("Participants should discuss goals and performance expectations and try to come to a shared acceptance of the content in this record before signing off. Do you still want to proceed?")) {
+                    return;
+                }
                 const supervisorSignOffDone = !!$('#viewConversationModal').data('supervisor-signoff');
                 const employeeSignOffDone = !!$('#viewConversationModal').data('employee-signoff');
-                const isUnsignOff = $(this).data('action') === 'unsignoff';
                 let confirmMessage = '';
 
                 if (isUnsignOff) {
@@ -249,7 +259,6 @@
                 if (!confirm(confirmMessage)) {
                     return;
                 }
-                const formType = isSupervisor ? 'supervisor-' : 'employee-';
                 const url = ($(this).data('action') === 'unsignoff') ? '/conversation/unsign-off/' + conversation_id : '/conversation/sign-off/' + conversation_id;
                 const data = ($(this).data('action') === 'unsignoff') ? $('#unsign-off-form').serialize() : $('#'+formType+'sign_off_form').serialize() + '&' +
                     $.param({

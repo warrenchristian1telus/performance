@@ -110,8 +110,14 @@ class Conversation extends Model
     public static function warningMessage() {
         $user = Auth::user();
         $authId = $user->id;
-        $lastConv = self::where('user_id', $authId)->whereNotNull('signoff_user_id')->orderBy('sign_off_time', 'DESC')->first();
-
+        $lastConv = self::where(function ($query) use ($authId) {
+            $query->where('user_id', $authId)->orWhereHas('conversationParticipants', function ($query) use ($authId) {
+                return $query->where('participant_id', $authId);
+            });
+        })->whereNotNull('signoff_user_id')
+        ->whereNotNull('supervisor_signoff_id')
+        ->orderBy('sign_off_time', 'DESC')->first();
+        
         if ($lastConv) {
             if ($lastConv->sign_off_time->addMonths(4)->lt(Carbon::now())) {
                 return "You are required to complete a performance conversation every 4 months at minimum. You are overdue. Please complete a conversation as soon as possible.";

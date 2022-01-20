@@ -101,7 +101,10 @@ class MyEmployeesDataTable extends DataTable
             ->dom('Bfrtip')
             ->orderBy(0, 'desc')
             ->searching(true)
-            ->ordering(true);
+            ->ordering(true)
+            ->parameters([
+                'autoWidth' => false
+            ]);
     }
 
     /**

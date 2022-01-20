@@ -52,7 +52,10 @@ class GoalsDataTable extends DataTable
             ->dom('Bfrtip')
             ->orderBy(0, 'desc')
             ->searching(false)
-            ->ordering(true);
+            ->ordering(true)
+            ->parameters([
+                'autoWidth' => false
+            ]);
     }
 
     /**

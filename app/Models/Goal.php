@@ -83,13 +83,13 @@ class Goal extends Model implements Auditable
   public function getStartDateHumanAttribute() {
     return ($this->start_date) ?  $this->start_date->format('F d, Y') : null;
   }
-  
+
   public function getTargetDateHumanAttribute()
   {
-    return ($this->start_date) ? $this->target_date->format('F d, Y') : null;
+    return ($this->target_date) ? $this->target_date->format('F d, Y') : null;
   }
 
-  public function sharedWith() 
+  public function sharedWith()
   {
     return $this->belongsToMany('App\Models\User', 'goals_shared_with', 'goal_id', 'user_id')->withTimestamps();
   }

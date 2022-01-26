@@ -1,6 +1,6 @@
 <x-side-layout>
     <h3>Conversations</h3>
-    <?php /* @include('conversation.partials.compliance-message') */ ?>
+    @include('conversation.partials.compliance-message')
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
         @if(!$disableEdit && false)
@@ -17,48 +17,53 @@
             @if ($type == 'upcoming')
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
-                <div class="callout callout-info">
-                    <h6>
-                      <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">{{ $c->topic->name }}</a>
-                    </h6>
-                    <span class="mr-2">
-                        <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">With
-                        @foreach ($c->conversationParticipants as $p)
-                            {{$p->participant->name}}&nbsp;
-                        @endforeach
-                        </a>
-                    </span>
-                    <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
-                        <i class="fa-trash fa"></i>
-                    </button>
-                    <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
-                        View
-                    </button>
+                <div class="d-flex callout callout-info">
+                    <div class="flex-fill btn-view-conversation"  style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                        <h6>
+                            {{ $c->topic->name }}
+                        </h6>
+                        <span class="mr-2">
+                            With
+                            @foreach ($c->conversationParticipants as $p)
+                                {{$p->participant->name}}&nbsp;
+                            @endforeach
+                        </span>
+                    </div>
+                    <div class="d-flex flex-row-reverse align-items-center">
+                        <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
+                            <i class="fa-trash fa"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                            View
+                        </button>
+                    </div>
                 </div>
             </div>
             @endforeach
           @else
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
-                <div class="callout callout-info">
-                  <h6>
-                    <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">{{ $c->topic->name }}</a>
-                  </h6>
-                    <span class="mr-2">
-                      <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">With
-                        @foreach ($c->conversationParticipants as $p)
-                            {{$p->participant->name}}&nbsp;
-                        @endforeach
-                      </a>
-                    </span> |
-                    <span class="mx-2">
-                      <i class="fa fa-calendar text-primary mr-2"></i>
-                      <a href="javascript:void(0);" class="btn-view-conversation" style="cursor: pointer; text-decoration: none;"  data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
-                        {{ $c->c_date }}</span>
-                      </a>
-                    <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
-                        View
-                    </button>
+                <div class="d-flex callout callout-info">
+                    <div class="flex-fill btn-view-conversation"  style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                        <h6>
+                            {{ $c->topic->name }}
+                        </h6>
+                        <span class="mr-2">
+                            With
+                            @foreach ($c->conversationParticipants as $p)
+                                {{$p->participant->name}}&nbsp;
+                            @endforeach
+                        </span> |
+                        <span class="mx-2">
+                            <i class="fa fa-calendar text-primary mr-2"></i>
+                            {{ $c->c_date }}
+                        </span>
+                    </div>
+                    <div class="d-flex flex-row-reverse align-items-center">
+                        <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                            View
+                        </button>
+                    </div>
                 </div>
             </div>
             @endforeach
@@ -413,7 +418,7 @@
                         $("#supervisor-signoff-questions").find('input:radio[name="check_two"][value="'+result.supv_agree2+'"]').prop('checked', true);
                         $("#supervisor-signoff-questions").find('input:radio[name="check_three"][value="'+result.supv_agree3+'"]').prop('checked', true);
 
-
+                        
                         if (!!result.supervisor_signoff_id) {
                             $('#supervisor-signoff-message').find('.not').addClass('d-none');
                             $('#supervisor-signoff-message').find('.time').removeClass('d-none');

@@ -25,7 +25,12 @@ class CreateGoalRequest extends FormRequest
     {
         return [
             'title' => 'required',
+            'start_date' => 'nullable',
+            'target_date' => 'nullable',
             'what' => 'required',
+            'why' => 'nullable',
+            'how' => 'nullable',
+            'measure_of_success' => 'nullable',
             'goal_type_id' => 'required|exists:goal_types,id'
         ];
     }

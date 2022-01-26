@@ -26,9 +26,9 @@ class EditSuggestedGoalRequest extends FormRequest
         return [
             'title' => 'required',
             'what' => 'required',
-            // 'why' => 'required',
-            // 'how' => 'required',
-            // 'measure_of_success' => 'required',
+            'why' => 'nullable',
+            'how' => 'nullable',
+            'measure_of_success' => 'nullable',
             'goal_type_id' => 'required|exists:goal_types,id'
         ];
     }

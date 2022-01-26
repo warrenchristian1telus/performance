@@ -1,6 +1,6 @@
 <x-side-layout>
     <h3>Conversations</h3>
-    @include('conversation.partials.compliance-message')
+    <?php /* @include('conversation.partials.compliance-message') */ ?>
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
         @if(!$disableEdit && false)
@@ -418,7 +418,7 @@
                         $("#supervisor-signoff-questions").find('input:radio[name="check_two"][value="'+result.supv_agree2+'"]').prop('checked', true);
                         $("#supervisor-signoff-questions").find('input:radio[name="check_three"][value="'+result.supv_agree3+'"]').prop('checked', true);
 
-                        
+
                         if (!!result.supervisor_signoff_id) {
                             $('#supervisor-signoff-message').find('.not').addClass('d-none');
                             $('#supervisor-signoff-message').find('.time').removeClass('d-none');

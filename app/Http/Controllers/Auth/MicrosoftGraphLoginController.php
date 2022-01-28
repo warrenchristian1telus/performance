@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\MicrosoftGraph\TokenCache;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use GuzzleHttp\Exception\ClientException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Model;
+use App\Models\EmployeeDemo;
+use Illuminate\Http\Request;
+use App\MicrosoftGraph\TokenCache;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Providers\RouteServiceProvider;
+use GuzzleHttp\Exception\ClientException;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 class MicrosoftGraphLoginController extends Controller
 {
@@ -114,6 +115,13 @@ class MicrosoftGraphLoginController extends Controller
                 // To Retrieve "samaccountname" and "GUID" from "id_token"
                 $parsedToken = $this->parseToken($accessToken->getValues()['id_token']);
 
+                // Check where the authenicated user has record in PeopleSoft via  ODS's Employee table
+                $guid = property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null;
+                $ee = EmployeeDemo::whereRaw("REPLACE(guid,'-','') = ?",[$guid])->first();
+                if (!($ee)) {
+                    abort(403, 'You do not have enough permissions to perform this action. Please contact your system administor in Performance application.');
+                }
+
                 // find or create a new user
                 $isUser = User::where('azure_id', $user->getId())->first();
 
@@ -132,6 +140,7 @@ class MicrosoftGraphLoginController extends Controller
 
                     //Auth::login($isUser);
                     Auth::loginUsingId($isUser->id);
+                    $request->session()->regenerate();
 
                 } else {
 
@@ -153,6 +162,9 @@ class MicrosoftGraphLoginController extends Controller
                     $request->session()->regenerate();
 
                 }
+
+                // Grant or Remove 'Supervisor' Role based on ODS demo database
+                $this->assignSupervisorRole(Auth::user());
 
                 // /* the following code for debugging when no GUID returned from Token */
                 // if (env('APP_DEBUG')) {
@@ -218,6 +230,29 @@ class MicrosoftGraphLoginController extends Controller
     {
         $base64Data = explode(".", $token)[1];
         return json_decode(base64_decode($base64Data));
+    }
+
+    private function assignSupervisorRole(User $user)
+    {
+
+        $role = 'Supervisor';
+
+        // To determine the login user whether is manager or not 
+        $ee = EmployeeDemo::whereRaw("REPLACE(guid,'-','') = ?",[$user->guid])->first();
+
+        if ($ee) {
+            $mgr = EmployeeDemo::where('manager_id', $ee->employee_id)->first();
+
+            if ($mgr) {
+                if (!($user->hasRole($role))) {
+                    $user->assignRole($role);
+                }
+            } else {
+                if ($user->hasRole($role)) {
+                    $user->removeRole($role);
+                }
+            }
+        }
     }
 
 }

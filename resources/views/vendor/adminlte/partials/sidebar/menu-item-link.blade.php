@@ -2,7 +2,7 @@
 @if(
     (!session()->has('GOALS_ALLOWED') && !session()->has('CONVERSATION_ALLOWED'))
     || (session()->has('GOALS_ALLOWED') && session()->get('GOALS_ALLOWED') && $item['url'] == 'goal/current')
-    || (session()->has('CONVERSATION_ALLOWED') && session()->get('CONVERSATION_ALLOWED') && $item['url'] == 'conversation/upcoming')
+    || (session()->has('CONVERSATION_ALLOWED') && session()->get('CONVERSATION_ALLOWED') && $item['url'] == 'conversation/templates')
 )
 <li @isset($item['id']) id="{{ $item['id'] }}" @endisset class="nav-item">
 

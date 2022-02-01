@@ -59,7 +59,9 @@ class Conversation extends Model
 
     // If conversation is with
     public function getIsWithSupervisorAttribute() {
-        $reportingManager = Auth::user()->reportingManager()->first();
+        $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+        $user = User::find($authId);
+        $reportingManager = $user->reportingManager()->first();
         if (!$reportingManager) {
             return false;
         }

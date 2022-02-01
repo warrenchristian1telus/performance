@@ -171,15 +171,16 @@ class ConversationController extends Controller
 
     public function signOff(SignoffRequest $request, Conversation $conversation)
     {
+        $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
         if (!$conversation->is_with_supervisor) {
-            $conversation->supervisor_signoff_id = Auth::id();
+            $conversation->supervisor_signoff_id = $authId;
             $conversation->supervisor_signoff_time = Carbon::now();
 
             $conversation->supv_agree1 = $request->check_one;
             $conversation->supv_agree2 = $request->check_two;
             $conversation->supv_agree3 = $request->check_three;
         } else {
-            $conversation->signoff_user_id = Auth::id();
+            $conversation->signoff_user_id = $authId;
             $conversation->sign_off_time = Carbon::now();
             $conversation->empl_agree1 = $request->check_one;
             $conversation->empl_agree2 = $request->check_two;

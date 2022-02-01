@@ -83,8 +83,12 @@
     <x-slot name="js">
         <script>
             $("#participant_id").select2();
-            var isSupervisor = {{Auth::user()->hasRole('Supervisor') ? 'true' : 'false'}};
-            var currentUser = {{Auth::Id()}};
+            @php
+                $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+                $user = App\Models\User::find($authId);
+            @endphp
+            var isSupervisor = {{$user->hasRole('Supervisor') ? 'true' : 'false'}};
+            var currentUser = {{$authId}};
             var conversation_id = 0;
             var toReloadPage = false;
             $('#conv_participant_edit').select2({

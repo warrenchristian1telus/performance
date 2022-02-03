@@ -152,6 +152,7 @@
             function checkIfItIsLocked() {
                 $modal = $("#viewConversationModal");
                 if ($modal.data('is-frozen') == 1){
+                    if($modal.data('is-not-allowed') == 1) return true;
                     const supervisorSignOffDone = $modal.data('supervisor-signoff') == 1;
                     const employeeSignOffDone = $modal.data('employee-signoff') == 1;
                     let message = "must un-sign before changes can be made to this record of conversation";
@@ -325,7 +326,7 @@
             });
 
             $(document).on('click', '.btn-view-conversation', function(e) {
-                conversation_id = e.target.getAttribute('data-id');
+                conversation_id = e.currentTarget.getAttribute('data-id');
                 updateConversation(conversation_id);
             });
 
@@ -391,7 +392,23 @@
 
                         user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
                         user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
+                        let isNotThirdPerson = true;
+                        if (!user1 || !user2) {
+                            user1 = result.conversation_participants[0];
+                            user2 = result.conversation_participants[1];
 
+                            // Disable everything.
+                            $("button.btn-conv-edit").hide();
+                            $("button.btn-conv-save").hide();
+                            $("button.btn-conv-cancel").hide();
+                            $("#viewConversationModal").find('textarea').each((index, e) => $(e).prop('readonly', true));
+                            $('#viewConversationModal').data('is-frozen', 1);
+                            $('#viewConversationModal').data('is-not-allowed', 1);
+
+                            $('#signoff-form-block').hide();
+                            $('#unsignoff-form-block').hide();
+                            isNotThirdPerson = false;
+                        }
                         if (!isSupervisor) {
                             $('#employee-signoff-questions').removeClass('d-none');
                             $('#supervisor-signoff-questions').addClass('d-none');
@@ -452,13 +469,15 @@
                             $("#viewConversationModal").find('textarea').each((index, e) => $(e).prop('readonly', true));
                             $('#viewConversationModal').data('is-frozen', 1);
                         }
-                        const currentEmpSignoffDone = isSupervisor ? !!result.supervisor_signoff_id : !!result.signoff_user_id
-                        if (currentEmpSignoffDone) {
-                            $("#signoff-form-block").hide();
-                            $("#unsignoff-form-block").show();
-                        } else {
-                            $("#unsignoff-form-block").hide();
-                            $("#signoff-form-block").show();
+                        if (isNotThirdPerson) {
+                            const currentEmpSignoffDone = isSupervisor ? !!result.supervisor_signoff_id : !!result.signoff_user_id
+                            if (currentEmpSignoffDone) {
+                                $("#signoff-form-block").hide();
+                                $("#unsignoff-form-block").show();
+                            } else {
+                                $("#unsignoff-form-block").hide();
+                                $("#signoff-form-block").show();
+                            }
                         }
 
                         if(!!$('#unsign-off-form').length) {

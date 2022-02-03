@@ -76,12 +76,13 @@ class ConversationController extends Controller
     {
 
         DB::beginTransaction();
+        $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
         $isDirectRequest = true;
         if(route('my-team.my-employee') == url()->previous()) {
             $isDirectRequest = false;
         }
 
-        $actualOwner = $isDirectRequest ? Auth::id() : $request->owner_id ?? Auth::id();
+        $actualOwner = $isDirectRequest ? $authId : $request->owner_id ?? $authId;
 
         $conversation = new Conversation();
         $conversation->conversation_topic_id = $request->conversation_topic_id;
@@ -218,10 +219,12 @@ class ConversationController extends Controller
     }
 
     public function templateDetail($id) {
+        $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+        $user = User::find($authId);
         $template = ConversationTopic::findOrFail($id);
         $allTemplates = ConversationTopic::all();
-        $participants = Auth::user()->reportees()->get();
-        $reportingManager = Auth::user()->reportingManager()->get();
+        $participants = session()->has('original-auth-id') ? User::where('id', Auth::id())->get() : $user->reportees()->get();
+        $reportingManager = $user->reportingManager()->get();
         $participants = $participants->toBase()->merge($reportingManager);
         return view('conversation.partials.template-detail-modal-body', compact('template','allTemplates','participants','reportingManager'));
     }

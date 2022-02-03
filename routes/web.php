@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
     Route::get('/', function () {
-        return view('welcome');
+        // return view('welcome');
+        return redirect('/dashboard');
     });
     Route::middleware(['ViewShare'])->group(function () {
         Route::match(['get', 'post', 'delete', 'put'], '/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');

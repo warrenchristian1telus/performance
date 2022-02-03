@@ -57,9 +57,13 @@ class MicrosoftGraphLoginController extends Controller
         }
 
         if (!isset($providedState) || $expectedState != $providedState) {
-            return redirect('/')
+            return redirect('/login')
                 ->with('error', 'Invalid auth state')
                 ->with('errorDetail', 'The provided auth state did not match the expected value');
+        }
+
+        if($request->error) {
+            abort(403, 'System Error! ' . $request->error .  ' [' . $request->error_description . ']');   
         }
 
         // Authorization code should be in the "code" query param
@@ -104,8 +108,7 @@ class MicrosoftGraphLoginController extends Controller
                     if ($e->getResponse()->getStatusCode() == '404') {
                         // No action
                     } else {
-                        dd('throw error if not 404');
-                        // throw ExceptionWrapper::wrapGuzzleBadResponseException($e);
+                        throw ExceptionWrapper::wrapGuzzleBadResponseException($e);
                     }
                 }
 
@@ -119,7 +122,9 @@ class MicrosoftGraphLoginController extends Controller
                 $guid = property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null;
                 $ee = EmployeeDemo::whereRaw("REPLACE(guid,'-','') = ?",[$guid])->first();
                 if (!($ee)) {
-                    abort(403, 'You do not have enough permissions to perform this action. Please contact your system administor in Performance application.');
+                    return redirect('/login')
+                        ->with('error-psft', 'You do not have PeopleSoft HCM account setup yet.');
+                    //abort(403, 'You do not have enough permissions to perform this action. Please contact your system administor in Performance application.');
                 }
 
                 // find or create a new user
@@ -138,11 +143,27 @@ class MicrosoftGraphLoginController extends Controller
                         }
                     }
 
+                    if (!($isUser->joining_date)) {
+                            $isUser->joining_date = $ee->position_start_date;
+                            $isUser->save();
+                    }
+                    
+                    // Assign reporting_id 
+                    if (!($isUser->reporting_to)) {
+                        $mgr_id = $this->getReportingTo($ee);
+                        if ($mgr_id) {
+                            $isUser->reporting_to = $mgr_id;
+                            $isUser->save();
+                        }
+                    }
+
                     //Auth::login($isUser);
                     Auth::loginUsingId($isUser->id);
                     $request->session()->regenerate();
 
                 } else {
+
+                    $mgr_id = $this->getReportingTo($ee);
 
                     $createUser = User::create([
                         'name' => $user->getDisplayName(),
@@ -151,6 +172,8 @@ class MicrosoftGraphLoginController extends Controller
                         'password' => Hash::make('WatchDog'),
                         'samaccountname' => property_exists($parsedToken, 'samaccountname') ? $parsedToken->samaccountname : null,
                         'guid' => property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null,
+                        'joining_date' => $ee->position_start_date,
+                        'reporting_to' => $mgr_id,
                     ]);
 
                     // assign default role 'employee'
@@ -175,8 +198,7 @@ class MicrosoftGraphLoginController extends Controller
                 //     }
                 // }
 
-                return redirect()->intended(RouteServiceProvider::HOME);
-                //return redirect('/dashboard');
+                return redirect('/dashboard');
 
             } catch (League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
 
@@ -205,6 +227,7 @@ class MicrosoftGraphLoginController extends Controller
     // <SignOutSnippet>
     public function destroy(Request $request)
     {
+
         // Determine whether signon Azure or local database
         if (empty(session('accessToken'))) {
             $back_url = ('/');
@@ -221,8 +244,6 @@ class MicrosoftGraphLoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect($back_url);
-
-        // return redirect('/');
     }
     // </SignOutSnippet>
 
@@ -253,6 +274,21 @@ class MicrosoftGraphLoginController extends Controller
                 }
             }
         }
+    }
+
+    private function getReportingTo($ee) { 
+
+
+        $mgr = EmployeeDemo::where('employee_id', $ee->manager_id)->first();
+        
+        // To determine the login user whether is manager or not 
+        if ($mgr) {
+            $user = User::where('guid', str_replace('-','',$mgr->guid))->first();
+            return $user->id;
+        }
+
+        return null;
+
     }
 
 }

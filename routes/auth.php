@@ -16,17 +16,17 @@ use Laravel\Socialite\Facades\Socialite;
 use App\MicrosoftGraph\SendMail;
 
 
-Route::get('/login/microsoft', [AzureLoginController::class, 'login'])->name('ms-login');
+//Route::get('/login/microsoft', [AzureLoginController::class, 'login'])->name('ms-login');
 
 // Route::get('/login/microsoft/callback', [AzureLoginController::class, 'handleCallback'])->name('ms-callback');
 
 // MS Graph API Authenication -- composer require league/oauth2-client  microsoft/microsoft-graph
 Route::get('/login/microsoft/callback', [MicrosoftGraphLoginController::class, 'callback']);
-Route::get('/login/graph', [MicrosoftGraphLoginController::class, 'signin'])
+Route::get('/login/microsoft', [MicrosoftGraphLoginController::class, 'signin'])
                  ->middleware('guest')
-                 ->name('login');
+                 ->name('ms-login');
 Route::post('/logout', [MicrosoftGraphLoginController::class, 'destroy'])
-                ->middleware('auth')
+                //->middleware('auth')
                 ->name('logout');
 // Test function                 
 Route::get('/graph/sendmail', function() {

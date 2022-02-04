@@ -284,7 +284,7 @@ class MicrosoftGraphLoginController extends Controller
         // To determine the login user whether is manager or not 
         if ($mgr) {
             $user = User::where('guid', str_replace('-','',$mgr->guid))->first();
-            return $user->id;
+            return ($user ? $user->id : null);
         }
 
         return null;

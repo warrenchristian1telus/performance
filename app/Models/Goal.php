@@ -71,7 +71,7 @@ class Goal extends Model implements Auditable
   }
 
   public function user() {
-    return $this->belongsTo('App\Models\User')->select('name', 'id');
+    return $this->belongsTo('App\Models\User')->select('name', 'id', 'email', 'reporting_to');
   }
 
   public function comments()

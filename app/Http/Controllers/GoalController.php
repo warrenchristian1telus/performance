@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\Goals\CreateGoalRequest;
-use App\Models\Goal;
-use App\Models\GoalType;
-use Illuminate\Support\Facades\Auth;
-use App\DataTables\GoalsDataTable;
-use App\Http\Requests\Goals\EditSuggestedGoalRequest;
-use App\Models\GoalComment;
-use App\Models\LinkedGoal;
-use App\Models\User;
-use App\Models\DashboardNotification;
-use App\Scopes\NonLibraryScope;
 use Carbon\Carbon;
+use App\Models\Goal;
+use App\Models\User;
+use App\Models\GoalType;
+use App\Models\LinkedGoal;
+use App\Models\GoalComment;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Scopes\NonLibraryScope;
+use App\DataTables\GoalsDataTable;
+use Illuminate\Support\Facades\Auth;
+use App\Models\DashboardNotification;
+use App\Http\Requests\Goals\CreateGoalRequest;
+use App\Http\Requests\Goals\EditSuggestedGoalRequest;
 use App\MicrosoftGraph\SendMail;
 
 class GoalController extends Controller
@@ -402,6 +402,17 @@ class GoalController extends Controller
         $comment->comment = $request->comment;
 
         $comment->save();
+
+        // notify the employee when my supervisor reply my comment  
+        if (session()->get('original-auth-id') == $goal->user->reporting_to) {
+            
+            $sendMail = new SendMail();
+            $response = $sendMail->send( 
+                [ $goal->user->email ], 
+                "Your supervisor added Goal Comment",
+                "Your Supervisor have added comment to your goal."
+             );
+        }
 
         $user = User::findOrFail($goal->user_id);
         $curr_user = User::findOrFail(Auth::id());

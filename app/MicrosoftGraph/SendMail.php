@@ -41,7 +41,7 @@ class SendMail
                 ],
                 'toRecipients' => $attendees
             ],
-            "saveToSentItems" => "false",
+            "saveToSentItems" => "true",
         ];
 
         //  User - API https://graph.microsoft.com/v1.0/me/sendMail

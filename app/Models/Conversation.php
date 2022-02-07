@@ -109,7 +109,7 @@ class Conversation extends Model
         return !self::where('user_id', $user_id)->count() > 0;
     }
 
-    public static function warningMessage() {
+    public static function getLastConv($ignoreList = []) {
         $user = Auth::user();
         $authId = $user->id;
         $lastConv = self::where(function ($query) use ($authId) {
@@ -118,7 +118,20 @@ class Conversation extends Model
             });
         })->whereNotNull('signoff_user_id')
         ->whereNotNull('supervisor_signoff_id')
-        ->orderBy('sign_off_time', 'DESC')->first();
+        ->whereNotIn('id', $ignoreList)
+        ->orderBy('sign_off_time', 'DESC')
+        ->first();
+
+        if ($lastConv && !$lastConv->is_with_supervisor) {
+            $ignoreList[] = $lastConv->id;
+            $lastConv = self::getLastConv($ignoreList);
+        }
+        return $lastConv;
+    }
+
+    public static function warningMessage() {
+        
+        $lastConv = self::getLastConv();
         
         if ($lastConv) {
             if ($lastConv->sign_off_time->addMonths(4)->lt(Carbon::now())) {
@@ -127,7 +140,9 @@ class Conversation extends Model
             return "Your last performance conversation was completed on ".$lastConv->sign_off_time->format('d-M-y').". You must complete your next performance conversation by ". $lastConv->sign_off_time->addMonths(4)->format('d-M-y') ;
 
         }
-        return "You have not completed any performance conversations. You must complete your first performance conversation by " . $user->joining_date->addMonths(4)->format('d-M-y');
+        $user = Auth::user();
+        $joiningDate = $user->joining_date ? $user->joining_date->addMonths(4)->format('d-M-y') : '';
+        return "You have not completed any performance conversations. You must complete your first performance conversation by " . $joiningDate;
     }
 
     public static function latestPastConversation()

@@ -1,6 +1,6 @@
 <x-side-layout>
     <h3>Conversations</h3>
-    <?php /* @include('conversation.partials.compliance-message') */ ?>
+    @include('conversation.partials.compliance-message')
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
         @if(!$disableEdit && false)

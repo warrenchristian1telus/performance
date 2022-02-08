@@ -407,11 +407,16 @@ class GoalController extends Controller
         if (session()->get('original-auth-id') == $goal->user->reporting_to) {
             
             $sendMail = new SendMail();
-            $response = $sendMail->send( 
-                [ $goal->user->email ], 
-                "Your supervisor added Goal Comment",
-                "Your Supervisor have added comment to your goal."
-             );
+            $sendMail->attendeeAddresses = [ $goal->user->email ];
+            $sendMail->subject = "Your supervisor added Goal Comment";
+            $sendMail->body = "Your Supervisor have added comment to your goal.";
+
+            //$response = $sendMail->send();
+            $sendMail->template = 'SUPERVISOR_COMMENT_MY_GOAL';
+            array_push($sendMail->bindvariables, $goal->user->name);
+            array_push($sendMail->bindvariables, $goal->what);
+            array_push($sendMail->bindvariables, $comment->comment);
+            $response = $sendMail->sendMailWithGenericTemplate();
         }
 
         $user = User::findOrFail($goal->user_id);

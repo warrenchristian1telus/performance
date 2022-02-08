@@ -1,6 +1,7 @@
 <?php
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GenericTemplateController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,3 +37,8 @@ use Illuminate\Support\Facades\Route;
         return view('my-performance');
     })->middleware(['auth'])->name('my-performance');
     require __DIR__.'/auth.php';
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('generic-template', GenericTemplateController::class)->except(['destroy']);
+    Route::get('/graph-users', [GenericTemplateController::class,'getUsers']);
+});

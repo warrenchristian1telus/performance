@@ -151,72 +151,57 @@
                         </div>
                         <form id="employee-sign_off_form" method="post">
                             @csrf
-                            <table class="table table-borderless">
+                            <table class="table table-borderless text-center">
                                 <tr>
                                     <th></th>
-                                    <th>Agree</th>
-                                    <th>Disagree</th>
+                                    <th colspan="2" class="p-1 bg-dark border border-dark">Employee</th>
+                                    <th class="p-1"></th>
+                                    <th colspan="2" class="p-1 bg-dark border border-dark">Supervisor</th>
                                 </tr>
                                 <tr>
-                                    <td>My supervisor and I reviewed progress of my goals and adjusted as necessary.</td>
-                                    <td class="text-center"><input type="radio" name="check_one" value="1"></td>
-                                    <td class="text-center"><input type="radio" name="check_one" value="0"></td>
+                                    <th></th>
+                                    <td class="border-left border-dark emp-inputs" style="width:85px">Agree</td>
+                                    <td class="border-left border-right border-dark emp-inputs" style="width:85px">Disagree</td>
+                                    <td></td>
+                                    <td class="border-left border-dark sup-inputs" style="width:85px">Agree</td>
+                                    <td class="border-left border-right border-dark sup-inputs" style="width:85px">Disagree</td>
                                 </tr>
                                 <tr>
-                                    <td>I received guidance from my supervisor and understand what is expected of me between now and our next scheduled meeting.</td>
-                                    <td class="text-center"><input type="radio" name="check_two" value="1"></td>
-                                    <td class="text-center"><input type="radio" name="check_two" value="0"></td>
+                                    <td class="text-left">We reviewed progress of goals and adjusted as necessary.</td>
+                                    <td class="border-left border-dark emp-inputs"><input type="radio" name="check_one" value="1"></td>
+                                    <td class="border-left border-right border-dark emp-inputs"><input type="radio" name="check_one" value="0"></td>
+                                    <td></td>
+                                    <td class="border-left border-dark sup-inputs"><input type="radio" name="check_one_" value="1"></td>
+                                    <td class="border-left border-right border-dark sup-inputs"><input type="radio" name="check_one_" value="0"></td>
                                 </tr>
                                 <tr>
-                                    <td>I accept the content of this record of conversation.</td>
-                                    <td class="text-center"><input type="radio" name="check_three" value="1"></td>
-                                    <td class="text-center"><input type="radio" name="check_three" value="0"></td>
+                                    <td class="text-left">Performance expectations have been clearly communicated.</td>
+                                    <td class="border-left border-dark emp-inputs"><input type="radio" name="check_two" value="1"></td>
+                                    <td class="border-left border-right border-dark emp-inputs"><input type="radio" name="check_two" value="0"></td>
+                                    <td></td>
+                                    <td class="border-left border-dark sup-inputs"><input type="radio" name="check_two_" value="1"></td>
+                                    <td class="border-left border-right border-dark sup-inputs"><input type="radio" name="check_two_" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">I accept the content of this record of conversation.</td>
+                                    <td class="border border-top-0 border-dark emp-inputs"><input type="radio" name="check_three" value="1"></td>
+                                    <td class="border border-top-0 border-dark emp-inputs"><input type="radio" name="check_three" value="0"></td>
+                                    <td></td>
+                                    <td class="border border-top-0 border-dark sup-inputs"><input type="radio" name="check_three_" value="1"></td>
+                                    <td class="border border-top-0 border-dark sup-inputs"><input type="radio" name="check_three_" value="0"></td>
                                 </tr>
                             </table>
                         </form>
 
                     </div>
-                    <div id="supervisor-signoff-questions" class="d-none">
-                        <h5><u>Sign-off</u></h5>
-                        <div class="alert alert-default-danger common-error" style="display:none">
-                            <span class="h5">
+                    <div id="signoff-emp-id-input">
+                        <div class="my-2">Enter 6 digit employee ID to sign:</div>
 
-                            </span>
-                        </div>
-                        <form id="supervisor-sign_off_form" method="post">
-                            @csrf
-                            <table class="table table-borderless">
-                                <tr>
-                                    <th></th>
-                                    <th>Agree</th>
-                                    <th>Disagree</th>
-                                </tr>
-                                <tr>
-                                    <td>My employee and I reviewed the progress of goals and adjusted as necessary.</td>
-                                    <td class="text-center"><input type="radio" name="check_one" value="1"></td>
-                                    <td class="text-center"><input type="radio" name="check_one" value="0"></td>
-                                </tr>
-                                <tr>
-                                    <td>I clearly communicated what is expected of my employee between now and our next scheduled meeting.</td>
-                                    <td class="text-center"><input type="radio" name="check_two" value="1"></td>
-                                    <td class="text-center"><input type="radio" name="check_two" value="0"></td>
-                                </tr>
-                                <tr>
-                                    <td>I accept the content of this record of conversation.</td>
-                                    <td class="text-center"><input type="radio" name="check_three" value="1"></td>
-                                    <td class="text-center"><input type="radio" name="check_three" value="0"></td>
-                                </tr>
-                            </table>
-                        </form>
-
+                        <input type="text" id="employee_id" class="form-control d-inline w-50">
+                        <button class="btn btn-primary btn-sign-off ml-2" type="button">Sign with my employee ID</button>
+                        <br>
+                        <span class="text-danger error" data-error-for="employee_id"></span>
                     </div>
-
-                    <div class="my-2">Enter 6 digit employee ID to sign:</div>
-
-                    <input type="text" id="employee_id" class="form-control d-inline w-50">
-                    <button class="btn btn-primary btn-sign-off ml-2" type="button">Sign with my employee ID</button>
-                    <br>
-                    <span class="text-danger error" data-error-for="employee_id"></span>
                 </div>
 
                 <div id="unsignoff-form-block">

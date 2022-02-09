@@ -237,13 +237,13 @@
             });
 
             $(document).on('click', '.btn-sign-off', function(e) {
-                const formType = isSupervisor ? 'supervisor-' : 'employee-';
+                const formType = 'employee-';
                 const isUnsignOff = $(this).data('action') === 'unsignoff';
 
                 const agreements = [
-                    $('#'+formType+'sign_off_form').find('input:radio[name="check_one"]:checked').val(),
-                    $('#'+formType+'sign_off_form').find('input:radio[name="check_two"]:checked').val(),
-                    $('#'+formType+'sign_off_form').find('input:radio[name="check_three"]:checked').val()
+                    $('#'+formType+'sign_off_form').find('input:radio[name="check_one'+(isSupervisor? '_' : '') +'"]:checked').val(),
+                    $('#'+formType+'sign_off_form').find('input:radio[name="check_two'+(isSupervisor? '_' : '') +'"]:checked').val(),
+                    $('#'+formType+'sign_off_form').find('input:radio[name="check_three'+(isSupervisor? '_' : '') +'"]:checked').val()
                 ];
                 if (!isUnsignOff && agreements.includes("0") && !confirm("Participants should discuss goals and performance expectations and try to come to a shared acceptance of the content in this record before signing off. Do you still want to proceed?")) {
                     return;
@@ -405,12 +405,14 @@
                             $('#viewConversationModal').data('is-frozen', 1);
                             $('#viewConversationModal').data('is-not-allowed', 1);
 
-                            $('#signoff-form-block').hide();
+                            $('#signoff-form-block').find("#signoff-emp-id-input").hide();
                             $('#unsignoff-form-block').hide();
                             isNotThirdPerson = false;
                         }
+                        $('#employee-signoff-questions').removeClass('d-none');
                         if (!isSupervisor) {
-                            $('#employee-signoff-questions').removeClass('d-none');
+                            $("#employee-signoff-questions").find('.sup-inputs').find('input').prop('disabled', true);
+                            $("#employee-signoff-questions").find('.emp-inputs').find('input').prop('disabled', false);
                             $('#supervisor-signoff-questions').addClass('d-none');
                             //$('#employee-signoff-message').addClass('d-none');
                             $('#supervisor-signoff-message').removeClass('d-none');
@@ -420,7 +422,10 @@
                             $('#supervisor-signoff-message').find('.time').html("on " + result.supervisor_signoff_time);
                             $("textarea.supervisor-comment").addClass('enable-not-allowed').prop('readonly', true);
                         } else {
-                            $('#employee-signoff-questions').addClass('d-none');
+//                             $('#employee-signoff-questions').addClass('d-none');
+                            $("#employee-signoff-questions").find('.sup-inputs').find('input').prop('disabled', false);
+                            $("#employee-signoff-questions").find('.emp-inputs').find('input').prop('disabled', true);
+
                             $('#supervisor-signoff-questions').removeClass('d-none');
                             $('#employee-signoff-message').removeClass('d-none');
                             // $('#supervisor-signoff-message').addClass('d-none');
@@ -435,9 +440,9 @@
                         $("#employee-sign_off_form").find('input:radio[name="check_two"][value="'+result.empl_agree2+'"]').prop('checked', true);
                         $("#employee-sign_off_form").find('input:radio[name="check_three"][value="'+result.empl_agree3+'"]').prop('checked', true);
 
-                        $("#supervisor-signoff-questions").find('input:radio[name="check_one"][value="'+result.supv_agree1+'"]').prop('checked', true);
-                        $("#supervisor-signoff-questions").find('input:radio[name="check_two"][value="'+result.supv_agree2+'"]').prop('checked', true);
-                        $("#supervisor-signoff-questions").find('input:radio[name="check_three"][value="'+result.supv_agree3+'"]').prop('checked', true);
+                        $("#employee-signoff-questions").find('input:radio[name="check_one_"][value="'+result.supv_agree1+'"]').prop('checked', true);
+                        $("#employee-signoff-questions").find('input:radio[name="check_two_"][value="'+result.supv_agree2+'"]').prop('checked', true);
+                        $("#employee-signoff-questions").find('input:radio[name="check_three_"][value="'+result.supv_agree3+'"]').prop('checked', true);
 
 
                         if (!!result.supervisor_signoff_id) {
@@ -468,15 +473,25 @@
                             $("button.btn-conv-cancel").hide();
                             $("#viewConversationModal").find('textarea').each((index, e) => $(e).prop('readonly', true));
                             $('#viewConversationModal').data('is-frozen', 1);
+                            if (result.supervisor_signoff_id && isSupervisor) {
+                                $("#viewConversationModal .sup-inputs").find('input:radio').each((index, e) => $(e).prop('disabled', true));
+                            } 
+                            if (result.signoff_user_id && !isSupervisor) {
+                                $("#viewConversationModal .emp-inputs").find('input:radio').each((index, e) => $(e).prop('disabled', true));
+                            }
+                            if (result.signoff_user_id && result.supervisor_signoff_id) {
+                                $("#questions-to-consider").hide();
+                                $("#questions-to-consider").prev().hide();
+                            }
                         }
                         if (isNotThirdPerson) {
                             const currentEmpSignoffDone = isSupervisor ? !!result.supervisor_signoff_id : !!result.signoff_user_id
                             if (currentEmpSignoffDone) {
-                                $("#signoff-form-block").hide();
+                                $("#signoff-form-block").find("#signoff-emp-id-input").hide();
                                 $("#unsignoff-form-block").show();
                             } else {
                                 $("#unsignoff-form-block").hide();
-                                $("#signoff-form-block").show();
+                                $("#signoff-form-block").find("#signoff-emp-id-input").show();
                             }
                         }
 

@@ -177,9 +177,9 @@ class ConversationController extends Controller
             $conversation->supervisor_signoff_id = $authId;
             $conversation->supervisor_signoff_time = Carbon::now();
 
-            $conversation->supv_agree1 = $request->check_one;
-            $conversation->supv_agree2 = $request->check_two;
-            $conversation->supv_agree3 = $request->check_three;
+            $conversation->supv_agree1 = $request->check_one_;
+            $conversation->supv_agree2 = $request->check_two_;
+            $conversation->supv_agree3 = $request->check_three_;
         } else {
             $conversation->signoff_user_id = $authId;
             $conversation->sign_off_time = Carbon::now();

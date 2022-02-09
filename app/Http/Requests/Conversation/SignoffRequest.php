@@ -25,9 +25,12 @@ class SignoffRequest extends FormRequest
     {
         return [
             'employee_id' => 'required|digits:6',
-            'check_one' => 'required|boolean',
-            'check_two' => 'required|boolean',
-            'check_three' => 'required|boolean'
+            'check_one' => 'required_without:check_one_|boolean',
+            'check_two' => 'required_without:check_two_|boolean',
+            'check_three' => 'required_without:check_three_|boolean',
+            'check_one_' => 'required_without:check_one|boolean',
+            'check_two_' => 'required_without:check_two|boolean',
+            'check_three_' => 'required_without:check_three|boolean'
         ];
     }
 

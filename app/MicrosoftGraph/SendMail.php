@@ -13,17 +13,19 @@ use App\MicrosoftGraph\TokenCache;
 class SendMail
 {
 
-    public $attendeeAddresses;
+    public $toAddresses;
+    public $sender_id;
+
     public $subject;
     public $body;
 
-    public $azure_id;
+    // Generic Template 
     public $template;
     public $bindvariables;
 
     public function __construct() 
     {
-        $this->attendeeAddresses = [];
+        $this->toAddresses = [];
         $this->bindvariables = [];
     }
 
@@ -39,11 +41,11 @@ class SendMail
         $graph->setAccessToken($accessToken);
 
         $attendees = [];
-        foreach ($this->attendeeAddresses as $attendeeAddress) {
+        foreach ($this->toAddresses as $toAddress) {
             array_push($attendees, [
                 // Add the email address in the emailAddress property
                 'emailAddress' => [
-                    'address' => $attendeeAddress,
+                    'address' => $toAddress,
                 ],
             ]);
         }
@@ -81,27 +83,15 @@ class SendMail
         // Bind variable
         $keys = $generic_template->binds->pluck('bind')->toArray();
 
-        $this->azure_id = $generic_template->azure_id;
         $this->subject = str_replace( $keys, $this->bindvariables, $generic_template->subject);
         $this->body = str_replace( $keys, $this->bindvariables, $generic_template->body);
 
-        switch ($generic_template->sender) {
-            case 1:
-                return $this->send();
-                break;
-            case 2:    
-                return $this->sendMailUsingApplicationToken();
-                break;
+        if ($generic_template->sender == 2) {
+            // Override the sender based on the generic template definition
+            $this->sender_id = $generic_template->azure_id;
         }
-
-        // if ($generic_template->sender == 1) {
-        //     return $this->send();
-        // }
-
-        // if ($generic_template->sender == 2) {
-        //     return $this->sendMailUsingApplicationToken();
-        // }   
-
+        return $this->sendMailUsingApplicationToken();
+       
     }
 
     public function sendMailUsingApplicationToken() 
@@ -113,11 +103,11 @@ class SendMail
         $graph->setAccessToken($accessToken);
 
         $attendees = [];
-        foreach ($this->attendeeAddresses as $attendeeAddress) {
+        foreach ($this->toAddresses as $toAddress) {
             array_push($attendees, [
                 // Add the email address in the emailAddress property
                 'emailAddress' => [
-                    'address' => $attendeeAddress,
+                    'address' => $toAddress,
                 ],
             ]);
         }
@@ -127,7 +117,7 @@ class SendMail
             "message" => [
                 "subject" => $this->subject,
                 "body" => [
-                    "contentType" => "Text",
+                    "contentType" => "HTML",
                     "content" => $this->body,
                 ],
                 'toRecipients' => $attendees
@@ -136,7 +126,7 @@ class SendMail
         ];
 
         //  User - API https://graph.microsoft.com/v1.0/users/{id}/sendMail
-        $sendMailUrl = '/users/' . $this->azure_id . '/sendMail';
+        $sendMailUrl = '/users/' . $this->sender_id . '/sendMail';
         $response = $graph->createRequest('POST', $sendMailUrl)
             ->addHeaders(['Prefer' => 'outlook.timezone="Pacific Standard Time"'])
             ->attachBody($newMessage)

@@ -73,6 +73,12 @@
                 {{--  --}}
                 <select class="form-control select2 @error('email') is-invalid @enderror" 
                      name="email" id="email">
+                    @if (old('email')) 
+                        @foreach ( Session::get('old_emails') ?? [] as $key =>$value )
+                            <option value="{{ $key }}" selected="selected">{{ $value }}</option>
+                        @endforeach
+                    @endif
+
                 </select>
                 @error('email')
                     <span class="invalid-feedback">
@@ -201,6 +207,26 @@
                 $(document).on("click", "div.delete_this_row" , function(e) {
                     e.preventDefault();
                         $(this).parent().parent().remove();
+                });
+
+                $('#email').select2({
+                    ajax: {
+                        url: '/graph-users'
+                        , dataType: 'json'
+                        , delay: 250
+                        , data: function(params) {
+                            var query = {
+                                'q': params.term
+                            , }
+                            return query;
+                        }
+                        , processResults: function(data) {
+                            return {
+                                results: data
+                                };
+                        }
+                        , cache: false
+                    }
                 });
 
                 $('#sender').change(function() {

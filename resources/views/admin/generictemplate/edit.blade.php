@@ -82,7 +82,14 @@
               <div class="col-sm-6" >
                 <select class="form-control select2 @error('email') is-invalid @enderror" 
                  name="email" id="email">
-                   <option value="{{ $generic_template->azure_id }}" selected="selected">{{ $generic_template->email }}</option>
+                  @if (old('email')) 
+                     @foreach ( Session::get('old_emails') ?? [] as $key =>$value )
+                        <option value="{{ $key }}" selected="selected">{{ $value }}</option>
+                     @endforeach
+                  @else
+                        <option value="{{ $generic_template->azure_id }}" selected="selected">{{ $generic_template->email }}</option>
+                  @endif
+    
                 </select>
                 @error('email')
                     <span class="invalid-feedback">

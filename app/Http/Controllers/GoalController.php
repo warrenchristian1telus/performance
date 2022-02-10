@@ -17,6 +17,7 @@ use App\Models\DashboardNotification;
 use App\Http\Requests\Goals\CreateGoalRequest;
 use App\Http\Requests\Goals\EditSuggestedGoalRequest;
 use App\MicrosoftGraph\SendMail;
+use App\Jobs\SendEmailJob;
 
 class GoalController extends Controller
 {
@@ -403,22 +404,6 @@ class GoalController extends Controller
 
         $comment->save();
 
-        // notify the employee when my supervisor reply my comment  
-        if (session()->get('original-auth-id') == $goal->user->reporting_to) {
-            
-            $sendMail = new SendMail();
-            $sendMail->attendeeAddresses = [ $goal->user->email ];
-            $sendMail->subject = "Your supervisor added Goal Comment";
-            $sendMail->body = "Your Supervisor have added comment to your goal.";
-
-            //$response = $sendMail->send();
-            $sendMail->template = 'SUPERVISOR_COMMENT_MY_GOAL';
-            array_push($sendMail->bindvariables, $goal->user->name);
-            array_push($sendMail->bindvariables, $goal->what);
-            array_push($sendMail->bindvariables, $comment->comment);
-            $response = $sendMail->sendMailWithGenericTemplate();
-        }
-
         $user = User::findOrFail($goal->user_id);
         $curr_user = User::findOrFail(Auth::id());
 
@@ -465,6 +450,34 @@ class GoalController extends Controller
             $newNotify->related_id = $goal->id;
             $newNotify->save();
             }
+
+        // notify the employee when my supervisor reply my comment  
+        if ($curr_user->azure_id) {
+            if (session()->get('original-auth-id') == $goal->user->reporting_to) {
+
+                // Real-Time 
+                $sendMail = new SendMail();
+                $sendMail->toAddresses = [ $goal->user->email ];
+                $sendMail->sender_id = $curr_user->azure_id;
+                $sendMail->template = 'SUPERVISOR_COMMENT_MY_GOAL';
+                array_push($sendMail->bindvariables, $goal->user->name);
+                array_push($sendMail->bindvariables, $goal->what);
+                array_push($sendMail->bindvariables, $comment->comment);
+                $response = $sendMail->sendMailWithGenericTemplate();
+
+                // Using Queue            
+                // $sendEmailJob = new SendEmailJob();
+                // $sendEmailJob->toAddresses = [ $goal->user->email ];
+                // $sendEmailJob->sender_id = $curr_user->azure_id;
+                // $sendEmailJob->template = 'SUPERVISOR_COMMENT_MY_GOAL';
+                // array_push($sendEmailJob->bindvariables, $goal->user->name);
+                // array_push($sendEmailJob->bindvariables, $goal->what);
+                // array_push($sendEmailJob->bindvariables, $comment->comment);
+
+                // dispatch($sendEmailJob);
+
+            }
+        }
 
         return redirect()->back();
     }

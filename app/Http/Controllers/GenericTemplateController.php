@@ -64,6 +64,13 @@ class GenericTemplateController extends Controller
     public function store(Request $request)
     {
 
+        // array for build the select option on the page
+        if ($request->email) {
+            $request->session()->flash('old_emails', 
+                [$request->email => $this->getAzureEmail($request->email) ]
+            );
+        }
+        
         //setup Validator and passing request data and rules
         $validator = Validator::make(request()->all(), [
             'template'           => 'required|min:10|max:30|unique:generic_templates,template',
@@ -203,6 +210,13 @@ class GenericTemplateController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        // array for build the select option on the page
+        if ($request->email) {
+            $request->session()->flash('old_emails', 
+              [$request->email => $this->getAzureEmail($request->email) ]
+            );
+        }
 
          //setup Validator and passing request data and rules
          $validator = Validator::make(request()->all(), [

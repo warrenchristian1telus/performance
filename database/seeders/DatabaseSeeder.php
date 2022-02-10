@@ -32,5 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTableSeeder_Additional_20220126::class);
         $this->call(SupervisorGoalSeeder_Additional_20220126::class);
         $this->call(ConversationSeeder_Additional_20220126::class);
+        // Generic Template 
+        $this->call(GenericTemplateSeeder::class);
     }
 }

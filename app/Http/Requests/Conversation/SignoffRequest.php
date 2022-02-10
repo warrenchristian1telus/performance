@@ -36,7 +36,7 @@ class SignoffRequest extends FormRequest
 
     public function messages() 
     {
-        $message = __('You should discuss performance expectations, adjust goals, and capture significant conversation outcomes as part of this process. Please indicate if you agree or disagree with each of the statements before signing off');
+        $message = __('Please indicate if you agree or disagree with each of the statements before signing off');
         return [
             'check_one.*' => $message,
             'check_two.*' => $message,

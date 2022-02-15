@@ -252,7 +252,25 @@ return [
             'url'  => 'my-team/my-employees',
             'icon' => 'fas fa-fw fa-users',
             'active' => ['my-team/*'],
-            'can' => ['my team']
+            'can' => ['my team'],
+            'submenu' => [
+                [
+                    'text' => 'Team Goals',
+                    'url'  => '#',
+                ],
+                [
+                    'text' => 'Team Conversations',
+                    'url'  => 'my-team/conversations',
+                ],
+                [
+                    'text' => 'Notifications',
+                    'url'  => '#',
+                ],
+                [
+                    'text' => 'Performance Statistics',
+                    'url'  => '#',
+                ],
+            ]
         ],
         [
             'text' => 'Resources',

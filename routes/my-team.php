@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\MyTeamController;
+use App\Http\Controllers\MyTeamConversationController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['role:Supervisor']], function () {
@@ -25,6 +26,11 @@ Route::group(['middleware' => ['role:Supervisor']], function () {
     Route::get('employee-excused/{user_id}', [MyTeamController::class, 'getProfileExcused'])->name('my-team.employee-excused');
     Route::post('employee-excused', [MyTeamController::class, 'updateExcuseDetails'])->name('excused.updateExcuseDetails');
     // Route::get('excused-reasons', [MyTeamController::class, 'getExcusedReason'])->name('ereasons');
+
+
+    Route::prefix('my-team')->group(function() {
+        Route::get('/conversations', [MyTeamConversationController::class, 'index'])->name('conversations');
+    });
 });
 
 Route::group(['middleware' => ['ViewAsPermission']], function () {

@@ -28,8 +28,12 @@ Route::group(['middleware' => ['role:Supervisor']], function () {
     // Route::get('excused-reasons', [MyTeamController::class, 'getExcusedReason'])->name('ereasons');
 
 
-    Route::prefix('my-team')->group(function() {
-        Route::get('/conversations', [MyTeamConversationController::class, 'index'])->name('conversations');
+    Route::prefix('my-team')->name('my-team.')->group(function() {
+        Route::get('/conversations', [MyTeamConversationController::class, 'templates'])->name('conversations');
+        Route::get('/conversations/upcoming', [MyTeamConversationController::class, 'index'])->name('conversations.upcoming');
+        Route::post('/conversations/upcoming', [MyTeamConversationController::class, 'index'])->name('conversations.upcoming.filter');
+        Route::get('/conversations/past', [MyTeamConversationController::class, 'index'])->name('conversations.past');
+        Route::post('/conversations/past', [MyTeamConversationController::class, 'index'])->name('conversations.past.filter');
     });
 });
 

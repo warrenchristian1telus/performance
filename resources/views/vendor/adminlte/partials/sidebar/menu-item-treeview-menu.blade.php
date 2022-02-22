@@ -1,7 +1,7 @@
 <li @isset($item['id']) id="{{ $item['id'] }}" @endisset class="nav-item has-treeview {{ $item['submenu_class'] }}">
 
     {{-- Menu toggler --}}
-    <a class="nav-link {{ $item['class'] }} @isset($item['shift']) {{ $item['shift'] }} @endisset"
+    <a class="nav-link py-3 {{ $item['class'] }} @isset($item['shift']) {{ $item['shift'] }} @endisset"
        href="" {!! $item['data-compiled'] ?? '' !!}>
 
         <i class="mr-2 {{ $item['icon'] ?? 'far fa-fw fa-circle' }} {{
@@ -10,7 +10,7 @@
 
         <p>
             {{ $item['text'] }}
-            <i class="fas fa-angle-left right"></i>
+            <i class="py-2 fas fa-angle-left right"></i>
 
             @isset($item['label'])
                 <span class="badge badge-{{ $item['label_color'] ?? 'primary' }} right">

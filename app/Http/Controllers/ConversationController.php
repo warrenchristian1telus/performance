@@ -24,36 +24,98 @@ class ConversationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $viewType = 'conversations')
     {
         $authId = Auth::id();
-
+        $user = User::find($authId);
+        $supervisor = $user->reportingManager()->first();
+        $supervisorId = (!$supervisor) ? null : $supervisor->id;
         $conversationMessage = Conversation::warningMessage();
         $conversationTopics = ConversationTopic::all();
         $participants = Participant::all();
         $query = Conversation::with('conversationParticipants');
         $type = 'upcoming';
-        if ($request->is('conversation/past')) {
-            $conversations = $query->where(function($query) use ($authId) {
+        if ($request->is('conversation/past') || $request->is('my-team/conversations/past')) {
+            $query->where(function($query) use ($authId, $supervisorId, $viewType) {
                 $query->where('user_id', $authId)->
-                    orWhereHas('conversationParticipants', function($query) use ($authId) {
-                    return $query->where('participant_id', $authId);
+                    orWhereHas('conversationParticipants', function($query) use ($authId, $supervisorId, $viewType) {
+                        $query->where('participant_id', $authId);
+                        if ($viewType === 'my-team')
+                            $query->where('participant_id', '<>', $supervisorId);
+                        return $query;
+                    });
+            })->whereNotNull('signoff_user_id')->whereNotNull('supervisor_signoff_id');
+            if ($viewType === 'my-team') {
+                $query->where('user_id', '<>', $supervisorId);
+            }
+            else {
+                $query->where(function($query) use ($supervisorId) {
+                    $query->where('user_id', $supervisorId)->
+                    orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
+                        $query->where('participant_id', $supervisorId);
+                    });
                 });
-            })->whereNotNull('signoff_user_id')->whereNotNull('supervisor_signoff_id')->orderBy('date', 'asc')->paginate(10);
+            }
             $type = 'past';
+            if ($request->has('user_id') && $request->user_id) {
+                $user_id = $request->user_id;
+                $query->where(function($query) use($user_id) {
+                    $query->where('user_id', $user_id)->
+                        orWhereHas('conversationParticipants', function($query) use ($user_id) {
+                            $query->where('participant_id', $user_id);
+                            return $query;
+                        });
+                });
+            }
+            if ($request->has('conversation_topic_id') && $request->conversation_topic_id) {
+                $query->where('conversation_topic_id', $request->conversation_topic_id);
+            }
+
+            if ($request->has('start_date') && $request->start_date) {
+                $query->whereRaw("IF(`sign_off_time` > `supervisor_signoff_time`, `sign_off_time`, `supervisor_signoff_time`) >= '$request->start_date'");
+            }
+            if ($request->has('end_date') && $request->end_date) {
+                $query->whereRaw("IF(`sign_off_time` > `supervisor_signoff_time`, `sign_off_time`, `supervisor_signoff_time`) >= '$request->end_date'");
+            }
+            $conversations = $query->orderBy('date', 'asc')->paginate(10);
+
         } else {
-            $conversations = $query->where(function($query) use ($authId) {
+            $conversations = $query->where(function($query) use ($authId, $supervisorId, $viewType) {
                 $query->where('user_id', $authId)->
-                    orWhereHas('conversationParticipants', function($query) use ($authId) {
-                        return $query->where('participant_id', $authId);
+                    orWhereHas('conversationParticipants', function($query) use ($authId, $supervisorId, $viewType) {
+                        $query->where('participant_id', $authId);
                     });
             })->where(function($query) {
                 $query->whereNull('signoff_user_id')
                     ->orWhereNull('supervisor_signoff_id');
-            })->orderBy('date', 'asc')->paginate(10);
+            });
+            if ($viewType === 'my-team') {
+                $query->where(function ($query) use($supervisorId) {
+                    $query->whereDoesntHave('conversationParticipants', function ($query) use ($supervisorId) {
+                        $query->where('participant_id', $supervisorId);
+                    });
+                    $query->where('user_id', '<>', $supervisorId);
+                });
+            }
+            else {
+                $query->where(function($query) use ($supervisorId) {
+                    $query->where('user_id', $supervisorId)->
+                    orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
+                        $query->where('participant_id', $supervisorId);
+                    });
+                });
+            }
+
+            $conversations = $query->orderBy('date', 'asc')->paginate(10);
+            
         }
 
-        return view('conversation.index', compact('type', 'conversations', 'conversationTopics', 'participants', 'conversationMessage'));
+        $view = 'conversation.index';
+        $reportees = $viewType === 'my-team' ? $user->reportees()->get() : null;
+        $topics = $viewType === 'my-team' ? ConversationTopic::all() : null;
+
+        
+        return view($view, compact('type', 'conversations', 'conversationTopics', 'participants', 'conversationMessage', 'viewType', 'reportees', 'topics'));
     }
 
     /**
@@ -207,7 +269,7 @@ class ConversationController extends Controller
         response()->json(['success' => true, 'Message' => 'UnSign Successfull', 'data' => $conversation]);;
     }
 
-    public function templates(Request $request) {
+    public function templates(Request $request, $viewType = 'conversations') {
         $query = new ConversationTopic;
         if ($request->has('search') && $request->search) {
             $query = $query->where('name', 'LIKE', "%$request->search%");
@@ -215,7 +277,7 @@ class ConversationController extends Controller
         $templates = $query->get();
         $searchValue = $request->search ?? '';
         $conversationMessage = Conversation::warningMessage();
-        return view('conversation.templates', compact('templates', 'searchValue', 'conversationMessage'));
+        return view('conversation.templates', compact('templates', 'searchValue', 'conversationMessage', 'viewType'));
     }
 
     public function templateDetail($id) {

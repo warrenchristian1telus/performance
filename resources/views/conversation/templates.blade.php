@@ -1,6 +1,8 @@
 <x-side-layout>
     <h3>Conversations</h3>
-    @include('conversation.partials.compliance-message');
+    @if($viewType === 'conversations')
+        @include('conversation.partials.compliance-message')
+    @endif
     <div class="row">
         <div class="col-md-8"> @include('conversation.partials.tabs')</div>
     </div>

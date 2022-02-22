@@ -14,7 +14,7 @@ class Conversation extends Model
     use HasFactory, SoftDeletes;
 
     protected $with = ['topic', 'conversationParticipants', 'conversationParticipants.participant'];
-    protected $appends = ['c_date', 'c_time', 'questions', 'date_time', 'is_current_user_participant', 'is_with_supervisor'];
+    protected $appends = ['c_date', 'c_time', 'questions', 'date_time', 'is_current_user_participant', 'is_with_supervisor', 'last_sign_off_date'];
 
     protected $casts = [
         'date' => 'datetime:Y-m-d',
@@ -75,6 +75,11 @@ class Conversation extends Model
     public function getCDateAttribute()
     {
         return $this->date->format('M d, Y');
+    }
+
+    public function getLastSignOffDateAttribute()
+    {
+        return $this->supervisor_signoff_time > $this->sign_off_time ? $this->sign_off_time : $this->supervisor_signoff_time;
     }
 
     public function getCTimeAttribute()

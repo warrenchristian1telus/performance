@@ -7,6 +7,7 @@ use Microsoft\Graph\Graph;
 use Microsoft\Graph\Model;
 use App\Models\EmployeeDemo;
 use Illuminate\Http\Request;
+use App\Models\SharedProfile;
 use App\MicrosoftGraph\TokenCache;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -253,31 +254,9 @@ class MicrosoftGraphLoginController extends Controller
         return json_decode(base64_decode($base64Data));
     }
 
-    private function assignSupervisorRole(User $user)
-    {
 
-        $role = 'Supervisor';
-
-        // To determine the login user whether is manager or not 
-        $ee = EmployeeDemo::whereRaw("REPLACE(guid,'-','') = ?",[$user->guid])->first();
-
-        if ($ee) {
-            $mgr = EmployeeDemo::where('manager_id', $ee->employee_id)->first();
-
-            if ($mgr) {
-                if (!($user->hasRole($role))) {
-                    $user->assignRole($role);
-                }
-            } else {
-                if ($user->hasRole($role)) {
-                    $user->removeRole($role);
-                }
-            }
-        }
-    }
 
     private function getReportingTo($ee) { 
-
 
         $mgr = EmployeeDemo::where('employee_id', $ee->manager_id)->first();
         
@@ -291,4 +270,40 @@ class MicrosoftGraphLoginController extends Controller
 
     }
 
+    private function assignSupervisorRole(User $user)
+    {
+
+        $role = 'Supervisor';
+
+        $isManager = false;
+        $hasSharedProfile = false;
+
+        // To determine the login user whether is manager or not 
+           // To determine the login user whether is manager or not 
+           $mgr = User::where('reporting_to', $user->id)->first();
+           if ($mgr) {
+               $isManager = true;
+           } else {
+               $isManager = false;
+           }
+
+        // To determine the login user whether has shared profile
+        $sp = SharedProfile::where('shared_with', $user->id )->first();
+        if ($sp) {
+            $hasSharedProfile = true;
+        } else {
+            $hasSharedProfile = false;
+        }
+
+        // Assign/Rovoke Role when is manager or has shared Profile
+        if ($user->hasRole($role)) {
+            if (!($isManager or $hasSharedProfile)) {
+                $user->removeRole($role);
+            }
+        } else {
+            if ($isManager or $hasSharedProfile) {
+                $user->assignRole($role);
+            }
+        }
+    }
 }

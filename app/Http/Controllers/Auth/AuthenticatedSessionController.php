@@ -7,6 +7,8 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\SharedProfile;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,9 +30,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
+
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        // Assign Role "employee"
+        $user = Auth::user();
+        if (!($user->hasRole('employee'))) {
+            $user->assignRole('employee');
+        }
+        // Grant or Remove 'Supervisor' Role based on ODS demo database
+        $this->assignSupervisorRole($user);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
@@ -50,5 +61,41 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    protected function assignSupervisorRole(User $user)
+    {
+
+        $role = 'Supervisor';
+
+        $isManager = false;
+        $hasSharedProfile = false;
+
+        // To determine the login user whether is manager or not 
+        $mgr = User::where('reporting_to', $user->id)->first();
+        if ($mgr) {
+            $isManager = true;
+        } else {
+            $isManager = false;
+        }
+
+        // To determine the login user whether has shared profile
+        $sp = SharedProfile::where('shared_with', $user->id )->first();
+        if ($sp) {
+            $hasSharedProfile = true;
+        } else {
+            $hasSharedProfile = false;
+        }
+
+        // Assign/Rovoke Role when is manager or has shared Profile
+        if ($user->hasRole($role)) {
+            if (!($isManager or $hasSharedProfile)) {
+                $user->removeRole($role);
+            }
+        } else {
+            if ($isManager or $hasSharedProfile) {
+                $user->assignRole($role);
+            }
+        }
     }
 }

@@ -226,6 +226,7 @@ return [
 
     'menu' => [
         [
+            'role' => 'listitem',
             'text' => 'Home',
             'url'  => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
@@ -235,12 +236,14 @@ return [
         ],
         [
             'text' => 'Goals',
+            'role' => 'listitem',
             'url'  => 'goal/current',
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['goal/*'],
             'can' => ['goals']
         ],
         [
+            'role' => 'listitem',
             'text' => 'Conversations',
             'url'  => 'conversation/templates',
             'icon' => 'fas fa-fw fa-bullseye',
@@ -248,6 +251,7 @@ return [
             'can' => ['conversions']
         ],
         [
+            'role' => 'listitem',
             'text' => 'My Team',
             'url'  => 'my-team/my-employees',
             'icon' => 'fas fa-fw fa-users',
@@ -274,12 +278,21 @@ return [
             ]
         ],
         [
+            'role' => 'listitem',
+            'text' => 'System Administration',
+            'url'  => 'sysadmin/myorg',
+            'icon' => 'fas fa-fw fa-cog',
+            'active' => ['sysadmin/*']
+        ],
+        [
+            'role' => 'listitem',
             'text' => 'Resources',
             'url'  => 'resource/user-guide',
-            'icon' => 'fas fa-fw fa-bullseye',
+            'icon' => 'fas fa-fw fa-book',
             'active' => ['resource/*']
         ],
         // [
+        //     'role' => 'listitem',
         //     'text' => 'POC',
         //     'url'  => 'poc/bidashboard',
         //     'icon' => 'fas fa-fw fa-lightbulb',

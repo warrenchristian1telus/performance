@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
             require __DIR__ . '/conversation.php';
             require __DIR__ . '/resource.php';
             require __DIR__ . '/my-team.php';
+            require __DIR__ . '/sysadmin.php';
             require __DIR__ . '/poc.php';
         });
     });

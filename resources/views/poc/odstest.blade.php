@@ -1,7 +1,7 @@
 @extends('poc.layout')
 @section('tab-content')
 <div class="row-container">
-  <p>ODS Data on https://analytics-testapi.psa.gov.bc.ca/apiserver/api.rsc/Datamart_TMPerform_ps_employee_demo/</p>
+  <p>ODS Data on https://analytics-testapi.psa.gov.bc.ca/apiserver/api.rst#Datamart_ePerform_ps_employee_demo </p>
   <!-- <table border=1>
     <tr>
       <td>Date Posted</td>
@@ -24,6 +24,6 @@
   @dd($response);
 </div>
 <div class="row-container b">
-  <p>Data on Performance employee_demo</p>
+  <p>Datamart_TMPerform_ps_employee_demo</p>
 </div>
 @endsection

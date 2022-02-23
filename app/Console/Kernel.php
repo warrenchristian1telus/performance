@@ -29,6 +29,22 @@ class Kernel extends ConsoleKernel
         $schedule->command('daily:notification')
             ->daily()
             ->at('8:00');
+
+        $schedule->command('command:getODSOrganizations')
+          ->timezone('America/Vancouver')
+          ->dailyAt('00:05')
+          ->runInBackground();
+
+        $schedule->command('command:StoreODSData')
+          ->timezone('America/Vancouver')
+          ->hourlyAt(1)
+          ->runInBackground();
+
+        $schedule->command('command:getODSOrgNodes')
+          ->timezone('America/Vancouver')
+          ->dailyAt('00:15')
+          ->runInBackground();
+
     }
 
     /**

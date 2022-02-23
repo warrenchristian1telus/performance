@@ -1,11 +1,11 @@
 <div>
 
   <div class="btn-group">
-
-      <div class="mr-2" size="xs" style="float:right">
-        <input type="checkbox" id='master'> Select All
-        &nbsp;&nbsp
-
+    <label for="master">
+      <input id="master" type="checkbox" name="select_all">&nbsp;&nbsp;Select All
+    </label>
+    &nbsp;&nbsp;&nbsp;&nbsp
+    <label for="action_btn">
       <button type="button" icon="fas fa-xs fa-ellipsis-v" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Actions
       </button>
@@ -20,16 +20,14 @@
               Mark as unread
           </x-button>
       </div>
-    </div>
-
+    </label>
   </div>
 
   @foreach($notifications as $notification)
   <div class="rounded shadow-sm" size="xs" >
       <div class="p-2">
         <div class="pl-2 d-flex align-items-center justify-content-center {{$notification->status === null ? "border-left" : ""}}  border-primary" style="border-width:3px !important" id="tr_{{$notification->id}}">
-
-            <input type='checkbox' class='sub_chk' data-id="{{$notification->id}}">
+            <input id='ntfyitem' type='checkbox' class='sub_chk' data-id="{{$notification->id}}">
             <div style="cursor:pointer;" onclick="window.location.href = '{{route("goal.show", $notification->relatedGoal->id)}}'">
               <div class="pl-3 d-flex align-items-center justify-content-center flex-row">
                   <x-profile-pic size="36"></x-profile-pic>
@@ -49,13 +47,15 @@
                   size="sm"
                   :href='route("goal.show", $notification->relatedGoal->id)'
                   :tooltip="__('Click to view the details of this goal.')"
-                  tooltipPosition="bottom" class="mr-2">{{__('View')}}
+                  tooltipPosition="bottom" class="mr-2" aria-label="Show Item">{{__('View')}}
+
               </x-button>
             @endif
               <x-button
                   size="sm" style="danger" icon="trash"
                   :tooltip="__('Click to delete notification.')"
-                  tooltipPosition="bottom" class="btn btn-danger btn-sm float-right mr-2 delete-notification-btn" data-id="{{ $notification->id }}">
+                  tooltipPosition="bottom" class="btn btn-danger btn-sm float-right mr-2 delete-notification-btn" data-id="{{ $notification->id }}"
+                  aria-label="Delete Notification">
               </x-button>
           </div>
       </div>

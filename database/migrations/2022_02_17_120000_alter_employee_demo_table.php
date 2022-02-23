@@ -26,7 +26,6 @@ class AlterEmployeeDemoTable extends Migration
             $table->string('jobcodedescgroup')->after('manager_last_name')->nullable();
             $table->string('occupationalgroup')->after('manager_last_name')->nullable();
             $table->string('paygroup')->after('manager_last_name')->nullable();
-            $table->string('organization')->after('manager_last_name')->nullable();
             $table->string('address1')->after('manager_last_name')->nullable();
             $table->string('address2')->after('manager_last_name')->nullable();
             $table->string('appointment_status')->after('manager_last_name')->nullable();
@@ -62,7 +61,6 @@ class AlterEmployeeDemoTable extends Migration
             $table->string('supervisor_position_number')->after('manager_last_name')->nullable();
             $table->string('supervisor_position_title')->after('manager_last_name')->nullable();
             $table->string('tgb_reg_district')->after('manager_last_name')->nullable();
-            // $table->string('organization')->after('manager_last_name')->nullable();
         });
     }
 

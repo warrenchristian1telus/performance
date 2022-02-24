@@ -280,33 +280,6 @@ return [
         ],
         [
             'role' => 'listitem',
-            'text' => 'System Administration',
-            'id' => 'sysadmin-menu',
-            'url'  => 'sysadmin/myorg',
-            'icon' => 'fas fa-fw fa-cog',
-            'active' => ['sysadmin/*']
-            'submenu' => [
-                [
-                    'text' => 'My Organization',
-                    'url'  => 'sysadmin/myorg',
-                ],
-                [
-                    'text' => 'Statistics and Reports',
-                    'url'  => 'sysadmin/statistics',
-                ],
-                [
-                    'text' => 'Goal Bank',
-                    'url'  => 'sysadmin/goal-bank',
-                ],
-                [
-                    'text' => 'Shared Employees',
-                    'url'  => 'sysadmin/shared',
-                ],
-            ]
-        ],
-    ],
-        [
-            'role' => 'listitem',
             'text' => 'Resources',
             'url'  => 'resource/user-guide',
             'icon' => 'fas fa-fw fa-book',

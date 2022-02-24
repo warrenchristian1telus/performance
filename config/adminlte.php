@@ -253,6 +253,7 @@ return [
         [
             'role' => 'listitem',
             'text' => 'My Team',
+            'id' => 'my-team-menu',
             'url'  => 'my-team/my-employees',
             'icon' => 'fas fa-fw fa-users',
             'active' => ['my-team/*'],

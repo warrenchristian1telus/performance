@@ -14,7 +14,7 @@
                 </p>
             </div>
         </div>
-        <div class="row">
+        <div class="row d-none">
             <div class="col-8">
                 <form action="" id="search-templates-form">
                     <div class="position-relative w-50">
@@ -29,15 +29,37 @@
         <div class="row">
             <div class="col-12">
                 @foreach ($templates as $template)
-                <div class="card">
-                    <div class="card-body text-primary p-2">
-                        <button class="btn d-flex align-items-center w-100 template-btn" data-toggle="modal" data-target="#conversationTemplateDetail" data-id="{{$template->id}}">
-                            <strong>{{$template->name}}</strong>
-                            <div class="flex-fill"></div>
-                            <span class="btn btn-primary btn-sm">View</span>
-                        </button>
+                    @if(strtolower($template->name) === 'performance check-in')
+                        <h4>Performance Check-in Template</h4>
+                        <p>The Performance check-In template can be used in most situations. It includes options to capture progress against goals, celebrate successes, discuss ways to improve future performance outcomes, and record an overall performance evaluation.</p>
+                        <div class="card border border-primary">
+                            <div class="card-body text-primary p-2">
+                                <button class="btn d-flex align-items-center w-100 template-btn" data-toggle="modal" data-target="#conversationTemplateDetail" data-id="{{$template->id}}">
+                                    <strong>{{$template->name}}</strong>
+                                    <div class="flex-fill"></div>
+                                    <span class="btn btn-primary btn-sm">View</span>
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+
+                @endforeach
+            </div>
+            <div class="col-12">
+                <h4>Other Templates</h4>
+                <p>These templates can be used as required to support conversations that require a more specific focus. Select a topic below to read more in the <em>When to use this template section</em>.</p>
+                @foreach ($templates as $template)
+                    @if(strtolower($template->name) !== 'performance check-in')
+                    <div class="card">
+                        <div class="card-body text-primary p-2">
+                            <button class="btn d-flex align-items-center w-100 template-btn" data-toggle="modal" data-target="#conversationTemplateDetail" data-id="{{$template->id}}">
+                                <strong>{{$template->name}}</strong>
+                                <div class="flex-fill"></div>
+                                <span class="btn btn-primary btn-sm">View</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                    @endif
                 @endforeach
             </div>
         </div>

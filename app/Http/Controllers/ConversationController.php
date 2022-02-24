@@ -75,7 +75,7 @@ class ConversationController extends Controller
                 $query->whereRaw("IF(`sign_off_time` > `supervisor_signoff_time`, `sign_off_time`, `supervisor_signoff_time`) >= '$request->start_date'");
             }
             if ($request->has('end_date') && $request->end_date) {
-                $query->whereRaw("IF(`sign_off_time` > `supervisor_signoff_time`, `sign_off_time`, `supervisor_signoff_time`) >= '$request->end_date'");
+                $query->whereRaw("IF(`sign_off_time` > `supervisor_signoff_time`, `sign_off_time`, `supervisor_signoff_time`) <= '$request->end_date'");
             }
             $conversations = $query->orderBy('date', 'asc')->paginate(10);
 

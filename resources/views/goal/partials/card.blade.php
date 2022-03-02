@@ -12,7 +12,7 @@
                 @if ($allowEditModal ?? false)
                     <x-button icon='edit' class="text-light edit-suggested-goal" data-goal-id="{{$goal->id}}" aria-label="Edit button" data-toggle="modal" data-target="#edit-suggested-goal-modal"></x-button>
                 @endif
-                @if ($type !== 'supervisor' && !$disableEdit)
+                @if ($type ?? '' ?? '' !== 'supervisor' && !$disableEdit)
                 <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}')">
                     @csrf
                     @method('DELETE')
@@ -37,6 +37,7 @@
           </div>
         @endif
         <div class="card-footer d-flex align-items-center">
+            @if(($cardDesign ?? 'default') === 'default')
             <div>
                 <b>Goal created by:&nbsp;</b>{{ $goal->user->name}} <br>
                 @if($goal->is_library)
@@ -50,7 +51,7 @@
             <div class="flex-fill"></div>
             @if(!$goal->is_library)
             <div>
-                @if($type !== 'supervisor' && !$disableEdit)
+                @if($type ?? '' !== 'supervisor' && !$disableEdit)
                     @include('goal.partials.status-change')
                 @else
                     <x-goal-status :status="$goal->status"></x-goal-status>
@@ -63,7 +64,7 @@
                 :tooltip="__('Click to view the details of this goal.')"
                 tooltipPosition="bottom" class="ml-2">{{__('View')}}</x-button>
             @endif
-            @if($type === 'supervisor' && !$disableEdit)
+            @if(($type ?? '') === 'supervisor' && !$disableEdit)
                 <form action="{{route('goal.supervisor.copy', $goal->id)}}" method="post" onSubmit="return confirm('This goal will be copied to your Current Goals tab. You can access and edit it there without impacting your supervisor\'s goal. Continue?');">
                     @csrf
                     <x-button
@@ -73,6 +74,26 @@
                         :tooltip="__('Click to copy this goal to your Current Goals tab and make it your own.')"
                         tooltipPosition="bottom">{{__('Copy')}}</x-button>
                 </form>
+            @endif
+            @elseif (($cardDesign ?? 'default') === 'my-team')
+            <select class="form-control is-shared" id="is_shared_{{$goal->id}}"  name="is_shared[{{ $goal->id }}]" data-goal-id="{{ $goal->id }}" >
+                <option value="1" {{ count($goal->sharedWith) > 0 ? 'selected' : ''}}>Shared</option>
+                <option value="0" {{ count($goal->sharedWith) > 0 ? '' : 'selected'}}>Private</option>
+            </select>
+            <select multiple class="form-control search-users" id="search-users-{{$goal->id}}" name="share_with[{{$goal->id}}][]"  {{ count($goal->sharedWith) > 0 ? '' : 'disabled'}} data-goal-id="{{$goal->id}}">
+                @php
+                    $alreadyAdded = [];
+                @endphp
+                @foreach ($goal->sharedWith as $employee)
+                    <option value="{{ $employee->id }}" selected> {{$employee->name}}</option>
+                    @php array_push($alreadyAdded, $employee->id) @endphp
+                @endforeach
+                @foreach ($employees as $employee)
+                    @if (!in_array($employee->id, $alreadyAdded))
+                        <option value="{{ $employee->id }}" {{ count($alreadyAdded) === 0 ? 'selected' : ''}}> {{$employee->name}}</option>
+                    @endif
+                @endforeach
+            </select>
             @endif
 
         </div>

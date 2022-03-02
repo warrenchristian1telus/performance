@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Scopes\NonLibraryScope;
 use App\DataTables\GoalsDataTable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\DashboardNotification;
 use App\Http\Requests\Goals\CreateGoalRequest;
 use App\Http\Requests\Goals\EditSuggestedGoalRequest;
@@ -37,7 +38,7 @@ class GoalController extends Controller
         $type = 'past';
         if ($request->is("goal/current")) {
             $goals = $query->where('status', 'active')
-                ->paginate(4);
+                ->paginate(8);
             $type = 'current';
             return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
         } else if ($request->is("goal/supervisor")) {
@@ -46,7 +47,7 @@ class GoalController extends Controller
             // $referencedGoals = Goal::where('user_id', $authId)->whereNotNull('referenced_from')->pluck('referenced_from');
             $goals = $user->sharedGoals()
                 /* ->whereNotIn('goals.id', $referencedGoals ) */
-                ->paginate(4);
+                ->paginate(8);
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
         }
@@ -249,6 +250,12 @@ class GoalController extends Controller
 
         $bankGoals = $query->get();
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
+
+        // dd($query->get()->pluck('user.id', 'user.name'));
+        // $createdBy = $query->get()->get('user.name', 'user.id');
+        // $createdBy=json_encode($createdBy);
+        // dd($createdBy);
+
         return view('goal.bank', compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));
     }
 
@@ -451,11 +458,11 @@ class GoalController extends Controller
             $newNotify->save();
             }
 
-        // notify the employee when my supervisor reply my comment  
+        // notify the employee when my supervisor reply my comment
         if ($curr_user->azure_id) {
             if (session()->get('original-auth-id') == $goal->user->reporting_to) {
 
-                // Real-Time 
+                // Real-Time
                 $sendMail = new SendMail();
                 $sendMail->toAddresses = [ $goal->user->email ];
                 $sendMail->sender_id = $curr_user->azure_id;
@@ -465,7 +472,7 @@ class GoalController extends Controller
                 array_push($sendMail->bindvariables, $comment->comment);
                 $response = $sendMail->sendMailWithGenericTemplate();
 
-                // Using Queue            
+                // Using Queue
                 // $sendEmailJob = new SendEmailJob();
                 // $sendEmailJob->toAddresses = [ $goal->user->email ];
                 // $sendEmailJob->sender_id = $curr_user->azure_id;

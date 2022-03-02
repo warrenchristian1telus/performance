@@ -26,8 +26,12 @@
                 <p class="h5">
                     {{ $goal->title }}
                 </p>
-                <p>
+                <!-- <p>
                     {{ $goal->what }}
+                </p> -->
+                <p>
+                    <b>Goal Type:&nbsp;&nbsp;&nbsp;</b>{{ $goal->goaltype->name}}<br>
+                    <b>Created by:&nbsp;&nbsp;&nbsp;</b>{{ $goal->user->name}}<br>
                 </p>
             </a>
         </div>
@@ -40,6 +44,7 @@
             @if(($cardDesign ?? 'default') === 'default')
             <div>
                 <b>Goal created by:&nbsp;</b>{{ $goal->user->name}} <br>
+                <!-- <b>Goal created by:&nbsp;</b>{{ $goal->user->name}} <br> -->
                 @if($goal->is_library)
                     <b>Goal suggested to:&nbsp;</b>
                     @foreach($goal->sharedWith as $index => $sharedWith)

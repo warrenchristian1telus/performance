@@ -21,12 +21,18 @@
          @if ($type == 'current' || $type == 'supervisor')
             @if($type == 'supervisor')
                 <div class="col-12 mb-4">
-                    These goals have been shared with you by your supervisor and reflect current priorities. Consider these goals when creating your own.
+                    @if($goals->count() != 0)
+                        These goals have been shared with you by your supervisor and reflect current priorities. Consider these goals when creating your own.
+                    @else
+                        <div class="alert alert-warning alert-dismissible no-border"  style="border-color:#caf0f8; background-color:#caf0f8" role="alert">
+                        <span class="h5" aria-hidden="true"><i class="icon fa fa-info-circle"></i><b>Your supervisor is not currently sharing any goals with you.</b></span>
+                        </div>
+                    @endif
                 </div>
             @endif
             @foreach ($goals as $goal)
 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="col-12 col-sm-3">
                     @include('goal.partials.card')
                 </div>
 
@@ -96,7 +102,7 @@
                      <small  class="text-danger error-target_date"></small>
                 </div>
                 <div class="col-12">
-                    <div class="card mt-3 p-3">
+                    <div class="card mt-3 p-3" icon="fa-question">
                         <span>Supporting Material</span>
                         <a href="{{route('resource.goal-setting')}}" target="_blank">Goal Setting Resources</a>
                     </div>

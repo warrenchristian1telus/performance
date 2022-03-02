@@ -17,7 +17,9 @@
                     <x-textarea label="What" name="what" :value="$goal->what" />
                     <x-textarea label="Why" name="why" :value="$goal->why" />
                     <x-textarea label="How" name="how" :value="$goal->how"/>
-                    <x-textarea label="Measures of Success" name="measure_of_success" :value="$goal->measure_of_success" />
+                        <!-- <x-textarea label="Measures of Success" name="measure_of_success" :value="$goal->measure_of_success" /> -->
+                    <label for='measure_of_success'>Measure of Success</label>
+                    <textarea class="ckeditor form-control" name="measure_of_success" :value="$goal->measure_of_success">{{$goal->measure_of_success}}</textarea>
                 </div>
                 <div class="col-sm-6">
                     <x-input label="Start Date" type="date" name="start_date" :value="$goal->start_date ? $goal->start_date->format('Y-m-d') : ''" />
@@ -32,3 +34,13 @@
         </form>
     </div>
 </x-side-layout>
+
+<script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+<script type="test/javascript">
+    $(document).ready(function(){
+        $('.ckeditor').ckeditor();
+        CKEDITOR.config.removeButtons='About';
+        CKEDITOR.replace('content');
+        });
+    });
+</script>

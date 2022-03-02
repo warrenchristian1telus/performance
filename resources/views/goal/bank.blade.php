@@ -7,15 +7,13 @@
                 </x-slot>
             </div>
         </div>
+        <div>
+            The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile.
+            <br>
+            <br>
+        </div>
         <form action="" method="get">
             <div class="row">
-                <div class="col">
-                    <x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
-                </div>
-                <div class="col">
-                    <x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type" :selected="request()->goal_type"></x-dropdown>
-                </div>
-
                 <div class="col">
                     <label>
                         Title
@@ -23,14 +21,19 @@
                     </label>
                 </div>
                 <div class="col">
+                    <x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type" :selected="request()->goal_type"></x-dropdown>
+                </div>
+                <div class="col">
                     <label>
                         Date Added
                         <input type="text" class="form-control" name="date_added" value="{{request()->date_added ?? 'Any'}}">
                     </label>
                 </div>
-
                 <div class="col">
                     <x-dropdown :list="$createdBy" label="Created by"></x-dropdown>
+                </div>
+                <div class="col">
+                    <x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
                 </div>
                 <div class="col">
                     <button class="btn btn-primary mt-4 px-5">Filter</button>

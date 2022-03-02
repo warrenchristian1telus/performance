@@ -56,6 +56,6 @@
 
     <b>{{__("Measures of Success")}}</b>
     <div class="form-control-plaintext">
-        {{$goal['measure_of_success']}}
+        {!!$goal['measure_of_success']!!}
     </div>
 </div>

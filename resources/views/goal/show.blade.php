@@ -31,17 +31,17 @@
                                <b>Linked Goals</b>
                                 <span class="float-right">
                                  <button class="btn  btn-sm link-goal" data-id="{{ $goal->id }}" data-toggle="modal" data-target="#supervisorGoalModal"> <i class="fa fa-plus"></i></button>
-                                  
+
                                 </span>
                             </div>
                             @forelse ($linkedGoals as $l)
                             <div class="card mx-3">
                             <div class="card-body py-2">
                              <p class="mb-0"><a href="{{route("goal.show", $l->id)}}" > {{ $l->title }}</a></p>
-                            
+
                              <span class="mr-2">{{ $l->user->name }}</span>
-                           <span class="mx-3">  | &nbsp; &nbsp; &nbsp; 
-                          
+                           <span class="mx-3">  | &nbsp; &nbsp; &nbsp;
+
                             <div class="d-inline-flex flex-row align-items-center">
                                 <div class="bg-{{ \Config::get("global.status.$l->status.color") }} rounded-circle mr-2" style="width:15px; height:15px;"></div>
                                 <div class="text-capitalize">
@@ -51,12 +51,12 @@
                             </span>
                              <span class="mx-3">| &nbsp;&nbsp; &nbsp; {{\Carbon\Carbon::now()->format('M d, Y') }}</span>
                             </div>
-                           
+
                             </div>
                             @empty
-                           
+
                             <div class="p-3 text-center">
-                              
+
                                 <p class="text-center">No Goals to Display</p>
                                 <p class="text-center font-weight-bold">Start linking to your supervisor's goal</p>
                                 <button class="btn btn-outline-primary btn-sm link-goal" data-id="{{ $goal->id }}" data-toggle="modal" data-target="#supervisorGoalModal">Link Goals</button>
@@ -69,19 +69,19 @@
                     @if (!$goal->is_library)
                     <div class="col-12 col-sm-5">
                         <b>Comments</b>
-                        @foreach ($goal->comments as $comment) 
+                        @foreach ($goal->comments as $comment)
                             <div class="d-flex flex-row my-2">
                                 <x-profile-pic></x-profile-pic>
                                 <div class="border flex-fill p-2 rounded">
                                     <b>{{$comment->user->name}}</b> on {{$comment->created_at->format('M d, Y H:i A')}}<br>
-                                    {{$comment->comment}}
+                                    {!!$comment->comment!!}
                                     <div>
                                         @foreach($comment->replies as $reply)
                                         <div class="card mt-2 p-2 d-flex flex-row bg-light">
                                             <x-profile-pic></x-profile-pic>
                                             <div class="flex-fill">
                                                 <b>{{$reply->user->name}}</b> on {{$reply->created_at->format('M d, Y H:i A')}}<br>
-                                                {{$reply->comment}}
+                                                {!!$reply->comment!!}
                                             </div>
                                         </div>
                                         @endforeach
@@ -91,8 +91,11 @@
                                                 @csrf
                                                 <input type="hidden" name="parent_id" value="{{$comment->id}}">
                                                 <div class="d-flex flex-row my-2">
-                                                    <x-profile-pic></x-profile-pic>
-                                                    <x-textarea label="" name="comment" placeholder="" required info="Ctrl+Enter to submit"/>
+                                                        <x-profile-pic></x-profile-pic>
+                                                    <x-textarea class="ckeditor" label="" name="comment" placeholder=""/>
+                                                </div>
+                                                <div class="d-flex flex-row my-2">
+                                                    <x-button class="btn" action="submit" :data-comment-id="$comment->id" size="sm">Add Comment</x-button>
                                                 </div>
                                             </form>
                                         </div>
@@ -104,10 +107,13 @@
                             @csrf
                             <div class="d-flex flex-row my-2">
                                 <x-profile-pic></x-profile-pic>
-                                <x-textarea label="" name="comment" placeholder="" required info="Ctrl+Enter to submit"/>
+                                <x-textarea class="ckeditor" label="" name="comment" placeholder=""/>
+                            </div>
+                            <div class="d-flex flex-row my-2">
+                                <x-button class="btn" action="submit" size="sm">Add Comment</x-button>
                             </div>
                         </form>
-                        
+
                     </div>
                     @endif
                 </div>
@@ -115,6 +121,16 @@
         </div>
     </div>
     @include('goal.partials.supervisor-goal')
+
+    <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+    <script type="test/javascript">
+        $(document).ready(function(){
+            $('.ckeditor').ckeditor();
+            CKEDITOR.config.removeButtons='About';
+            CKEDITOR.replace('content');
+            });
+        });
+    </script>
 
     @push('js')
         <script>

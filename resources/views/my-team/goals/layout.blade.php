@@ -8,8 +8,9 @@
     @yield('tab-content')
     
     @push('css')
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
     @endpush
     @push('js')
-    
+        <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
     @endpush
 </x-side-layout>

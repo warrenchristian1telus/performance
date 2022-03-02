@@ -21,10 +21,8 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
 @endpush
 @push('js')
-    <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
     <script>
         $(document).on('change', '.is-shared', function (e) {
             let confirmMessage = "Making this goal private will hide it from all employees. Continue?";

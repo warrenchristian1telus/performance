@@ -43,7 +43,6 @@
         <div class="card-footer d-flex align-items-center">
             @if(($cardDesign ?? 'default') === 'default')
             <div>
-                <b>Goal created by:&nbsp;</b>{{ $goal->user->name}} <br>
                 <!-- <b>Goal created by:&nbsp;</b>{{ $goal->user->name}} <br> -->
                 @if($goal->is_library)
                     <b>Goal suggested to:&nbsp;</b>

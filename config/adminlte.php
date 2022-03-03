@@ -261,7 +261,8 @@ return [
             'submenu' => [
                 [
                     'text' => 'Team Goals',
-                    'url'  => '#',
+                    'url'  => 'my-team/team-goals/share-my-goals',
+                    'active' => ['my-team/team-goals/*']
                 ],
                 [
                     'text' => 'Team Conversations',

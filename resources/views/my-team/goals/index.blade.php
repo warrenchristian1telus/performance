@@ -41,17 +41,20 @@
             const form = $(this).parents('form').get()[0];
             fetch(form.action,{method:'post', body: new FormData(form)});
         });
-        $(".search-users").each(function() {
-            const goalId = $(this).data('goal-id');
-            $(this).multiselect({
-                allSelectedText: 'All Direct Report',
-                selectAllText: 'All Direct Report',
-                includeSelectAllOption: true,
-                onDropdownHide: function () {
-                    const form = $("#share-my-goals-form").get()[0];
-                    fetch(form.action,{method:'post', body: new FormData(form)});
-                }
+        $(document).ready(() => {
+            $(".search-users").each(function() {
+                const goalId = $(this).data('goal-id');
+                $(this).multiselect({
+                    allSelectedText: 'All Direct Report',
+                    selectAllText: 'All Direct Report',
+                    includeSelectAllOption: true,
+                    onDropdownHide: function () {
+                        const form = $("#share-my-goals-form").get()[0];
+                        fetch(form.action,{method:'post', body: new FormData(form)});
+                    }
+                });
             });
         });
+        
     </script>
 @endpush

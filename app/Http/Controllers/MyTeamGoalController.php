@@ -18,4 +18,10 @@ class MyTeamGoalController extends Controller {
         $employees = $myTeamController->myEmployeesAjax();
         return view('my-team.goals.index', compact('goals', 'employees'));
     }
+
+    public function teamGoalBank() {
+        $myTeamController = new MyTeamController();
+        return $myTeamController->showSugggestedGoals('my-team.goals.bank');
+    }
+
 }

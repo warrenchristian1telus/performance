@@ -259,7 +259,7 @@ class MyTeamController extends Controller
         // return redirect()->back();
     }
 
-    public function showSugggestedGoals() {
+    public function showSugggestedGoals($viewName = 'my-team.suggested-goals') {
         $goaltypes = GoalType::all();
         $eReasons = ExcusedReason::all();
         $conversationTopics = ConversationTopic::all();
@@ -280,7 +280,7 @@ class MyTeamController extends Controller
             ->with('goalType')
             ->paginate(4);
         $goalDeleteConfirmationText = "You are about to delete a suggested goal, meaning it will no longer be visible to your direct reports. Are you sure you want to continue?";
-        return view('my-team.suggested-goals', compact('goals', 'goaltypes', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal', 'goalDeleteConfirmationText'));
+        return view($viewName, compact('goals', 'goaltypes', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal', 'goalDeleteConfirmationText'));
     }
 
 }

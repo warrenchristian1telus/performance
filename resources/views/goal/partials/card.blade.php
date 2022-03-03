@@ -41,18 +41,21 @@
           </div>
         @endif
         <div class="card-footer d-flex align-items-center">
+            <div class="flex-fill"></div>
+
             @if(($cardDesign ?? 'default') === 'default')
             <div>
                 <!-- <b>Goal created by:&nbsp;</b>{{ $goal->user->name}} <br> -->
                 @if($goal->is_library)
-                    <b>Goal suggested to:&nbsp;</b>
-                    @foreach($goal->sharedWith as $index => $sharedWith)
-                        {{ $sharedWith->name }}{{ (isset($goal->sharedWith[$index+1])) ? ',' : ''}}
-                    @endforeach
+                <div class="flex-fill"></div>
+                <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}')">
+                    @csrf
+                    @method('DELETE')
+                    <x-button size="md" icon='trash' class="ml-1 text-light" aria-label="Delete button" tooltip="Click to permanently delete this goal" style="danger"></x-button>
+                </form>
                 @endif
             </div>
 
-            <div class="flex-fill"></div>
             @if(!$goal->is_library)
             <div>
                 @if($type ?? '' !== 'supervisor' && !$disableEdit)
@@ -84,7 +87,7 @@
                 <option value="1" {{ count($goal->sharedWith) > 0 ? 'selected' : ''}}>Shared</option>
                 <option value="0" {{ count($goal->sharedWith) > 0 ? '' : 'selected'}}>Private</option>
             </select>
-            <select multiple class="form-control search-users" id="search-users-{{$goal->id}}" name="share_with[{{$goal->id}}][]"  {{ count($goal->sharedWith) > 0 ? '' : 'disabled'}} data-goal-id="{{$goal->id}}">
+            <select multiple class="form-control search-users ml-1" id="search-users-{{$goal->id}}" name="share_with[{{$goal->id}}][]"  {{ count($goal->sharedWith) > 0 ? '' : 'disabled'}} data-goal-id="{{$goal->id}}">
                 @php
                     $alreadyAdded = [];
                 @endphp
@@ -98,6 +101,11 @@
                     @endif
                 @endforeach
             </select>
+            <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}')">
+                @csrf
+                @method('DELETE')
+                <x-button size="md" icon='trash' class="ml-1 text-light" aria-label="Delete button" tooltip="Click to permanently delete this goal" style="danger"></x-button>
+            </form>
             @endif
 
         </div>

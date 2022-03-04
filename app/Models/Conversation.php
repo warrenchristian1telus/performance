@@ -114,8 +114,9 @@ class Conversation extends Model
         return !self::where('user_id', $user_id)->count() > 0;
     }
 
-    public static function getLastConv($ignoreList = []) {
-        $user = Auth::user();
+    public static function getLastConv($ignoreList = [], $user = null) {
+        if ($user === null) 
+            $user = Auth::user();
         $authId = $user->id;
         $lastConv = self::where(function ($query) use ($authId) {
             $query->where('user_id', $authId)->orWhereHas('conversationParticipants', function ($query) use ($authId) {
@@ -129,7 +130,7 @@ class Conversation extends Model
 
         if ($lastConv && !$lastConv->is_with_supervisor) {
             $ignoreList[] = $lastConv->id;
-            $lastConv = self::getLastConv($ignoreList);
+            $lastConv = self::getLastConv($ignoreList, $user);
         }
         return $lastConv;
     }
@@ -140,14 +141,32 @@ class Conversation extends Model
         
         if ($lastConv) {
             if ($lastConv->sign_off_time->addMonths(4)->lt(Carbon::now())) {
-                return "You are required to complete a performance conversation every 4 months at minimum. You are overdue. Please complete a conversation as soon as possible.";
+                return [
+                    "You are required to complete a performance conversation every 4 months at minimum. You are overdue. Please complete a conversation as soon as possible.",
+                    "danger"
+                ];
             }
-            return "Your last performance conversation was completed on ".$lastConv->sign_off_time->format('d-M-y').". You must complete your next performance conversation by ". $lastConv->sign_off_time->addMonths(4)->format('d-M-y') ;
-
+            return [
+                "Your last performance conversation was completed on ".$lastConv->sign_off_time->format('d-M-y').". You must complete your next performance conversation by ". $lastConv->sign_off_time->addMonths(4)->format('d-M-y'),
+                $lastConv->sign_off_time->addMonths(4)->diffInMonths(Carbon::now(), false) < 1 ? "success" : "warning"
+            ];
         }
         $user = Auth::user();
-        $joiningDate = $user->joining_date ? $user->joining_date->addMonths(4)->format('d-M-y') : '';
-        return "You have not completed any performance conversations. You must complete your first performance conversation by " . $joiningDate;
+        $nextDueDate = $user->joining_date ? $user->joining_date->addMonths(4) : '';
+        return [
+            "You have not completed any performance conversations. You must complete your first performance conversation by " . $nextDueDate->format('d-M-y'),
+            $nextDueDate->diffInMonths(Carbon::now(), false) < 1 ? "success" : ($nextDueDate->diffInMonths(Carbon::now()) > 4 ? "danger" : "warning")
+        ];
+    }
+
+    public static function nextConversationDue($user = null) {
+        if ($user === null)
+            $user = Auth::user();
+        $lastConv = self::getLastConv([], $user);
+        $nextConvDate =  ($lastConv) ? $lastConv->sign_off_time->addMonths(4) : (
+            $user->joining_date ? $user->joining_date->addMonths(4)->format('d-M-y') : ''
+        );
+        return $nextConvDate;
     }
 
     public static function latestPastConversation()

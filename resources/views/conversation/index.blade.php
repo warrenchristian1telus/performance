@@ -35,7 +35,7 @@
                         </span>
                     </div>
                     <div class="d-flex flex-row-reverse align-items-center">
-                        <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
+                        <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}" data-disallowed="{{ (!!$c->signoff_user_id || !!$c->supervisor_signoff_id) ? 'true' : 'false'}}">
                             <i class="fa-trash fa"></i>
                         </button>
                         <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
@@ -336,6 +336,10 @@
             });
 
             $(document).on('click', '.delete-btn', function() {
+                if($(this).data('disallowed')) {
+                    alert("This record of conversation cannot be deleted because it has been signed by at least one participant. Un-sign the conversation if you wish to delete it.")
+                    return;
+                }
                 if (!confirm('Are you sure you want to delete this conversation ?')) {
                     return;
                 }

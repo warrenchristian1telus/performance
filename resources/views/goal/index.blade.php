@@ -1,6 +1,6 @@
 <x-side-layout>
     <x-slot name="header">
-        <h3>Goals</h3>
+        <h3>My Goals</h3>
         @include('goal.partials.tabs')
     </x-slot>
     @if($type != 'supervisor' && !$disableEdit)
@@ -10,6 +10,9 @@
     </x-button>
     <x-button icon="clone" href="{{ route('goal.library') }}">
         Add Goal from Goal Bank
+    </x-button>
+    <x-button icon="question" href="{{ route('resource.goal-setting') }} " target="_blank" tooltip='Click here to access goal setting resources and examples (opens in new window).'>
+        Need Help?
     </x-button>
     @endif
 
@@ -24,7 +27,7 @@
                     @if($goals->count() != 0)
                         These goals have been shared with you by your supervisor and reflect current priorities. Consider these goals when creating your own.
                     @else
-                        <div class="alert alert-warning alert-dismissible no-border"  style="border-color:#caf0f8; background-color:#caf0f8" role="alert">
+                        <div class="alert alert-warning alert-dismissible no-border"  style="border-color:#d5e6f6; background-color:#d5e6f6" role="alert">
                         <span class="h5" aria-hidden="true"><i class="icon fa fa-info-circle"></i><b>Your supervisor is not currently sharing any goals with you.</b></span>
                         </div>
                     @endif

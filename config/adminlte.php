@@ -235,7 +235,7 @@ return [
             'hiddenInViewAs' => true
         ],
         [
-            'text' => 'Goals',
+            'text' => 'My Goals',
             'role' => 'listitem',
             'url'  => 'goal/current',
             'icon' => 'fas fa-fw fa-bullseye',

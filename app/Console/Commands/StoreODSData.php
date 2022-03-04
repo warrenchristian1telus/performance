@@ -106,7 +106,7 @@ class StoreODSData extends Command
               'city' => $item['city'],
               'country' => $item['country'],
               'employee_status_long' => $item['employee_status_long_description'],
-              'estimated_years_service' => $item['estimated_years_service'],
+              // 'estimated_years_service' => $item['estimated_years_service'],
               'job_function_employee_group' => $item['job_function_employee_group'],
               'jobcode_desc' => $item['jobcode_desc'],
               'level1_program' => $item['level1_program'],

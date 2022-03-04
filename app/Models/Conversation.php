@@ -146,16 +146,24 @@ class Conversation extends Model
                     "danger"
                 ];
             }
+            $nextDueDate = $lastConv->sign_off_time->addMonths(4);
+            $diff = Carbon::now()->diffInMonths($lastConv->sign_off_time->addMonths(4), false);
             return [
                 "Your last performance conversation was completed on ".$lastConv->sign_off_time->format('d-M-y').". You must complete your next performance conversation by ". $lastConv->sign_off_time->addMonths(4)->format('d-M-y'),
-                $lastConv->sign_off_time->addMonths(4)->diffInMonths(Carbon::now(), false) < 1 ? "success" : "warning"
+                $diff < 0 ? "danger" : ($diff < 1 ? "warning" : "success")
             ];
         }
         $user = Auth::user();
         $nextDueDate = $user->joining_date ? $user->joining_date->addMonths(4) : '';
+        $diff = Carbon::now()->diffInMonths($nextDueDate, false);
+        /* dd([
+            Carbon::now()->format('d-M-y'),
+            $nextDueDate->format('d-M-y'),
+            $diff
+        ]); */
         return [
             "You have not completed any performance conversations. You must complete your first performance conversation by " . $nextDueDate->format('d-M-y'),
-            $nextDueDate->diffInMonths(Carbon::now(), false) < 1 ? "success" : ($nextDueDate->diffInMonths(Carbon::now()) > 4 ? "danger" : "warning")
+            $diff < 0 ? "danger" : ($diff < 1 ? "warning" : "success")
         ];
     }
 

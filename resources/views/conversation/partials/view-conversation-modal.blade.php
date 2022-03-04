@@ -191,6 +191,13 @@
                                     <td class="border border-top-0 border-dark sup-inputs"><input type="radio" name="check_three_" value="0"></td>
                                 </tr> -->
                             </table>
+
+                            <div>
+                                <input type="hidden" name="team_member_agreement" value="0">
+                                <label>
+                                    <input type="checkbox" name="team_member_agreement" id="team_member_agreement" value="1">&nbsp;Team member disagrees with the information contained in this performance review.
+                                </label>
+                            </div>
                         </form>
 
                     </div>

@@ -31,6 +31,7 @@ class SignoffRequest extends FormRequest
             'check_one_' => 'required_without:check_one|boolean',
             'check_two_' => 'required_without:check_two|boolean',
             // 'check_three_' => 'required_without:check_three|boolean'
+            'team_member_agreement' => 'nullable|boolean'
         ];
     }
 
@@ -40,7 +41,7 @@ class SignoffRequest extends FormRequest
         return [
             'check_one.*' => $message,
             'check_two.*' => $message,
-            'check_three.*' => $message,
+            /* 'check_three.*' => $message, */
             'employee_id.*' => 'Please enter your employee ID to complete the signoff'
         ];
     }

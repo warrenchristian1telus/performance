@@ -362,6 +362,14 @@
                 $("#viewConversationModal").find("textarea").val('');
             });
 
+            $(document).on('change', '#team_member_agreement', function () {
+                if ($(this).prop('checked')) {
+                    if (!confirm("Ticking this box will send a notification to your supervisor that you disagree with this performance review. Continue/Cancel")) {
+                        $(this).prop("checked", false);
+                    }
+                }
+            });
+
             function isContentModified() {
                 const commentCount = 5;
                 for(let i=1; i <= commentCount; i++) {
@@ -431,6 +439,8 @@
                             $('#supervisor-signoff-message').find('.time').html("on " + result.supervisor_signoff_time);
                             $("textarea.supervisor-comment").addClass('enable-not-allowed').prop('readonly', true);
                         } else {
+                            $("#team_member_agreement").prop('disabled', true);
+
 //                             $('#employee-signoff-questions').addClass('d-none');
                             $("#employee-signoff-questions").find('.sup-inputs').find('input').prop('disabled', false);
                             $("#employee-signoff-questions").find('.emp-inputs').find('input').prop('disabled', true);
@@ -482,6 +492,7 @@
                             $("button.btn-conv-cancel").hide();
                             $("#viewConversationModal").find('textarea').each((index, e) => $(e).prop('readonly', true));
                             $('#viewConversationModal').data('is-frozen', 1);
+                            $("#team_member_agreement").prop('disabled', true);
                             if (result.supervisor_signoff_id && isSupervisor) {
                                 $("#viewConversationModal .sup-inputs").find('input:radio').each((index, e) => $(e).prop('disabled', true));
                             } 

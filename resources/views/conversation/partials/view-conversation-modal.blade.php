@@ -191,24 +191,26 @@
                                     <td class="border border-top-0 border-dark sup-inputs"><input type="radio" name="check_three_" value="0"></td>
                                 </tr> -->
                             </table>
+                            <div id="signoff-emp-id-input">
+                                <div class="my-2">Enter your 6 digit employee ID to indicate you have read and accept the performance review:</div>
 
-                            <div>
-                                <input type="hidden" name="team_member_agreement" value="0">
-                                <label>
-                                    <input type="checkbox" name="team_member_agreement" id="team_member_agreement" value="1">&nbsp;Team member disagrees with the information contained in this performance review.
-                                </label>
+                                <input type="text" id="employee_id" class="form-control d-inline w-50">
+                                <button class="btn btn-primary btn-sign-off ml-2" type="button">Sign with my employee ID</button>
+                                <br>
+                                <span class="text-danger error" data-error-for="employee_id"></span>
+
+                                <div class="mt-3">
+                                    <input type="hidden" name="team_member_agreement" value="0">
+                                    <label style="font-weight: normal;">
+                                        <input type="checkbox" name="team_member_agreement" id="team_member_agreement" value="1">&nbsp;Team member disagrees with the information contained in this performance review.
+                                    </label>
+                                </div>
                             </div>
                         </form>
 
                     </div>
-                    <div id="signoff-emp-id-input">
-                        <div class="my-2">Enter your 6 digit employee ID to indicate you have read and accept the performance review:</div>
-
-                        <input type="text" id="employee_id" class="form-control d-inline w-50">
-                        <button class="btn btn-primary btn-sign-off ml-2" type="button">Sign with my employee ID</button>
-                        <br>
-                        <span class="text-danger error" data-error-for="employee_id"></span>
-                    </div>
+                    
+                            
                 </div>
 
                 <div id="unsignoff-form-block">
@@ -219,6 +221,12 @@
                         <button data-action="unsignoff" class="btn btn-primary btn-sign-off ml-2" type="button">Un-Sign</button>
                         <br>
                         <span class="text-danger error" data-error-for="employee_id"></span>
+
+                        <div class="mt-3">
+                            <label style="font-weight: normal;">
+                                <input type="checkbox" name="team_member_agreement" id="team_member_agreement_2" value="1" disabled>&nbsp;Team member disagrees with the information contained in this performance review.
+                            </label>
+                        </div>
                     </form>
                 </div>
                 @endif

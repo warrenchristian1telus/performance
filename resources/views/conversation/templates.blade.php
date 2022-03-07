@@ -1,5 +1,5 @@
 <x-side-layout>
-    <h3>Conversations</h3>
+    <h3> My Conversations</h3>
     @if($viewType === 'conversations')
         @include('conversation.partials.compliance-message')
     @endif

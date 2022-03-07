@@ -59,7 +59,16 @@ class Conversation extends Model
 
     // If conversation is with
     public function getIsWithSupervisorAttribute() {
-        $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+        return $this->isWithSupervisor();
+    }
+
+    private function isWithSupervisor($userID = null) {
+        if ($userID === null) {
+            $checkForOriginalUser = false;
+            $authId = ($checkForOriginalUser && session()->has('original-auth-id')) ? session()->get('original-auth-id') : Auth::id();
+        } else {
+            $authId = $userID;
+        }
         $user = User::find($authId);
         $reportingManager = $user->reportingManager()->first();
         if (!$reportingManager) {
@@ -118,6 +127,7 @@ class Conversation extends Model
         if ($user === null) 
             $user = Auth::user();
         $authId = $user->id;
+        
         $lastConv = self::where(function ($query) use ($authId) {
             $query->where('user_id', $authId)->orWhereHas('conversationParticipants', function ($query) use ($authId) {
                 return $query->where('participant_id', $authId);
@@ -127,8 +137,8 @@ class Conversation extends Model
         ->whereNotIn('id', $ignoreList)
         ->orderBy('sign_off_time', 'DESC')
         ->first();
-
-        if ($lastConv && !$lastConv->is_with_supervisor) {
+        
+        if ($lastConv && !$lastConv->isWithSupervisor($user->id)) {
             $ignoreList[] = $lastConv->id;
             $lastConv = self::getLastConv($ignoreList, $user);
         }
@@ -136,7 +146,6 @@ class Conversation extends Model
     }
 
     public static function warningMessage() {
-        
         $lastConv = self::getLastConv();
         
         if ($lastConv) {
@@ -171,7 +180,7 @@ class Conversation extends Model
         if ($user === null)
             $user = Auth::user();
         $lastConv = self::getLastConv([], $user);
-        $nextConvDate =  ($lastConv) ? $lastConv->sign_off_time->addMonths(4) : (
+        $nextConvDate =  ($lastConv) ? $lastConv->sign_off_time->addMonths(4)->format('d-M-y') : (
             $user->joining_date ? $user->joining_date->addMonths(4)->format('d-M-y') : ''
         );
         return $nextConvDate;

@@ -406,6 +406,8 @@
                         $('#info_comment4_edit').val(result.info_comment4);
                         $('#info_comment5').val(result.info_comment5);
                         $('#info_comment5_edit').val(result.info_comment5);
+                        $('#team_member_agreement').prop('checked', result.team_member_agreement ? true : false);
+                        $('#team_member_agreement_2').prop('checked', result.team_member_agreement ? true : false);
 
                         user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
                         user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
@@ -529,9 +531,9 @@
 
                         //Additional Info to Capture
                         if (result.conversation_topic_id == 1) {
-                          $("#info_capture1").html('<span>Appreciation - highlight what has gone well </span><i class="fas fa-info-circle"  data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide an overview of the actions or results being celebrated. Be as specific as possible about timing, activities, and outcomes achieved. Highlight behaviours, competencies, and corporate values that you feel contributed to the success." ></i>');
-                          $("#info_capture2").html('<span>Coaching - identify areas where things could be (even) better </span><i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide specific examples of actions, outcomes or behaviours where there is opportunity for growth. Capture information on any additional assistance or training offered to support improvement."></i>');
-                          $("#info_capture3").html('<span>Evaluation - provide an overall summary of performance</span> <i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Be as specific as possible, use examples, and focus on observable behaviours and business results"></i>');
+                          $("#info_capture1").html('<span>Appreciation (optional) - highlight what has gone well </span><i class="fas fa-info-circle"  data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide an overview of the actions or results being celebrated. Be as specific as possible about timing, activities, and outcomes achieved. Highlight behaviours, competencies, and corporate values that you feel contributed to the success." ></i>');
+                          $("#info_capture2").html('<span>Coaching (optional) - identify areas where things could be (even) better </span><i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide specific examples of actions, outcomes or behaviours where there is opportunity for growth. Capture information on any additional assistance or training offered to support improvement."></i>');
+                          $("#info_capture3").html('<span>Evaluation (optional) - provide an overall summary of performance</span> <i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Be as specific as possible, use examples, and focus on observable behaviours and business results"></i>');
                         }
                         if (result.conversation_topic_id == 4) {
                           $("#info_capture1").html("What date will a follow up meeting occur?");

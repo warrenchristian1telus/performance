@@ -279,13 +279,13 @@ return [
                 ],
             ]
         ],
-        [
-            'role' => 'listitem',
-            'text' => 'System Administration',
-            'url'  => 'sysadmin/myorg',
-            'icon' => 'fas fa-fw fa-cog',
-            'active' => ['sysadmin/*']
-        ],
+        // [
+        //     'role' => 'listitem',
+        //     'text' => 'System Administration',
+        //     'url'  => 'sysadmin/myorg',
+        //     'icon' => 'fas fa-fw fa-cog',
+        //     'active' => ['sysadmin/*']
+        // ],
         [
             'role' => 'listitem',
             'text' => 'Resources',

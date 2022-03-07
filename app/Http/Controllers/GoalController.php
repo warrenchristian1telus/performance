@@ -251,11 +251,6 @@ class GoalController extends Controller
         $bankGoals = $query->get();
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
 
-        // dd($query->get()->pluck('user.id', 'user.name'));
-        // $createdBy = $query->get()->get('user.name', 'user.id');
-        // $createdBy=json_encode($createdBy);
-        // dd($createdBy);
-
         return view('goal.bank', compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));
     }
 

@@ -14,10 +14,16 @@
                 <div class="col-12">
                     <x-dropdown :list="$goaltypes" label="Goal Type" name="goal_type_id" />
                     <x-input label="Goal Title" name="title" :value="$goal->title"/>
-                    <x-textarea label="What" name="what" :value="$goal->what" />
-                    <x-textarea label="Why" name="why" :value="$goal->why" />
-                    <x-textarea label="How" name="how" :value="$goal->how"/>
-                        <!-- <x-textarea label="Measures of Success" name="measure_of_success" :value="$goal->measure_of_success" /> -->
+                    <!-- <x-textarea label="What" name="what" :value="$goal->what" /> -->
+                    <label for='what'>What</label>
+                    <textarea class="ckeditor form-control" name="what" :value="$goal->what">{{$goal->what}}</textarea>
+                    <!-- <x-textarea label="Why" name="why" :value="$goal->why" /> -->
+                    <label for='why'>Why</label>
+                    <textarea class="ckeditor form-control" name="why" :value="$goal->why">{{$goal->why}}</textarea>
+                    <!-- <x-textarea label="How" name="how" :value="$goal->how"/> -->
+                    <label for='how'>How</label>
+                    <textarea class="ckeditor form-control" name="how" :value="$goal->how">{{$goal->how}}</textarea>
+                    <!-- <x-textarea class="content' label="Measures of Success" name="measure_of_success" :value="$goal->measure_of_success" /> -->
                     <label for='measure_of_success'>Measure of Success</label>
                     <textarea class="ckeditor form-control" name="measure_of_success" :value="$goal->measure_of_success">{{$goal->measure_of_success}}</textarea>
                 </div>
@@ -33,14 +39,17 @@
             </div>
         </form>
     </div>
-</x-side-layout>
 
-<script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
-<script type="test/javascript">
-    $(document).ready(function(){
-        $('.ckeditor').ckeditor();
-        CKEDITOR.config.removeButtons='About';
-        CKEDITOR.replace('content');
+    <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+    <script type="test/javascript">
+        $(document).ready(function(){
+            // $('.ckeditor').ckeditor();
+            // CKEDITOR.replace('content_what');
+            // CKEDITOR.replace('content_why');
+            // CKEDITOR.replace('content_how');
+            // CKEDITOR.replace('measure_of_success');
+            });
         });
-    });
-</script>
+    </script>
+
+</x-side-layout>

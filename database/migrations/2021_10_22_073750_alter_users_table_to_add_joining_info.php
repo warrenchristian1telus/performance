@@ -26,7 +26,7 @@ class AlterUsersTableToAddJoiningInfo extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('joinig_date');
+            $table->dropColumn('joining_date');
         });
     }
 }

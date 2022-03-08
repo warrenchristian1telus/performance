@@ -125,6 +125,55 @@
     <x-slot name="js">
         {{-- {{$dataTable->scripts()}} --}}
     <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            CKEDITOR.replace('what', {
+                on: {
+                    loaded: function() {ajaxRequest();}
+                }
+                toolbar: "Custom",
+                toolbar_Custom: [
+                    ["Bold", "Italic", "Underline"],
+                    ["NumberedList", "BulletedList"],
+                    ["Outdent", "Indent"]
+                ],
+            });
+            CKEDITOR.replace('why', {
+                on: {
+                    loaded: function() {ajaxRequest();}
+                }
+                toolbar: "Custom",
+                toolbar_Custom: [
+                    ["Bold", "Italic", "Underline"],
+                    ["NumberedList", "BulletedList"],
+                    ["Outdent", "Indent"]
+                ],
+            });
+            CKEDITOR.replace('how', {
+                on: {
+                    loaded: function() {ajaxRequest();}
+                }
+                toolbar: "Custom",
+                toolbar_Custom: [
+                    ["Bold", "Italic", "Underline"],
+                    ["NumberedList", "BulletedList"],
+                    ["Outdent", "Indent"]
+                ],
+            });
+            CKEDITOR.replace('measure_of_success', {
+                on: {
+                    loaded: function() {ajaxRequest();}
+                }
+                toolbar: "Custom",
+                toolbar_Custom: [
+                    ["Bold", "Italic", "Underline"],
+                    ["NumberedList", "BulletedList"],
+                    ["Outdent", "Indent"]
+                ],
+            });
+        });
+    </script>
+
     <script>
     $('body').popover({
         selector: '[data-toggle]',
@@ -139,41 +188,6 @@
         console.log(desc);
         $('.goal_type_text').text(desc);
     });
-
-        $(document).ready(function(){
-            CKEDITOR.replace('what', {
-                toolbar: "Custom",
-                toolbar_Custom: [
-                    ["Bold", "Italic", "Underline"],
-                    ["NumberedList", "BulletedList"],
-                    ["Outdent", "Indent"]
-                ],
-            });
-            CKEDITOR.replace('why', {
-                toolbar: "Custom",
-                toolbar_Custom: [
-                    ["Bold", "Italic", "Underline"],
-                    ["NumberedList", "BulletedList"],
-                    ["Outdent", "Indent"]
-                ],
-            });
-            CKEDITOR.replace('how', {
-                toolbar: "Custom",
-                toolbar_Custom: [
-                    ["Bold", "Italic", "Underline"],
-                    ["NumberedList", "BulletedList"],
-                    ["Outdent", "Indent"]
-                ],
-            });
-            CKEDITOR.replace('measure_of_success', {
-                toolbar: "Custom",
-                toolbar_Custom: [
-                    ["Bold", "Italic", "Underline"],
-                    ["NumberedList", "BulletedList"],
-                    ["Outdent", "Indent"]
-                ],
-            });
-        });
 
     $(document).on('click', '.btn-submit', function(e){
         e.preventDefault();

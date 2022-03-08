@@ -46,6 +46,9 @@
 <script type="text/javascript">
     $(document).ready(function(){
         CKEDITOR.replace('what', {
+            on: {
+                loaded: function() {ajaxRequest();}
+            }
             toolbar: "Custom",
             toolbar_Custom: [
                 ["Bold", "Italic", "Underline"],
@@ -54,6 +57,9 @@
             ],
         });
         CKEDITOR.replace('why', {
+            on: {
+                loaded: function() {ajaxRequest();}
+            }
             toolbar: "Custom",
             toolbar_Custom: [
                 ["Bold", "Italic", "Underline"],
@@ -62,6 +68,9 @@
             ],
         });
         CKEDITOR.replace('how', {
+            on: {
+                loaded: function() {ajaxRequest();}
+            }
             toolbar: "Custom",
             toolbar_Custom: [
                 ["Bold", "Italic", "Underline"],
@@ -70,6 +79,9 @@
             ],
         });
         CKEDITOR.replace('measure_of_success', {
+            on: {
+                loaded: function() {ajaxRequest();}
+            }
             toolbar: "Custom",
             toolbar_Custom: [
                 ["Bold", "Italic", "Underline"],

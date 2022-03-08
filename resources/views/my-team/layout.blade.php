@@ -70,7 +70,7 @@
                     includeSelectAllOption: true,
                     onDropdownHide: function () {
                         const form = $("#shareMyGoalsModal").find('form').get()[0];
-                        fetch(form.action,{method:'post', body: new FormData(form)});
+                        fetch(form.action,{method:'POST', body: new FormData(form)});
                     }
                 });
             });
@@ -198,7 +198,7 @@
                 const goalId = $(this).data('goal-id');
                 $("#search-users-" + goalId).multiselect(this.checked ? 'enable' : 'disable');
                 const form = $(this).parents('form').get()[0];
-                fetch(form.action,{method:'post', body: new FormData(form)});
+                fetch(form.action,{method:'POST', body: new FormData(form)});
             });
             $("#participant_id").select2();
 

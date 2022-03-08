@@ -269,14 +269,14 @@ return [
                     'url'  => 'my-team/conversations',
                     'active' => ['my-team/conversations/*'],
                 ],
-                [
-                    'text' => 'Notifications',
-                    'url'  => '#',
-                ],
-                [
-                    'text' => 'Performance Statistics',
-                    'url'  => '#',
-                ],
+                // [
+                //     'text' => 'Notifications',
+                //     'url'  => '#',
+                // ],
+                // [
+                //     'text' => 'Performance Statistics',
+                //     'url'  => '#',
+                // ],
             ]
         ],
         // [

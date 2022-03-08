@@ -12,7 +12,7 @@
             </x-button>
         </div>  -->
     </div>
-    <div class="col-md-8"> @include('my-team.partials.tabs')</div>
+    <!-- <div class="col-md-8"> include('my-team.partials.tabs')</div> -->
     @yield('tab-content')
     @include('my-team.partials.share-my-goals-modal')
     @include('my-team.partials.edit-suggested-goal-modal')

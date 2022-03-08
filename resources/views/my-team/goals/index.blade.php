@@ -18,12 +18,24 @@
         @endforelse
     </div>
 </form>
+<form action="{{route('goal.destroy', 'xxx')}}" method="POST" class="d-none" id="delete-goal-form">
+    @csrf
+    @method('DELETE');
+</form>
 @endsection
 
 @push('css')
 @endpush
 @push('js')
     <script>
+        $(document).on('click', '[data-action="delete-goal"]', function () {
+            if (confirm($(this).data('confirmation'))) {
+                let action = $("#delete-goal-form").attr('action');
+                action = action.replace('xxx', $(this).data("goal-id"));
+                $("#delete-goal-form").attr('action', action);
+                $("#delete-goal-form").submit();
+            }
+        });;
         $(document).on('change', '.is-shared', function (e) {
             let confirmMessage = "Making this goal private will hide it from all employees. Continue?";
             if ($(this).val() == "1") {
@@ -39,7 +51,7 @@
             const goalId = $(this).data('goal-id');
             $("#search-users-" + goalId).multiselect($(this).val() == "1" ? 'enable' : 'disable');
             const form = $(this).parents('form').get()[0];
-            fetch(form.action,{method:'post', body: new FormData(form)});
+            fetch(form.action,{method:'POST', body: new FormData(form)});
         });
         $(document).ready(() => {
             $(".search-users").each(function() {
@@ -50,7 +62,7 @@
                     includeSelectAllOption: true,
                     onDropdownHide: function () {
                         const form = $("#share-my-goals-form").get()[0];
-                        fetch(form.action,{method:'post', body: new FormData(form)});
+                        fetch(form.action,{method:'POST', body: new FormData(form)});
                     }
                 });
             });

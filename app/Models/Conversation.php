@@ -64,7 +64,7 @@ class Conversation extends Model
 
     private function isWithSupervisor($userID = null) {
         if ($userID === null) {
-            $checkForOriginalUser = false;
+            $checkForOriginalUser = true;
             $authId = ($checkForOriginalUser && session()->has('original-auth-id')) ? session()->get('original-auth-id') : Auth::id();
         } else {
             $authId = $userID;

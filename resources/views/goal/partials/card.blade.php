@@ -101,11 +101,7 @@
                     @endif
                 @endforeach
             </select>
-            <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}')">
-                @csrf
-                @method('DELETE')
-                <x-button size="md" icon='trash' class="ml-1 text-light" aria-label="Delete button" tooltip="Click to permanently delete this goal" style="danger"></x-button>
-            </form>
+            <x-button size="md" type="button" icon='trash' class="ml-1 text-light" aria-label="Delete button" tooltip="Click to permanently delete this goal" style="danger" data-action="delete-goal" data-goal-id="{{$goal->id}}" data-confirmation="{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}"></x-button>
             @endif
 
         </div>

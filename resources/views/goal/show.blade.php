@@ -94,7 +94,7 @@
                                                     <x-profile-pic></x-profile-pic>
                                                     <div class="border flex-fill p-2 rounded">
                                                         <!-- <x-textarea class="ckeditor" name="comment" id="addreply"/> -->
-                                                        <textarea class="ckeditor addreply" name="comment" id="addreply"></textarea>
+                                                        <textarea class="addreply" name="comment" id="addreply"></textarea>
                                                         <div class="d-flex flex-row my-2">
                                                             <x-button class="btn" action="submit" :data-comment-id="$comment->id" size="sm">Add Comment</x-button>
                                                         </div>
@@ -111,7 +111,7 @@
                                 <div class="d-flex flex-row my-2">
                                     <x-profile-pic></x-profile-pic>
                                     <div class="border flex-fill p-2 rounded">
-                                        <textarea class="ckeditor" name="comment" id="addcomment"></textarea>
+                                        <textarea name="comment" id="addcomment"></textarea>
                                         <!-- <x-textarea class="ckeditor" name="comment" id="addcomment"/> -->
                                         <div class="d-flex flex-row my-2">
                                             <x-button class="btn" action="submit" size="sm">Add Comment</x-button>
@@ -131,23 +131,26 @@
     @push('js')
     <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
-            // CKEDITOR.editorConfig = function(config) {
-            //     config.toolbarGroups = [
-            //         {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
-            //         {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
-            //     ]
-            // };
-            // CKEDITOR.replace('addcomment', {
-            //     // removePlugins: ['about, link, separator'],
-            // });
-            // CKEDITOR.replaceAll('addreply', {
-                // removePlugins: ['about, link, separator'],
-            // });
-            // CKEDITOR.inline('form-control', {
-            //     removePlugins: ['about, link, separator'],
-            // });
+    $(document).ready(function(){
+        CKEDITOR.replace('addcomment', {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
         });
+    });
+    $(document).ready(function(){
+        CKEDITOR.replaceAll('addreply', {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
+        });
+    });
     </script>
 
     <script>

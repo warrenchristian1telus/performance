@@ -2,10 +2,18 @@
     <div class="col-12">
         <x-dropdown :list="$goaltypes" label="Goal Type" name="goal_type_id"/>
         <x-input label="Goal Title" name="title" value="{{ old('title') }}"/>
-        <x-textarea label="What" name="what" :value="old('what')" />
-        <x-textarea label="Why" name="why" :value="old('why')" />
-        <x-textarea label="How" name="how" :value="old('how')"/>
-        <x-textarea label="Measures of Success" name="measure_of_success" :value="old('measure_of_success')" />
+        <!-- <x-textarea label="What" name="what" :value="old('what')" /> -->
+        <label for='what'>What</label>
+        <textarea id="what" class="form-control" name="what" :value="$goal->what">{!!$goal->what!!}</textarea>
+        <!-- <x-textarea label="Why" name="why" :value="old('why')" /> -->
+        <label for='why'>Why</label>
+        <textarea id="why" class="form-control" name="why" :value="$goal->why">{!!$goal->why!!}</textarea>
+        <!-- <x-textarea label="How" name="how" :value="old('how')"/> -->
+        <label for='how'>How</label>
+        <textarea id="how" class="form-control" name="how" :value="$goal->how">{!!$goal->how!!}</textarea>
+        <!-- <x-textarea label="Measures of Success" name="measure_of_success" :value="old('measure_of_success')" /> -->
+        <label for='measure_of_success'>Measure of Success</label>
+        <textarea id="measure_of_success" class="form-control" name="measure_of_success" :value="$goal->measure_of_success">{!!$goal->measure_of_success!!}</textarea>
     </div>
     <div class="col-sm-6">
         <x-input label="Start Date" type="date" name="start_date" :value="old('start_date')" />
@@ -20,3 +28,42 @@
         <x-button type="submit" class="btn-md"> Save </x-button>
     </div>
 </div>
+
+
+<script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        CKEDITOR.replace('what', {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
+        });
+        CKEDITOR.replace('why', {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
+        });
+        CKEDITOR.replace('how', {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
+        });
+        CKEDITOR.replace('measure_of_success', {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
+        });
+    });
+</script>

@@ -81,19 +81,19 @@
                     <small class="text-danger error-title"></small>
                     </div>
                        <div class="col-6">
-                    <x-textarea label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
+                    <x-textarea id="what" label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
                     <small class="text-danger error-what"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".'  />
+                    <x-textarea id="why" label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".'  />
                     <small class="text-danger error-why"></small>
                    </div>
                        <div class="col-6">
-                    <x-textarea label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' />
+                    <x-textarea id="How" label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' />
                     <small class="text-danger error-how"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'  />
+                    <x-textarea id="Measures of Success" label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'  />
                     <small class="text-danger error-measure_of_success"></small>
                 </div>
                 <div class="col-sm-6">
@@ -121,8 +121,10 @@
   </div>
 </div>
 
+
     <x-slot name="js">
         {{-- {{$dataTable->scripts()}} --}}
+    <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
     <script>
     $('body').popover({
         selector: '[data-toggle]',
@@ -138,6 +140,40 @@
         $('.goal_type_text').text(desc);
     });
 
+        $(document).ready(function(){
+            CKEDITOR.replace('what', {
+                toolbar: "Custom",
+                toolbar_Custom: [
+                    ["Bold", "Italic", "Underline"],
+                    ["NumberedList", "BulletedList"],
+                    ["Outdent", "Indent"]
+                ],
+            });
+            CKEDITOR.replace('why', {
+                toolbar: "Custom",
+                toolbar_Custom: [
+                    ["Bold", "Italic", "Underline"],
+                    ["NumberedList", "BulletedList"],
+                    ["Outdent", "Indent"]
+                ],
+            });
+            CKEDITOR.replace('how', {
+                toolbar: "Custom",
+                toolbar_Custom: [
+                    ["Bold", "Italic", "Underline"],
+                    ["NumberedList", "BulletedList"],
+                    ["Outdent", "Indent"]
+                ],
+            });
+            CKEDITOR.replace('measure_of_success', {
+                toolbar: "Custom",
+                toolbar_Custom: [
+                    ["Bold", "Italic", "Underline"],
+                    ["NumberedList", "BulletedList"],
+                    ["Outdent", "Indent"]
+                ],
+            });
+        });
 
     $(document).on('click', '.btn-submit', function(e){
         e.preventDefault();

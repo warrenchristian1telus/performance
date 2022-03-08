@@ -6,7 +6,7 @@
 <form action="{{ route('my-team.sync-goals')}}" method="POST" id="share-my-goals-form">
     @csrf
     <div class="row">
-        @php 
+        @php
             $cardDesign = 'my-team';
         @endphp
         @forelse ($goals as $goal)
@@ -14,7 +14,7 @@
             @include('goal.partials.card')
         </div>
         @empty
-            No Goals to Share. Please <a href="{{route('goal.index')}}">create a new goal</a>
+            No Goals to Share. Please&nbsp<a href="{{route('goal.index')}}">create a new goal</a>.
         @endforelse
     </div>
 </form>
@@ -67,6 +67,6 @@
                 });
             });
         });
-        
+
     </script>
 @endpush

@@ -45,7 +45,7 @@ Route::group(['middleware' => ['role:Supervisor']], function () {
 });
 
 Route::group(['middleware' => ['ViewAsPermission']], function () {
-    Route::get('my-team/view-as/{id}', [MyTeamController::class, 'viewProfileAs'])->name('my-team.view-profile-as');
+    Route::get('my-team/view-as/{id}/{landingPage?}', [MyTeamController::class, 'viewProfileAs'])->name('my-team.view-profile-as');
     Route::get('my-team/return-to-my-view', [MyTeamController::class, 'returnToMyProfile'])->name('my-team.return-to-my-view');
 
 });

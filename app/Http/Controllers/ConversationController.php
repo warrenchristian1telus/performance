@@ -171,7 +171,11 @@ class ConversationController extends Controller
         if(request()->ajax()){
             return response()->json(['success' => true, 'message' => 'Conversation Created successfully']);
         }else{
-            return redirect()->route('conversation.upcoming');
+            if ($conversation->is_with_supervisor) {
+                return redirect()->route('conversation.upcoming');
+            } else {
+                return redirect()->route('my-team.conversations.upcoming');
+            }
         }
     }
 

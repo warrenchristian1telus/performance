@@ -36,10 +36,12 @@ class MyEmployeesDataTable extends DataTable
                 return view('goal.partials.action', compact(["row"])); // $row['id'];
             })->editColumn('active_goals_count', function ($row) {
                 $text = $row['active_goals_count'] . " Goals";
-                return view('my-team.partials.link-to-profile', compact(['row', 'text']));
+                $landingPage = 'goal.current';
+                return view('my-team.partials.link-to-profile', compact(['row', 'text', 'landingPage']));
             })->addColumn('nextConversationDue', function ($row) {
                 $text = Conversation::nextConversationDue(User::find($row["id"]));
-                return view('my-team.partials.link-to-profile', compact(["row", "text"]));
+                $landingPage = 'conversation.templates';
+                return view('my-team.partials.link-to-profile', compact(["row", "text", "landingPage"]));
             })/* ->addColumn('latestConversation', function ($row) {
                 $conversation = $row->latestConversation[0] ?? null;
                 return view('my-team.partials.conversation', compact(["row", "conversation"]));

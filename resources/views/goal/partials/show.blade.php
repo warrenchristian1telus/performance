@@ -33,9 +33,17 @@
     <div class="form-control-plaintext">
         {{$goal['title']}}
     </div>
-    <b>{{__("Goal Description")}}</b>
+    <b>{{__("What")}}</b>
     <div class="form-control-plaintext">
         {!!$goal['what']!!}
+    </div>
+    <b>{{__("Why")}}</b>
+    <div class="form-control-plaintext">
+        {!!$goal['why']!!}
+    </div>
+    <b>{{__("How")}}</b>
+    <div class="form-control-plaintext">
+        {!!$goal['how']!!}
     </div>
     <b>{{__("Start Date")}}</b>
     <div class="form-control-plaintext">

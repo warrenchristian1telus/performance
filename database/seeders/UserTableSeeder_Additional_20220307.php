@@ -50,7 +50,7 @@ class UserTableSeeder_Additional_20220307 extends Seeder
         [ 'id' => 120028, 'email' => 'glen.seredynski@gov.bc.ca', 'name' => 'Glen Seredynski', 'password' => 'glen@123', 'reporting_to' => 120008,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120029, 'email' => 'tanya.sheena@gov.bc.ca', 'name' => 'Tanya Sheena', 'password' => 'tanya@123', 'reporting_to' => 120037,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120030, 'email' => 'todd.sheridan@gov.bc.ca', 'name' => 'Todd Sheridan', 'password' => 'todd@123', 'reporting_to' => 120036,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
-        [ 'id' => 120031, 'email' => 'akihiro.shin@gov.bc.ca', 'name' => 'Akihiro Shin', 'password' => 'akihiro@123', 'reporting_to' => 120016,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
+        [ 'id' => 120031, 'email' => 'aki.shin@gov.bc.ca', 'name' => 'Aki Shin', 'password' => 'aki@123', 'reporting_to' => 120016,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120032, 'email' => 'dean.skinner@gov.bc.ca', 'name' => 'Dean Skinner', 'password' => 'dean@123', 'reporting_to' => 120080,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120033, 'email' => 'jonathan.stedman@gov.bc.ca', 'name' => 'Jonathan Stedman', 'password' => 'jonathan@123', 'reporting_to' => 120024,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120034, 'email' => 'stewart.thompson@gov.bc.ca', 'name' => 'Stewart Thompson', 'password' => 'stewart@123', 'reporting_to' => 120022,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
@@ -66,7 +66,7 @@ class UserTableSeeder_Additional_20220307 extends Seeder
         [ 'id' => 120044, 'email' => 'matthew.waters@gov.bc.ca', 'name' => 'Matt Waters', 'password' => 'matt@123', 'reporting_to' => 120081,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120045, 'email' => 'indira.cruz@gov.bc.ca', 'name' => 'Indira Cruz', 'password' => 'indira@123', 'reporting_to' => 120044,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120046, 'email' => 'employee.one@gov.bc.ca', 'name' => 'Employee One', 'password' => 'employee@123', 'reporting_to' => 120045,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
-        [ 'id' => 120047, 'email' => 'christina.vendramin@gov.bc.ca', 'name' => 'Christina Vendramin', 'password' => 'christina@123', 'reporting_to' => 120081,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
+        [ 'id' => 120047, 'email' => 'cristina.vendramin@gov.bc.ca', 'name' => 'Cristina Vendramin', 'password' => 'cristina@123', 'reporting_to' => 120081,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120048, 'email' => 'lisa.sorensen@gov.bc.ca', 'name' => 'Lisa Sorensen', 'password' => 'lisa@123', 'reporting_to' => 120047,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120049, 'email' => 'employee.two@gov.bc.ca', 'name' => 'Employee Two', 'password' => 'employee@123', 'reporting_to' => 120048,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120050, 'email' => 'greg.bartlett@gov.bc.ca', 'name' => 'Greg Bartlett', 'password' => 'greg@123', 'reporting_to' => 120044,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
@@ -98,7 +98,7 @@ class UserTableSeeder_Additional_20220307 extends Seeder
         [ 'id' => 120076, 'email' => 'kenneth.kay@gov.bc.ca', 'name' => 'Ken Kay', 'password' => 'ken@123', 'reporting_to' => 120081,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120077, 'email' => 'travis.clark@gov.bc.ca', 'name' => 'Travis Clark', 'password' => 'travis@123', 'reporting_to' => 120079,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120078, 'email' => 'cleo.boucher@gov.bc.ca', 'name' => 'Cleo Boucher', 'password' => 'cleo@123', 'reporting_to' => 120081,  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
-        [ 'id' => 120079, 'email' => 'caitlyn.rutledge@gov.bc.ca', 'name' => 'Caitlyn Rutledge', 'password' => 'caitlyn@123', 'reporting_to' => 120078,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
+        [ 'id' => 120079, 'email' => 'caitlin.rutledge@gov.bc.ca', 'name' => 'Caitlin Rutledge', 'password' => 'caitlin@123', 'reporting_to' => 120078,  'role' => 'Employee', 'joining_date' => '01-MAR-2022' ],
 
     ];
 

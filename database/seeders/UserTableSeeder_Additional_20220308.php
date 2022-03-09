@@ -19,7 +19,7 @@ class UserTableSeeder_Additional_20220308 extends Seeder
     // User Creation
 
     $users = [
-        [ 'id' => 120080, 'email' => 'bobbi.saddle@gov.bc.ca', 'name' => 'Bobbi Saddle', 'password' => 'bobbi@123',  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
+        [ 'id' => 120080, 'email' => 'bobbi.sadler@gov.bc.ca', 'name' => 'Bobbi Sadler', 'password' => 'bobbi@123',  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
         [ 'id' => 120081, 'email' => 'generic.executive@gov.bc.ca', 'name' => 'Generic Executive', 'password' => 'generic@123',  'role' => 'Supervisor', 'joining_date' => '01-MAR-2022' ],
 
 

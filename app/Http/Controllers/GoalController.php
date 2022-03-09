@@ -30,7 +30,7 @@ class GoalController extends Controller
     public function index(GoalsDataTable $goalDataTable, Request $request)
     {
         $authId = Auth::id();
-        $goaltypes = GoalType::all();
+        $goaltypes = GoalType::all()->toArray();
         $user = User::find($authId);
         $query = Goal::where('user_id', $authId)
         ->with('user')

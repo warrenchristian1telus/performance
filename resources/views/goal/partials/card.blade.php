@@ -4,7 +4,7 @@
                 <a href="{{route("goal.show", $goal->id)}}" class="p-2">
                     <p class="card-title">
                         {{ $goal->start_date_human}}
-                            <span class="mx-4"><x-svg-icon icon="arrow-right" /></span>
+                            <span class="mx-2"><x-svg-icon icon="arrow-right" /></span>
                         {{ $goal->target_date_human}}
                     </p>
                 </a>

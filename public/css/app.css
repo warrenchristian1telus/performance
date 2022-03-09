@@ -41255,3 +41255,7 @@ a.text-muted:hover {
 .form-switch input:checked + i::after {
   transform: translate3d(22px, 2px, 0);
 }
+.tooltip-dropdown .dropdown-toggle::after {
+  margin-top: 0.55em;
+  float: right;
+}

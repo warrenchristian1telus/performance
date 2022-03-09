@@ -244,7 +244,7 @@ return [
         ],
         [
             'role' => 'listitem',
-            'text' => 'Team Conversations',
+            'text' => 'My Conversations',
             'url'  => 'conversation/templates',
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['conversation/*'],

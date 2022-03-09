@@ -89,11 +89,11 @@
                     <small class="text-danger error-why"></small>
                    </div>
                        <div class="col-6">
-                    <x-textarea id="How" label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' />
+                    <x-textarea id="how" label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' />
                     <small class="text-danger error-how"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea id="Measures of Success" label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'  />
+                    <x-textarea id="measure_of_success" label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'  />
                     <small class="text-danger error-measure_of_success"></small>
                 </div>
                 <div class="col-sm-6">
@@ -128,47 +128,35 @@
     <script type="text/javascript">
         $(document).ready(function(){
             CKEDITOR.replace('what', {
-                on: {
-                    loaded: function() {ajaxRequest();}
-                }
                 toolbar: "Custom",
                 toolbar_Custom: [
                     ["Bold", "Italic", "Underline"],
                     ["NumberedList", "BulletedList"],
-                    ["Outdent", "Indent"]
+                    ["Outdent", "Indent"],
                 ],
             });
             CKEDITOR.replace('why', {
-                on: {
-                    loaded: function() {ajaxRequest();}
-                }
                 toolbar: "Custom",
                 toolbar_Custom: [
                     ["Bold", "Italic", "Underline"],
                     ["NumberedList", "BulletedList"],
-                    ["Outdent", "Indent"]
+                    ["Outdent", "Indent"],
                 ],
             });
             CKEDITOR.replace('how', {
-                on: {
-                    loaded: function() {ajaxRequest();}
-                }
                 toolbar: "Custom",
                 toolbar_Custom: [
                     ["Bold", "Italic", "Underline"],
                     ["NumberedList", "BulletedList"],
-                    ["Outdent", "Indent"]
+                    ["Outdent", "Indent"],
                 ],
             });
             CKEDITOR.replace('measure_of_success', {
-                on: {
-                    loaded: function() {ajaxRequest();}
-                }
                 toolbar: "Custom",
                 toolbar_Custom: [
                     ["Bold", "Italic", "Underline"],
                     ["NumberedList", "BulletedList"],
-                    ["Outdent", "Indent"]
+                    ["Outdent", "Indent"],
                 ],
             });
         });
@@ -191,6 +179,9 @@
 
     $(document).on('click', '.btn-submit', function(e){
         e.preventDefault();
+        for (var i in CKEDITOR.instances){
+            CKEDITOR.instances[i].updateElement();
+        };
         $.ajax({
             url:'/goal',
             type : 'POST',

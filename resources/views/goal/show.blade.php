@@ -94,7 +94,7 @@
                                                     <x-profile-pic></x-profile-pic>
                                                     <div class="border flex-fill p-2 rounded">
                                                         <!-- <x-textarea class="ckeditor" name="comment" id="addreply"/> -->
-                                                        <textarea class="addreply" name="comment" id="addreply"></textarea>
+                                                        <textarea class="ckeditor" name="comment" id="addreply"></textarea>
                                                         <div class="d-flex flex-row my-2">
                                                             <x-button class="btn" action="submit" :data-comment-id="$comment->id" size="sm">Add Comment</x-button>
                                                         </div>
@@ -131,26 +131,10 @@
     @push('js')
     <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
-        CKEDITOR.replace('addcomment', {
-            toolbar: "Custom",
-            toolbar_Custom: [
-                ["Bold", "Italic", "Underline"],
-                ["NumberedList", "BulletedList"],
-                ["Outdent", "Indent"]
-            ],
+        $(document).ready(function(){
+            CKEDITOR.replace('addcomment', {
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
         });
-    });
-    $(document).ready(function(){
-        CKEDITOR.replaceAll('addreply', {
-            toolbar: "Custom",
-            toolbar_Custom: [
-                ["Bold", "Italic", "Underline"],
-                ["NumberedList", "BulletedList"],
-                ["Outdent", "Indent"]
-            ],
-        });
-    });
     </script>
 
     <script>

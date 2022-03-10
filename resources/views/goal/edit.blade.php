@@ -46,36 +46,12 @@
 <script type="text/javascript">
     $(document).ready(function(){
         CKEDITOR.replace('what', {
-            toolbar: "Custom",
-            toolbar_Custom: [
-                ["Bold", "Italic", "Underline"],
-                ["NumberedList", "BulletedList"],
-                ["Outdent", "Indent"]
-            ],
-        });
+            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
         CKEDITOR.replace('why', {
-            toolbar: "Custom",
-            toolbar_Custom: [
-                ["Bold", "Italic", "Underline"],
-                ["NumberedList", "BulletedList"],
-                ["Outdent", "Indent"]
-            ],
-        });
+            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
         CKEDITOR.replace('how', {
-            toolbar: "Custom",
-            toolbar_Custom: [
-                ["Bold", "Italic", "Underline"],
-                ["NumberedList", "BulletedList"],
-                ["Outdent", "Indent"]
-            ],
-        });
+            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
         CKEDITOR.replace('measure_of_success', {
-            toolbar: "Custom",
-            toolbar_Custom: [
-                ["Bold", "Italic", "Underline"],
-                ["NumberedList", "BulletedList"],
-                ["Outdent", "Indent"]
-            ],
-        });
+            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
     });
 </script>

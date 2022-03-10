@@ -33,7 +33,7 @@ class AlterEmployeeDemoTable extends Migration
             $table->string('city')->after('manager_last_name')->nullable();
             $table->string('country')->after('manager_last_name')->nullable();
             $table->string('employee_status_long')->after('manager_last_name')->nullable();
-            $table->smallInteger('estimated_years_service')->default(0)->after('manager_last_name');
+            // $table->smallInteger('estimated_years_service')->default(0)->after('manager_last_name');
             $table->string('job_function_employee_group')->after('manager_last_name')->nullable();
             $table->string('jobcode_desc')->after('manager_last_name')->nullable();
             $table->string('level1_program')->after('manager_last_name')->nullable();
@@ -91,7 +91,7 @@ class AlterEmployeeDemoTable extends Migration
             $table->dropColumn('city');
             $table->dropColumn('country');
             $table->dropColumn('employee_status_long');
-            $table->dropColumn('estimated_years_service');
+            // $table->dropColumn('estimated_years_service');
             $table->dropColumn('job_function_employee_group');
             $table->dropColumn('jobcode_desc');
             $table->dropColumn('level1_program');

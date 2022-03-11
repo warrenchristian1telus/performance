@@ -13,7 +13,7 @@ class JobSchedAudit extends Model
 
     use HasFactory;
 
-    protected $primaryKey = ['id'];
+    //protected $primaryKey = ['id'];
 
     protected $fillable = [
         'id',

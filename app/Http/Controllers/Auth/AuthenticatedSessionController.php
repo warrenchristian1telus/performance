@@ -40,6 +40,11 @@ class AuthenticatedSessionController extends Controller
         if (!($user->hasRole('employee'))) {
             $user->assignRole('employee');
         }
+
+        // Save the last signon success time
+        $user->last_signon_at = now();
+        $user->save();
+
         // Grant or Remove 'Supervisor' Role based on ODS demo database
         $this->assignSupervisorRole($user);
 

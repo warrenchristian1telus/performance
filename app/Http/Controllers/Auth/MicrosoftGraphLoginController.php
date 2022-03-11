@@ -121,74 +121,92 @@ class MicrosoftGraphLoginController extends Controller
 
                 // Check where the authenicated user has record in PeopleSoft via  ODS's Employee table
                 $guid = property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null;
-                $ee = EmployeeDemo::whereRaw("REPLACE(guid,'-','') = ?",[$guid])->first();
-                if (!($ee)) {
-                    return redirect('/login')
-                        ->with('error-psft', 'You do not have PeopleSoft HCM account setup yet.');
-                    //abort(403, 'You do not have enough permissions to perform this action. Please contact your system administor in Performance application.');
-                }
+                // $ee = EmployeeDemo::whereRaw("REPLACE(guid,'-','') = ?",[$guid])
+                //             ->whereNull('date_deleted')
+                //             ->first();
+                // if (!($ee)) {
+                //     return redirect('/login')
+                //         ->with('error-psft', 'You do not have PeopleSoft HCM account setup yet.');
+                //     //abort(403, 'You do not have enough permissions to perform this action. Please contact your system administor in Performance application.');
+                // }
 
                 // find or create a new user
-                $isUser = User::where('azure_id', $user->getId())->first();
+                //$isUser = User::where('azure_id', $user->getId())->first();
+                $isUser = User::where('guid', $guid)->where('acctlock',0)->first();
 
                 if ($isUser) {
                     if (!($isUser->hasRole('employee'))) {
                         $isUser->assignRole('employee');
                     }
 
-                    if (!($isUser->guid)) {
-                        if (property_exists($parsedToken, 'bcgovGUID')) {
+                    if (!($isUser->azure_id)) {
+                            $isUser->azure_id = $user->getId();
                             $isUser->samaccountname = property_exists($parsedToken, 'samaccountname') ? $parsedToken->samaccountname : null;
-                            $isUser->guid = property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null;
+                            if (!(filter_var($isUser->email, FILTER_VALIDATE_EMAIL))) {
+                                $isUser->email = $user->getMail();
+                            }
                             $isUser->save();
-                        }
+                        // if (property_exists($parsedToken, 'bcgovGUID')) {
+                        //     $isUser->samaccountname = property_exists($parsedToken, 'samaccountname') ? $parsedToken->samaccountname : null;
+                        //     $isUser->guid = property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null;
+                        //     $isUser->save();
+                        // }
                     }
 
-                    if (!($isUser->joining_date)) {
-                            $isUser->joining_date = $ee->position_start_date;
-                            $isUser->save();
-                    }
+                    // if (!($isUser->joining_date)) {
+                    //         $isUser->joining_date = $ee->position_start_date;
+                    //         $isUser->save();
+                    // }
                     
-                    // Assign reporting_id 
-                    if (!($isUser->reporting_to)) {
-                        $mgr_id = $this->getReportingTo($ee);
-                        if ($mgr_id) {
-                            $isUser->reporting_to = $mgr_id;
-                            $isUser->save();
-                        }
-                    }
+                    // // Assign reporting_id 
+                    // if (!($isUser->reporting_to)) {
+                    //     $mgr_id = $this->getReportingTo($ee);
+                    //     if ($mgr_id) {
+                    //         $isUser->reporting_to = $mgr_id;
+                    //         $isUser->save();
+                    //     }
+                    // }
+
+                    $isUser->last_signon_at = now();
+                    $isUser->save();
 
                     //Auth::login($isUser);
                     Auth::loginUsingId($isUser->id);
                     $request->session()->regenerate();
 
+                    // Grant or Remove 'Supervisor' Role based on ODS demo database
+                    $this->assignSupervisorRole(Auth::user());
+
                 } else {
 
-                    $mgr_id = $this->getReportingTo($ee);
+                    return redirect('/login')
+                        ->with('error-psft', 'You do not have PeopleSoft HCM account setup yet.');
 
-                    $createUser = User::create([
-                        'name' => $user->getDisplayName(),
-                        'email' => $user->getMail(),
-                        'azure_id' => $user->getId(),
-                        'password' => Hash::make('WatchDog'),
-                        'samaccountname' => property_exists($parsedToken, 'samaccountname') ? $parsedToken->samaccountname : null,
-                        'guid' => property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null,
-                        'joining_date' => $ee->position_start_date,
-                        'reporting_to' => $mgr_id,
-                    ]);
+                    // $mgr_id = $this->getReportingTo($ee);
 
-                    // assign default role 'employee'
-                    $createUser->assignRole('employee');
+                    // $createUser = User::create([
+                    //     'name' => $user->getDisplayName(),
+                    //     'email' => $user->getMail(),
+                    //     'azure_id' => $user->getId(),
+                    //     'password' => Hash::make('WatchDog'),
+                    //     'samaccountname' => property_exists($parsedToken, 'samaccountname') ? $parsedToken->samaccountname : null,
+                    //     'guid' => property_exists($parsedToken, 'bcgovGUID') ? $parsedToken->bcgovGUID : null,
+                    //     'joining_date' => $ee->position_start_date,
+                    //     'reporting_to' => $mgr_id,
+                    // ]);
 
-                    //Auth::login($createUser);
-                    Auth::loginUsingId($createUser->id);
+                    // // assign default role 'employee'
+                    // $createUser->assignRole('employee');
 
-                    $request->session()->regenerate();
+                    // //Auth::login($createUser);
+                    // Auth::loginUsingId($createUser->id);
+
+                    // $request->session()->regenerate();
 
                 }
 
                 // Grant or Remove 'Supervisor' Role based on ODS demo database
-                $this->assignSupervisorRole(Auth::user());
+                // $this->assignSupervisorRole(Auth::user());
 
                 // /* the following code for debugging when no GUID returned from Token */
                 // if (env('APP_DEBUG')) {

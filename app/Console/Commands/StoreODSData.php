@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 use App\Models\EmployeeDemo;
 use App\Models\JobSchedAudit;
-use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class StoreODSData extends Command
 {
@@ -43,6 +43,7 @@ class StoreODSData extends Command
      */
     public function handle()
     {
+
       $start_time = Carbon::now();
       $job_name = 'command:getDemoData';
       // $audit_id = DB::table('job_sched_audit')->insertGetId(
@@ -63,12 +64,14 @@ class StoreODSData extends Command
         foreach($data as $item){
           DB::table('employee_demo')->updateOrInsert(
             [
-              'guid' => $item['GUID'],
-            ],
-            [
-              'guid' => $item['GUID'],
+              //'guid' => $item['GUID'],
               'employee_id' => $item['EMPLID'],
               'empl_record' => $item['EMPL_RCD'],
+            ],
+            [
+              // 'guid' => $item['GUID'],
+              // 'employee_id' => $item['EMPLID'],
+              // 'empl_record' => $item['EMPL_RCD'],
               'employee_first_name' => $item['first_name'],
               'employee_last_name' => $item['last_name'],
               'employee_status' => $item['EMPL_STATUS'],
@@ -78,27 +81,28 @@ class StoreODSData extends Command
               'jobcode' => $item['JOBCODE'],
               // 'job_title' => $item['job_title'],
               'position_number' => $item['position_number'],
-              // 'position_start_date' => date('Y-m-d H:i:s', strtotime($item['position_start_date'])),
+              'position_start_date' => $item['position_start_date'] ? date('Y-m-d', strtotime($item['position_start_date'])) : null,
               // 'manager_id' => $item['manager_id'],
               // 'manager_first_name' => $item['manager_first_name'],
               // 'manager_last_name' => $item['manager_last_name'],
               'guid' => $item['GUID'],
               // 'date_posted' => date('Y-m-d H:i:s', strtotime($item['date_posted'])),
-              'date_deleted' => date('Y-m-d H:i:s', strtotime($item['date_deleted'])),
-              'date_updated' => date('Y-m-d H:i:s', strtotime($item['date_updated'])),
+              'date_deleted' => $item['date_deleted'] ? date('Y-m-d H:i:s', strtotime($item['date_deleted'])) : null,
+              'date_updated' => $item['date_updated'] ? date('Y-m-d H:i:s', strtotime($item['date_updated'])) : null,
               // 'date_created' => date('Y-m-d H:i:s', strtotime($item['date_created'])),
               'business_unit' => $item['BUSINESS_UNIT'],
               'effdt' => $item['EFFDT'],
               'effseq' => $item['EFFSEQ'],
               'empl_class' => $item['EMPL_CLASS'],
               'empl_ctg' => $item['EMPL_CTG'],
-              'hire_dt' => date('Y-m-d H:i:s', strtotime($item['HIRE_DT'])),
+              'hire_dt' => $item['HIRE_DT'] ? date('Y-m-d H:i:s', strtotime($item['HIRE_DT'])) : null,
               'idir' => $item['IDIR'],
               'job_function' => $item['JOB_FUNCTION'],
               'jobcodedescgroup' => $item['JobCodeDescGroup'],
               'occupationalgroup' => $item['OccupationalGroup'],
               'paygroup' => $item['PAYGROUP'],
               'organization' => $item['Organization'],
+              'job_indicator' => $item['job_indicator'],
               'address1' => $item['address1'],
               'address2' => $item['address2'],
               'appointment_status' => $item['appointment_status'],
@@ -128,6 +132,8 @@ class StoreODSData extends Command
               'public_service_act' => $item['public_service_act'],
               'sal_admin_plan' => $item['sal_admin_plan'],
               'stateprovince' => $item['stateprovince'],
+              'supervisor_emplid' => $item['supervisor_emplid'],
+              'supervisor_position_start_date' => $item['supervisor_position_start_date'] ? date('Y-m-d', strtotime($item['supervisor_position_start_date'])) : null,
               'supervisor_email' => $item['supervisor_email'],
               'supervisor_name' => $item['supervisor_name'],
               'supervisor_position_number' => $item['supervisor_position_number'],
@@ -151,5 +157,7 @@ class StoreODSData extends Command
           ]
         );
 
+    
     }
+    
 }

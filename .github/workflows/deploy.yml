@@ -1,12 +1,13 @@
 # Static Deploy On Openshift
 # Builds and Deploys merged PR's to persistent pods/services/routes/etc in the OpenShift Dev environment.
 name: Deploy on Openshift
-  
 on:
-  # https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows
   push:
-    # Edit to the branch(es) you want to build and deploy on each push.
-    branches: [ perf-devops ]
+    branches:
+      - dev
+      - test
+      - prod
+
 
 jobs:
   #Print variables for logging and debugging purposes
@@ -27,6 +28,7 @@ jobs:
     name: Build APP
     runs-on: ubuntu-latest
     # if: ${{ github.event.pull_request.merged == true}}
+    if: ${{ github.ref_name == "dev" || github.ref_name == "test" || github.ref_name == "prod" }}
     env:
       BUILD_ID: ${{ github.event.number }}
       BUILD_NAMESPACE: 332842-tools
@@ -69,6 +71,7 @@ jobs:
   deployDev:
     name: Deploy APP to Dev environment
     runs-on: ubuntu-latest
+    if: ${{ github.ref_name == "dev" }}
     env:
      BUILD_ID: ${{ github.event.number }}
      NAMESPACE: 332842-dev

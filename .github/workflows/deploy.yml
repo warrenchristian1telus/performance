@@ -7,8 +7,6 @@ on:
       - dev
       - test
       - prod
-
-
 jobs:
   #Print variables for logging and debugging purposes
   checkEnv:

@@ -69,7 +69,7 @@ jobs:
   deployDev:
     name: Deploy APP to Dev environment
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == "dev"}}
+    if: ${{ github.ref_name == 'dev'}}
     env:
      BUILD_ID: ${{ github.event.number }}
      NAMESPACE: 332842-dev

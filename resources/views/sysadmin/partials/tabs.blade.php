@@ -39,9 +39,9 @@
             Previous Employees
         </x-button>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.conversations' ? 'border-primary' : ''}}">
+    <!-- <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.conversations' ? 'border-primary' : ''}}">
         <x-button :href="route('sysadmin.conversations')" style="">
             Conversations
         </x-button>
-    </div>
+    </div> -->
 </div>

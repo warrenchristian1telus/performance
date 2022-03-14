@@ -269,23 +269,56 @@ return [
                     'url'  => 'my-team/conversations',
                     'active' => ['my-team/conversations/*'],
                 ],
-                // [
-                //     'text' => 'Notifications',
-                //     'url'  => '#',
-                // ],
-                // [
-                //     'text' => 'Performance Statistics',
-                //     'url'  => '#',
-                // ],
             ]
         ],
-        // [
-        //     'role' => 'listitem',
-        //     'text' => 'System Administration',
-        //     'url'  => 'sysadmin/myorg',
-        //     'icon' => 'fas fa-fw fa-cog',
-        //     'active' => ['sysadmin/*']
-        // ],
+        [
+            'role' => 'listitem',
+            'text' => 'System Administration',
+            'url'  => '#',
+            'icon' => 'fas fa-fw fa-cog',
+            'submenu' => [
+                [
+                    'text' => 'My Organization',
+                    'url'  => 'sysadmin/myorg',
+                    'active' => ['sysadmin/myorg']
+                ],
+                [
+                    'text' => 'Statistics and Reports',
+                    'url'  => 'sysadmin/statistics',
+                    'active' => ['sysadmin/statistics']
+                ],
+                [
+                    'text' => 'Goal Bank',
+                    'url'  => 'sysadmin/goal-bank',
+                    'active' => ['sysadmin/goal-bank']
+                ],
+                [
+                    'text' => 'Shared Employees',
+                    'url'  => 'sysadmin/shared',
+                    'active' => ['sysadmin/shared']
+                ],
+                [
+                    'text' => 'Excused Employees',
+                    'url'  => 'sysadmin/excused',
+                    'active' => ['sysadmin/excused']
+                ],
+                [
+                    'text' => 'Notification Log',
+                    'url'  => 'sysadmin/notifications',
+                    'active' => ['sysadmin/notifications']
+                ],
+                [
+                    'text' => 'Access and Permissions',
+                    'url'  => 'sysadmin/access',
+                    'active' => ['sysadmin/access']
+                ],
+                [
+                    'text' => 'Previous Employees',
+                    'url'  => 'sysadmin/previous',
+                    'active' => ['sysadmin/previous']
+                ],
+            ],
+        ],
         [
             'role' => 'listitem',
             'text' => 'Resources',

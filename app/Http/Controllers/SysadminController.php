@@ -39,16 +39,18 @@ class SysadminController extends Controller
         ->get();
          // dd($tree->count());
 
+        $level0Value = 'all';
         $level1Value = 'all';
         $level2Value = 'all';
         $level3Value = 'all';
         $level4Value = 'all';
 
         $this->getDropdownValues($mandatoryOrSuggested, $goalTypes);
-        $level1 = $this->getOrgLevel1();
-        $level2 = $this->getOrgLevel2($level1Value);
-        $level3 = $this->getOrgLevel3($level1Value, $level2Value);
-        $level4 = $this->getOrgLevel4($level1Value, $level2Value, $level3Value);
+        $level0 = $this->getOrgLevel0();
+        $level1 = $this->getOrgLevel1($level0Value);
+        $level2 = $this->getOrgLevel2($level0Value, $level1Value);
+        $level3 = $this->getOrgLevel3($level0Value, $level1Value, $level2Value);
+        $level4 = $this->getOrgLevel4($level0Value, $level1Value, $level2Value, $level3Value);
 
         $authId = Auth::id();
         $goaltypes = GoalType::all();
@@ -91,7 +93,7 @@ class SysadminController extends Controller
         ->get();
 
         // return view('sysadmin.goal-bank', compact('level1','level2','level3','level4', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
-        return view('sysadmin.goal-bank', compact('level1', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
+        return view('sysadmin.goal-bank', compact('level0', 'level1', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
     }
 
     public function goaledit($id)
@@ -240,16 +242,33 @@ class SysadminController extends Controller
         return response()->json(['success' => true, 'message' => 'Goal Created successfully']);
     }
 
-    public function getOrgLevel1() {
-        $level1 = DB::table('employee_demo')
-        ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key1"), 'level1_program')
-        ->where(trim('level1_program'), '<>', '')
-        ->groupby('level1_program')
-        ->get('key1', 'level1_program');
+    public function getOrgLevel0() {
+        $level0 = DB::table('employee_demo')
+        ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key0"), 'organization')
+        ->where(trim('organization'), '<>', '')
+        ->groupby('organization')
+        ->get('key0', 'organization');
+        return $level0;
+    }
+
+    public function getOrgLevel1($id0) {
+        if ($id0 == 'all') {
+            $level1 = [['key1' => 'all', 'level1_program' => 'All']];
+            $level2 = [['key2' => 'all', 'level2_division' => 'All']];
+            $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
+            $level4 = [['key4' => 'all', 'level4' => 'All']];
+        }else{
+            $level1 = DB::table('employee_demo')
+            ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key2"), 'level1_program')
+            ->where(trim('level1_program'), '<>', '')
+            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
+            ->groupby('level1_program')
+            ->pluck('level1_program', 'key1');
+        };
         return $level1;
     }
 
-    public function getOrgLevel2($id1) {
+    public function getOrgLevel2($id0, $id1) {
         if ($id1 == 'all') {
             $level2 = [['key2' => 'all', 'level2_division' => 'All']];
             $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
@@ -258,6 +277,7 @@ class SysadminController extends Controller
             $level2 = DB::table('employee_demo')
             ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key2"), 'level2_division')
             ->where(trim('level2_division'), '<>', '')
+            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
             ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
             ->groupby('level2_division')
             ->pluck('level2_division', 'key2');
@@ -266,7 +286,7 @@ class SysadminController extends Controller
     }
 
 
-    public function getOrgLevel3($id1, $id2) {
+    public function getOrgLevel3($id0, $id1, $id2) {
         if ($id2 == 'all') {
             $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
             $level4 = [['key4' => 'all', 'level4' => 'All']];
@@ -274,6 +294,7 @@ class SysadminController extends Controller
             $level3 = DB::table('employee_demo')
             ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level3_branch, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key3"), 'level3_branch')
             ->where(trim('level3_branch'), '<>', '')
+            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
             ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
             ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id2)
             ->groupby('level3_branch')
@@ -282,13 +303,14 @@ class SysadminController extends Controller
         return json_encode($level3);
     }
 
-    public function getOrgLevel4($id1, $id2, $id3) {
+    public function getOrgLevel4($id0, $id1, $id2, $id3) {
         if ($id3 == 'all') {
             $level4 = [['key4' => 'all', 'level4' => 'All']];
         }else{
             $level4 = DB::table('employee_demo')
             ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level4, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key4"), 'level4')
             ->where(trim('level4'), '<>', '')
+            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
             ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
             ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id2)
             ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level3_branch, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id3)

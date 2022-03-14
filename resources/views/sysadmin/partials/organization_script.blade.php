@@ -4,6 +4,60 @@
 <script type="text/javascript">
 jQuery(document).ready(function ()
 {
+    jQuery('select[name="dd_level0"]').on('change',function(){
+        var ddlevel0 = jQuery(this).val();
+        if(ddlevel0 == 'all') {
+            jQuery('select[name="dd_level1"]').empty();
+            jQuery('select[name="dd_level2"]').empty();
+            jQuery('select[name="dd_level3"]').empty();
+            jQuery('select[name="dd_level4"]').empty();
+            $('select[name="dd_level1"]').append('<option value="all">All</option>');
+            $('select[name="dd_level2"]').append('<option value="all">All</option>');
+            $('select[name="dd_level3"]').append('<option value="all">All</option>');
+            $('select[name="dd_level4"]').append('<option value="all">All</option>');
+            dd_level1 = 'all';
+            dd_level2 = 'all';
+            dd_level3 = 'all';
+            dd_level4 = 'all';
+        }else if(ddlevel0 != null){
+            console.log('Not Null');
+            jQuery.ajax({
+                url : 'level1/'+ddlevel0,
+                type : "GET",
+                dataType : "json",
+                success:function(data)
+                {
+                    jQuery('select[name="dd_level1"]').empty();
+                    $('select[name="dd_level1"]').append('<option value="all">All</option>');
+                    jQuery.each(data, function(key1, level1_program){
+                        $('select[name="dd_level1"]').append('<option value="'+ key1 +'">'+ level1_program +'</option>');
+                    });
+                    jQuery('select[name="dd_level2"]').empty();
+                    $('select[name="dd_level2"]').append('<option value="all">All</option>');
+                    dd_level2 = 'all';
+                    jQuery('select[name="dd_level3"]').empty();
+                    $('select[name="dd_level3"]').append('<option value="all">All</option>');
+                    dd_level3 = 'all';
+                    jQuery('select[name="dd_level4"]').empty();
+                    $('select[name="dd_level4"]').append('<option value="all">All</option>');
+                    dd_level4 = 'all';
+                }
+            });
+        }else {
+            $('select[name="dd_level1"]').empty();
+            $('select[name="dd_level2"]').empty();
+            $('select[name="dd_level3"]').empty();
+            $('select[name="dd_level4"]').empty();
+            $('select[name="dd_level1"]').append('<option value="all">All</option>');
+            $('select[name="dd_level2"]').append('<option value="all">All</option>');
+            $('select[name="dd_level3"]').append('<option value="all">All</option>');
+            $('select[name="dd_level4"]').append('<option value="all">All</option>');
+            dd_level1 = 'all';
+            dd_level2 = 'all';
+            dd_level3 = 'all';
+            dd_level4 = 'all';
+        }
+    });
     jQuery('select[name="dd_level1"]').on('change',function(){
         var ddlevel1 = jQuery(this).val();
         if(ddlevel1 == 'all') {
@@ -19,7 +73,7 @@ jQuery(document).ready(function ()
         }else if(ddlevel1 != null){
             console.log('Not Null');
             jQuery.ajax({
-                url : 'level2/'+ddlevel1,
+                url : 'level2/'+ddlevel0+'/'+ddlevel1,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -61,7 +115,7 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }else if(ddlevel2 != null){
             jQuery.ajax({
-                url : 'level3/'+ddlevel1+'/'+ddlevel2,
+                url : 'level3/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -96,7 +150,7 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }else if(ddlevel3 != null){
             jQuery.ajax({
-                url : 'level4/'+ddlevel1+'/'+ddlevel2+'/'+ddlevel3,
+                url : 'level4/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2+'/'+ddlevel3,
                 type : "GET",
                 dataType : "json",
                 success:function(data)

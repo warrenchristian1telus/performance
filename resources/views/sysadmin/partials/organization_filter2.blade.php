@@ -1,5 +1,14 @@
 <tr>
     <td style="text-align: left; width: 300px; " class="p-2 form-group">
+        <label for='ee_level0'>Organization</label>
+        <select class="form-control" name="ee_level0" id="ee_level0">
+            <option value="all">All</option>
+            @foreach ($eelevel0 as $el0)
+            <option value="{{ $el0->key0 }}">{{ $el0->level0_program }}</option>
+            @endforeach
+        </select>
+    </td>
+    <td style="text-align: left; width: 300px; " class="p-2 form-group">
         <label for='ee_level1'>Organization Level 1</label>
         <select class="form-control" name="ee_level1" id="ee_level1">
             <option value="all">All</option>

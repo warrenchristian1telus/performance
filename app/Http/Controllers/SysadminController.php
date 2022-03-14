@@ -134,7 +134,8 @@ class SysadminController extends Controller
     public function shared()
     {
         $this->getDropdownValues($mandatoryOrSuggested, $goalTypes);
-        $level1 = $this->getOrgLevel1();
+        $level0 = $this->getOrgLevel0();
+        // $level1 = $this->getOrgLevel1();
 
         $sharedElements = [['key' => 'all', 'value' => 'All']];
 
@@ -148,7 +149,7 @@ class SysadminController extends Controller
         ->select('users.id', 'users.name', 'employee_demo.job_title')
         ->paginate(8);
 
-        return view('sysadmin.shared', compact('level1', 'sEmpl', 'jobTitles', 'sharedElements'));
+        return view('sysadmin.shared', compact('level0', 'sEmpl', 'jobTitles', 'sharedElements'));
     }
 
     public function excused()
@@ -169,7 +170,8 @@ class SysadminController extends Controller
 
     public function previous()
     {
-        $level1 = $this->getOrgLevel1();
+        $level0 = $this->getOrgLevel0();
+        // $level1 = $this->getOrgLevel1();
         $jobTitles = $this->getJobTitles();
 
         $iEmpl = DB::table('employee_demo')
@@ -177,11 +179,12 @@ class SysadminController extends Controller
         // ->wherenotin('employee_status', ['A', 'L', 'P', 'S'])
         ->paginate(8);
 
-        return view('sysadmin.previous', compact('level1', 'iEmpl', 'jobTitles'));
+        return view('sysadmin.previous', compact('level0', 'iEmpl', 'jobTitles'));
     }
 
     public function conversations()
     {
+        $level0 = $this->getOrgLevel0();
         $level1 = $this->getOrgLevel1();
         $eelevel1 = $this->getOrgLevel1();
 

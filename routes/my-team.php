@@ -3,6 +3,7 @@
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\MyTeamController;
 use App\Http\Controllers\MyTeamConversationController;
+use App\Http\Controllers\MyTeamGoalController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['role:Supervisor']], function () {
@@ -35,10 +36,16 @@ Route::group(['middleware' => ['role:Supervisor']], function () {
         Route::get('/conversations/past', [MyTeamConversationController::class, 'index'])->name('conversations.past');
         Route::post('/conversations/past', [MyTeamConversationController::class, 'index'])->name('conversations.past.filter');
     });
+
+    Route::prefix('my-team/team-goals')->name('my-team.')->group(function() {
+        Route::get('/share-my-goals', [MyTeamGoalController::class, 'shareMyGoals'])->name('share-my-goals');
+        Route::get('/team-goal-bank', [MyTeamGoalController::class, 'teamGoalBank'])->name('team-goal-bank');
+    });
+
 });
 
 Route::group(['middleware' => ['ViewAsPermission']], function () {
-    Route::get('my-team/view-as/{id}', [MyTeamController::class, 'viewProfileAs'])->name('my-team.view-profile-as');
+    Route::get('my-team/view-as/{id}/{landingPage?}', [MyTeamController::class, 'viewProfileAs'])->name('my-team.view-profile-as');
     Route::get('my-team/return-to-my-view', [MyTeamController::class, 'returnToMyProfile'])->name('my-team.return-to-my-view');
 
 });

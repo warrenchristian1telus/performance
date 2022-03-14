@@ -16,7 +16,8 @@ Route::get('sysadmin/notifications', [SysadminController::class, 'notifications'
 Route::get('sysadmin/access', [SysadminController::class, 'access'])->name('sysadmin.access');
 Route::get('sysadmin/previous', [SysadminController::class, 'previous'])->name('sysadmin.previous');
 Route::get('sysadmin/conversations', [SysadminController::class, 'conversations'])->name('sysadmin.conversations');
-Route::get('sysadmin/level1', 'App\Http\Controllers\SysadminController@getOrgLevel1')->name('sysadmin.level1');
-Route::get('sysadmin/level2/{id1}', 'App\Http\Controllers\SysadminController@getOrgLevel2')->name('sysadmin.level2');
-Route::get('sysadmin/level3/{id1}/{id2}', 'App\Http\Controllers\SysadminController@getOrgLevel3')->name('sysadmin.level3');
-Route::get('sysadmin/level4/{id1}/{id2}/{id3}', 'App\Http\Controllers\SysadminController@getOrgLevel4')->name('sysadmin.level4');
+Route::get('sysadmin/level0', 'App\Http\Controllers\SysadminController@getOrgLevel0')->name('sysadmin.level0');
+Route::get('sysadmin/level1/{id0}', 'App\Http\Controllers\SysadminController@getOrgLevel1')->name('sysadmin.level1');
+Route::get('sysadmin/level2/{id0}/{id1}', 'App\Http\Controllers\SysadminController@getOrgLevel2')->name('sysadmin.level2');
+Route::get('sysadmin/level3/{id0}/{id1}/{id2}', 'App\Http\Controllers\SysadminController@getOrgLevel3')->name('sysadmin.level3');
+Route::get('sysadmin/level4/{id0}/{id1}/{id2}/{id3}', 'App\Http\Controllers\SysadminController@getOrgLevel4')->name('sysadmin.level4');

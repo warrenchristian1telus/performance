@@ -15,7 +15,7 @@
 <div>
 
     <div class="card card-primary shadow mb-3" style="overflow-x: auto;">
-        <div class="d-flex" style="width: 3400px">
+        <div class="d-flex" style="width: 3700px">
             <form action="" method="get">
 
                 <table class="uk-table m-3">
@@ -60,7 +60,7 @@
             <!-- <div class="md-card-content m-3" style="overflow-x: auto;"> -->
             <!-- <table class="table table-borderless table-layout:fixed" style="overflow-x: auto;"> -->
             <!-- <table class="table table-wrapper table-layout:fixed" style="overflow-x: auto;"> -->
-            <div class="table table-wrapper" style="width: 3400px">
+            <div class="table table-wrapper" style="width: 3700px">
                 <div class="md-card-content" style="overflow-x: auto;">
                     <!-- <div class="md-card-content" style="overflow-x: auto;"> -->
                     <!-- <table class="table table-borderless table-layout:fixed" style="overflow-x: auto;" width="2800px"> -->

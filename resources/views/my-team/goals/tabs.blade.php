@@ -4,8 +4,8 @@
          Share My Goals
         </x-button>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'goal.past' ? 'border-primary' : ''}}">
-        <x-button role="tab" :href="route('goal.past')" style="">
+    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'my-team.team-goal-bank' ? 'border-primary' : ''}}">
+        <x-button role="tab" :href="route('my-team.team-goal-bank')" style="">
           Team Goal Bank
         </x-button>
     </div>

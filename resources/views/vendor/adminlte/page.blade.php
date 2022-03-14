@@ -66,10 +66,17 @@
 
 @section('adminlte_js')
     <script>
+        $("li#my-team-menu.nav-item").find("i.right", function (e) {
+            console.log("Icon Clicked");
+            console.log(e);
+        });
         $("li#my-team-menu.nav-item").click(function(e)
         {
-            let url = $(this).find('a.nav-link').attr('href');
-            window.location = url;
+            if(!e.target.classList.contains("right")) 
+            {
+                let url = $(this).find('a.nav-link').attr('href');
+                window.location = url;
+            }
             /* // Load the content from the link's "href" attribute.
 
             $.get(url, function(data)

@@ -235,7 +235,7 @@ return [
             'hiddenInViewAs' => true
         ],
         [
-            'text' => 'Goals',
+            'text' => 'My Goals',
             'role' => 'listitem',
             'url'  => 'goal/current',
             'icon' => 'fas fa-fw fa-bullseye',
@@ -244,7 +244,7 @@ return [
         ],
         [
             'role' => 'listitem',
-            'text' => 'Conversations',
+            'text' => 'My Conversations',
             'url'  => 'conversation/templates',
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['conversation/*'],
@@ -261,29 +261,63 @@ return [
             'submenu' => [
                 [
                     'text' => 'Team Goals',
-                    'url'  => '#',
+                    'url'  => 'my-team/team-goals/share-my-goals',
+                    'active' => ['my-team/team-goals/*']
                 ],
                 [
                     'text' => 'Team Conversations',
                     'url'  => 'my-team/conversations',
                     'active' => ['my-team/conversations/*'],
                 ],
-                [
-                    'text' => 'Notifications',
-                    'url'  => '#',
-                ],
-                [
-                    'text' => 'Performance Statistics',
-                    'url'  => '#',
-                ],
             ]
         ],
         [
             'role' => 'listitem',
             'text' => 'System Administration',
-            'url'  => 'sysadmin/myorg',
+            'url'  => '#',
             'icon' => 'fas fa-fw fa-cog',
-            'active' => ['sysadmin/*']
+            'submenu' => [
+                [
+                    'text' => 'My Organization',
+                    'url'  => 'sysadmin/myorg',
+                    'active' => ['sysadmin/myorg']
+                ],
+                [
+                    'text' => 'Statistics and Reports',
+                    'url'  => 'sysadmin/statistics',
+                    'active' => ['sysadmin/statistics']
+                ],
+                [
+                    'text' => 'Goal Bank',
+                    'url'  => 'sysadmin/goal-bank',
+                    'active' => ['sysadmin/goal-bank']
+                ],
+                [
+                    'text' => 'Shared Employees',
+                    'url'  => 'sysadmin/shared',
+                    'active' => ['sysadmin/shared']
+                ],
+                [
+                    'text' => 'Excused Employees',
+                    'url'  => 'sysadmin/excused',
+                    'active' => ['sysadmin/excused']
+                ],
+                [
+                    'text' => 'Notification Log',
+                    'url'  => 'sysadmin/notifications',
+                    'active' => ['sysadmin/notifications']
+                ],
+                [
+                    'text' => 'Access and Permissions',
+                    'url'  => 'sysadmin/access',
+                    'active' => ['sysadmin/access']
+                ],
+                [
+                    'text' => 'Previous Employees',
+                    'url'  => 'sysadmin/previous',
+                    'active' => ['sysadmin/previous']
+                ],
+            ],
         ],
         [
             'role' => 'listitem',

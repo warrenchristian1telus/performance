@@ -4,6 +4,59 @@
 <script type="text/javascript">
 jQuery(document).ready(function ()
 {
+    jQuery('select[name="ee_level0"]').on('change',function(){
+        var eelevel0 = jQuery(this).val();
+        if(eelevel0 == 'all') {
+            jQuery('select[name="ee_level1"]').empty();
+            jQuery('select[name="ee_level2"]').empty();
+            jQuery('select[name="ee_level3"]').empty();
+            jQuery('select[name="ee_level4"]').empty();
+            $('select[name="ee_level1"]').append('<option value="all">All</option>');
+            $('select[name="ee_level2"]').append('<option value="all">All</option>');
+            $('select[name="ee_level3"]').append('<option value="all">All</option>');
+            $('select[name="ee_level4"]').append('<option value="all">All</option>');
+            ee_level1 = 'all';
+            ee_level2 = 'all';
+            ee_level3 = 'all';
+            ee_level4 = 'all';
+        }else if(eelevel0 != null){
+            jQuery.ajax({
+                url : 'level1/'+eelevel0,
+                type : "GET",
+                dataType : "json",
+                success:function(data)
+                {
+                    jQuery('select[name="ee_level1"]').empty();
+                    $('select[name="ee_level1"]').append('<option value="all">All</option>');
+                    jQuery.each(data, function(key1, level1_program){
+                        $('select[name="ee_level1"]').append('<option value="'+ key1 +'">'+ level1_program +'</option>');
+                    });
+                    jQuery('select[name="ee_level2"]').empty();
+                    $('select[name="ee_level2"]').append('<option value="all">All</option>');
+                    ee_level2 = 'all';
+                    jQuery('select[name="ee_level3"]').empty();
+                    $('select[name="ee_level3"]').append('<option value="all">All</option>');
+                    ee_level3 = 'all';
+                    jQuery('select[name="ee_level4"]').empty();
+                    $('select[name="ee_level4"]').append('<option value="all">All</option>');
+                    ee_level4 = 'all';
+                }
+            });
+        }else {
+            $('select[name="ee_level1"]').empty();
+            $('select[name="ee_level2"]').empty();
+            $('select[name="ee_level3"]').empty();
+            $('select[name="ee_level4"]').empty();
+            $('select[name="ee_level1"]').append('<option value="all">All</option>');
+            $('select[name="ee_level2"]').append('<option value="all">All</option>');
+            $('select[name="ee_level3"]').append('<option value="all">All</option>');
+            $('select[name="ee_level4"]').append('<option value="all">All</option>');
+            ee_level1 = 'all';
+            ee_level2 = 'all';
+            ee_level3 = 'all';
+            ee_level4 = 'all';
+        }
+    });
     jQuery('select[name="ee_level1"]').on('change',function(){
         var eelevel1 = jQuery(this).val();
         if(eelevel1 == 'all') {

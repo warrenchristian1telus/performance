@@ -30,7 +30,10 @@ class User extends Authenticatable
         'excused_start_date',
         'excused_end_date',
         'excused_reason_id',
-        'joining_date'
+        'joining_date',
+        'acctlock',
+        'last_signon_at',
+        'last_sync_at',
     ];
 
     /**
@@ -164,4 +167,9 @@ class User extends Authenticatable
     public function getReportingUserIds() {
         return $this->reportees()->pluck('id');
     }
+
+    public function reportingTos() {
+        return $this->hasMany('App\Models\UserReportingTo', 'user_id');
+    }
+
 }

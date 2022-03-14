@@ -191,7 +191,7 @@ class MyTeamController extends Controller
         }
     }
 
-    public function viewProfileAs($id, Request $request) {
+    public function viewProfileAs($id, $landingPage = null, Request $request) {
         $actualAuthId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();        
         $hasAccess = User::with('reportingManagerRecursive')->find($id)->canBeSeenBy($actualAuthId);
 
@@ -214,6 +214,9 @@ class MyTeamController extends Controller
                 session()->put('GOALS_ALLOWED', true);
                 session()->put('CONVERSATION_ALLOWED', true);
             }
+        }
+        if ($landingPage) {
+            return redirect()->route($landingPage);
         }
         return (url()->previous() === Route('my-team.my-employee') || url()->previous() === Route('my-team.view-profile-as.direct-report', User::find($id)->reportingManager->id))
             ? ((session()->has('GOALS_ALLOWED') && session()->get('GOALS_ALLOWED')) ? redirect()->route('goal.current') : redirect()->route('conversation.upcoming'))
@@ -259,7 +262,7 @@ class MyTeamController extends Controller
         // return redirect()->back();
     }
 
-    public function showSugggestedGoals() {
+    public function showSugggestedGoals($viewName = 'my-team.suggested-goals') {
         $goaltypes = GoalType::all();
         $eReasons = ExcusedReason::all();
         $conversationTopics = ConversationTopic::all();
@@ -280,7 +283,7 @@ class MyTeamController extends Controller
             ->with('goalType')
             ->paginate(4);
         $goalDeleteConfirmationText = "You are about to delete a suggested goal, meaning it will no longer be visible to your direct reports. Are you sure you want to continue?";
-        return view('my-team.suggested-goals', compact('goals', 'goaltypes', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal', 'goalDeleteConfirmationText'));
+        return view($viewName, compact('goals', 'goaltypes', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal', 'goalDeleteConfirmationText'));
     }
 
 }

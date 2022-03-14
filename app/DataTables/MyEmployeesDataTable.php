@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Conversation;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Html\Column;
@@ -35,15 +36,20 @@ class MyEmployeesDataTable extends DataTable
                 return view('goal.partials.action', compact(["row"])); // $row['id'];
             })->editColumn('active_goals_count', function ($row) {
                 $text = $row['active_goals_count'] . " Goals";
-                return view('my-team.partials.link-to-profile', compact(['row', 'text']));
-            })->addColumn('latestConversation', function ($row) {
+                $landingPage = 'goal.current';
+                return view('my-team.partials.link-to-profile', compact(['row', 'text', 'landingPage']));
+            })->addColumn('nextConversationDue', function ($row) {
+                $text = Conversation::nextConversationDue(User::find($row["id"]));
+                $landingPage = 'conversation.templates';
+                return view('my-team.partials.link-to-profile', compact(["row", "text", "landingPage"]));
+            })/* ->addColumn('latestConversation', function ($row) {
                 $conversation = $row->latestConversation[0] ?? null;
                 return view('my-team.partials.conversation', compact(["row", "conversation"]));
             })->addColumn('upcomingConversation', function ($row) {
                 $removeBlankLink = true;
                 $conversation = $row->upcomingConversation[0] ?? null;
                 return view('my-team.partials.conversation', compact(["row", "conversation", 'removeBlankLink']));
-            })
+            }) */
             ->addColumn('shared', function ($row) {
                 // $yesOrNo = ($row->id % 2 === 0) ? 'Yes' : 'No';
                 return view('my-team.partials.view-btn', compact(["row"])); // $row['id'];
@@ -127,6 +133,12 @@ class MyEmployeesDataTable extends DataTable
                 'name' => 'active_goals_count',
                 'searchable' => false
             ]),
+            Column::computed('nextConversationDue')
+                ->title('Next Conversation Due')
+                ->exportable(false)
+                ->printable(false)
+                ->addClass('text-center')
+            /* ,
             Column::computed('upcomingConversation')
                 ->title('Upcoming Conversation')
                 ->exportable(false)
@@ -136,7 +148,7 @@ class MyEmployeesDataTable extends DataTable
                 ->title('Last Conversation')
                 ->exportable(false)
                 ->printable(false)
-                ->addClass('text-center'),
+                ->addClass('text-center') */,
             Column::computed('shared')
                 ->exportable(false)
                 ->printable(false)

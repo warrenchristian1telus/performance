@@ -20,12 +20,13 @@ class TopicSeeder extends Seeder
                 'name' => 'Performance Check-In',
                 'when_to_use' => 'Use this template when performance expectations are generally being met for a given role and you want to discuss progress against goals, challenges, successes, and how to improve ways of working and future performance outcomes.',
                 'preparing_for_conversation' =>
-                    '<ul><li>Employees should consider:</li><ul>
-                    <li>Areas you have excelled at, or projects you&rsquo;ve been involved in that have been great successes</li>
-                    <li>Skills and competencies that have led to your greatest results</li>
-                    <li>Areas you feel you could improve and what would help you improve</li>
-                    <li>Things that got in the way that will be important to address moving forward</li></ul></ul>
-                    <ul><li>Supervisors should come prepared with feedback that is:</li>
+                    '<ul><li>Employees </li><ul>
+                    <li>Consider areas you have excelled at, or projects you&rsquo;ve been involved in that have been great successes</li>
+                    <li>Identify skills and competencies that have led to your greatest results</li>
+                    <li>Determine areas you feel you could improve and what would help you improve</li>
+                    <li>Identify things that got in the way that will be important to address moving forward</li></ul></ul>
+                    <ul><li>Supervisors </li><ul>
+                    <p>Come prepared with feedback that is:</p>
                     <ul><li>Specific</li>
                     <li>Supported by examples</li>
                     <li>Focused on behaviours, not individuals</li>
@@ -37,37 +38,37 @@ class TopicSeeder extends Seeder
                     <li>What accomplishments are you most proud of?</li><ul>
                     <li>How would you like to celebrate success? Do you prefer one-on-one discussions or would you like more public or team-oriented recognition?</li></ul>
                     <li>How do you think your role helps the work unit succeed?</li>
-                    <li>What challenges have you faced? Did you learn anything?</li>
-                    <ul><li>Is there anything that our team or organization could learn from that you would be open to sharing?</li></ul>
+                    <li>What challenges have you faced? What did you learn?</li>
+                    <ul><li>What could our team or organization learn from your experience?</li></ul>
                     <li>What support do you need from me as your supervisor to perform at your best?</li>
                     <ul><li>What do I do that is most/least helpful for you when it comes to completing your work?</li></ul>
                     <li>In what areas do you need or want to improve? What would help you improve?</li>
-                    <ul><li>Are there specific skills or competencies we should focus on moving forward?</li></ul>
+                    <ul><li>What specific skills or competencies should we focus on moving forward?</li></ul>
                     <li>What motivates you to get your job done?</li>
                     <li>Which job responsibilities/tasks do you enjoy most? Which do you least enjoy?</li>
                     <li>What opportunities are you looking for moving forward?</li>
-                    <ul><li>Do you have any interests or skills we could consider integrating into your work?</li></ul>
+                    <ul><li>Which of your interests or skills could we consider integrating into your work?</li></ul>
                     <li>How do you prefer to receive feedback and/or recognition for your work?</li>
                     <li>What (if any) concerns do you have when it comes to giving me feedback? How can I alleviate those concerns?</li></ul>'
             ],
             [
                 'id' => 2,
                 'name' => 'Goal Setting',
-                'when_to_use' => 'Use this template when establishing initial goals or revising existing goals in response to shifting or new priorities in the organization. It will help to align individual goals with organizational strategies and create connections to individual strengths and opportunities for growth.',
+                'when_to_use' => 'Use this template when you need to focus on establishing initial goals or revising existing goals in response to shifting or new priorities in the organization. It will help to align individual goals with organizational strategies and create connections to individual strengths and opportunities for growth.',
                 'preparing_for_conversation' =>
-                    'Employees should:
-                    <ul><li>Consider how their work connects to broader team, organizational, or corporate objectives</li>
+                    'Employees
+                    <ul><li>Consider how your work connects to broader team, organizational, or corporate objectives</li>
                     <li>Reflect on personal strengths and skills that could support the work of the team</li>
                     <li>Identify any potential barriers to success that will be important to address when setting new goals</li>
                     <li>Come prepared to discuss goals that focus on both business results (what we accomplish) and/or behavioural competencies (how we accomplish things)</li></ul>
-                    Supervisors should:
+                    Supervisors
                     <ul><li>Provide copies of relevant corporate plans, organizational plans, and job profiles to the employee to help focus discussions</li>
                     <li>Come prepared to discuss goals that focus on both business results (what we accomplish) and/or behavioural competencies (how we accomplish things).s</li>
                     <li>Consider adding suggested or mandated goals for employees through the Goal Bank in this platform as a way to provide common language and a starting point for customization</li></ul>',
-                'question_html' => '<p>Supervisors should share relevant team goals and priorities to begin the conversation. Participants can choose some or all the questions below to help guide discussion. Significant outcomes and action items should be captured in the comment boxes throughout the template.</p>
+                'question_html' => '<p>Supervisors can share relevant team goals and priorities to begin the conversation. This helps employees understand the bigger picture and how their goals contribute. Participants can choose some or all the questions below to help guide discussion. Significant outcomes and action items should be captured in the comment boxes throughout the template.</p>
                     <ul><li>What goals can you add to your plan to help achieve team priorities?</li>
                     <li>What competencies and values will you focus on to achieve your goals?</li>
-                    <li>What do you need to learn to achieve your goals? Do you have any gaps that you want to address?</li>
+                    <li>What do you need to learn to achieve your goals? What gaps do you want to address?</li>
                     <li>What are the barriers to your success? How will you overcome them?</li>
                     <li>Imagine what success will look like: this can inform your personal performance measures (remember to pick results that are within your control and/or influence).</li>
                     <li>What personal goals would you like to include in your profile?</li>
@@ -81,21 +82,21 @@ class TopicSeeder extends Seeder
                 'name' => 'Career Development',
                 'when_to_use' => 'Use this template when you want to focus on mid- and long-term goals and career development for an individual. It will help define potential paths forward and focus on specific steps and supports to assist with reaching career aspirations.',
                 'preparing_for_conversation' =>
-                    'Employees should reflect on:
-                    <ul><li>Personal strengths and areas for growth</li>
-                    <li>Skills they would like to use more or less of in future roles</li>
-                    <li>Training and learning opportunities they’d like to pursue</li>
-                    <li>The impact they want to have in their career</li></ul>
-                    Supervisors should:
+                    'Employees
+                    <ul><li>Reflect on personal strengths and areas for growth</li>
+                    <li>Identify skills you would like to use more or less of in future roles</li>
+                    <li>Determine training and learning opportunities you’d like to pursue</li>
+                    <li>Consider the impact you want to have in your career</li></ul>
+                    Supervisors
                     <ul><li>Reflect on employee’s strengths and areas for growth</li>
                     <li>Review past comments in the performance app</li>
-                    <li>Consider how they might connect employees with mentors or contacts in areas of employee interest</li>
+                    <li>Consider how you might connect employees with mentors or contacts in areas of employee interest</li>
                     <li>Be aware of any organizational rules or restrictions governing training or learning opportunities for employees (for example: availability of training resources, access to external vs. internal courses, etc.)</li></ul>',
                 'question_html' => '<p>Participants can choose some or all the questions below to help guide discussions. Significant outcomes and action items should be captured in the comments section of the template.</p>
                     <ul><li>What are your career goals?</li>
                     <ul><li>What do you think you need to get there?</li></ul>
-                    <li>Do you have specific goals you&rsquo;d like to achieve in the next year, two years, longer?</li>
-                    <li>Are you interested in exploring other positions or opportunities within the BCPS?</li>
+                    <li>What specific goals would you like to achieve in the next year, two years, longer?</li>
+                    <li>What positions or opportunities are you interested in exploring within the BCPS?</li>
                     <ul><li>What do you want your next position to be?</li></ul>
                     <li>How do you see your career in the BCPS developing?</li>
                     <li>How would you define &ldquo;success&rdquo; for your career?</li>
@@ -108,17 +109,20 @@ class TopicSeeder extends Seeder
             [
                 'id' => 4,
                 'name' => 'Performance Improvement',
-                'when_to_use' => '<p>Use this template when performance expectations are not being met for a given role. It will help define required performance improvements, support to be provided, timelines, and next steps. Before engaging in this conversation, a supervisor should consider:</p>
-                    <p>Supervisors should reach out to an HR Specialist through MyHR if they need additional support having this conversation and/or if performance improvements are not made within agreed upon timelines.</p>',
-                'preparing_for_conversation' => 'Before engaging in this conversation, a supervisor should consider:
+                'when_to_use' => 'Use this template when performance expectations are not being met for a given role. It will help define required performance improvements, support to be provided, timelines, and next steps.',
+                'preparing_for_conversation' => 
+                    'Employees
+                    <ul><li>Consider what has been going well in your role</li>
+                    <li>Identify where you see opportunities for improvement</li>
+                    <li>Determine what supports would help you perform at your best</li></ul>
+                    <p>Supervisors</p>
+                    <p>Before engaging in this conversation, you may want to reach out to an HR Specialist through MyHR for additional support in having this conversation and/or if performance improvements are not made within agreed upon timelines.</p>
+                    <p>You may also consider requesting short term coaching to review how you want to show up in the conversation.</p>
+                    Consider:
                     <ul><li>What are the expectations for the position? Are they consistent with the employee&rsquo;s classification, job description, and work done by other employees in similar roles? Has a copy of the job description been provided to the employee?</li>
-                    <li>Have the expectations been clearly articulated? How have they been articulated (i.e. goals in MyPerformance, a letter of expectations)? Does the employee understand them?</li>
-                    <li>What 2-3 specific areas of performance should the employee focus in the near term?</li></ul>
-                    <p>Supervisors should reach out to an HR Specialist through MyHR if they need additional support having this conversation and/or if performance improvements are not made within agreed upon timelines.</p>
-                    Employees should consider:
-                    <ul><li>What has been going well in their role</li>
-                    <li>Where they see opportunities for improvement</li>
-                    <li>What supports would help them perform at their best</li></ul>',
+                    <li>What assumptions are you making about the employee?</li>
+                    <li>Have the expectations been clearly articulated? How have they been articulated (i.e. goals in the Performance Development app, a letter of expectations)? Does the employee understand them?</li>
+                    <li>What 2-3 specific areas of performance should the employee focus in the near term?</li></ul>',
                 'question_html' => '<p>Supervisors should summarize the high-level performance expectations identified in the performance profile as requiring further development to begin the conversation. Participants can then use the items below to guide discussion. Significant outcomes and action items should be captured in the appropriate comment boxes throughout the template.</p>
                     <ul><li>Tell me about how things have been going for you in your role.</li>
                     <ul><li>What is going well?</li>
@@ -127,7 +131,8 @@ class TopicSeeder extends Seeder
                     <ul><li>This could be coaching, tools, resources, additional training, etc.</li></ul>
                     <li>Between now and our next conversation, I would like you to work on 2-3 areas we&rsquo;ve discussed as requiring development. What specific steps will you take to meet these expectations?</li>
                     <li>We will follow up on these areas and discuss your progress during our next meeting. If needed, we can discuss an action plan for improvement in each of those areas when we meet again.</li>
-                    <li>Is there anything else you would like to share with me or any other reasonable support that I can offer?</li></ul>',
+                    <li>What else would you like to share with me?</li>
+                    <li>What support would you like from me?</li></ul>',
 
             ],
             // [

@@ -66,7 +66,7 @@
                         <div class="card-body">
                             <table class="table table-borderless">
                                 <thead>
-                                    <th style="width:50%""> Goal Title</th>
+                                    <th style="width:50%"> Goal Title</th>
                                     <th style="width:20%"> Date Added</th>
                                     <th style="width:20%"> Created By</th>
                                 </thead>

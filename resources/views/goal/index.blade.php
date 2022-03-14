@@ -1,6 +1,6 @@
 <x-side-layout>
     <x-slot name="header">
-        <h3>Goals</h3>
+        <h3>My Goals</h3>
         @include('goal.partials.tabs')
     </x-slot>
     @if($type != 'supervisor' && !$disableEdit)
@@ -10,6 +10,9 @@
     </x-button>
     <x-button icon="clone" href="{{ route('goal.library') }}">
         Add Goal from Goal Bank
+    </x-button>
+    <x-button icon="question" href="{{ route('resource.goal-setting') }} " target="_blank" tooltip='Click here to access goal setting resources and examples (opens in new window).'>
+        Need Help?
     </x-button>
     @endif
 
@@ -24,7 +27,7 @@
                     @if($goals->count() != 0)
                         These goals have been shared with you by your supervisor and reflect current priorities. Consider these goals when creating your own.
                     @else
-                        <div class="alert alert-warning alert-dismissible no-border"  style="border-color:#caf0f8; background-color:#caf0f8" role="alert">
+                        <div class="alert alert-warning alert-dismissible no-border"  style="border-color:#d5e6f6; background-color:#d5e6f6" role="alert">
                         <span class="h5" aria-hidden="true"><i class="icon fa fa-info-circle"></i><b>Your supervisor is not currently sharing any goals with you.</b></span>
                         </div>
                     @endif
@@ -78,19 +81,19 @@
                     <small class="text-danger error-title"></small>
                     </div>
                        <div class="col-6">
-                    <x-textarea label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
+                    <x-textarea id="what" label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
                     <small class="text-danger error-what"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".'  />
+                    <x-textarea id="why" label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".'  />
                     <small class="text-danger error-why"></small>
                    </div>
                        <div class="col-6">
-                    <x-textarea label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' />
+                    <x-textarea id="how" label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' />
                     <small class="text-danger error-how"></small>
                   </div>
                        <div class="col-6">
-                    <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'  />
+                    <x-textarea id="measure_of_success" label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'  />
                     <small class="text-danger error-measure_of_success"></small>
                 </div>
                 <div class="col-sm-6">
@@ -118,8 +121,23 @@
   </div>
 </div>
 
+
     <x-slot name="js">
         {{-- {{$dataTable->scripts()}} --}}
+    <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            CKEDITOR.replace('what', {
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+            CKEDITOR.replace('why', {
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+            CKEDITOR.replace('how', {
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+            CKEDITOR.replace('measure_of_success', {
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+        });
+    </script>
+
     <script>
     $('body').popover({
         selector: '[data-toggle]',
@@ -135,9 +153,11 @@
         $('.goal_type_text').text(desc);
     });
 
-
     $(document).on('click', '.btn-submit', function(e){
         e.preventDefault();
+        for (var i in CKEDITOR.instances){
+            CKEDITOR.instances[i].updateElement();
+        };
         $.ajax({
             url:'/goal',
             type : 'POST',

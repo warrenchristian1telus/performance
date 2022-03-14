@@ -58,19 +58,19 @@
                             <tbody>
                                 @foreach($bankGoals as $goal)
                                 <tr>
-                                    <td>
+                                    <td style="width:35%">
                                         <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->title }}</a>
                                     </td>
-                                    <td>
+                                    <td style="width:20%">
                                         <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{$goal->goalType->name}}</a>
                                     </td>
-                                    <td>
+                                    <td style="width:15%">
                                         <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at->format('M d, Y') }}</a>
                                     </td>
-                                    <td>
+                                    <td style="width:15%">
                                         <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->user->name }}</a>
                                     </td>
-                                    <td>
+                                    <td style="width:15%">
                                         <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->is_mandatory ? 'Mandatory' : 'Suggested' }}</a>
                                     </td>
                                     <td>

@@ -23,22 +23,22 @@ use App\Jobs\SendEmailJob;
 class GoalController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * Display a listing of the resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function index(GoalsDataTable $goalDataTable, Request $request)
     {
         $authId = Auth::id();
         $goaltypes = GoalType::all();
         $user = User::find($authId);
         $query = Goal::where('user_id', $authId)
-            ->with('user')
-            ->with('goalType');
+        ->with('user')
+        ->with('goalType');
         $type = 'past';
         if ($request->is("goal/current")) {
             $goals = $query->where('status', 'active')
-                ->paginate(8);
+            ->paginate(8);
             $type = 'current';
             return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
         } else if ($request->is("goal/supervisor")) {
@@ -46,21 +46,21 @@ class GoalController extends Controller
             // TO remove already copied goals.
             // $referencedGoals = Goal::where('user_id', $authId)->whereNotNull('referenced_from')->pluck('referenced_from');
             $goals = $user->sharedGoals()
-                /* ->whereNotIn('goals.id', $referencedGoals ) */
-                ->paginate(8);
+            /* ->whereNotIn('goals.id', $referencedGoals ) */
+            ->paginate(8);
             $type = 'supervisor';
             return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
         }
         $goals = $query->where('status', '<>', 'active')
-            ->paginate(4);
+        ->paginate(4);
         return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * Show the form for creating a new resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function create()
     {
         $goaltypes = GoalType::all();
@@ -68,11 +68,11 @@ class GoalController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
     public function store(CreateGoalRequest $request)
     {
         $input = $request->validated();
@@ -85,42 +85,42 @@ class GoalController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    * Display the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
     public function show($id)
     {
         // TODO: Manage Auth when we are clear with Supervisor Logic.
         $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->/* where('user_id', Auth::id())
-            -> */where('id', $id)
-            ->with('goalType')
-            ->with('comments')
-            ->firstOrFail();
+        -> */where('id', $id)
+        ->with('goalType')
+        ->with('comments')
+        ->firstOrFail();
 
 
         $linkedGoalsIds = LinkedGoal::where('user_goal_id', $id)->pluck('supervisor_goal_id');
 
         /* $supervisorGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
-            ->whereNotIn('id', $linkedGoalsIds)
-            ->with('comments')->get(); */
+        ->whereNotIn('id', $linkedGoalsIds)
+        ->with('comments')->get(); */
         $linkedGoals
-            = Goal::with('goalType', 'comments')
-            ->whereIn('id', $linkedGoalsIds)
-            ->get();
+        = Goal::with('goalType', 'comments')
+        ->whereIn('id', $linkedGoalsIds)
+        ->get();
 
-            $user = User::findOrFail($goal->user_id);
-            if (($goal->last_supervisor_comment == 'Y') and (($goal->user_id == session()->get('original-auth-id')) or (session()->get('original-auth-id') == null))) {
+        $user = User::findOrFail($goal->user_id);
+        if (($goal->last_supervisor_comment == 'Y') and (($goal->user_id == session()->get('original-auth-id')) or (session()->get('original-auth-id') == null))) {
 
-              $goal->last_supervisor_comment = 'N';
-              $goal->save();
-            };
+            $goal->last_supervisor_comment = 'N';
+            $goal->save();
+        };
 
-              $affected = DashboardNotification::wherein('notification_type', ['GC', 'GR'])
-                ->where('related_id', $goal->id)
-                ->wherenull('status')
-                ->update(['status' => 'R']);
+        $affected = DashboardNotification::wherein('notification_type', ['GC', 'GR'])
+        ->where('related_id', $goal->id)
+        ->wherenull('status')
+        ->update(['status' => 'R']);
 
         return view('goal.show', compact('goal', 'linkedGoals'));
     }
@@ -130,25 +130,25 @@ class GoalController extends Controller
         $linkedGoalsIds = LinkedGoal::where('user_goal_id', $id)->pluck('supervisor_goal_id');
 
         $supervisorGoals = Goal::whereIn('id', [997, 998, 999])->with('goalType')
-            ->whereNotIn('id', $linkedGoalsIds)
-            ->with('comments')->get();
+        ->whereNotIn('id', $linkedGoalsIds)
+        ->with('comments')->get();
 
         return view('goal.partials.supervisor-goal-content', compact('goal', 'supervisorGoals'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    * Show the form for editing the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
     public function edit($id)
     {
         $goal = Goal::withoutGlobalScope(NonLibraryScope::class)
-            ->where('user_id', Auth::id())
-            ->where('id', $id)
-            ->with('goalType')
-            ->firstOrFail();
+        ->where('user_id', Auth::id())
+        ->where('id', $id)
+        ->with('goalType')
+        ->firstOrFail();
 
         $goaltypes = GoalType::all(['id', 'name']);
 
@@ -157,12 +157,12 @@ class GoalController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    * Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
     public function update(CreateGoalRequest $request, $id)
     {
         $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->findOrFail($id);
@@ -188,11 +188,11 @@ class GoalController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    * Remove the specified resource from storage.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
     public function destroy($id)
     {
         $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->find($id);
@@ -210,9 +210,9 @@ class GoalController extends Controller
 
     public function goalBank(Request $request) {
         $query = Goal::withoutGlobalScope(NonLibraryScope::class)
-            ->where('is_library', true)
-            ->with('goalType')
-            ->with('user');
+        ->where('is_library', true)
+        ->with('goalType')
+        ->with('user');
         if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
             if ($request->is_mandatory == "1") {
                 $query = $query->where('is_mandatory', $request->is_mandatory);
@@ -250,11 +250,6 @@ class GoalController extends Controller
 
         $bankGoals = $query->get();
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
-
-        // dd($query->get()->pluck('user.id', 'user.name'));
-        // $createdBy = $query->get()->get('user.name', 'user.id');
-        // $createdBy=json_encode($createdBy);
-        // dd($createdBy);
 
         return view('goal.bank', compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));
     }
@@ -328,9 +323,9 @@ class GoalController extends Controller
         $sQuery = clone $query;
 
         /* $supervisorGoals = $sQuery->whereIn('id', [998])->with('goalType')
-                            ->with('comments')->get(); */
+        ->with('comments')->get(); */
         $organizationGoals = $query->whereIn('id', [997, 999])->with('goalType')
-                            ->with('comments')->get();
+        ->with('comments')->get();
 
         $user = Auth::user();
         // $sQuery = $user->sharedGoals()->withoutGlobalScope(NonLibraryScope::class);
@@ -393,99 +388,100 @@ class GoalController extends Controller
 
     public function addComment(Request $request, $id)
     {
-        $goal = Goal::findOrFail($id);
-        $comment = new GoalComment;
+        if ($request->comment != null and $request->comment != '') {
+            $goal = Goal::findOrFail($id);
+            $comment = new GoalComment;
 
-        $comment->goal_id = $goal->id;
-        $comment->user_id = Auth::id();
-        $comment->parent_id = $request->parent_id ?? null;
+            $comment->goal_id = $goal->id;
+            $comment->user_id = Auth::id();
+            $comment->parent_id = $request->parent_id ?? null;
 
-        if (session()->get('original-auth-id') != null) {
-          $comment->user_id = session()->get('original-auth-id');
-        }
-        else {
-          $comment->user_id = Auth::id();
-        }
-
-        $comment->comment = $request->comment;
-
-        $comment->save();
-
-        $user = User::findOrFail($goal->user_id);
-        $curr_user = User::findOrFail(Auth::id());
-
-        if (($goal->last_supervisor_comment != 'Y') and (session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
-          //update flag
-          $goal->last_supervisor_comment = 'Y';
-          $goal->save();
-          }
-
-        if ($request->parent_id != null) {
-          $original_comment = GoalComment::findOrFail($request->parent_id);
-          if (($original_comment->user_id != Auth::id()) and ($goal->user_id != Auth::id())) {
-            //user replying to somebody else's comment
-            $newNotify = new DashboardNotification;
-            $newNotify->user_id = Auth::id();
-            $newNotify->notification_type = 'GR';
-            $newNotify->comment = $user->name . ' replied to your Goal comment.';
-            $newNotify->related_id = $goal->id;
-            $newNotify->save();
-          }
-        }
-        else {
-          if ((session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
-            //add dashboard notification
-            $newNotify = new DashboardNotification;
-            $newNotify->user_id = Auth::id();
-            $newNotify->notification_type = 'GC';
-            $newNotify->comment = $comment->user->name . ' added a comment to your goal.';
-            $newNotify->related_id = $goal->id;
-            $newNotify->save();
-            //send email notification to employee
-            // $sendMail = new SendMail();
-            // $response = $sendMail->send(['email here'],   "Supervisor Added Goal Comment",
-            //      "Your Supervisor have added comment to your goal.");
+            if (session()->get('original-auth-id') != null) {
+                $comment->user_id = session()->get('original-auth-id');
             }
-        }
-
-          if (($curr_user->reporting_to == $goal->user_id) and ($goal->user_id != Auth::id())) {
-            //add notification in Supervisor's Dashboard
-            $newNotify = new DashboardNotification;
-            $newNotify->user_id = $curr_user->reporting_to;
-            $newNotify->notification_type = 'GC';
-            $newNotify->comment = $curr_user->name . ' added a comment to your goal.';
-            $newNotify->related_id = $goal->id;
-            $newNotify->save();
+            else {
+                $comment->user_id = Auth::id();
             }
 
-        // notify the employee when my supervisor reply my comment
-        if ($curr_user->azure_id) {
-            if (session()->get('original-auth-id') == $goal->user->reporting_to) {
+            $comment->comment = $request->comment;
 
-                // Real-Time
-                $sendMail = new SendMail();
-                $sendMail->toAddresses = [ $goal->user->email ];
-                $sendMail->sender_id = $curr_user->azure_id;
-                $sendMail->template = 'SUPERVISOR_COMMENT_MY_GOAL';
-                array_push($sendMail->bindvariables, $goal->user->name);
-                array_push($sendMail->bindvariables, $goal->what);
-                array_push($sendMail->bindvariables, $comment->comment);
-                $response = $sendMail->sendMailWithGenericTemplate();
+            $comment->save();
 
-                // Using Queue
-                // $sendEmailJob = new SendEmailJob();
-                // $sendEmailJob->toAddresses = [ $goal->user->email ];
-                // $sendEmailJob->sender_id = $curr_user->azure_id;
-                // $sendEmailJob->template = 'SUPERVISOR_COMMENT_MY_GOAL';
-                // array_push($sendEmailJob->bindvariables, $goal->user->name);
-                // array_push($sendEmailJob->bindvariables, $goal->what);
-                // array_push($sendEmailJob->bindvariables, $comment->comment);
+            $user = User::findOrFail($goal->user_id);
+            $curr_user = User::findOrFail(Auth::id());
 
-                // dispatch($sendEmailJob);
+            if (($goal->last_supervisor_comment != 'Y') and (session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
+                //update flag
+                $goal->last_supervisor_comment = 'Y';
+                $goal->save();
+            }
 
+            if ($request->parent_id != null) {
+                $original_comment = GoalComment::findOrFail($request->parent_id);
+                if (($original_comment->user_id != Auth::id()) and ($goal->user_id != Auth::id())) {
+                    //user replying to somebody else's comment
+                    $newNotify = new DashboardNotification;
+                    $newNotify->user_id = Auth::id();
+                    $newNotify->notification_type = 'GR';
+                    $newNotify->comment = $user->name . ' replied to your Goal comment.';
+                    $newNotify->related_id = $goal->id;
+                    $newNotify->save();
+                }
+            }
+            else {
+                if ((session()->get('original-auth-id') != null) and ($user->reporting_to == session()->get('original-auth-id'))) {
+                    //add dashboard notification
+                    $newNotify = new DashboardNotification;
+                    $newNotify->user_id = Auth::id();
+                    $newNotify->notification_type = 'GC';
+                    $newNotify->comment = $comment->user->name . ' added a comment to your goal.';
+                    $newNotify->related_id = $goal->id;
+                    $newNotify->save();
+                    //send email notification to employee
+                    // $sendMail = new SendMail();
+                    // $response = $sendMail->send(['email here'],   "Supervisor Added Goal Comment",
+                    //      "Your Supervisor have added comment to your goal.");
+                }
+            }
+
+            if (($curr_user->reporting_to == $goal->user_id) and ($goal->user_id != Auth::id())) {
+                //add notification in Supervisor's Dashboard
+                $newNotify = new DashboardNotification;
+                $newNotify->user_id = $curr_user->reporting_to;
+                $newNotify->notification_type = 'GC';
+                $newNotify->comment = $curr_user->name . ' added a comment to your goal.';
+                $newNotify->related_id = $goal->id;
+                $newNotify->save();
+            }
+
+            // notify the employee when my supervisor reply my comment
+            if ($curr_user->azure_id) {
+                if (session()->get('original-auth-id') == $goal->user->reporting_to) {
+
+                    // Real-Time
+                    $sendMail = new SendMail();
+                    $sendMail->toAddresses = [ $goal->user->email ];
+                    $sendMail->sender_id = $curr_user->azure_id;
+                    $sendMail->template = 'SUPERVISOR_COMMENT_MY_GOAL';
+                    array_push($sendMail->bindvariables, $goal->user->name);
+                    array_push($sendMail->bindvariables, $goal->what);
+                    array_push($sendMail->bindvariables, $comment->comment);
+                    $response = $sendMail->sendMailWithGenericTemplate();
+
+                    // Using Queue
+                    // $sendEmailJob = new SendEmailJob();
+                    // $sendEmailJob->toAddresses = [ $goal->user->email ];
+                    // $sendEmailJob->sender_id = $curr_user->azure_id;
+                    // $sendEmailJob->template = 'SUPERVISOR_COMMENT_MY_GOAL';
+                    // array_push($sendEmailJob->bindvariables, $goal->user->name);
+                    // array_push($sendEmailJob->bindvariables, $goal->what);
+                    // array_push($sendEmailJob->bindvariables, $comment->comment);
+
+                    // dispatch($sendEmailJob);
+
+                }
             }
         }
-
         return redirect()->back();
     }
 
@@ -521,15 +517,15 @@ class GoalController extends Controller
 
         // TODO: For UserExperience Test
         /* if (!$goal->sharedWith()->where('users.id', $userId)->exists()) {
-            abort(403, __('You do not have access to the resource'));
-        } */
+        abort(403, __('You do not have access to the resource'));
+    } */
 
-        $newGoal = $goal->replicate();
-        $newGoal->user_id = $userId;
-        $newGoal->is_shared = 0;
-        $newGoal->referenced_from = $goal->id;
-        $newGoal->save();
+    $newGoal = $goal->replicate();
+    $newGoal->user_id = $userId;
+    $newGoal->is_shared = 0;
+    $newGoal->referenced_from = $goal->id;
+    $newGoal->save();
 
-        return redirect()->route('goal.current');
-    }
+    return redirect()->route('goal.current');
+}
 }

@@ -27,10 +27,11 @@ class SignoffRequest extends FormRequest
             'employee_id' => 'required|digits:6',
             'check_one' => 'required_without:check_one_|boolean',
             'check_two' => 'required_without:check_two_|boolean',
-            'check_three' => 'required_without:check_three_|boolean',
+            // 'check_three' => 'required_without:check_three_|boolean',
             'check_one_' => 'required_without:check_one|boolean',
             'check_two_' => 'required_without:check_two|boolean',
-            'check_three_' => 'required_without:check_three|boolean'
+            // 'check_three_' => 'required_without:check_three|boolean'
+            'team_member_agreement' => 'nullable|boolean'
         ];
     }
 
@@ -40,7 +41,7 @@ class SignoffRequest extends FormRequest
         return [
             'check_one.*' => $message,
             'check_two.*' => $message,
-            'check_three.*' => $message,
+            /* 'check_three.*' => $message, */
             'employee_id.*' => 'Please enter your employee ID to complete the signoff'
         ];
     }

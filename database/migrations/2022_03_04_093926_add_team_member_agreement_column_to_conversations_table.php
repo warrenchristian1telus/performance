@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterUsersTableToAddJoiningInfo extends Migration
+class AddTeamMemberAgreementColumnToConversationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterUsersTableToAddJoiningInfo extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->date('joining_date')->after('reporting_to')->nullable();
+        Schema::table('conversations', function (Blueprint $table) {
+            $table->boolean('team_member_agreement')->after('supv_agree3');
         });
     }
 
@@ -25,8 +25,8 @@ class AlterUsersTableToAddJoiningInfo extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('joining_date');
+        Schema::table('conversations', function (Blueprint $table) {
+            $table->dropColumn('team_member_agreement');
         });
     }
 }

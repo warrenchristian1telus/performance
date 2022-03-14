@@ -35,15 +35,15 @@
     </div>
     <b>{{__("What")}}</b>
     <div class="form-control-plaintext">
-        {{$goal['what']}}
+        {!!$goal['what']!!}
     </div>
     <b>{{__("Why")}}</b>
     <div class="form-control-plaintext">
-        {{$goal['why']}}
+        {!!$goal['why']!!}
     </div>
     <b>{{__("How")}}</b>
     <div class="form-control-plaintext">
-        {{$goal['how']}}
+        {!!$goal['how']!!}
     </div>
     <b>{{__("Start Date")}}</b>
     <div class="form-control-plaintext">
@@ -56,6 +56,6 @@
 
     <b>{{__("Measures of Success")}}</b>
     <div class="form-control-plaintext">
-        {{$goal['measure_of_success']}}
+        {!!$goal['measure_of_success']!!}
     </div>
 </div>

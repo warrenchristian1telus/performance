@@ -59,7 +59,16 @@ class Conversation extends Model
 
     // If conversation is with
     public function getIsWithSupervisorAttribute() {
-        $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+        return $this->isWithSupervisor();
+    }
+
+    private function isWithSupervisor($userID = null) {
+        if ($userID === null) {
+            $checkForOriginalUser = true;
+            $authId = ($checkForOriginalUser && session()->has('original-auth-id')) ? session()->get('original-auth-id') : Auth::id();
+        } else {
+            $authId = $userID;
+        }
         $user = User::find($authId);
         $reportingManager = $user->reportingManager()->first();
         if (!$reportingManager) {
@@ -114,9 +123,11 @@ class Conversation extends Model
         return !self::where('user_id', $user_id)->count() > 0;
     }
 
-    public static function getLastConv($ignoreList = []) {
-        $user = Auth::user();
+    public static function getLastConv($ignoreList = [], $user = null) {
+        if ($user === null) 
+            $user = Auth::user();
         $authId = $user->id;
+        
         $lastConv = self::where(function ($query) use ($authId) {
             $query->where('user_id', $authId)->orWhereHas('conversationParticipants', function ($query) use ($authId) {
                 return $query->where('participant_id', $authId);
@@ -126,28 +137,53 @@ class Conversation extends Model
         ->whereNotIn('id', $ignoreList)
         ->orderBy('sign_off_time', 'DESC')
         ->first();
-
-        if ($lastConv && !$lastConv->is_with_supervisor) {
+        
+        if ($lastConv && !$lastConv->isWithSupervisor($user->id)) {
             $ignoreList[] = $lastConv->id;
-            $lastConv = self::getLastConv($ignoreList);
+            $lastConv = self::getLastConv($ignoreList, $user);
         }
         return $lastConv;
     }
 
     public static function warningMessage() {
-        
         $lastConv = self::getLastConv();
         
         if ($lastConv) {
             if ($lastConv->sign_off_time->addMonths(4)->lt(Carbon::now())) {
-                return "You are required to complete a performance conversation every 4 months at minimum. You are overdue. Please complete a conversation as soon as possible.";
+                return [
+                    "You are required to complete a performance conversation every 4 months at minimum. You are overdue. Please complete a conversation as soon as possible.",
+                    "danger"
+                ];
             }
-            return "Your last performance conversation was completed on ".$lastConv->sign_off_time->format('d-M-y').". You must complete your next performance conversation by ". $lastConv->sign_off_time->addMonths(4)->format('d-M-y') ;
-
+            $nextDueDate = $lastConv->sign_off_time->addMonths(4);
+            $diff = Carbon::now()->diffInMonths($lastConv->sign_off_time->addMonths(4), false);
+            return [
+                "Your last performance conversation was completed on ".$lastConv->sign_off_time->format('d-M-y').". You must complete your next performance conversation by ". $lastConv->sign_off_time->addMonths(4)->format('d-M-y'),
+                $diff < 0 ? "danger" : ($diff < 1 ? "warning" : "success")
+            ];
         }
         $user = Auth::user();
-        $joiningDate = $user->joining_date ? $user->joining_date->addMonths(4)->format('d-M-y') : '';
-        return "You have not completed any performance conversations. You must complete your first performance conversation by " . $joiningDate;
+        $nextDueDate = $user->joining_date ? $user->joining_date->addMonths(4) : '';
+        $diff = Carbon::now()->diffInMonths($nextDueDate, false);
+        /* dd([
+            Carbon::now()->format('d-M-y'),
+            $nextDueDate->format('d-M-y'),
+            $diff
+        ]); */
+        return [
+            "You have not completed any performance conversations. You must complete your first performance conversation by " . $nextDueDate->format('d-M-y'),
+            $diff < 0 ? "danger" : ($diff < 1 ? "warning" : "success")
+        ];
+    }
+
+    public static function nextConversationDue($user = null) {
+        if ($user === null)
+            $user = Auth::user();
+        $lastConv = self::getLastConv([], $user);
+        $nextConvDate =  ($lastConv) ? $lastConv->sign_off_time->addMonths(4)->format('d-M-y') : (
+            $user->joining_date ? $user->joining_date->addMonths(4)->format('d-M-y') : ''
+        );
+        return $nextConvDate;
     }
 
     public static function latestPastConversation()

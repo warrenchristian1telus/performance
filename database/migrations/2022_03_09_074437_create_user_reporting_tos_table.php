@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterEmployeeDemoTable extends Migration
+class CreateUserReportingTosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AlterEmployeeDemoTable extends Migration
      */
     public function up()
     {
-        Schema::table('employee_demo', function (Blueprint $table) {
-            $table->string('organization')->after('manager_last_name')->nullable();
+        Schema::create('user_reporting_tos', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id');
+            $table->foreignId('reporting_to_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AlterEmployeeDemoTable extends Migration
      */
     public function down()
     {
-        Schema::table('employee_demo', function (Blueprint $table) {
-            $table->dropColumn('organization');
-        });
+        Schema::dropIfExists('user_reporting_tos');
     }
 }

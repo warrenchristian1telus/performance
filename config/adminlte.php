@@ -235,7 +235,7 @@ return [
             'hiddenInViewAs' => true
         ],
         [
-            'text' => 'Goals',
+            'text' => 'My Goals',
             'role' => 'listitem',
             'url'  => 'goal/current',
             'icon' => 'fas fa-fw fa-bullseye',
@@ -244,7 +244,7 @@ return [
         ],
         [
             'role' => 'listitem',
-            'text' => 'Conversations',
+            'text' => 'My Conversations',
             'url'  => 'conversation/templates',
             'icon' => 'fas fa-fw fa-bullseye',
             'active' => ['conversation/*'],
@@ -261,30 +261,31 @@ return [
             'submenu' => [
                 [
                     'text' => 'Team Goals',
-                    'url'  => '#',
+                    'url'  => 'my-team/team-goals/share-my-goals',
+                    'active' => ['my-team/team-goals/*']
                 ],
                 [
                     'text' => 'Team Conversations',
                     'url'  => 'my-team/conversations',
                     'active' => ['my-team/conversations/*'],
                 ],
-                [
-                    'text' => 'Notifications',
-                    'url'  => '#',
-                ],
-                [
-                    'text' => 'Performance Statistics',
-                    'url'  => '#',
-                ],
+                // [
+                //     'text' => 'Notifications',
+                //     'url'  => '#',
+                // ],
+                // [
+                //     'text' => 'Performance Statistics',
+                //     'url'  => '#',
+                // ],
             ]
         ],
-        [
-            'role' => 'listitem',
-            'text' => 'System Administration',
-            'url'  => 'sysadmin/myorg',
-            'icon' => 'fas fa-fw fa-cog',
-            'active' => ['sysadmin/*']
-        ],
+        // [
+        //     'role' => 'listitem',
+        //     'text' => 'System Administration',
+        //     'url'  => 'sysadmin/myorg',
+        //     'icon' => 'fas fa-fw fa-cog',
+        //     'active' => ['sysadmin/*']
+        // ],
         [
             'role' => 'listitem',
             'text' => 'Resources',

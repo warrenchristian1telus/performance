@@ -35,7 +35,7 @@
                         </span>
                     </div>
                     <div class="d-flex flex-row-reverse align-items-center">
-                        <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}">
+                        <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}" data-disallowed="{{ (!!$c->signoff_user_id || !!$c->supervisor_signoff_id) ? 'true' : 'false'}}">
                             <i class="fa-trash fa"></i>
                         </button>
                         <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
@@ -336,6 +336,10 @@
             });
 
             $(document).on('click', '.delete-btn', function() {
+                if($(this).data('disallowed')) {
+                    alert("This record of conversation cannot be deleted because it has been signed by at least one participant. Un-sign the conversation if you wish to delete it.")
+                    return;
+                }
                 if (!confirm('Are you sure you want to delete this conversation ?')) {
                     return;
                 }
@@ -356,6 +360,14 @@
 
             $(document).on('show.bs.modal', '#viewConversationModal', function(e) {
                 $("#viewConversationModal").find("textarea").val('');
+            });
+
+            $(document).on('change', '#team_member_agreement', function () {
+                if ($(this).prop('checked')) {
+                    if (!confirm("Ticking this box will send a notification to your supervisor that you disagree with this performance review. Continue/Cancel")) {
+                        $(this).prop("checked", false);
+                    }
+                }
             });
 
             function isContentModified() {
@@ -394,6 +406,8 @@
                         $('#info_comment4_edit').val(result.info_comment4);
                         $('#info_comment5').val(result.info_comment5);
                         $('#info_comment5_edit').val(result.info_comment5);
+                        $('#team_member_agreement').prop('checked', result.team_member_agreement ? true : false);
+                        $('#team_member_agreement_2').prop('checked', result.team_member_agreement ? true : false);
 
                         user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
                         user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
@@ -427,6 +441,8 @@
                             $('#supervisor-signoff-message').find('.time').html("on " + result.supervisor_signoff_time);
                             $("textarea.supervisor-comment").addClass('enable-not-allowed').prop('readonly', true);
                         } else {
+                            $("#team_member_agreement").prop('disabled', true);
+
 //                             $('#employee-signoff-questions').addClass('d-none');
                             $("#employee-signoff-questions").find('.sup-inputs').find('input').prop('disabled', false);
                             $("#employee-signoff-questions").find('.emp-inputs').find('input').prop('disabled', true);
@@ -478,6 +494,7 @@
                             $("button.btn-conv-cancel").hide();
                             $("#viewConversationModal").find('textarea').each((index, e) => $(e).prop('readonly', true));
                             $('#viewConversationModal').data('is-frozen', 1);
+                            $("#team_member_agreement").prop('disabled', true);
                             if (result.supervisor_signoff_id && isSupervisor) {
                                 $("#viewConversationModal .sup-inputs").find('input:radio').each((index, e) => $(e).prop('disabled', true));
                             } 
@@ -514,9 +531,9 @@
 
                         //Additional Info to Capture
                         if (result.conversation_topic_id == 1) {
-                          $("#info_capture1").html('<span>Appreciation - highlight what has gone well </span><i class="fas fa-info-circle"  data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide an overview of the actions or results being celebrated. Be as specific as possible about timing, activities, and outcomes achieved. Highlight behaviours, competencies, and corporate values that you feel contributed to the success." ></i>');
-                          $("#info_capture2").html('<span>Coaching - identify areas where things could be (even) better </span><i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide specific examples of actions, outcomes or behaviours where there is opportunity for growth. Capture information on any additional assistance or training offered to support improvement."></i>');
-                          $("#info_capture3").html('<span>Evaluation - provide an overall summary of performance</span> <i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Be as specific as possible, use examples, and focus on observable behaviours and business results"></i>');
+                          $("#info_capture1").html('<span>Appreciation (optional) - highlight what has gone well </span><i class="fas fa-info-circle"  data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide an overview of the actions or results being celebrated. Be as specific as possible about timing, activities, and outcomes achieved. Highlight behaviours, competencies, and corporate values that you feel contributed to the success." ></i>');
+                          $("#info_capture2").html('<span>Coaching (optional) - identify areas where things could be (even) better </span><i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Provide specific examples of actions, outcomes or behaviours where there is opportunity for growth. Capture information on any additional assistance or training offered to support improvement."></i>');
+                          $("#info_capture3").html('<span>Evaluation (optional) - provide an overall summary of performance</span> <i class="fas fa-info-circle" data-toggle="popover" data-placement="right" data-trigger="hover" data-content="Be as specific as possible, use examples, and focus on observable behaviours and business results"></i>');
                         }
                         if (result.conversation_topic_id == 4) {
                           $("#info_capture1").html("What date will a follow up meeting occur?");

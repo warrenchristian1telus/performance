@@ -133,11 +133,11 @@ class StoreODSData extends Command
               'sal_admin_plan' => $item['sal_admin_plan'],
               'stateprovince' => $item['stateprovince'],
               'supervisor_emplid' => $item['supervisor_emplid'],
-              'supervisor_position_start_date' => $item['supervisor_position_start_date'] ? date('Y-m-d', strtotime($item['supervisor_position_start_date'])) : null,
+              //'supervisor_position_start_date' => $item['supervisor_position_start_date'] ? date('Y-m-d', strtotime($item['supervisor_position_start_date'])) : null,
               'supervisor_email' => $item['supervisor_email'],
               'supervisor_name' => $item['supervisor_name'],
-              'supervisor_position_number' => $item['supervisor_position_number'],
-              'supervisor_position_title' => $item['supervisor_position_title'],
+              //'supervisor_position_number' => $item['supervisor_position_number'],
+              //'supervisor_position_title' => $item['supervisor_position_title'],
               'tgb_reg_district' => $item['tgb_reg_district'],
             ]
           );

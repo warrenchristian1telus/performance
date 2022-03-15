@@ -20,6 +20,7 @@ jQuery(document).ready(function ()
             ee_level3 = 'all';
             ee_level4 = 'all';
         }else if(eelevel0 != null){
+            console.log('Not Null');
             jQuery.ajax({
                 url : 'level1/'+eelevel0,
                 type : "GET",
@@ -58,6 +59,7 @@ jQuery(document).ready(function ()
         }
     });
     jQuery('select[name="ee_level1"]').on('change',function(){
+        var eelevel0 = jQuery('select[name="ee_level0"]').val();
         var eelevel1 = jQuery(this).val();
         if(eelevel1 == 'all') {
             jQuery('select[name="ee_level2"]').empty();
@@ -70,8 +72,9 @@ jQuery(document).ready(function ()
             ee_level3 = 'all';
             ee_level4 = 'all';
         }else if(eelevel1 != null){
+            console.log('Not Null');
             jQuery.ajax({
-                url : 'level2/'+eelevel1,
+                url : 'level2/'+eelevel0+'/'+eelevel1,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -102,6 +105,7 @@ jQuery(document).ready(function ()
         }
     });
     jQuery('select[name="ee_level2"]').on('change',function(){
+        var eelevel0 = jQuery('select[name="ee_level0"]').val();
         var eelevel1 = jQuery('select[name="ee_level1"]').val();
         var eelevel2 = jQuery(this).val();
         if(eelevel2 == 'all') {
@@ -113,7 +117,7 @@ jQuery(document).ready(function ()
             ee_level4 = 'all';
         }else if(eelevel2 != null){
             jQuery.ajax({
-                url : 'level3/'+eelevel1+'/'+eelevel2,
+                url : 'level3/'+eelevel0+'/'+eelevel1+'/'+eelevel2,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -139,6 +143,7 @@ jQuery(document).ready(function ()
         }
     });
     jQuery('select[name="ee_level3"]').on('change',function(){
+        var eelevel0 = jQuery('select[name="ee_level0"]').val();
         var eelevel1 = jQuery('select[name="ee_level1"]').val();
         var eelevel2 = jQuery('select[name="ee_level2"]').val();
         var eelevel3 = jQuery(this).val();
@@ -148,7 +153,7 @@ jQuery(document).ready(function ()
             ee_level4 = 'all';
         }else if(eelevel3 != null){
             jQuery.ajax({
-                url : 'level4/'+eelevel1+'/'+eelevel2+'/'+eelevel3,
+                url : 'level4/'+eelevel0+'/'+eelevel1+'/'+eelevel2+'/'+eelevel3,
                 type : "GET",
                 dataType : "json",
                 success:function(data)

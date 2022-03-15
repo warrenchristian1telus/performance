@@ -59,6 +59,7 @@ jQuery(document).ready(function ()
         }
     });
     jQuery('select[name="dd_level1"]').on('change',function(){
+        var ddlevel0 = jQuery('select[name="dd_level0"]').val();
         var ddlevel1 = jQuery(this).val();
         if(ddlevel1 == 'all') {
             jQuery('select[name="dd_level2"]').empty();
@@ -104,6 +105,7 @@ jQuery(document).ready(function ()
         }
     });
     jQuery('select[name="dd_level2"]').on('change',function(){
+        var ddlevel0 = jQuery('select[name="dd_level0"]').val();
         var ddlevel1 = jQuery('select[name="dd_level1"]').val();
         var ddlevel2 = jQuery(this).val();
         if(ddlevel2 == 'all') {
@@ -141,6 +143,7 @@ jQuery(document).ready(function ()
         }
     });
     jQuery('select[name="dd_level3"]').on('change',function(){
+        var ddlevel0 = jQuery('select[name="dd_level0"]').val();
         var ddlevel1 = jQuery('select[name="dd_level1"]').val();
         var ddlevel2 = jQuery('select[name="dd_level2"]').val();
         var ddlevel3 = jQuery(this).val();

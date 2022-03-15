@@ -18,7 +18,16 @@ class SysadminController extends Controller
 {
     public function myorg()
     {
-        return view('sysadmin.myorg');
+        $level0 = $this->getOrgLevel0();
+        $this->getSearchCriterias($crit);
+
+        $iEmpl = DB::table('employee_demo')
+        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4', 'deptid')
+        ->orderby('employee_name')
+        ->paginate(10);
+
+
+        return view('sysadmin.myorg', compact('level0', 'crit', 'iEmpl'));
     }
 
     public function statistics()
@@ -47,10 +56,6 @@ class SysadminController extends Controller
 
         $this->getDropdownValues($mandatoryOrSuggested, $goalTypes);
         $level0 = $this->getOrgLevel0();
-        $level1 = $this->getOrgLevel1($level0Value);
-        $level2 = $this->getOrgLevel2($level0Value, $level1Value);
-        $level3 = $this->getOrgLevel3($level0Value, $level1Value, $level2Value);
-        $level4 = $this->getOrgLevel4($level0Value, $level1Value, $level2Value, $level3Value);
 
         $authId = Auth::id();
         $goaltypes = GoalType::all();
@@ -74,26 +79,27 @@ class SysadminController extends Controller
         $newGoal = new Goal;
         $newGoal->user_id = Auth::id();
 
-        $aud_org = DB::table('employee_demo')
-        ->select('organization')
-        ->where(trim('organization'), '<>', '')
-        ->groupby('organization')
-        ->get();
+        $aud_org = $this->getOrgLevel0();
 
-        $aud_level1 =  DB::table('organizations')
-        ->select('level1')
-        ->where(trim('level1'), '<>', '')
-        ->whereExists(function ($query) {
-            $query->select(DB::raw(1))
-            ->from('employee_demo')
-            ->whereColumn('employee_demo.deptid', 'organizations.deptid');
-        }
-        )
-        ->groupby('level1')
+        $aud_level1 =  DB::table('employee_demo')
+        ->select('level1_program')
+        ->where(trim('level1_program'), '<>', '')
+        ->groupby('level1_program')
         ->get();
+        // $aud_level1 =  DB::table('organizations')
+        // ->select('level1')
+        // ->where(trim('level1'), '<>', '')
+        // ->whereExists(function ($query) {
+        //     $query->select(DB::raw(1))
+        //     ->from('employee_demo')
+        //     ->whereColumn('employee_demo.deptid', 'organizations.deptid');
+        // }
+        // )
+        // ->groupby('level1')
+        // ->get();
 
         // return view('sysadmin.goal-bank', compact('level1','level2','level3','level4', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
-        return view('sysadmin.goal-bank', compact('level0', 'level1', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
+        return view('sysadmin.goal-bank', compact('level0', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
     }
 
     public function goaledit($id)
@@ -135,18 +141,19 @@ class SysadminController extends Controller
     {
         $this->getDropdownValues($mandatoryOrSuggested, $goalTypes);
         $level0 = $this->getOrgLevel0();
-        // $level1 = $this->getOrgLevel1();
 
         $sharedElements = [['key' => 'all', 'value' => 'All']];
 
         $jobTitles = DB::table('employee_demo')
-        ->select('job_title')
+        ->select('position_title')
         ->distinct()
         ->get();
 
-        $sEmpl = DB::table('users')
-        ->leftjoin('employee_demo', 'employee_demo.employee_id', '=', 'users.id')
-        ->select('users.id', 'users.name', 'employee_demo.job_title')
+        $sEmpl = DB::table('goals')
+        ->leftjoin('employee_demo', 'employee_demo.employee_id', '=', 'goals.user_id')
+        ->where('employee_demo.employee_name', '!=', '')
+        ->select('goals.user_id', 'employee_demo.employee_name', 'employee_demo.position_title', 'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division', 'employee_demo.level3_branch', 'employee_demo.level4')
+        ->distinct()
         ->paginate(8);
 
         return view('sysadmin.shared', compact('level0', 'sEmpl', 'jobTitles', 'sharedElements'));
@@ -171,7 +178,6 @@ class SysadminController extends Controller
     public function previous()
     {
         $level0 = $this->getOrgLevel0();
-        // $level1 = $this->getOrgLevel1();
         $jobTitles = $this->getJobTitles();
 
         $iEmpl = DB::table('employee_demo')
@@ -185,8 +191,7 @@ class SysadminController extends Controller
     public function conversations()
     {
         $level0 = $this->getOrgLevel0();
-        $level1 = $this->getOrgLevel1();
-        $eelevel1 = $this->getOrgLevel1();
+        $eelevel0 = $this->getOrgLevel0();
 
         $openConversations = DB::table('conversations')
         ->leftjoin('employee_demo', 'employee_demo.employee_id', '=', 'conversations.user_id')
@@ -207,7 +212,7 @@ class SysadminController extends Controller
 
 
 
-        return view('sysadmin.conversations', compact('level1', 'eelevel1', 'openConversations', 'closedConversations'));
+        return view('sysadmin.conversations', compact('level0', 'eelevel0', 'openConversations', 'closedConversations'));
     }
 
     /**
@@ -262,7 +267,7 @@ class SysadminController extends Controller
             $level4 = [['key4' => 'all', 'level4' => 'All']];
         }else{
             $level1 = DB::table('employee_demo')
-            ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key2"), 'level1_program')
+            ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key1"), 'level1_program')
             ->where(trim('level1_program'), '<>', '')
             ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
             ->groupby('level1_program')
@@ -357,6 +362,27 @@ class SysadminController extends Controller
                 "name" => $type
             ];
         }
+    }
+
+    private function getSearchCriterias(&$Criterias) {
+        $Criterias = [
+            [
+                "id" => 'all',
+                "name" => 'All'
+            ],
+            [
+                "id" => 'emp',
+                "name" => 'Employee ID'
+            ],
+            [
+                "id" => 'cls',
+                "name" => 'Classification'
+            ],
+            [
+                "id" => 'dpt',
+                "name" => 'Department ID'
+            ],
+        ];
     }
 
 

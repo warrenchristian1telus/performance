@@ -4,7 +4,7 @@
         <select class="form-control" name="dd_level0" id="dd_level0">
             <option value="all">All</option>
             @foreach ($level0 as $l0)
-            <option value="{{ $l0->key0 }}">{{ $l0->organization }}</option>
+                <option value="{{ $l0->key0 }}">{{ $l0->organization }}</option>
             @endforeach
         </select>
     </td>

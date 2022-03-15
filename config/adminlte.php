@@ -317,6 +317,11 @@ return [
                     'url'  => 'sysadmin/previous',
                     'active' => ['sysadmin/previous']
                 ],
+                [
+                    'text' => 'Conversations',
+                    'url'  => 'sysadmin/conversations',
+                    'active' => ['sysadmin/conversations']
+                ],
             ],
         ],
         [

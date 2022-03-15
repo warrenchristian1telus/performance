@@ -13,7 +13,8 @@ class POCController extends Controller
     {
       $response = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])
         ->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))
-        ->get(env('ODS_EMPLOYEE_DEMO_URI'));
+        ->get(env('ODS_EMPLOYEE_DEMO_URI'))
+        ->paginate(100);
         // return view('poc.odsorghierarchy', ['response' => $response['value']]);
 
         dd($response['value']);

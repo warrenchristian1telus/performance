@@ -132,19 +132,14 @@
                                 tooltipPosition="bottom" class="btn btn-danger btn-sm mr-2 delete-notification-btn" data-id="{{ $o->id }}"
                                 aria-label="Delete Goal">
                             </x-button>
-
-
                         </td>
                     </tr>
-
-
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
 </div>
 </div>
 
@@ -171,7 +166,6 @@
         <div class="card card-primary shadow mb-3">
             <div class="d-flex justify-content-around">
 
-
                 <div class="container-fluid">
                     <form action="{{ route ('sysadmin.goaladd', $newGoal, $newGoal->id)}}" method="POST">
                         @csrf
@@ -191,25 +185,25 @@
                                     </div>
                                     <div class="row">
                                         <div class="col m-2">
-                                            <x-textarea label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$newGoal->what" />
+                                            <x-textarea id="what" label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$newGoal->what" />
                                                 <small class="text-danger error-what"></small>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col m-2">
-                                                <x-textarea label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".' :value="$newGoal->why" />
+                                                <x-textarea id="why" label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".' :value="$newGoal->why" />
                                                     <small class="text-danger error-why"></small>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col m-2">
-                                                    <x-textarea label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' :value="$newGoal->how"/>
+                                                    <x-textarea id="how" label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' :value="$newGoal->how"/>
                                                         <small class="text-danger error-how"></small>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col m-2">
-                                                        <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$newGoal->measure_of_success" />
+                                                        <x-textarea id="measure_of_success" label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$newGoal->measure_of_success" />
                                                             <small class="text-danger error-measure_of_success"></small>
                                                         </div>
                                                     </div>
@@ -224,9 +218,6 @@
                         </div>
                     </div>
 
-
-
-
                     <div>
                         <div class="h5 p-3">{{__('Step 2. Select audience')}}
                             <small><a href="#" class="float-right">Hide Ministries</a></small>
@@ -239,33 +230,72 @@
                     <div>
                         <div class="h5 p-3">{{__('Step 3. Finish')}}</div>
                         <div class="p-3">
-
-
-
-
-
-
-
-                        </div>
+                            <x-button type="button" size="sm" :tooltip="__('Add Goal')" tooltipPosition="bottom" class="mr-2" aria-label="Add Goal"> Add Goal</x-button>
+                            <x-button
+                            size="sm"
+                            :href='url()->previous()'
+                            :tooltip="__('Cancel')"
+                            tooltipPosition="bottom" class="mr-2" aria-label="Cancel">{{__('Cancel')}}
+                        </x-button>
                     </div>
+                </div>
 
-                    <div class="p-3">
-                        <x-button
-                        size="sm"
-                        :href='url()->previous()'
-                        :tooltip="__('Save Changes')"
-                        tooltipPosition="bottom" class="mr-2" aria-label="Save Changes">{{__('Save Changes')}}
-                    </x-button>
-                    <x-button
-                    size="sm"
-                    :href='url()->previous()'
-                    :tooltip="__('Cancel')"
-                    tooltipPosition="bottom" class="mr-2" aria-label="Cancel">{{__('Cancel')}}
-                </x-button>
             </div>
 
 
 
             @include('sysadmin.partials.organization_script')
+
+            <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+            <script type="text/javascript">
+            $('body').popover({
+                selector: '[data-toggle]',
+                trigger: 'hover',
+            });
+
+            $(document).ready(function(){
+                CKEDITOR.replace('what', {
+                    toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ]
+                });
+                CKEDITOR.replace('why', {
+                    toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ]
+                });
+                CKEDITOR.replace('how', {
+                    toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ]
+                });
+                CKEDITOR.replace('measure_of_success', {
+                    toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ]
+                });
+            });
+
+            $(document).on('click', '.btn-submit', function(e){
+                e.preventDefault();
+                for (var i in CKEDITOR.instances){
+                    CKEDITOR.instances[i].updateElement();
+                };
+                // $.ajax({
+                //     url:'/goal',
+                //     type : 'POST',
+                //     data: $('#goal_form').serialize(),
+                //     success: function (result) {
+                //         console.log(result);
+                //         if(result.success){
+                //             window.location.href= '/goal';
+                //         }
+                //     },
+                //     error: function (error){
+                //         var errors = error.responseJSON.errors;
+                //         $('.text-danger').each(function(i, obj) {
+                //             $('.text-danger').text('');
+                //         });
+                //         Object.entries(errors).forEach(function callback(value, index) {
+                //             var className = '.error-' + value[0];
+                //             $(className).text(value[1]);
+                //         });
+                //     }
+                // });
+
+            });
+            </script>
 
             @endsection

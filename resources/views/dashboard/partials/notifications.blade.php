@@ -24,6 +24,7 @@
   </div>
 
   @foreach($notifications as $notification)
+  @if ($notification->relatedGoal)
   <div class="rounded shadow-sm" size="xs" >
       <div class="p-2">
         <div class="pl-2 d-flex align-items-center justify-content-center {{$notification->status === null ? "border-left" : ""}}  border-primary" style="border-width:3px !important" id="tr_{{$notification->id}}">
@@ -60,6 +61,7 @@
           </div>
       </div>
   </div>
+  @endif
   @endforeach
 </div>
 

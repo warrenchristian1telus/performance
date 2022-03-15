@@ -18,12 +18,6 @@
                     <!-- <x-textarea id="what" label="What" name="what" :value="$goal->what" /> -->
                     <label for='what'>What</label>
                     <textarea id="what" name="what" :value="$goal->what">{!!$goal->what!!}</textarea>
-                    <!-- <x-textarea id="why" label="Why" name="why" :value="$goal->why" /> -->
-                    <label for='why'>Why</label>
-                    <textarea id="why" name="why" :value="$goal->why">{!!$goal->why!!}</textarea>
-                    <!-- <x-textarea id="how" label="How" name="how" :value="$goal->how"/> -->
-                    <label for='how'>How</label>
-                    <textarea id="how" name="how" :value="$goal->how">{!!$goal->how!!}</textarea>
                     <!-- <x-textarea id="measure_of_success" class="content' label="Measures of Success" name="measure_of_success" :value="$goal->measure_of_success" /> -->
                     <label for='measure_of_success'>Measure of Success</label>
                     <textarea id="measure_of_success" name="measure_of_success" :value="$goal->measure_of_success">{!!$goal->measure_of_success!!}</textarea>
@@ -46,10 +40,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
         CKEDITOR.replace('what', {
-            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
-        CKEDITOR.replace('why', {
-            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
-        CKEDITOR.replace('how', {
             toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
         CKEDITOR.replace('measure_of_success', {
             toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });

@@ -30,7 +30,7 @@ class GoalController extends Controller
     public function index(GoalsDataTable $goalDataTable, Request $request)
     {
         $authId = Auth::id();
-        $goaltypes = GoalType::all();
+        $goaltypes = GoalType::all()->toArray();
         $user = User::find($authId);
         $query = Goal::where('user_id', $authId)
         ->with('user')
@@ -247,6 +247,13 @@ class GoalController extends Controller
             $query = $query->whereDate('created_at', '<=', $endDate);
         }
 
+        if ($request->has('created_by') && $request->created_by) {
+            $query = $query->where('user_id', $request->created_by);
+        }
+
+        $query->whereHas('sharedWith', function($query) {
+            $query->where('user_id', Auth::id());
+        });
 
         $bankGoals = $query->get();
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
@@ -269,22 +276,18 @@ class GoalController extends Controller
                 "name" => 'Suggested'
             ]
         ];
+        $createdBy = Goal::withoutGlobalScope(NonLibraryScope::class)
+            ->where('is_library', true)
+            ->with('user')
+            ->groupBy('user_id')
+            ->get()
+            ->pluck('user')
+            ->toArray();
 
-        $createdBy = [
-            [
-                "id" => "0",
-                "name" => "Any"
-            ],
-            [
-                "id" => "1",
-                "name" => "Supervisor"
-            ],
-            [
-                "id" => "2",
-                "name" => "Organization"
-            ]
-        ];
-
+        array_unshift($createdBy , [
+            "id" => "0",
+            "name" => "Any"
+        ]);
 
         $goalType = GoalType::all()->pluck('name', 'id')->toArray();
         array_unshift($goalType, "Any");
@@ -367,9 +370,7 @@ class GoalController extends Controller
         return view('goal.partials.show', compact('goal', 'showAddBtn'));
     }
 
-    public function saveFromLibrary(Request $request)
-    {
-        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->find($request->selected_goal);
+    private function copyFromLibrary(Goal $goal) {
         $newGoal = new Goal;
         $newGoal->title = $goal->title;
         $newGoal->why = $goal->why;
@@ -381,8 +382,22 @@ class GoalController extends Controller
         $newGoal->status = $goal->status;
         $newGoal->goal_type_id = $goal->goal_type_id;
         $newGoal->user_id = Auth::id();
-        $newGoal->save();
+        $newGoal->created_by = $goal->user_id;
+        return $newGoal;
+    }
 
+    public function saveFromLibraryMultiple(Request $request) {
+        foreach ($request->goal_ids as $goal_id) {
+            $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->find($goal_id);
+            $newGoal = $this->copyFromLibrary($goal);
+        }
+        return redirect()->route('goal.current');
+    }
+
+    public function saveFromLibrary(Request $request)
+    {
+        $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->find($request->selected_goal);
+        $newGoal = $this->copyFromLibrary($goal);
         return response()->json(['success' => true, 'data' => $newGoal, 'message' => 'Goal Added Successfully']);
     }
 
@@ -520,12 +535,13 @@ class GoalController extends Controller
         abort(403, __('You do not have access to the resource'));
     } */
 
-    $newGoal = $goal->replicate();
-    $newGoal->user_id = $userId;
-    $newGoal->is_shared = 0;
-    $newGoal->referenced_from = $goal->id;
-    $newGoal->save();
+        $newGoal = $goal->replicate();
+        $newGoal->user_id = $userId;
+        $newGoal->created_by = $goal->user_id;
+        $newGoal->is_shared = 0;
+        $newGoal->referenced_from = $goal->id;
+        $newGoal->save();
 
-    return redirect()->route('goal.current');
-}
+        return redirect()->route('goal.current');
+    }
 }

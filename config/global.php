@@ -11,7 +11,7 @@ return [
             'tooltip' => 'Supervisor and employee agree objectives met',
         ],
         'not met' => [
-            'color' => 'danger',
+            'color' => 'info',
             'tooltip' => 'Substantial portion incomplete by end date',
         ],
         'cancelled or deferred' => [

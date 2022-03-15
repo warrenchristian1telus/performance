@@ -3,3 +3,9 @@ $theme-colors: (
 );
 @import 'node_modules/admin-lte/build/scss/adminlte.scss';
 @import 'custom-switch';
+.tooltip-dropdown {
+  .dropdown-toggle::after {
+    margin-top: 0.55em;
+    float: right;
+  }
+}

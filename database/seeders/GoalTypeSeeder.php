@@ -23,7 +23,7 @@ class GoalTypeSeeder extends Seeder
             ],
             [
                 'name' => 'Career Development',
-                'description' => 'Career Development Goals are desirable but not required (in order to improve and grow) and can be strategic or long-term',
+                'description' => 'Career Development Goals are not required but are desirable in order to improve and grow. They tend to be medium- or long-term.',
                 'order' => 3
             ],
             [

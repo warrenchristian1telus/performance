@@ -27,6 +27,7 @@ class Goal extends Model implements Auditable
     'measure_of_success',
     'status',
     'user_id',
+    'created_by',
     'created_at',
     'updated_at',
     'is_library',
@@ -72,6 +73,10 @@ class Goal extends Model implements Auditable
 
   public function user() {
     return $this->belongsTo('App\Models\User')->select('name', 'id', 'email', 'reporting_to');
+  }
+
+  public function originalCreatedBy() {
+    return $this->belongsTo('App\Models\User', 'created_by')->select('name', 'id', 'email', 'reporting_to');
   }
 
   public function comments()

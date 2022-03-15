@@ -11,6 +11,7 @@ Route::post('goal/library', [GoalController::class, 'saveFromLibrary'])->name('g
 Route::get('goal/library/{id}', [GoalController::class, 'showForLibrary'])->name('goal.library.detail');
 Route::get('goal/supervisor/{id}', [GoalController::class, 'getSupervisorGoals'])->name('goal.supervisor');
 Route::post('goal/supervisor/{id}/copy', [GoalController::class, 'copyGoal'])->name('goal.supervisor.copy');
+Route::post('goal/library/copy-multiple', [GoalController::class, 'saveFromLibraryMultiple'])->name('goal.library.save-multiple');
 
 Route::get('goal', function () {
     return redirect()->route('goal.current');

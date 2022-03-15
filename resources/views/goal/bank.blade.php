@@ -30,7 +30,7 @@
                     </label>
                 </div>
                 <div class="col">
-                    <x-dropdown :list="$createdBy" label="Created by"></x-dropdown>
+                    <x-dropdown :list="$createdBy" name="created_by" :selected="request()->created_by" label="Created by"></x-dropdown>
                 </div>
                 <div class="col">
                     <x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
@@ -41,51 +41,63 @@
             </div>
         </form>
 
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr class="border-bottom">
-                                    <th style="width:35%"> Goal Title</th>
-                                    <th style="width:20%"> Goal Type</th>
-                                    <th style="width:15%"> Date Added</th>
-                                    <th style="width:15%"> Created By</th>
-                                    <th style="width:15%"> Mandatory/Suggested</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($bankGoals as $goal)
-                                <tr>
-                                    <td style="width:35%">
-                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->title }}</a>
-                                    </td>
-                                    <td style="width:20%">
-                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{$goal->goalType->name}}</a>
-                                    </td>
-                                    <td style="width:15%">
-                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at->format('M d, Y') }}</a>
-                                    </td>
-                                    <td style="width:15%">
-                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->user->name }}</a>
-                                    </td>
-                                    <td style="width:15%">
-                                        <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->is_mandatory ? 'Mandatory' : 'Suggested' }}</a>
-                                    </td>
-                                    <td>
-                                      <button class="btn btn-primary btn-sm float-right ml-2 btn-view-goal show-goal-detail highlighter" data-id="{{$goal->id}}" data-toggle="modal" data-target="#viewGoal">
-                                          View
-                                      </button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+        <form action="{{ route('goal.library.save-multiple') }}" method="post">
+            @csrf
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr class="border-bottom">
+                                        <th>
+                                            <input type="checkbox" id="select_all">
+                                        </th>
+                                        <th style="width:35%"> Goal Title</th>
+                                        <th style="width:20%"> Goal Type</th>
+                                        <th style="width:15%"> Date Added</th>
+                                        <th style="width:15%"> Created By</th>
+                                        <th style="width:15%"> Mandatory/Suggested</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($bankGoals as $goal)
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="goal_ids[]" value="{{$goal->id}}">
+                                        </td>
+                                        <td style="width:35%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->title }}</a>
+                                        </td>
+                                        <td style="width:20%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{$goal->goalType->name}}</a>
+                                        </td>
+                                        <td style="width:15%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at->format('M d, Y') }}</a>
+                                        </td>
+                                        <td style="width:15%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->user->name }}</a>
+                                        </td>
+                                        <td style="width:15%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->is_mandatory ? 'Mandatory' : 'Suggested' }}</a>
+                                        </td>
+                                        <td>
+                                        <button class="btn btn-primary btn-sm float-right ml-2 btn-view-goal show-goal-detail highlighter" data-id="{{$goal->id}}" data-toggle="modal" data-target="#viewGoal">
+                                            View
+                                        </button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <x-button id="addMultipleGoalButton" disabled>Add Selected Goals to Your Profile <span class="selected_count">(0)</span></x-button>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
     @include('goal.partials.goal-detail-modal')
     <div class="modal fade" id="addGoalModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
@@ -137,6 +149,17 @@
             });
         </script>
         <script>
+            $(document).on('click', '#select_all', function (e) {
+                $('input:checkbox').prop('checked', this.checked);
+            });
+            $(document).on('click', 'input:checkbox', function (e) {
+                let count = $('input:checkbox:checked').length;
+                if ($("#select_all").get(0).checked) {
+                    count--;
+                }
+                $('#addMultipleGoalButton').find('span.selected_count').html("("+count+")");
+                $('#addMultipleGoalButton').prop('disabled', count === 0);    
+            });
             $(document).on('click', '.show-goal-detail', function(e) {
                 e.preventDefault();
                 $("#goal_form").find('input[name=selected_goal]').val($(this).data('id'));

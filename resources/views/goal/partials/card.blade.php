@@ -31,7 +31,7 @@
                 </p> -->
                 <p>
                     <b>Goal Type:&nbsp;&nbsp;&nbsp;</b>{{ $goal->goaltype->name}}<br>
-                    <b>Created by:&nbsp;&nbsp;&nbsp;</b>{{ $goal->user->name}}<br>
+                    <b>Created by:&nbsp;&nbsp;&nbsp;</b>{{ $goal->originalCreatedBy ? $goal->originalCreatedBy->name : $goal->user->name }}<br>
                 </p>
             </a>
         </div>

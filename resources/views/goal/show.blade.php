@@ -94,7 +94,7 @@
                                                     <x-profile-pic></x-profile-pic>
                                                     <div class="border flex-fill p-2 rounded">
                                                         <!-- <x-textarea class="ckeditor" name="comment" id="addreply"/> -->
-                                                        <textarea class="ckeditor" name="comment" id="addreply"></textarea>
+                                                        <textarea class="addreply" name="comment"></textarea>
                                                         <div class="d-flex flex-row my-2">
                                                             <x-button class="btn" action="submit" :data-comment-id="$comment->id" size="sm">Add Comment</x-button>
                                                         </div>
@@ -129,12 +129,44 @@
         @include('goal.partials.supervisor-goal')
 
     @push('js')
+    <script>
+        window.onbeforeunload = function () {
+            for (var i in CKEDITOR.instances){
+                CKEDITOR.instances[i].updateElement();
+            };
+            let isDirty = false;
+            $("textarea").each((i, e) => {
+                if ($(e).val() !== '') {
+                    isDirty = true;
+                }
+            });
+            if (isDirty) {
+                return "If you continue you will lose any unsaved information";
+            }
+        };
+    </script>
     <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
-            CKEDITOR.replace('addcomment', {
-                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+    $(document).ready(function(){
+        CKEDITOR.replace('addcomment', {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
         });
+    });
+    $(document).ready(function(){
+        CKEDITOR.replaceAll('addreply', {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
+        });
+    });
     </script>
 
     <script>

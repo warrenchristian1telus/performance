@@ -313,8 +313,8 @@ class GoalController extends Controller
                     $qq->orWhere(function ($q) use ($search) {
                         $q->orWhere('title', 'LIKE', '%' . $search . '%');
                         $q->orWhere('what', 'LIKE', '%' . $search . '%');
-                        $q->orWhere('why', 'LIKE', '%' . $search . '%');
-                        $q->orWhere('how', 'LIKE', '%' . $search . '%');
+                        /* $q->orWhere('why', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('how', 'LIKE', '%' . $search . '%'); */
                         $q->orWhere('measure_of_success', 'LIKE', '%' . $search . '%');
                     });
                 }
@@ -345,8 +345,8 @@ class GoalController extends Controller
                     $qq->orWhere(function ($q) use ($search) {
                         $q->orWhere('title', 'LIKE', '%' . $search . '%');
                         $q->orWhere('what', 'LIKE', '%' . $search . '%');
-                        $q->orWhere('why', 'LIKE', '%' . $search . '%');
-                        $q->orWhere('how', 'LIKE', '%' . $search . '%');
+                        /* $q->orWhere('why', 'LIKE', '%' . $search . '%');
+                        $q->orWhere('how', 'LIKE', '%' . $search . '%'); */
                         $q->orWhere('measure_of_success', 'LIKE', '%' . $search . '%');
                     });
                 }
@@ -373,9 +373,9 @@ class GoalController extends Controller
     private function copyFromLibrary(Goal $goal) {
         $newGoal = new Goal;
         $newGoal->title = $goal->title;
-        $newGoal->why = $goal->why;
+        // $newGoal->why = $goal->why;
         $newGoal->what = $goal->what;
-        $newGoal->how = $goal->how;
+        // $newGoal->how = $goal->how;
         $newGoal->measure_of_success = $goal->measure_of_success;
         $newGoal->start_date = $goal->start_date;
         $newGoal->target_date = $goal->target_date;
@@ -383,6 +383,7 @@ class GoalController extends Controller
         $newGoal->goal_type_id = $goal->goal_type_id;
         $newGoal->user_id = Auth::id();
         $newGoal->created_by = $goal->user_id;
+        $newGoal->save();
         return $newGoal;
     }
 

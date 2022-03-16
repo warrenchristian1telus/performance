@@ -21,13 +21,7 @@
                             <x-input label="Goal Title" name="title"/>
                         </div>
                         <div class="col-6">
-                            <x-textarea label="What" name="what" />
-                        </div>
-                        <div class="col-6">
-                            <x-textarea label="Why" name="why" />
-                        </div>
-                        <div class="col-6">
-                            <x-textarea label="How" name="how" />
+                            <x-textarea label="Description" name="what" />
                         </div>
                         <div class="col-6">
                             <x-textarea label="Measures of Success" name="measure_of_success" />

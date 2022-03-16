@@ -31,25 +31,13 @@
                           <small class="text-danger error-title"></small>
                       </div>
                       <div class="col m-2">
-              						<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
+                          <x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
                       </div>
           				</div>
                   <div class="row">
                       <div class="col m-2">
-                          <x-textarea label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" />
+                          <x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" />
                           <small class="text-danger error-what"></small>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col m-2">
-                          <x-textarea label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".' :value="$bankgoal->why" />
-                          <small class="text-danger error-why"></small>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col m-2">
-                          <x-textarea label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' :value="$bankgoal->how"/>
-                          <small class="text-danger error-how"></small>
                       </div>
                   </div>
                   <div class="row">

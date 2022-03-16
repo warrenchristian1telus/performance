@@ -159,6 +159,9 @@
         $('.tooltip-dropdown').find('.dropdown-item[data-value="1"]').click();
         $("input[name=start_date]").val('');
         $("input[name=target_date]").val('');
+        for (var i in CKEDITOR.instances){
+            CKEDITOR.instances[i].setData('');
+        };
                  
     });
     $(document).on('hide.bs.modal', '#addGoalModal', function(e) {

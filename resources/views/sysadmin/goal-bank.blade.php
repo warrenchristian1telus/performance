@@ -185,29 +185,19 @@
                                     </div>
                                     <div class="row">
                                         <div class="col m-2">
-                                            <x-textarea id="what" label="What" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$newGoal->what" />
+                                            <x-textarea id="what" label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$newGoal->what" />
                                                 <small class="text-danger error-what"></small>
                                             </div>
                                         </div>
+                                        
+                                            
                                         <div class="row">
                                             <div class="col m-2">
-                                                <x-textarea id="why" label="Why" name="why" tooltip='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".' :value="$newGoal->why" />
-                                                    <small class="text-danger error-why"></small>
-                                                </div>
+                                                <x-textarea id="measure_of_success" label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$newGoal->measure_of_success" />
+                                                <small class="text-danger error-measure_of_success"></small>
                                             </div>
-                                            <div class="row">
-                                                <div class="col m-2">
-                                                    <x-textarea id="how" label="How" name="how" tooltip='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".' :value="$newGoal->how"/>
-                                                        <small class="text-danger error-how"></small>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col m-2">
-                                                        <x-textarea id="measure_of_success" label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$newGoal->measure_of_success" />
-                                                            <small class="text-danger error-measure_of_success"></small>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        </div>
+                                    </div>
                                             </tbody>
                                         </form>
                                     </div>
@@ -255,12 +245,6 @@
 
             $(document).ready(function(){
                 CKEDITOR.replace('what', {
-                    toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ]
-                });
-                CKEDITOR.replace('why', {
-                    toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ]
-                });
-                CKEDITOR.replace('how', {
                     toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ]
                 });
                 CKEDITOR.replace('measure_of_success', {

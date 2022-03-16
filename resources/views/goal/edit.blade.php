@@ -16,7 +16,7 @@
                     <x-dropdown :list="$goaltypes" label="Goal Type" name="goal_type_id" />
                     <x-input label="Goal Title" name="title" :value="$goal->title"/>
                     <!-- <x-textarea id="what" label="What" name="what" :value="$goal->what" /> -->
-                    <label for='what'>What</label>
+                    <label for='what'>Description</label>
                     <textarea id="what" name="what" :value="$goal->what">{!!$goal->what!!}</textarea>
                     <!-- <x-textarea id="measure_of_success" class="content' label="Measures of Success" name="measure_of_success" :value="$goal->measure_of_success" /> -->
                     <label for='measure_of_success'>Measure of Success</label>

@@ -134,4 +134,23 @@
     </div>
 </div>
 
+@push('js')
+              <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+              <script>
+
+                $(document).ready(function(){
+                    CKEDITOR.replace('body', {
+                         readOnly: true,
+                         toolbar: "Custom",
+                         toolbar_Custom: [
+                            ["Bold", "Italic", "Underline"],
+                            ["NumberedList", "BulletedList"],
+                            ["Outdent", "Indent"],
+                        ],
+                    });
+
+                });
+              </script>
+          @endpush
+
 </x-side-layout>

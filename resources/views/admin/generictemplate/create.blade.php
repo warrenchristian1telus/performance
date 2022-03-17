@@ -178,8 +178,18 @@
 
           
           @push('js')
+             <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
               <script>
                   $(document).ready(function(){
+                    CKEDITOR.replace('body', {
+                         toolbar: "Custom",
+                         toolbar_Custom: [
+                            ["Bold", "Italic", "Underline"],
+                            ["NumberedList", "BulletedList"],
+                            ["Outdent", "Indent"],
+                        ],
+                    });
+
                     let row_number = {{ count(old('binds', [''])) }};
 
                     let str = '<tr>';   

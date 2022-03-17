@@ -93,9 +93,11 @@
             });
 
             $(document).on('click', '.btn-submit', function(e) {
-                if(!confirm('This will send a notification to all participants that you would like to schedule a conversation and will move this template to your Open Conversations tab. Would you like to continue?')){
-                    return false;
-                }
+                /*
+                 if(!confirm('This will send a notification to all participants that you would like to schedule a conversation and will move this template to your Open Conversations tab. Would you like to continue?')){
+                     return false;
+                 }
+                */
 
                 e.preventDefault();
                 $.ajax({

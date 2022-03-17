@@ -58,7 +58,7 @@
         <strong>
             Meeting info
         </strong>
-         <form id="conversation_form" action="{{ route ('conversation.store')}}" method="POST" onsubmit="return confirm('This will send a notification to all participants that you would like to schedule a conversation and will move this template to your Open Conversations tab. Would you like to continue?')">
+         <form id="conversation_form" action="{{ route ('conversation.store')}}" method="POST">
              @csrf
               <div class="mt-2 d-flex justify-content-between align-items-end">
 

@@ -168,6 +168,18 @@ class ConversationController extends Controller
             ]);
         }
         DB::commit();
+
+        // Send a notification to all participants that you would like to schedule a conversation 
+        $toAddresses = User::whereIn('id',$request->participant_id)->pluck('email');
+        $topic = ConversationTopic::find($request->conversation_topic_id);
+        $user = User::find(Auth::id());
+        $sendMail = new \App\MicrosoftGraph\SendMail();
+        $sendMail->toAddresses = $toAddresses;
+        $sendMail->sender_id = $user->azure_id;
+        $sendMail->template = 'ADVICE_SCHEDULE_CONVERSATION';
+        array_push($sendMail->bindvariables, $topic->name);
+        $response = $sendMail->sendMailWithGenericTemplate();
+
         if(request()->ajax()){
             return response()->json(['success' => true, 'message' => 'Conversation Created successfully']);
         }else{

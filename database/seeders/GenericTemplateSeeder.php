@@ -28,6 +28,15 @@ class GenericTemplateSeeder extends Seeder
 <blockquote><q>%3</q></blockquote>
 EOD;
 
+$body2 = <<<'EOD'
+<p>Hi all,</p>
+
+<p>New Conversation template %1 was created and the meeting will be scheduled soon.</p>
+
+<p>Thank you.</p>
+
+EOD;
+
     $template = GenericTemplate::updateOrCreate([
       'template' => 'SUPERVISOR_COMMENT_MY_GOAL',
     ], [
@@ -60,6 +69,28 @@ EOD;
       'description' => 'The new comment',
     ]);        
 
+    // Template 2
+    $template = GenericTemplate::updateOrCreate([
+      'template' => 'ADVICE_SCHEDULE_CONVERSATION',
+    ], [
+      'description' =>  'Send out email notification to all participants that you would like to schedule a conversation',
+      'instructional_text' => 'You can add parameters',
+      'sender' => '1',
+      'email' => '',
+      'azure_id' => '',
+      'subject' => 'New conversation template added, the schedule meeting will come soon',
+      'body' => $body2,
+    ]);
+
+    foreach ($template->binds as $bind) {
+      $bind->delete();
+    }
+
+    $template->binds()->create([
+      'seqno' => 0,
+      'bind' => '%1', 
+      'description' => 'Conversation Template',
+    ]);        
 
   }
 }

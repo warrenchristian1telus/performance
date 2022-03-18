@@ -13,9 +13,15 @@ Create a goal for your employees to use in their own profile. Goals can be sugge
     </div>
     @endforeach
 </div>
+<div class="row">
+    <div class="col">
+        {{$suggestedGoals->links()}}
+    </div>
+</div>
 @include('my-team.partials.add-goal-to-library-modal')
 @endsection
 @push('js')
+<script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
 <script>
     $(document).on('click', '#add-goal-to-library-btn', function () {
         $("#addGoalToLibraryModal").modal('show');
@@ -24,6 +30,12 @@ Create a goal for your employees to use in their own profile. Goals can be sugge
         allSelectedText: 'All',
         selectAllText: 'All',
         includeSelectAllOption: true
+    });
+    $(document).ready(function(){
+        CKEDITOR.replace('what', {
+            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+        CKEDITOR.replace('measure_of_success', {
+            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
     });
 </script>
 @endpush

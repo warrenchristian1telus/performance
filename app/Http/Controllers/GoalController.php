@@ -278,6 +278,9 @@ class GoalController extends Controller
         ];
         $createdBy = Goal::withoutGlobalScope(NonLibraryScope::class)
             ->where('is_library', true)
+            ->whereHas('sharedWith', function($query) {
+                $query->where('user_id', Auth::id());
+            })
             ->with('user')
             ->groupBy('user_id')
             ->get()
@@ -289,15 +292,20 @@ class GoalController extends Controller
             "name" => "Any"
         ]);
 
-        $goalType = GoalType::all()->pluck('name', 'id')->toArray();
-        array_unshift($goalType, "Any");
-        $goalTypes = [];
+        $goalTypes = GoalType::all()->toArray();
+        array_unshift($goalTypes, [
+            "id" => "0",
+            "name" => "Any"
+        ]);
+
+        // dd($goalTypes);
+        /* $goalTypes = [];
         foreach($goalType as $id => $type) {
             $goalTypes[] = [
                 "id" => $id,
                 "name" => $type
             ];
-        }
+        } */
     }
 
     public function library(Request $request)

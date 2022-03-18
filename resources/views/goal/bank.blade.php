@@ -12,7 +12,7 @@
             <br>
             <br>
         </div>
-        <form action="" method="get">
+        <form action="" method="get" id="filter-menu">
             <div class="row">
                 <div class="col">
                     <label>
@@ -34,10 +34,10 @@
                 </div>
                 <div class="col">
                     <x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
-                </div>
+                </div><!-- 
                 <div class="col">
                     <button class="btn btn-primary mt-4 px-5">Filter</button>
-                </div>
+                </div> -->
             </div>
         </form>
 
@@ -136,6 +136,10 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
         <script>
+            $('#filter-menu select, #filter-menu input').change(function () {
+                $("#filter-menu").submit();
+            });
+            
             $('input[name="date_added"]').daterangepicker({
                 autoUpdateInput: false,
                 locale: {

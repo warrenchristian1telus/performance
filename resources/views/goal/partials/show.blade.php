@@ -37,6 +37,10 @@
     <div class="form-control-plaintext">
         {!!$goal['what']!!}
     </div>
+    <b>{{__("Measures of Success")}}</b>
+    <div class="form-control-plaintext">
+        {!!$goal['measure_of_success']!!}
+    </div>
     <b>{{__("Start Date")}}</b>
     <div class="form-control-plaintext">
         {{$goal['start_date_human']}}
@@ -44,10 +48,5 @@
     <b>{{__("End Date")}}</b>
     <div class="form-control-plaintext">
         {{$goal['target_date_human']}}
-    </div>
-
-    <b>{{__("Measures of Success")}}</b>
-    <div class="form-control-plaintext">
-        {!!$goal['measure_of_success']!!}
     </div>
 </div>

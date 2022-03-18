@@ -130,7 +130,20 @@
 
     @push('js')
     <script>
+        if(!!window.performance && window.performance.navigation.type === 2)
+        {
+            console.log('Reloading');
+            window.location.reload();
+        }
+        window.isDirty = true;
+        $('form').on('submit', () => {
+            window.isDirty = false;
+        });
         window.onbeforeunload = function () {
+            if (!window.isDirty) {
+                return;
+            }
+            debugger;
             for (var i in CKEDITOR.instances){
                 CKEDITOR.instances[i].updateElement();
             };

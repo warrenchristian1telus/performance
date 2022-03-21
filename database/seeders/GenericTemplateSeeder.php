@@ -43,8 +43,7 @@ EOD;
       'description' =>  'send out email notificatioin when supervisor added comment on the gaol',
       'instructional_text' => 'You can add parameters',
       'sender' => '1',
-      'email' => '',
-      'azure_id' => '',
+      'sender_id' => 702,
       'subject' => 'Your supervisor added a new comment on your goal.',
       'body' => $body,
     ]);
@@ -76,8 +75,7 @@ EOD;
       'description' =>  'Send out email notification to all participants that you would like to schedule a conversation',
       'instructional_text' => 'You can add parameters',
       'sender' => '1',
-      'email' => '',
-      'azure_id' => '',
+      'sender_id' => 702,
       'subject' => 'New conversation template added, the schedule meeting will come soon',
       'body' => $body2,
     ]);

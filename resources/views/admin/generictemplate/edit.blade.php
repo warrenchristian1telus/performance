@@ -59,7 +59,7 @@
               </div>
 
               <div class="form-group row ">
-                <label for="sender" class="col-sm-2 col-form-label">Sender:</label>
+                <label for="sender" class="col-sm-2 col-form-label">Sender Type:</label>
                 <div class="col-sm-2">
                     <select id="sender" class="form-control @error('sender') is-invalid @enderror" name="sender">
                         
@@ -78,20 +78,24 @@
                         </span>
                     @enderror
               </div>
-              <label for="email" class="col-sm-1 col-form-label text-right">Email:</label>
-              <div class="col-sm-6" >
-                <select class="form-control select2 @error('email') is-invalid @enderror" 
-                 name="email" id="email">
-                  @if (old('email')) 
-                     @foreach ( Session::get('old_emails') ?? [] as $key =>$value )
+              <label for="sender_id" class="col-sm-2 col-form-label text-right">User Name:</label>
+              <div class="col-sm-5" >
+                <select class="form-control select2 @error('sender_id') is-invalid @enderror" 
+                 name="sender_id" id="sender_id">
+{{-- 
+                  @if (old('sender_id')) 
+--}}
+                     @foreach ( Session::get('old_sender_ids') ?? [] as $key =>$value )
                         <option value="{{ $key }}" selected="selected">{{ $value }}</option>
                      @endforeach
+{{-- 
                   @else
                         <option value="{{ $generic_template->azure_id }}" selected="selected">{{ $generic_template->email }}</option>
                   @endif
+--}}
     
                 </select>
-                @error('email')
+                @error('sender_id')
                     <span class="invalid-feedback">
                     {{  $message  }}
                     </span>
@@ -154,7 +158,7 @@
                             <td class="col-2">
                                 <input  name="binds[]" class="form-control
                                 @error('bind'.$index) is-invalid @enderror"  
-                                value="{{ old('binds.' . $loop->index) ?? $generic_template->binds[$index]->bind ?? '1'  }}" />
+                                value="{{ old('binds.' . $loop->index) ?? $generic_template->binds[$index]->bind ?? ''  }}" />
                                 @error( 'bind'.$index)
                                     <span class="invalid-feedback">
                                         {{  $message  }}
@@ -163,7 +167,7 @@
                             </td>
                             <td class="col-8">
                                 <input  name="descriptions[]" class="form-control" 
-                                value="{{ old('descriptions.' . $loop->index) ?? $generic_template->binds[$index]->description  ?? '1' }}" />
+                                value="{{ old('descriptions.' . $loop->index) ?? $generic_template->binds[$index]->description  ?? '' }}" />
                             </td>
                             <td class="col-2">
                                 <div type="button" class="pull-right btn btn-sm btn-danger delete_this_row">Delete</div>
@@ -196,6 +200,16 @@
             </div>
           </form>
 
+        @push('css')
+        <style>
+        .select2-container .select2-selection--single {
+        height: 38px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 38px !important;
+        }
+        </style>
+        @endpush
           @push('js')
               <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
               <script>
@@ -239,7 +253,7 @@
                         $(this).parent().parent().remove();
                 });
 
-                $('#email').select2({
+                $('#sender_id').select2({
                     ajax: {
                         url: '/graph-users'
                         , dataType: 'json'
@@ -261,7 +275,7 @@
 
                 $('#sender').change(function() {
                     if ($('#sender').val() == '1') {
-                        $('#email option:selected').remove();
+                        $('#sender_id option:selected').remove();
                     }
                 });
 

@@ -484,8 +484,9 @@ class GoalController extends Controller
 
                     // Real-Time
                     $sendMail = new SendMail();
-                    $sendMail->toAddresses = [ $goal->user->email ];
-                    $sendMail->sender_id = $curr_user->azure_id;
+                    //$sendMail->toAddresses = [ $goal->user->email ];
+                    $sendMail->toRecipients = array($goal->user->id);  
+                    $sendMail->sender_id = $curr_user->id;
                     $sendMail->template = 'SUPERVISOR_COMMENT_MY_GOAL';
                     array_push($sendMail->bindvariables, $goal->user->name);
                     array_push($sendMail->bindvariables, $goal->what);

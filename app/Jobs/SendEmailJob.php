@@ -31,7 +31,7 @@ class SendEmailJob implements ShouldQueue
     public function __construct()
     {
         //
-        $this->toAddresses = [];
+        $this->toRecipients = [];
         $this->bindvariables = [];
     }
 
@@ -44,7 +44,8 @@ class SendEmailJob implements ShouldQueue
     {
         //
         $sendMail = new SendMail();
-        $sendMail->toAddresses = $this->toAddresses;
+        //$sendMail->toAddresses = $this->toAddresses;
+        $sendMail->toRecipients = $this->toRecipients;
         $sendMail->sender_id = $this->sender_id;
         $sendMail->template = $this->template;
         $sendMail->bindvariables = $this->bindvariables;

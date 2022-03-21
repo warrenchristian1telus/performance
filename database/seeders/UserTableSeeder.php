@@ -108,6 +108,80 @@ class UserTableSeeder extends Seeder
         'role' => 'Supervisor',
         'joining_date' => '04-DEC-2014'
       ],
+
+      [ 
+        'id' => 702, 
+        'name' => 'Supervisor One', 
+        'email' => 'supervisor1@extest.gov.bc.ca', 
+        'azure_id' => 'd321f903-1418-4777-805c-b588857703c9',
+        "password" => 'watchdog', 
+        "reporting_to" => null, 
+        "joining_date" => '11-OCT-2011', 
+        'role' => 'Employee',
+        "samaccountname" => 'SUPERVISOR1', 
+        'guid' => 'FE40A79B39134D49B363FFEB2DBECC71'
+      ],
+      [ 
+        'id' => 701, 
+        'name' => 'Employee 11', 
+        'email' => 'employee11@extest.gov.bc.ca', 
+        'azure_id' => 'c910c169-eb51-43f6-8923-2640e7c75400', 
+        "password" => 'watchdog', 
+        "reporting_to" => 702, 
+        "joining_date" => '06-FEB-2020', 
+        'role' => 'Employee',
+        "samaccountname" => 'EMPLOYEE11', 
+        'guid' => '11B8F4AEAB4A44CF95EFA80B418ED70B'
+      ],
+      [ 
+        'id' => 703, 
+        'name' => 'Employee 12', 
+        'email' => 'employee12@extest.gov.bc.ca', 
+        'azure_id' => 'c9a685ac-4489-4c9e-ad64-a87bdf846467',
+        "password" => 'watchdog', 
+        "reporting_to" => 702, 
+        "joining_date" => '20-JUL-2011', 
+        'role' => 'Employee',
+        "samaccountname" => 'EMPLOYEE12', 
+        'guid' => '844CC197345F4338B2AF76454137267D'
+      ],
+      [ 
+        'id' => 704, 
+        'name' => 'Employee 13', 
+        'email' => 'employee13@extest.gov.bc.ca', 
+        'azure_id' => 'b859ce71-b123-46c8-9ea3-001be8cc5618', 
+        "password" => 'watchdog', 
+        "reporting_to" => 702, 
+        "joining_date" => '10-FEB-2005', 
+        'role' => 'Employee',
+        "samaccountname" => 'EMPLOYEE13', 
+        'guid' => 'F65BFEC28FC34F658F6927176244AA03'
+      ],
+      [ 
+        'id' => 705, 
+        'name' => 'Supervisor Two', 
+        'email' => 'supervisor2@extest.gov.bc.ca', 
+        'azure_id' => 'ee7a7585-34da-4c00-b802-ccfdc0233381',
+        "password" => 'watchdog', 
+        "reporting_to" => null, 
+        "joining_date" => '14-JUL-2008', 
+        'role' => 'Employee',
+        "samaccountname" => 'SUPERVISOR1', 
+        'guid' => 'D097DC45D450428898145D17319CD754'
+      ],
+      [ 
+        'id' => 706, 
+        'name' => 'Employee 21', 
+        'email' => 'employee21@extest.gov.bc.ca', 
+        'azure_id' => '8bdd1142-26fb-405f-80ad-1c27a1d2c716',
+        "password" => 'watchdog', 
+        "reporting_to" => 705, 
+        "joining_date" => '25-APR-2014', 
+        'role' => 'Employee',
+        "samaccountname" => 'EMPLOYEE21', 
+        'guid' => '1EF27D0F64204C5A96B565184D6CC624'
+      ],
+
       // [ 'id' => 100001, 'email' => 'marlo.waldie@gov.bc.ca', 'name' => 'Marlo Waldie', 'password' => 'marlo@123',  'role' => 'Supervisor', 'joining_date' => '15-JAN-2022' ],
       // [ 'id' => 100002, 'email' => 'shelley.wiggins@gov.bc.ca ', 'name' => 'Shelley Wiggins', 'password' => 'shelley@123', 'reporting_to' => 100001,  'role' => 'Supervisor', 'joining_date' => '15-JAN-2022' ],
       // [ 'id' => 100003, 'email' => 'alexandria.neilson@gov.bc.ca', 'name' => 'Alexandria Neilson', 'password' => 'alexandria@123', 'reporting_to' => 100002,  'role' => 'Employee', 'joining_date' => '15-JAN-2022' ],

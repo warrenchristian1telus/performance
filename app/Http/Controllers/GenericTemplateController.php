@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\GenericTemplate;
-
-use Microsoft\Graph\Graph;
-use Microsoft\Graph\Model;
-
-use App\MicrosoftGraph\TokenCache;
 use App\Models\GenericTemplateBind;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -65,19 +61,21 @@ class GenericTemplateController extends Controller
     {
 
         // array for build the select option on the page
-        if ($request->email) {
-            $request->session()->flash('old_emails', 
-                [$request->email => $this->getAzureEmail($request->email) ]
+        if ($request->sender_id) {
+            $sender_ids = User::where('id', $request->sender_id)->pluck('name','id');
+            $request->session()->flash('old_sender_ids', 
+                //[$request->email => $this->getAzureEmail($request->email) ]
+                $sender_ids
             );
         }
-        
+
         //setup Validator and passing request data and rules
         $validator = Validator::make(request()->all(), [
             'template'           => 'required|min:10|max:30|unique:generic_templates,template',
             'description'        => 'required|max:250',
             'instructional_text' => 'required',
             'sender'             => 'required',
-            'email'              => '',
+            'sender_id'          => '',
             'subject'            => 'required',
             'body'               => 'required',
         ]);
@@ -86,12 +84,12 @@ class GenericTemplateController extends Controller
         //hook to add additional rules by calling the ->after method
         $validator->after(function ($validator) {
             
-            if ( request('sender') == 1 && (!(empty(request('email')))) ) {
-                $validator->errors()->add('email', 'To supply email, the sender field must be set to Other.'); 
+            if ( request('sender') == 1 && (!(empty(request('sender_id')))) ) {
+                $validator->errors()->add('sender_id', 'To supply usser name, the sender type field must be set to Other.'); 
             }
 
-            if ( request('sender') == 2 && (empty(request('email'))) ) {
-                $validator->errors()->add('email', 'The email field is required.'); 
+            if ( request('sender') == 2 && (empty(request('sender_id'))) ) {
+                $validator->errors()->add('sender_id', 'The user name field is required.'); 
             }
 
             if ( str_contains( request('template') ?? '', ' ')) {
@@ -105,18 +103,20 @@ class GenericTemplateController extends Controller
             //
             $binds = request('binds');
             $descriptions = request('descriptions');
-            for ($i=0; $i < count($binds); $i++) {
-                if ($binds[$i] != '' && empty($descriptions[$i]) ) {
-                    $validator->errors()->add('description' .$i, 'required.');
+            if ($binds) {
+                for ($i=0; $i < count($binds); $i++) {
+                    if ($binds[$i] != '' && empty($descriptions[$i]) ) {
+                        $validator->errors()->add('description' .$i, 'required.');
+                    }
+                    if (empty($binds[$i])  && $descriptions[$i] != '' ) {
+                        $validator->errors()->add('bind' .$i, 'required.');
+                    }
+                    if (empty($binds[$i]) && empty($descriptions[$i]) ) {
+                        $validator->errors()->add('bind' .$i, 'required.');
+                        $validator->errors()->add('description' .$i, 'required.');
+                    }
                 }
-                if (empty($binds[$i])  && $descriptions[$i] != '' ) {
-                    $validator->errors()->add('bind' .$i, 'required.');
-                }
-                if (empty($binds[$i]) && empty($descriptions[$i]) ) {
-                    $validator->errors()->add('bind' .$i, 'required.');
-                    $validator->errors()->add('description' .$i, 'required.');
-                }
-            }
+            }   
 
             // Validate detail
             $collection = collect( request('binds') );
@@ -132,9 +132,10 @@ class GenericTemplateController extends Controller
         //run validation which will redirect on failure
         $validator->validate();
 
-        if ($request->email) {
-            $email = $this->getAzureEmail($request->email);   
-        }
+        // if ($request->email) {
+        //     //$email = $this->getAzureEmail($request->email);   
+        //     $email = ($user = User::find($request->email)) ? $user->email : null;
+        // }
 
         $generic_template = GenericTemplate::Create(
             [
@@ -142,8 +143,9 @@ class GenericTemplateController extends Controller
             'description' =>  $request->description,
             'instructional_text' => $request->instructional_text,
             'sender' => $request->sender,
-            'email' => $email ?? '',
-            'azure_id' => $request->email,
+            'sender_id' => $request->sender_id,
+            //'email' => $email ?? '',
+            //'azure_id' => $request->email,
             'subject' => $request->subject,
             'body' => $request->body,
             'created_by_id' => Auth::id(),
@@ -153,13 +155,15 @@ class GenericTemplateController extends Controller
     
         $binds = $request->input('binds', []);
         $descriptions = $request->input('descriptions', []);
-        for ($i=0; $i < count($binds); $i++) {
-            if ($binds[$i] != '') {
-                $generic_template->binds()->create([
-                    'seqno' => $i,
-                    'bind' => $binds[$i], 
-                    'description' => $descriptions[$i],
-                ]);        
+        if ($binds) {
+            for ($i=0; $i < count($binds); $i++) {
+                if ($binds[$i] != '') {
+                    $generic_template->binds()->create([
+                        'seqno' => $i,
+                        'bind' => $binds[$i], 
+                        'description' => $descriptions[$i],
+                    ]);        
+                }
             }
         }
 
@@ -189,10 +193,18 @@ class GenericTemplateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
         //
         $generic_template = GenericTemplate::find($id);
+
+        if (!Session()->get('old_sender_ids')) {
+            $sender_ids = User::where('id', $generic_template->sender_id)->pluck('name','id');
+            Session()->flash('old_sender_ids', 
+                $sender_ids
+            );
+        }
+
 
         $generic_template->load('binds');
 
@@ -211,10 +223,17 @@ class GenericTemplateController extends Controller
     public function update(Request $request, $id)
     {
 
-        // array for build the select option on the page
-        if ($request->email) {
-            $request->session()->flash('old_emails', 
-              [$request->email => $this->getAzureEmail($request->email) ]
+        // if ($request->email) {
+        //     $email = ($user = User::find($request->email)) ? $user->email : null;
+        //     $request->session()->flash('old_emails', 
+        //       //[$request->email => $this->getAzureEmail($request->email) ]
+        //       [$request->email => $email ]
+        //     );
+        // }
+        if ($request->sender_id) {
+            $sender_ids = User::where('id', $request->sender_id)->pluck('name','id');
+            $request->session()->flash('old_sender_ids', 
+                $sender_ids
             );
         }
 
@@ -224,7 +243,6 @@ class GenericTemplateController extends Controller
             'description'        => 'required|max:250',
             'instructional_text' => 'required',
             'sender'             => 'required',
-            'email'              => '',
             'subject'            => 'required',
             'body'               => 'required',
         ]);
@@ -232,12 +250,12 @@ class GenericTemplateController extends Controller
         //hook to add additional rules by calling the ->after method
         $validator->after(function ($validator) {
 
-            if ( request('sender') == 1 && (!(empty(request('email')))) ) {
-                $validator->errors()->add('email', 'To supply email, the sender field must be set to Other.'); 
+            if ( request('sender') == 1 && (!(empty(request('sender_id')))) ) {
+                $validator->errors()->add('sender_id', 'To supply user name, the sender field must be set to Other.'); 
             }
 
-            if ( request('sender') == 2 && (empty(request('email'))) ) {
-                $validator->errors()->add('email', 'The email field is required.'); 
+            if ( request('sender') == 2 && (empty(request('sender_id'))) ) {
+                $validator->errors()->add('sender_id', 'The user name field is required.'); 
             }
 
             if ( str_contains( request('template') ?? '', ' ')) {
@@ -251,16 +269,18 @@ class GenericTemplateController extends Controller
             //
             $binds = request('binds');
             $descriptions = request('descriptions');
-            for ($i=0; $i < count($binds); $i++) {
-                if ($binds[$i] != '' && empty($descriptions[$i]) ) {
-                    $validator->errors()->add('description' .$i, 'required.');
-                }
-                if (empty($binds[$i])  && $descriptions[$i] != '' ) {
-                    $validator->errors()->add('bind' .$i, 'required.');
-                }
-                if (empty($binds[$i]) && empty($descriptions[$i]) ) {
-                    $validator->errors()->add('bind' .$i, 'required.');
-                    $validator->errors()->add('description' .$i, 'required.');
+            if ($binds) {
+                for ($i=0; $i < count($binds); $i++) {
+                    if ($binds[$i] != '' && empty($descriptions[$i]) ) {
+                        $validator->errors()->add('description' .$i, 'required.');
+                    }
+                    if (empty($binds[$i])  && $descriptions[$i] != '' ) {
+                        $validator->errors()->add('bind' .$i, 'required.');
+                    }
+                    if (empty($binds[$i]) && empty($descriptions[$i]) ) {
+                        $validator->errors()->add('bind' .$i, 'required.');
+                        $validator->errors()->add('description' .$i, 'required.');
+                    }
                 }
             }
 
@@ -278,17 +298,19 @@ class GenericTemplateController extends Controller
         //run validation which will redirect on failure
         $validator->validate();
 
-        if ($request->email) {
-            $email = $this->getAzureEmail($request->email);   
-        }
+        // if ($request->email) {
+        //     //$email = $this->getAzureEmail($request->email);   
+        //     $email = ($user = User::find($request->email)) ? $user->email : null;
+        // }
 
         $generic_template = GenericTemplate::find($id);
         $generic_template->update([
             'description' =>  $request->description,
             'instructional_text' => $request->instructional_text,
             'sender' => $request->sender,
-            'email' => $email ?? '',
-            'azure_id' => $request->email,
+            'sender_id' => $request->sender_id,
+            //'email' => $email ?? '',
+            //'azure_id' => $request->email,
             'subject' => $request->subject,
             'body' => $request->body,
             'modified_by_id' => Auth::id(),
@@ -301,13 +323,15 @@ class GenericTemplateController extends Controller
 
         $binds = $request->input('binds', []);
         $descriptions = $request->input('descriptions', []);
-        for ($i=0; $i < count($binds); $i++) {
-            if ($binds[$i] != '') {
-                $generic_template->binds()->create([
-                    'seqno' => $i,
-                    'bind' => $binds[$i], 
-                    'description' => $descriptions[$i],
-                ]);        
+        if ($binds) {
+            for ($i=0; $i < count($binds); $i++) {
+                if ($binds[$i] != '') {
+                    $generic_template->binds()->create([
+                        'seqno' => $i,
+                        'bind' => $binds[$i], 
+                        'description' => $descriptions[$i],
+                    ]);        
+                }
             }
         }
 
@@ -330,7 +354,7 @@ class GenericTemplateController extends Controller
 
     public function getUsers(Request $request)
     {
-        
+        /*
         $tokenCache = new TokenCache();
         $accessToken = $tokenCache->getAccessToken();
     
@@ -364,12 +388,26 @@ class GenericTemplateController extends Controller
                     'text' => $user->getMail(),
             ];
         }
+        */
+
+        $users = User::whereRaw("lower(name) like '%". strtolower($request->q)."%'")
+                    ->whereNotNull('azure_id') 
+                    ->get(['id','name']);
+        //$formatted_users = $users->only(['id', 'name'])->toArray();
+        $formatted_users = [];
+        foreach ($users as $user) {
+             $formatted_users[] = [
+                    'id' => $user->id, 
+                    'text' => $user->name,
+            ];
+        }
 
         // return "[{'id':31,'name':'Abc'}, {'id':32,'name':'Abc12'}, {'id':33,'name':'Abc123'},{'id':34,'name':'Abc'}]";
         return response()->json($formatted_users);
 
     }
 
+    /*
     public function getAzureEmail($id)
     {
         $tokenCache = new TokenCache();
@@ -387,6 +425,7 @@ class GenericTemplateController extends Controller
         return $user->getMail();
        
     }
+    */
 
 
 }

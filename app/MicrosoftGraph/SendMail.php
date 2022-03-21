@@ -5,28 +5,58 @@ namespace App\MicrosoftGraph;
 use DateTime;
 use DateInterval;
 use DateTimeZone;
+use App\Models\User;
 use GuzzleHttp\Client;
 use Microsoft\Graph\Graph;
 use App\Models\GenericTemplate;
+use App\Models\NotificationLog;
 use App\MicrosoftGraph\TokenCache;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class SendMail
 {
 
-    public $toAddresses;
-    public $sender_id;
+    //public $toAddresses;
+    public $toRecipients;       /* array of user id */
+    public $sender_id;          /* user id (Model: User) */
 
-    public $subject;
-    public $body;
+    public $subject;            /* String */
+    public $body;               /* String */
+    public $bodyContentType;    /* text or html, default is 'html' */
 
     // Generic Template 
-    public $template;
-    public $bindvariables;
+    public $template;           /* String - name of the template */
+    public $bindvariables;      
+
+    // Option 
+    public $importance;         /* low, normal, and high. */
+    public $saveToSentItems;    /* Boolean -- true or false */
+
+    // Audit Log related
+    public $saveToLog;          /* Boolean -- true or false */
+    public $alertType;
+    public $alertFormat;
+    
+    // Default email for Testing purpose (sent any email to this email)
+    public $SendToTestAccount;  /* jpoon@extest.gov.bc.ca */
+
+    // Private property
+    private $generic_template;  
 
     public function __construct() 
     {
-        $this->toAddresses = [];
+        //$this->toAddresses = [];
+        $this->toRecipients = [];
         $this->bindvariables = [];
+        $this->bodyContentType = 'html';
+        $this->saveToSentItems = true;
+        $this->saveToLog = true;
+
+        $this->SendToTestEmail = "jpoon@extest.gov.bc.ca";
+
+        $this->alertType = 'Notification';
+        $this->alertFormat = 'E-mail'; 
     }
 
     public function send() 
@@ -55,12 +85,12 @@ class SendMail
             "message" => [
                 "subject" => $this->subject,
                 "body" => [
-                    "contentType" => "HTML",
+                    "contentType" => $this->bodyContentType,
                     "content" => $this->body,
                 ],
                 'toRecipients' => $attendees
             ],
-            "saveToSentItems" => "true",
+            "saveToSentItems" => $this->saveToSentItems ? "true" : "false",
         ];
 
         //  User - API https://graph.microsoft.com/v1.0/me/sendMail
@@ -70,25 +100,53 @@ class SendMail
             ->attachBody($newMessage)
             ->execute();
 
+        if ($this->saveToLog) {
+        // Insert Aduit log
+            $log = NotificationLog::Create([  
+                'recipients' => $this->subject,
+                'subject' => $this->subject,
+                'description' => $this->body,
+                'alert_type' => 'Notfication',
+                'alert_format' => 'E-mail',
+                'sender_id' => Auth::id(),
+                // 'template_id' ,
+                'status' => $response->getStatus(), 
+                'date_sent' => now(),
+            ]);
+        }   
+
         return $response;
 
+    }
+
+    public function sendMailWithoutGenericTemplate() 
+    {
+
+        if (!($this->sender_id) ) {
+            $this->sender_id = Auth::id();
+        }
+        
+        return $this->sendMailUsingApplicationToken();
     }
 
 
     public function sendMailWithGenericTemplate() 
     {
 
-        $generic_template = GenericTemplate::where('template',$this->template)->first(); 
+        $this->generic_template = GenericTemplate::where('template',$this->template)->first(); 
 
         // Bind variable
-        $keys = $generic_template->binds->pluck('bind')->toArray();
+        $keys = $this->generic_template->binds->pluck('bind')->toArray();
 
-        $this->subject = str_replace( $keys, $this->bindvariables, $generic_template->subject);
-        $this->body = str_replace( $keys, $this->bindvariables, $generic_template->body);
+        $this->subject = str_replace( $keys, $this->bindvariables, $this->generic_template->subject);
+        $this->body = str_replace( $keys, $this->bindvariables, $this->generic_template->body);
 
-        if ($generic_template->sender == 2) {
+        if ($this->generic_template->sender == 2) {
             // Override the sender based on the generic template definition
-            $this->sender_id = $generic_template->azure_id;
+            $user = User::find($this->generic_template->sender_id);
+            $this->sender_id = $user->id;
+        } else {
+            $this->sender_id = Auth::id();
         }
         return $this->sendMailUsingApplicationToken();
        
@@ -102,14 +160,34 @@ class SendMail
         $graph = new Graph();
         $graph->setAccessToken($accessToken);
 
+        $emailAddresses = User::whereIn('id', $this->toRecipients)->pluck('email');
+
         $attendees = [];
-        foreach ($this->toAddresses as $toAddress) {
+        foreach ($emailAddresses as $emailAddress) {
             array_push($attendees, [
                 // Add the email address in the emailAddress property
                 'emailAddress' => [
-                    'address' => $toAddress,
+                    'address' => $emailAddress,
                 ],
             ]);
+        }
+
+        if (!App::environment(['production'])) {
+            /* Override sender and recipients */
+            $this->body = "<h3>NOTE: This is a test message and here is the content:</h3>".      
+                          "<hr>".
+                          "<p><b>To: </b>". implode('; ', $emailAddresses->toArray() ). "</p>".
+                          "<p><b>Subject: </b>" . $this->subject . "</p>".
+                          "<p><b>Body : </b>" . $this->body . "</p>".
+                          "<hr>";
+            $this->subject = "[*TESTING*] ".$this->subject;
+            $attendees = [ 
+                [
+                    'emailAddress' => [
+                    'address' => $this->SendToTestEmail,    /* default account for testing purpose */
+                   ],
+                ]
+            ];
         }
 
         // Build message
@@ -117,21 +195,46 @@ class SendMail
             "message" => [
                 "subject" => $this->subject,
                 "body" => [
-                    "contentType" => "HTML",
+                    "contentType" => $this->bodyContentType,
                     "content" => $this->body,
                 ],
                 'toRecipients' => $attendees
             ],
-            "saveToSentItems" => "true",
+            "saveToSentItems" => $this->saveToSentItems ? "true" : "false",
         ];
 
+        $sender = User::where('id', $this->sender_id)->first();
         //  User - API https://graph.microsoft.com/v1.0/users/{id}/sendMail
-        $sendMailUrl = '/users/' . $this->sender_id . '/sendMail';
+        $sendMailUrl = '/users/' . $sender->azure_id . '/sendMail';
         $response = $graph->createRequest('POST', $sendMailUrl)
             ->addHeaders(['Prefer' => 'outlook.timezone="Pacific Standard Time"'])
             ->attachBody($newMessage)
             ->execute();
 
+        if ($this->saveToLog) {
+
+            // Insert Notification log
+            $notification_log = NotificationLog::Create([  
+                //'recipients' => implode('|', $this->toRecipients),
+                'sender_id' => $this->sender_id,
+                'subject' => $this->subject,
+                'description' => $this->body,
+                'alert_type' => $this->alertType,
+                'alert_format' => $this->alertFormat,
+                'template_id' => $this->generic_template ? $this->generic_template->id : null,
+                'status' => $response->getStatus(), 
+                'date_sent' => now(),
+            ]);
+
+            // Update Recipients
+            foreach ($this->toRecipients as $recipient_id) {
+                $notification_log->recipients()->updateOrCreate([
+                    'recipient_id' => $recipient_id,
+                ]);
+            }
+
+        }   
+        
         return $response;
 
     }

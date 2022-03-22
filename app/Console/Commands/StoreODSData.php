@@ -80,6 +80,7 @@ class StoreODSData extends Command
               'deptid' => $item['DEPTID'],
               'jobcode' => $item['JOBCODE'],
               // 'job_title' => $item['job_title'],
+              'job_title' => $item['jobcode_desc'],
               'position_number' => $item['position_number'],
               'position_start_date' => $item['position_start_date'] ? date('Y-m-d', strtotime($item['position_start_date'])) : null,
               // 'manager_id' => $item['manager_id'],
@@ -136,7 +137,7 @@ class StoreODSData extends Command
               //'supervisor_position_start_date' => $item['supervisor_position_start_date'] ? date('Y-m-d', strtotime($item['supervisor_position_start_date'])) : null,
               'supervisor_email' => $item['supervisor_email'],
               'supervisor_name' => $item['supervisor_name'],
-              //'supervisor_position_number' => $item['supervisor_position_number'],
+              'supervisor_position_number' => $item['supervisor_position_number'],
               //'supervisor_position_title' => $item['supervisor_position_title'],
               'tgb_reg_district' => $item['tgb_reg_district'],
             ]

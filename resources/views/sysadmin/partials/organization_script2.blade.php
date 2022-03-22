@@ -20,9 +20,8 @@ jQuery(document).ready(function ()
             ee_level3 = 'all';
             ee_level4 = 'all';
         }else if(eelevel0 != null){
-            console.log('Not Null');
             jQuery.ajax({
-                url : 'level1/'+eelevel0,
+                url : '/sysadmin/level1/'+eelevel0,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -72,9 +71,8 @@ jQuery(document).ready(function ()
             ee_level3 = 'all';
             ee_level4 = 'all';
         }else if(eelevel1 != null){
-            console.log('Not Null');
             jQuery.ajax({
-                url : 'level2/'+eelevel0+'/'+eelevel1,
+                url : '/sysadmin/level2/'+eelevel0+'/'+eelevel1,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -117,7 +115,7 @@ jQuery(document).ready(function ()
             ee_level4 = 'all';
         }else if(eelevel2 != null){
             jQuery.ajax({
-                url : 'level3/'+eelevel0+'/'+eelevel1+'/'+eelevel2,
+                url : '/sysadmin/level3/'+eelevel0+'/'+eelevel1+'/'+eelevel2,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -153,7 +151,7 @@ jQuery(document).ready(function ()
             ee_level4 = 'all';
         }else if(eelevel3 != null){
             jQuery.ajax({
-                url : 'level4/'+eelevel0+'/'+eelevel1+'/'+eelevel2+'/'+eelevel3,
+                url : '/sysadmin/level4/'+eelevel0+'/'+eelevel1+'/'+eelevel2+'/'+eelevel3,
                 type : "GET",
                 dataType : "json",
                 success:function(data)

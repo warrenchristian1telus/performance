@@ -94,4 +94,6 @@
     </div>
 </div>
 
+@include('hradmin.partials.organization_script')
+
 @endsection

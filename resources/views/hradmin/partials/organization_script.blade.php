@@ -21,7 +21,7 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }else if(ddlevel0 != null){
             jQuery.ajax({
-                url : 'level1/'+ddlevel0,
+                url : '/hradmin/level1/'+ddlevel0,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -72,7 +72,7 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }else if(ddlevel1 != null){
             jQuery.ajax({
-                url : 'level2/'+ddlevel0+'/'+ddlevel1,
+                url : '/hradmin/level2/'+ddlevel0+'/'+ddlevel1,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -115,7 +115,7 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }else if(ddlevel2 != null){
             jQuery.ajax({
-                url : 'level3/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2,
+                url : '/hradmin/level3/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -151,7 +151,7 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }else if(ddlevel3 != null){
             jQuery.ajax({
-                url : 'level4/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2+'/'+ddlevel3,
+                url : '/hradmin/level4/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2+'/'+ddlevel3,
                 type : "GET",
                 dataType : "json",
                 success:function(data)

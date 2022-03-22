@@ -20,9 +20,8 @@ jQuery(document).ready(function ()
             dd_level3 = 'all';
             dd_level4 = 'all';
         }else if(ddlevel0 != null){
-            console.log('Not Null');
             jQuery.ajax({
-                url : 'level1/'+ddlevel0,
+                url : '/sysadmin/level1/'+ddlevel0,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -42,7 +41,7 @@ jQuery(document).ready(function ()
                     $('select[name="dd_level4"]').append('<option value="all">All</option>');
                     dd_level4 = 'all';
                 }
-            });
+            })
         }else {
             $('select[name="dd_level1"]').empty();
             $('select[name="dd_level2"]').empty();
@@ -72,9 +71,8 @@ jQuery(document).ready(function ()
             dd_level3 = 'all';
             dd_level4 = 'all';
         }else if(ddlevel1 != null){
-            console.log('Not Null');
             jQuery.ajax({
-                url : 'level2/'+ddlevel0+'/'+ddlevel1,
+                url : '/sysadmin/level2/'+ddlevel0+'/'+ddlevel1,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -117,7 +115,7 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }else if(ddlevel2 != null){
             jQuery.ajax({
-                url : 'level3/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2,
+                url : '/sysadmin/level3/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2,
                 type : "GET",
                 dataType : "json",
                 success:function(data)
@@ -153,7 +151,7 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }else if(ddlevel3 != null){
             jQuery.ajax({
-                url : 'level4/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2+'/'+ddlevel3,
+                url : '/sysadmin/level4/'+ddlevel0+'/'+ddlevel1+'/'+ddlevel2+'/'+ddlevel3,
                 type : "GET",
                 dataType : "json",
                 success:function(data)

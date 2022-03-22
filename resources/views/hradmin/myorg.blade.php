@@ -108,6 +108,7 @@
 {{ $iEmpl->links() }}
 
 
+@include('hradmin.partials.organization_script')
 
 
 @endsection

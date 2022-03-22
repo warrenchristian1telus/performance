@@ -13,7 +13,7 @@
             @method('PUT')
             <div class="row">
                 <div class="col-12">
-                    <x-dropdown :list="$goaltypes" label="Goal Type" name="goal_type_id" />
+                    <x-tooltip-dropdown name="goal_type_id" :options="$goaltypes" label="Goal Type" tooltipField="description" displayField="name" :selectedValue="$goal->goal_type_id" />
                     <x-input label="Goal Title" name="title" :value="$goal->title"/>
                     <!-- <x-textarea id="what" label="What" name="what" :value="$goal->what" /> -->
                     <label for='what'>Description</label>
@@ -28,20 +28,50 @@
                 <div class="col-sm-6">
                     <x-input label="End Date" type="date" name="target_date" :value="$goal->target_date ? $goal->target_date->format('Y-m-d') : ''" />
                 </div>
-                <div class="col-12 text-center">
+                <div class="col-12 text-center mb-3">
                     <x-button type="submit" class="btn-lg"> Save </x-button>
                 </div>
             </div>
         </form>
     </div>
-</x-side-layout>
 
-<script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        CKEDITOR.replace('what', {
-            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
-        CKEDITOR.replace('measure_of_success', {
-            toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
-    });
-</script>
+    @push('js')
+
+    <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            CKEDITOR.replace('what', {
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+            CKEDITOR.replace('measure_of_success', {
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+        });
+    </script>
+    <script>
+        if(!!window.performance && window.performance.navigation.type === 2)
+        {
+            console.log('Reloading');
+            window.location.reload();
+        }
+        window.isDirty = true;
+        $('form').on('submit', () => {
+            window.isDirty = false;
+        });
+        let originalData = $('form').serialize();
+        $(document).ready(function () {
+            originalData = $('form').serialize();
+        });
+        window.onbeforeunload = function () {
+            if (!window.isDirty) {
+                return;
+            }
+            for (var i in CKEDITOR.instances) {
+                CKEDITOR.instances[i].updateElement();
+            };
+            const currentData = $('form').serialize();
+            if (currentData != originalData) {
+                return "If you continue you will lose any unsaved information";
+            }
+        };
+    </script>
+    @endpush
+</x-side-layout>

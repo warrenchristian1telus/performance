@@ -12,7 +12,7 @@
                 @if ($allowEditModal ?? false)
                     <x-button icon='edit' class="text-light edit-suggested-goal" data-goal-id="{{$goal->id}}" aria-label="Edit button" data-toggle="modal" data-target="#edit-suggested-goal-modal"></x-button>
                 @endif
-                @if ($type ?? '' ?? '' !== 'supervisor' && !$disableEdit)
+                @if (($type ?? '') !== 'supervisor' && !$disableEdit)
                 <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}')">
                     @csrf
                     @method('DELETE')

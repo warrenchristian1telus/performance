@@ -273,54 +273,91 @@ return [
         ],
         [
             'role' => 'listitem',
-            'text' => 'System Administration',
+            'text' => 'HR Administration',
             'url'  => '#',
             'icon' => 'fas fa-fw fa-cog',
             'submenu' => [
                 [
                     'text' => 'My Organization',
-                    'url'  => 'sysadmin/myorg',
-                    'active' => ['sysadmin/myorg']
+                    'url'  => 'hradmin/myorg',
+                    'active' => ['hradmin/myorg']
                 ],
                 [
-                    'text' => 'Statistics and Reports',
-                    'url'  => 'sysadmin/statistics',
-                    'active' => ['sysadmin/statistics']
+                    'text' => 'Share Employees',
+                    'url'  => 'hradmin/shared/shareemployee',
+                    'active' => ['hradmin/shared/*']
+                ],
+                [
+                    'text' => 'Excuse Employees',
+                    'url'  => 'hradmin/excused/excuseemployee',
+                    'active' => ['hradmin/excused/*']
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'sysadmin/goal-bank',
-                    'active' => ['sysadmin/goal-bank']
+                    'url'  => 'hradmin/goals/goal-bank',
+                    'active' => ['hradmin/goals/*']
                 ],
                 [
-                    'text' => 'Shared Employees',
-                    'url'  => 'sysadmin/shared',
-                    'active' => ['sysadmin/shared']
+                    'text' => 'Notifications',
+                    'url'  => 'hradmin/notifications/createnotification',
+                    'active' => ['hradmin/notifications/*']
                 ],
                 [
-                    'text' => 'Excused Employees',
-                    'url'  => 'sysadmin/excused',
-                    'active' => ['sysadmin/excused']
+                    'text' => 'Statistics and Reports',
+                    'url'  => 'hradmin/statistics/goalsummary',
+                    'active' => ['hradmin/statistics/*']
+                ],
+            ],
+        ],
+        [
+            'role' => 'listitem',
+            'text' => 'System Administration',
+            'url'  => '#',
+            'icon' => 'fas fa-fw fa-cog',
+            'submenu' => [
+                [
+                    'text' => 'Employee List',
+                    'url'  => 'sysadmin/employees/current',
+                    'active' => ['sysadmin/employees/*']
                 ],
                 [
-                    'text' => 'Notification Log',
-                    'url'  => 'sysadmin/notifications',
-                    'active' => ['sysadmin/notifications']
+                    'text' => 'Share Employees',
+                    'url'  => 'sysadmin/shared/shareemployee',
+                    'active' => ['sysadmin/shared/*']
+                ],
+                [
+                    'text' => 'Excuse Employees',
+                    'url'  => 'sysadmin/excused/excuseemployee',
+                    'active' => ['sysadmin/excused/*']
+                ],
+                [
+                    'text' => 'Goal Bank',
+                    'url'  => 'sysadmin/goals/goal-bank',
+                    'active' => ['sysadmin/goals/*']
+                ],
+                [
+                    'text' => 'Unlock Conversations',
+                    'url'  => 'sysadmin/unlock/unlockconversation',
+                    'active' => ['sysadmin/unlock/*']
+                ],
+                [
+                    'text' => 'Notifications',
+                    'url'  => 'sysadmin/notifications/createnotification',
+                    'active' => ['sysadmin/notifications/*']
                 ],
                 [
                     'text' => 'Access and Permissions',
-                    'url'  => 'sysadmin/access',
-                    'active' => ['sysadmin/access']
+                    'url'  => 'sysadmin/access/createaccess',
+                    'active' => ['sysadmin/access/*']
                 ],
                 [
-                    'text' => 'Previous Employees',
-                    'url'  => 'sysadmin/previous',
-                    'active' => ['sysadmin/previous']
+                    'text' => 'Statistics and Reports',
+                    'url'  => 'sysadmin/statistics/goalsummary',
+                    'active' => ['sysadmin/statistics/*']
                 ],
                 [
-                    'text' => 'Conversations',
-                    'url'  => 'sysadmin/conversations',
-                    'active' => ['sysadmin/conversations']
+                    'text' => 'Switch Identity',
+                    'url'  => '#',
                 ],
             ],
         ],

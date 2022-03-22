@@ -155,7 +155,7 @@ class MyTeamController extends Controller
         $type = 'upcoming';
         // return view('my-team/performance-statistics', compact('goals','employees', 'goaltypes'));
         return view('my-team/performance-statistics', compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'eReasons'));
-        
+
     }
     public function goalsHierarchy()
     {
@@ -191,8 +191,8 @@ class MyTeamController extends Controller
         }
     }
 
-    public function viewProfileAs($id, $landingPage = null, Request $request) {
-        $actualAuthId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();        
+    public function viewProfileAs($id, $landingPage = null) {
+        $actualAuthId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
         $hasAccess = User::with('reportingManagerRecursive')->find($id)->canBeSeenBy($actualAuthId);
 
         // If it is shared with Logged In user.

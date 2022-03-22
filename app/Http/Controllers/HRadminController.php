@@ -14,138 +14,8 @@ use App\Models\GoalType;
 use App\Models\OrgNode;
 use Carbon\Carbon;
 
-
-class SysadminController extends Controller
+class HRadminController extends Controller
 {
-    public function current()
-    {
-        $level0 = $this->getOrgLevel0();
-        $jobTitles = $this->getJobTitles();
-
-        $iEmpl = DB::table('employee_demo')
-        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4')
-         ->wherein('employee_status', ['A', 'L', 'P', 'S'])
-        // ->wherein('date_deleted', [0, null])
-        ->paginate(10);
-
-        return view('sysadmin.employees.current', compact('level0', 'iEmpl', 'jobTitles'));
-    }
-
-    public function previous()
-    {
-        $level0 = $this->getOrgLevel0();
-        $jobTitles = $this->getJobTitles();
-
-        $iEmpl = DB::table('employee_demo')
-        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4')
-        // ->where('date_deleted')
-        ->wherenotin('employee_status', ['A', 'L', 'P', 'S'])
-        ->paginate(10);
-
-        return view('sysadmin.employees.previous', compact('level0', 'iEmpl', 'jobTitles'));
-    }
-
-    public function shareemployee()
-    {
-        $this->getDropdownValues($mandatoryOrSuggested, $goalTypes);
-        $level0 = $this->getOrgLevel0();
-
-        $sharedElements = [['key' => 'all', 'value' => 'All']];
-
-        $jobTitles = DB::table('employee_demo')
-        ->select('position_title')
-        ->distinct()
-        ->get();
-
-        $sEmpl = DB::table('goals')
-        ->leftjoin('employee_demo', 'employee_demo.employee_id', '=', 'goals.user_id')
-        ->where('employee_demo.employee_name', '!=', '')
-        ->select('goals.user_id', 'employee_demo.employee_name', 'employee_demo.position_title', 'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division', 'employee_demo.level3_branch', 'employee_demo.level4')
-        ->distinct()
-        ->paginate(8);
-
-        return view('sysadmin.shared.shareemployee', compact('level0', 'sEmpl', 'jobTitles', 'sharedElements'));
-    }
-
-    public function manageshares()
-    {
-        return view('sysadmin.shared.manageshares');
-    }
-
-    public function excuseemployee()
-    {
-        return view('sysadmin.excused.excuseemployee');
-    }
-
-    public function manageexcused()
-    {
-        return view('sysadmin.excused.manageexcused');
-    }
-
-    public function managegoals()
-    {
-        return view('sysadmin.goals.managegoals');
-    }
-
-    public function unlockconversation()
-    {
-        return view('sysadmin.unlock.unlockconversation');
-    }
-
-    public function manageunlocked()
-    {
-        return view('sysadmin.unlock.manageunlocked');
-    }
-
-    public function createnotification()
-    {
-        return view('sysadmin.notifications.createnotification');
-    }
-
-    public function viewnotifications()
-    {
-        return view('sysadmin.notifications.viewnotifications');
-    }
-
-    public function createaccess()
-    {
-        return view('sysadmin.access.createaccess');
-    }
-
-    public function manageaccess()
-    {
-        return view('sysadmin.access.manageaccess');
-    }
-
-    public function goalsummary()
-    {
-        return view('sysadmin.statistics.goalsummary');
-    }
-
-    public function conversationsummary()
-    {
-        return view('sysadmin.statistics.conversationsummary');
-    }
-
-    public function sharedsummary()
-    {
-        return view('sysadmin.statistics.sharedsummary');
-    }
-
-    public function excusedsummary()
-    {
-        return view('sysadmin.statistics.excusedsummary');
-    }
-
-
-
-
-
-
-
-
-
-
     public function myorg()
     {
         $level0 = $this->getOrgLevel0();
@@ -157,12 +27,7 @@ class SysadminController extends Controller
         ->paginate(10);
 
 
-        return view('sysadmin.myorg', compact('level0', 'crit', 'iEmpl'));
-    }
-
-    public function statistics()
-    {
-        return view('sysadmin.statistics');
+        return view('hradmin.myorg', compact('level0', 'crit', 'iEmpl'));
     }
 
     public function addgoal()
@@ -173,10 +38,7 @@ class SysadminController extends Controller
             $query->select(DB::raw(1))
             ->from('employee_demo')
             ->where('employee_demo.deptid', 'deptid');
-        }
-        )
-        ->get();
-         // dd($tree->count());
+        })->get();
 
         $level0Value = 'all';
         $level1Value = 'all';
@@ -216,20 +78,7 @@ class SysadminController extends Controller
         ->where(trim('level1_program'), '<>', '')
         ->groupby('level1_program')
         ->get();
-        // $aud_level1 =  DB::table('organizations')
-        // ->select('level1')
-        // ->where(trim('level1'), '<>', '')
-        // ->whereExists(function ($query) {
-        //     $query->select(DB::raw(1))
-        //     ->from('employee_demo')
-        //     ->whereColumn('employee_demo.deptid', 'organizations.deptid');
-        // }
-        // )
-        // ->groupby('level1')
-        // ->get();
-
-        // return view('sysadmin.goal-bank', compact('level1','level2','level3','level4', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
-        return view('sysadmin.goal-bank', compact('level0', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
+        return view('hradmin.goals.goal-bank', compact('level0', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
     }
 
     public function goaledit($id)
@@ -264,40 +113,86 @@ class SysadminController extends Controller
         ->groupby('level1')
         ->get();
 
-        return view('sysadmin.goal-edit', compact('bankgoal', 'goalTypes', 'mandatoryOrSuggested', 'aud_org', 'aud_level1'));
+        return view('hradmin.goals.goal-edit', compact('bankgoal', 'goalTypes', 'mandatoryOrSuggested', 'aud_org', 'aud_level1'));
     }
 
-    public function access()
+    public function shareemployee()
     {
-        return view('sysadmin.access');
-    }
-
-    public function conversations()
-    {
+        $this->getDropdownValues($mandatoryOrSuggested, $goalTypes);
         $level0 = $this->getOrgLevel0();
-        $eelevel0 = $this->getOrgLevel0();
 
-        $openConversations = DB::table('conversations')
-        ->leftjoin('employee_demo', 'employee_demo.employee_id', '=', 'conversations.user_id')
-        ->select('conversations.id', 'conversations.conversation_topic_id', 'conversations.date', 'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division', 'employee_demo.level3_branch', 'employee_demo.level4')
-        ->where(function ($query) {
-            $query->where('conversations.supervisor_signoff_id', null)
-            ->orwhere('conversations.user_id', null);
-        })
+        $sharedElements = [['key' => 'all', 'value' => 'All']];
+
+        $jobTitles = DB::table('employee_demo')
+        ->select('position_title')
+        ->distinct()
+        ->get();
+
+        $sEmpl = DB::table('goals')
+        ->leftjoin('employee_demo', 'employee_demo.employee_id', '=', 'goals.user_id')
+        ->where('employee_demo.employee_name', '!=', '')
+        ->select('goals.user_id', 'employee_demo.employee_name', 'employee_demo.position_title', 'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division', 'employee_demo.level3_branch', 'employee_demo.level4')
+        ->distinct()
         ->paginate(8);
 
-        $closedConversations = DB::table('conversations')
-        ->leftjoin('employee_demo', 'employee_demo.employee_id', '=', 'conversations.user_id')
-        ->select('conversations.id', 'conversations.conversation_topic_id', 'conversations.date', 'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division', 'employee_demo.level3_branch', 'employee_demo.level4')
-        ->where('conversations.supervisor_signoff_id', '!=', null)
-        ->where('conversations.user_id', '!=', null)
-        ->paginate(8);
-
-
-
-
-        return view('sysadmin.conversations', compact('level0', 'eelevel0', 'openConversations', 'closedConversations'));
+        return view('hradmin.shared.shareemployee', compact('level0', 'sEmpl', 'jobTitles', 'sharedElements'));
     }
+
+    public function manageshares()
+    {
+        return view('hradmin.shared.manageshares');
+    }
+
+    public function excuseemployee()
+    {
+        return view('hradmin.excused.excuseemployee');
+    }
+
+    public function manageexcused()
+    {
+        return view('hradmin.excused.manageexcused');
+    }
+
+    public function managegoals()
+    {
+        return view('hradmin.goals.managegoals');
+    }
+
+    public function createnotification()
+    {
+        return view('hradmin.notifications.createnotification');
+    }
+
+    public function viewnotifications()
+    {
+        return view('hradmin.notifications.viewnotifications');
+    }
+
+    public function goalsummary()
+    {
+        return view('hradmin.statistics.goalsummary');
+    }
+
+    public function conversationsummary()
+    {
+        return view('hradmin.statistics.conversationsummary');
+    }
+
+    public function sharedsummary()
+    {
+        return view('hradmin.statistics.sharedsummary');
+    }
+
+    public function excusedsummary()
+    {
+        return view('hradmin.statistics.excusedsummary');
+    }
+
+
+
+
+
+
 
     /**
     * Update the specified resource in storage.

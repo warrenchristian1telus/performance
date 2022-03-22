@@ -26,6 +26,7 @@ class AddCreatedByColumnToGoals extends Migration
     public function down()
     {
         Schema::table('goals', function (Blueprint $table) {
+            $table->dropForeign(['created_by']);
             $table->dropColumn('created_by');
         });
     }

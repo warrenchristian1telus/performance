@@ -148,6 +148,7 @@
                 }
             }).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('MMM DD, YYYY') + ' - ' + picker.endDate.format('MMM DD, YYYY'));
+                $("#filter-menu").submit();
             }).on('cancel.daterangepicker', function(ev, picker) {
                 $('input[name="date_added"]').val('Any');
             });

@@ -143,7 +143,6 @@
             if (!window.isDirty) {
                 return;
             }
-            debugger;
             for (var i in CKEDITOR.instances){
                 CKEDITOR.instances[i].updateElement();
             };

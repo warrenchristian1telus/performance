@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GoalController;
+use Illuminate\Http\Request;
 use App\Models\Organization;
 use App\Models\User;
 use App\Models\Goal;
@@ -16,7 +19,7 @@ use Carbon\Carbon;
 
 class HRadminController extends Controller
 {
-    public function myorg()
+    public function myorg(Request $request)
     {
         $level0 = $this->getOrgLevel0();
         $this->getSearchCriterias($crit);
@@ -26,11 +29,10 @@ class HRadminController extends Controller
         ->orderby('employee_name')
         ->paginate(10);
 
-
-        return view('hradmin.myorg', compact('level0', 'crit', 'iEmpl'));
+        return view('hradmin.myorg', compact('level0', 'crit', 'iEmpl', 'request'));
     }
 
-    public function addgoal()
+    public function addgoal(Request $request)
     {
 
         $tree = OrgNode::with('children')
@@ -78,10 +80,10 @@ class HRadminController extends Controller
         ->where(trim('level1_program'), '<>', '')
         ->groupby('level1_program')
         ->get();
-        return view('hradmin.goals.goal-bank', compact('level0', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1'));
+        return view('hradmin.goals.goal-bank', compact('level0', 'bankgoals', 'goalTypes', 'mandatoryOrSuggested', 'newGoal', 'aud_org', 'aud_level1', 'request'));
     }
 
-    public function goaledit($id)
+    public function goaledit($id, Request $request)
     {
         $goaltypes = GoalType::all();
         $this->getDropdownValues($mandatoryOrSuggested, $goalTypes);
@@ -113,10 +115,10 @@ class HRadminController extends Controller
         ->groupby('level1')
         ->get();
 
-        return view('hradmin.goals.goal-edit', compact('bankgoal', 'goalTypes', 'mandatoryOrSuggested', 'aud_org', 'aud_level1'));
+        return view('hradmin.goals.goal-edit', compact('bankgoal', 'goalTypes', 'mandatoryOrSuggested', 'aud_org', 'aud_level1', 'request'));
     }
 
-    public function shareemployee()
+    public function shareemployee(Request $request)
     {
         $this->getDropdownValues($mandatoryOrSuggested, $goalTypes);
         $level0 = $this->getOrgLevel0();
@@ -135,63 +137,58 @@ class HRadminController extends Controller
         ->distinct()
         ->paginate(8);
 
-        return view('hradmin.shared.shareemployee', compact('level0', 'sEmpl', 'jobTitles', 'sharedElements'));
+        return view('hradmin.shared.shareemployee', compact('level0', 'sEmpl', 'jobTitles', 'sharedElements', 'request'));
     }
 
-    public function manageshares()
+    public function manageshares(Request $request)
     {
         return view('hradmin.shared.manageshares');
     }
 
-    public function excuseemployee()
+    public function excuseemployee(Request $request)
     {
         return view('hradmin.excused.excuseemployee');
     }
 
-    public function manageexcused()
+    public function manageexcused(Request $request)
     {
         return view('hradmin.excused.manageexcused');
     }
 
-    public function managegoals()
+    public function managegoals(Request $request)
     {
         return view('hradmin.goals.managegoals');
     }
 
-    public function createnotification()
+    public function createnotification(Request $request)
     {
         return view('hradmin.notifications.createnotification');
     }
 
-    public function viewnotifications()
+    public function viewnotifications(Request $request)
     {
         return view('hradmin.notifications.viewnotifications');
     }
 
-    public function goalsummary()
+    public function goalsummary(Request $request)
     {
         return view('hradmin.statistics.goalsummary');
     }
 
-    public function conversationsummary()
+    public function conversationsummary(Request $request)
     {
         return view('hradmin.statistics.conversationsummary');
     }
 
-    public function sharedsummary()
+    public function sharedsummary(Request $request)
     {
         return view('hradmin.statistics.sharedsummary');
     }
 
-    public function excusedsummary()
+    public function excusedsummary(Request $request)
     {
         return view('hradmin.statistics.excusedsummary');
     }
-
-
-
-
-
 
 
     /**
@@ -230,82 +227,153 @@ class HRadminController extends Controller
     }
 
     public function getOrgLevel0() {
-        $level0 = DB::table('employee_demo')
-        ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key0"), 'organization')
+        $query = DB::table('employee_demo')
+        ->select('organization as key0', 'organization')
         ->where(trim('organization'), '<>', '')
-        ->groupby('organization')
-        ->get('key0', 'organization');
+        ->groupby('organization');
+
+        $level0 = $query->get('key0', 'organization');
         return $level0;
     }
+
+    // public function getOrgLevel0() {
+    //     $level0 = DB::table('employee_demo')
+    //     ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key0"), 'organization')
+    //     ->where(trim('organization'), '<>', '')
+    //     ->groupby('organization')
+    //     ->get('key0', 'organization');
+    //     return $level0;
+    // }
 
     public function getOrgLevel1($id0) {
         if ($id0 == 'all') {
             $level1 = [['key1' => 'all', 'level1_program' => 'All']];
-            $level2 = [['key2' => 'all', 'level2_division' => 'All']];
-            $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
-            $level4 = [['key4' => 'all', 'level4' => 'All']];
         }else{
-            $level1 = DB::table('employee_demo')
-            ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key1"), 'level1_program')
+            $query = DB::table('employee_demo')
+            ->select('level1_program as key1', 'level1_program')
             ->where(trim('level1_program'), '<>', '')
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
-            ->groupby('level1_program')
-            ->pluck('level1_program', 'key1');
+            ->where('organization', $id0);
+            $level1 = $query->groupby('level1_program')->pluck('level1_program', 'key1');
         };
         return $level1;
     }
 
+    // public function getOrgLevel1($id0) {
+    //     if ($id0 == 'all') {
+    //         $level1 = [['key1' => 'all', 'level1_program' => 'All']];
+    //         $level2 = [['key2' => 'all', 'level2_division' => 'All']];
+    //         $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
+    //         $level4 = [['key4' => 'all', 'level4' => 'All']];
+    //     }else{
+    //         $level1 = DB::table('employee_demo')
+    //         ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key1"), 'level1_program')
+    //         ->where(trim('level1_program'), '<>', '')
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
+    //         ->groupby('level1_program')
+    //         ->pluck('level1_program', 'key1');
+    //     };
+    //     return $level1;
+    // }
+
     public function getOrgLevel2($id0, $id1) {
         if ($id1 == 'all') {
             $level2 = [['key2' => 'all', 'level2_division' => 'All']];
-            $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
-            $level4 = [['key4' => 'all', 'level4' => 'All']];
         }else{
-            $level2 = DB::table('employee_demo')
-            ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key2"), 'level2_division')
+            $query = DB::table('employee_demo')
+            ->select("level2_division as key2", 'level2_division')
             ->where(trim('level2_division'), '<>', '')
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
-            ->groupby('level2_division')
-            ->pluck('level2_division', 'key2');
+            ->where('organization', $id0)
+            ->where('level1_program', $id1)
+            ->groupby('level2_division');
+            $level2 = $query->pluck('level2_division', 'key2');
         };
-        return json_encode($level2);
+        return $level2;
     }
+
+    // public function getOrgLevel2($id0, $id1) {
+    //     if ($id1 == 'all') {
+    //         $level2 = [['key2' => 'all', 'level2_division' => 'All']];
+    //         $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
+    //         $level4 = [['key4' => 'all', 'level4' => 'All']];
+    //     }else{
+    //         $level2 = DB::table('employee_demo')
+    //         ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key2"), 'level2_division')
+    //         ->where(trim('level2_division'), '<>', '')
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
+    //         ->groupby('level2_division')
+    //         ->pluck('level2_division', 'key2');
+    //     };
+    //     return json_encode($level2);
+    // }
 
 
     public function getOrgLevel3($id0, $id1, $id2) {
         if ($id2 == 'all') {
             $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
-            $level4 = [['key4' => 'all', 'level4' => 'All']];
         }else{
-            $level3 = DB::table('employee_demo')
-            ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level3_branch, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key3"), 'level3_branch')
+            $query = DB::table('employee_demo')
+            ->select("level3_branch as key3", 'level3_branch')
             ->where(trim('level3_branch'), '<>', '')
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id2)
-            ->groupby('level3_branch')
-            ->pluck('level3_branch', 'key3');
+            ->where('organization', $id0)
+            ->where('level1_program', $id1)
+            ->where('level2_division', $id2)
+            ->groupby('level3_branch');
+            $level3 = $query->pluck('level3_branch', 'key3');
         };
-        return json_encode($level3);
+        return $level3;
     }
+
+    // public function getOrgLevel3($id0, $id1, $id2) {
+    //     if ($id2 == 'all') {
+    //         $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
+    //         $level4 = [['key4' => 'all', 'level4' => 'All']];
+    //     }else{
+    //         $level3 = DB::table('employee_demo')
+    //         ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level3_branch, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key3"), 'level3_branch')
+    //         ->where(trim('level3_branch'), '<>', '')
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id2)
+    //         ->groupby('level3_branch')
+    //         ->pluck('level3_branch', 'key3');
+    //     };
+    //     return json_encode($level3);
+    // }
 
     public function getOrgLevel4($id0, $id1, $id2, $id3) {
         if ($id3 == 'all') {
             $level4 = [['key4' => 'all', 'level4' => 'All']];
         }else{
-            $level4 = DB::table('employee_demo')
-            ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level4, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key4"), 'level4')
+            $query = DB::table('employee_demo')
+            ->select("level4 as key4", 'level4')
             ->where(trim('level4'), '<>', '')
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id2)
-            ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level3_branch, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id3)
-            ->groupby('level4')
-            ->pluck('level4', 'key4');
-        };
-        return json_encode($level4);
+            ->where('organization', $id0)
+            ->where('level1_program', $id1)
+            ->where('level2_division', $id2)
+            ->where('level3_branch', $id3)
+            ->groupby('level4');
+            $level4 = $query->pluck('level4', 'key4');
+    };
+        return $level4;
     }
+
+    // public function getOrgLevel4($id0, $id1, $id2, $id3) {
+    //     if ($id3 == 'all') {
+    //         $level4 = [['key4' => 'all', 'level4' => 'All']];
+    //     }else{
+    //         $level4 = DB::table('employee_demo')
+    //         ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level4, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key4"), 'level4')
+    //         ->where(trim('level4'), '<>', '')
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id2)
+    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level3_branch, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id3)
+    //         ->groupby('level4')
+    //         ->pluck('level4', 'key4');
+    //     };
+    //     return json_encode($level4);
+    // }
 
     public function getJobTitles() {
         $jobTitles = DB::table('employee_demo')

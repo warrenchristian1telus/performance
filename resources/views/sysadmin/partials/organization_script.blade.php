@@ -169,5 +169,30 @@ jQuery(document).ready(function ()
             dd_level4 = 'all';
         }
     });
+    // $(document).on('click', '#searchBtn', function(e) {
+    //     $("#filter-menu").submit();
+    //     var ddlevel0 = jQuery('select[name="dd_level0"]').val();
+    //     var ddlevel1 = jQuery('select[name="dd_level1"]').val();
+    //     if(ddlevel0 != null && ddlevel0 != 'all'){
+    //         jQuery.ajax({
+    //             url : '/sysadmin/level1/'+ddlevel0,
+    //             type : "GET",
+    //             dataType : "json",
+    //             success:function(data)
+    //             {
+    //                 jQuery('select[name="dd_level1"]').empty();
+    //                 $('select[name="dd_level1"]').append('<option value="all">All</option>');
+    //                 jQuery.each(data, function(key1, level1_program){
+    //                     if (key1 == ddlevel1) {
+    //                         $('select[name="dd_level1"]').append('<option value="'+ key1 +'" selected>'+ level1_program +'</option>');
+    //                     }
+    //                     else {
+    //                         $('select[name="dd_level1"]').append('<option value="'+ key1 +'">'+ level1_program +'</option>');
+    //                     }
+    //                 });
+    //             }
+    //         })
+    //     }
+    // });
 });
 </script>

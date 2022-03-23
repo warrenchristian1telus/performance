@@ -12,8 +12,9 @@
 </div>
 <div>
     <div class="card card-primary shadow mb-3" style="overflow-x: auto;">
-        <div class="d-flex" style="width: 2200px">
-            <form action="" method="get">
+        <div class="d-flex" style="width: 2600px">
+            <form action="" method="get" id="filter-menu">
+                @csrf
                 <table class="uk-table m-3">
                     <tbody>
                         @include('sysadmin.partials.organization_filter')
@@ -37,7 +38,7 @@
                                 </label>
                             </td>
                             <td style="text-align: left; width: 200px; " class"p-2 form-group">
-                                <button class="btn btn-primary mt-4 px-5" name="searchBtn" id="searchBtn">Search</button>
+                                <button class="btn btn-primary mt-4 px-5" name="searchBtn2" id="searchBtn2">Filter</button>
                             </td>
                         </tr>
                     </tbody>
@@ -45,13 +46,14 @@
             </form>
         </div>
         <div id="collapseOne" class="collapse {{$iEmpl ? 'show' : ''}}" aria-labelledby="headingOne" data-parent="#accordionLibrary">
-            <div class="table table-wrapper" style="width: 2200px">
+            <div class="table table-wrapper" style="width: 2600px">
                 <div class="md-card-content" style="overflow-x: auto;">
                     <table class="uk-table m-3">
                         <thead>
                             <tr>
                                 <th style="text-align: left; width: 300px; "> Employee Name</th>
                                 <th style="text-align: left; width: 300px; "> Job Title</th>
+                                <th style="text-align: left; width: 400px; "> Organization</th>
                                 <th style="text-align: left; width: 400px; "> Organization Level 1</th>
                                 <th style="text-align: left; width: 400px; "> Organization Level 2</th>
                                 <th style="text-align: left; width: 400px; "> Organization Level 3</th>
@@ -66,6 +68,9 @@
                                 </td>
                                 <td style="text-align: left; width: 300px; ">
                                     <a href='# class="edit-goal-detail highlighter" data-id="{{$o->guid}}'>{{ $o->job_title }}</a>
+                                </td>
+                                <td style="text-align: left; width: 400px; ">
+                                    <a href='# class="edit-goal-detail highlighter" data-id="{{$o->guid}}'>{{ $o->organization }}</a>
                                 </td>
                                 <td style="text-align: left; width: 400px; ">
                                     <a href='# class="edit-goal-detail highlighter" data-id="{{$o->guid}}'>{{ $o->level1_program }}</a>
@@ -99,12 +104,16 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
-    $('#filter-menu select, #filter-menu input').change(function () {
-        $("#filter-menu").submit();
-    });
+    // $(document).on('click', '#searchBtn', function(e) {
+    //     $("#filter-menu").submit();
+    // });
+    // $('#filter-menu select, #filter-menu input').change(function () {
+    //     $("#filter-menu").submit();
+    // });
 
     $('input[name="activeSince"]').daterangepicker({
-        autoUpdateInput: false,
+        // autoUpdateInput: false,
+        autoUpdateInput: true,
         locale: {
             cancelLabel: 'Any',
             format: 'MMM DD, YYYY'

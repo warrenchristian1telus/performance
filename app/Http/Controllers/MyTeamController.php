@@ -186,7 +186,7 @@ class MyTeamController extends Controller
             }
             // dd((bool)$input['is_shared'][995]);
         }
-        if ($request->ajax()) {
+        if (!$request->ajax()) {
             return redirect()->back();
         }
     }

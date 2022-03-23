@@ -35,7 +35,7 @@
             @endif
             @foreach ($goals as $goal)
 
-                <div class="col-12 col-sm-3">
+                <div class="col-12 col-md-6 col-lg-3">
                     @include('goal.partials.card')
                 </div>
 
@@ -106,12 +106,18 @@
                 </div>
             </div>
         </form>
+        <form action="{{ route('my-team.sync-goals')}}" method="POST" id="share-my-goals-form">
+            @csrf
+            <div class="d-none" id="syncGoalSharingData"></div>
+        </form>
       </div>
 
     </div>
   </div>
 </div>
-
+    @push('css')
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
+    @endpush
 
     <x-slot name="js">
         {{-- {{$dataTable->scripts()}} --}}
@@ -136,7 +142,8 @@
             });
         });
     </script>
-
+    
+    <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
     <script>
     $('body').popover({
         selector: '[data-toggle]',
@@ -245,6 +252,59 @@
         e.preventDefault();
         }
     });
+
+        $(document).ready(() => {
+            $(".search-users").each(function() {
+                const goalId = $(this).data('goal-id');
+                const selectDropdown = this;
+                let valueBeforeChange = [];
+                $(this).multiselect({
+                    allSelectedText: 'All Team Members',
+                    selectAllText: 'All Team Members',
+                    nonSelectedText: 'No one',
+                    includeSelectAllOption: true,
+                    onDropdownShow: function () {
+                        valueBeforeChange = [...selectDropdown.options].filter(option => option.selected).map(option => option.value);
+                    },
+                    onDropdownHide: function () {
+                        const valueAfterChange = [...selectDropdown.options].filter(option => option.selected).map(option => option.value);
+                        let toRevert;
+                        if (valueBeforeChange.length === 0 && valueAfterChange.length !== 0) {
+                            toRevert = !confirm("Sharing this goal will make it visible to the selected employees. Continue?");
+                        }
+
+                        if (valueBeforeChange.length !==0 && valueAfterChange.length === 0) {
+                            toRevert = !confirm("Making this goal private will hide it from all employees. Continue?");
+                        }
+
+                        if (toRevert) {
+                            valueAfterChange.forEach((value) => {
+                                if (!valueBeforeChange.includes(value)) {
+                                    $(selectDropdown).multiselect('deselect', value);
+                                }
+                            });
+                            valueBeforeChange.forEach((value) => {
+                                $(selectDropdown).multiselect('select', value);
+                            });
+                        }
+                        const finalSelectedOptions = [...selectDropdown.options].filter(option => option.selected).map(option => option.value);
+                        document.getElementById("syncGoalSharingData").innerHTML = "";
+                        finalSelectedOptions.forEach((value) => {
+                            const input = document.createElement("input");
+                            input.setAttribute('value', value);
+                            input.name = $(selectDropdown).attr('name');
+                            document.getElementById("syncGoalSharingData").appendChild(input);
+                        });
+                        const input = document.createElement("input");
+                        input.setAttribute('value', finalSelectedOptions.length !== 0 ? "1" : "0");
+                        input.name = "is_shared["+goalId+"]";
+                        document.getElementById("syncGoalSharingData").appendChild(input);
+                        const form = $("#share-my-goals-form").get()[0];
+                        fetch(form.action, {method:'POST', body: new FormData(form)});
+                    }
+                });
+            });
+        });
     </script>
     </x-slot>
 

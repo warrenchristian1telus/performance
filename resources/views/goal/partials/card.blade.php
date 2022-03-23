@@ -41,6 +41,9 @@
           </div>
         @endif
         <div class="card-footer d-flex align-items-center">
+            @if(Auth::user()->reporteesCount() > 0 && request()->is('goal/current'))
+                @include('goal.partials.goal-share-with-dropdown')
+            @endif
             <div class="flex-fill"></div>
 
             @if(($cardDesign ?? 'default') === 'default')

@@ -9,6 +9,7 @@
     <div class="d-flex mt-3">
         <h4></h4>
         <div class="px-1">
+            {{-- 
             <form action="{{ route('generic-template.index') }}" class="form-inline" method="get">
                 <div class="form-group mx-sm-3 mb-2">
                   <input style="width: 18em;" type="text" class="form-control" name="q" placeholder="name or description" 
@@ -16,6 +17,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">Search</button>
               </form>
+             --}}
 
         </div>    
         <div class="flex-fill"></div>

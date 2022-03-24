@@ -36,7 +36,7 @@ class GenericTemplateController extends Controller
         }   
 
         // load the view and pass the sharks
-        return view('admin.generictemplate.index', compact('generic_templates','search'));
+        return view('hradmin.notifications.generic-template.index', compact('generic_templates','search'));
 
     }
 
@@ -48,7 +48,7 @@ class GenericTemplateController extends Controller
     public function create()
     {
         //
-        return view('admin.generictemplate.create');
+        return view('hradmin.notifications.generic-template.create');
     }
 
     /**
@@ -184,7 +184,7 @@ class GenericTemplateController extends Controller
         $generic_template = GenericTemplate::find($id);
 
         // show the view and pass the campaign year to it
-        return view('admin.generictemplate.show', compact('generic_template'));
+        return view('hradmin.notifications.generic-template.show', compact('generic_template'));
     }
 
     /**
@@ -209,7 +209,7 @@ class GenericTemplateController extends Controller
         $generic_template->load('binds');
 
         // show the view and pass the campaign year to it
-        return view('admin.generictemplate.edit', compact('generic_template'));
+        return view('hradmin.notifications.generic-template.edit', compact('generic_template'));
          
     }
 

@@ -53,10 +53,11 @@ class SendMail
         $this->saveToSentItems = true;
         $this->saveToLog = true;
 
-        $this->SendToTestEmail = "jpoon@extest.gov.bc.ca";
+        $this->SendToTestEmail = "travis.clark@gov.bc.ca";
+        
 
-        $this->alertType = 'Notification';
-        $this->alertFormat = 'E-mail'; 
+        $this->alertType = 'N';  /* Notification */
+        $this->alertFormat = 'E';   /* E = E-mail, A = In App */
     }
 
     public function send() 
@@ -173,14 +174,22 @@ class SendMail
         }
 
         if (!App::environment(['production'])) {
+
+            if (App::environment(['local'])) {
+                $this->SendToTestEmail = "jpoon@extest.gov.bc.ca";
+            }
+            
+            $sender = User::where('id', $this->sender_id)->first();
+
             /* Override sender and recipients */
-            $this->body = "<h3>NOTE: This is a test message and here is the content:</h3>".      
+            $this->body = "<h4>Note: The following message is the content was sent out from Performance application (Region: ". App::environment() .")</h4>".      
                           "<hr>".
+                          "<p><b>From: </b>". $sender->email . "</p>".
                           "<p><b>To: </b>". implode('; ', $emailAddresses->toArray() ). "</p>".
                           "<p><b>Subject: </b>" . $this->subject . "</p>".
                           "<p><b>Body : </b>" . $this->body . "</p>".
                           "<hr>";
-            $this->subject = "[*TESTING*] ".$this->subject;
+            $this->subject = "Performance Application -- message sent out from (Region: ". App::environment() .") ";
             $attendees = [ 
                 [
                     'emailAddress' => [

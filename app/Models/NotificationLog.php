@@ -22,10 +22,55 @@ class NotificationLog extends Model
         'date_sent',
     ];
 
+    public const ALERT_FORMAT = 
+    [
+        "E" => "E-mail",
+        "A" => "In app",
+    ];
+
+    public const ALERT_TYPE = 
+    [
+        "N" => "Notification",
+    ];
+
 
     public function recipients() {
         return $this->hasMany('App\Models\NotificationLogRecipient', 'notification_log_id');
     }
+
+    public function recipientNames() {
+
+        $userIds = $this->recipients()->pluck('recipient_id')->toArray();
+        $users = User::whereIn('id', $userIds)->pluck('name');
+        return implode('; ', $users->toArray() );
+
+    }
+
+    public function sender() {
+
+        return $this->belongsTo('App\Models\User')->select('name', 'id', 'email');        
+
+    }
+
+    public function template() {
+
+        return $this->belongsTo('App\Models\GenericTemplate')->select('template', 'id');        
+        
+    }
+
+    public function alert_type_name() {
+        
+        return array_key_exists($this->alert_type, self::ALERT_TYPE) ? self::ALERT_TYPE[$this->alert_type] : '';
+
+    }
+
+    public function alert_format_name() {
+        
+        return array_key_exists($this->alert_format, self::ALERT_FORMAT) ? self::ALERT_FORMAT[$this->alert_format] : '';
+
+    }
+
+
 
 }
 

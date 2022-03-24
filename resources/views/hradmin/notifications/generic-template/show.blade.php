@@ -3,6 +3,7 @@
         <h2 class="font-semibold text-xl text-primary leading-tight" role="banner">
             Generic Templates
         </h2> 
+        @include('hradmin.notifications.partials.tabs')
     </x-slot>
 
 <div class="card">

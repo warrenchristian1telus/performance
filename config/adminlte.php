@@ -299,7 +299,7 @@ return [
                 ],
                 [
                     'text' => 'Notifications',
-                    'url'  => 'hradmin/notifications/createnotification',
+                    'url'  => 'hradmin/notifications',
                     'active' => ['hradmin/notifications/*']
                 ],
                 [

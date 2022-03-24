@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\HRadminController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HRadminController;
+use App\Http\Controllers\GenericTemplateController;
+use App\Http\Controllers\HRAdmin\NotificationController;
 
 
 Route::get('hradmin/myorg', [HRadminController::class, 'myorg'])->name('hradmin.myorg');
@@ -15,8 +17,19 @@ Route::get('hradmin/goals/managegoals', [HRadminController::class, 'managegoals'
 Route::get('hradmin/goals/goal-edit/{id}', [HRadminController::class, 'goaledit'])->name('hradmin.goal-edit');
 Route::post('hradmin/goals/goaladd', [HRadminController::class, 'goaladd'])->name('hradmin.goaladd');
 Route::post('hradmin/goals/goalupdate/{id}', [HRadminController::class, 'goalupdate'])->name('hradmin.goalupdate');
-Route::get('hradmin/notifications/createnotification', [HRadminController::class, 'createnotification'])->name('hradmin.createnotification');
-Route::get('hradmin/notifications/viewnotifications', [HRadminController::class, 'viewnotifications'])->name('hradmin.viewnotifications');
+
+//Route::get('hradmin/notifications/createnotification', [HRadminController::class, 'createnotification'])->name('hradmin.createnotification');
+//Route::get('hradmin/notifications/viewnotifications', [HRadminController::class, 'viewnotifications'])->name('hradmin.viewnotifications');
+Route::group(['middleware' => ['auth']], function() {    
+    Route::get('hradmin/notifications', [NotificationController::class, 'index'])->name('hradmin.notifications');
+    Route::get('hradmin/notifications/detail/{notification_id}', [NotificationController::class, 'show']);
+    Route::get('hradmin/notifications/notify', [NotificationController::class, 'notify'])->name('hradmin.notifications.notify');
+    Route::post('hradmin/notifications/notify', [NotificationController::class, 'send'])->name('hradmin.notifications.send');
+    Route::get('hradmin/notifications/users', [NotificationController::class, 'getUsers'])->name('hradmin.notifications.users.list');
+    Route::resource('hradmin/notifications/generic-template', GenericTemplateController::class)->except(['destroy']);
+    Route::get('graph-users', [GenericTemplateController::class,'getUsers']);
+});
+
 Route::get('hradmin/statistics/goalsummary', [HRadminController::class, 'goalsummary'])->name('hradmin.goalsummary');
 Route::get('hradmin/statistics/conversationsummary', [HRadminController::class, 'conversationsummary'])->name('hradmin.conversationsummary');
 Route::get('hradmin/statistics/sharedsummary', [HRadminController::class, 'sharedsummary'])->name('hradmin.sharedsummary');

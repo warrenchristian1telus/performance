@@ -221,7 +221,11 @@ class SyncUserProfile extends Command
             if ($user) {
                 return $user->id;
             } else {
-
+                $text = 'Supervisor Not found - ' . $employee->supervisor_emplid . ' | employee -' .
+                    $employee->employee_id;
+                $this->info( 'exception ' . $text );
+                
+/*
                 $reportingToUser = User::create([
                     'name' => $supervisor->employee_first_name . ' ' . $supervisor->employee_last_name,
                     'email' => (trim($supervisor->employee_email)) ? $supervisor->employee_email : $supervisor->employee_id,
@@ -231,7 +235,7 @@ class SyncUserProfile extends Command
                 ]);
 
                 return $reportingToUser->id;
-
+*/
             }
         }
 

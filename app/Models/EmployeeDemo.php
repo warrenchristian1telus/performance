@@ -13,7 +13,9 @@ class EmployeeDemo extends Model
 
     use HasFactory;
 
-    protected $primaryKey = ['guid'];
+    //protected $primaryKey = ['guid'];
+    protected $primaryKey = ['employee_id','empl_record'];
+
     public $incrementing = false;
 
     protected $fillable = [

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\HRAdmin;
 
 use App\Models\User;
+use App\Jobs\SendEmailJob;
 use App\Models\EmployeeDemo;
 use Illuminate\Http\Request;
 use App\Models\NotificationLog;
@@ -138,23 +139,35 @@ class NotificationController extends Controller
         //run validation which will redirect on failure
         $validator->validate();
 
-         // Send a notification to all participants that you would like to schedule a conversation 
-         //$toAddresses = User::whereIn('id', $request->recipients)->pluck('email');
-         $current_user = User::find(Auth::id());
+        // Send a notification to all participants that you would like to schedule a conversation 
+        //$toAddresses = User::whereIn('id', $request->recipients)->pluck('email');
+        $current_user = User::find(Auth::id());
 
-         $sendMail = new \App\MicrosoftGraph\SendMail();
-         //$sendMail->toAddresses = $request->recipients;
-         $sendMail->toRecipients = $request->recipients;
-         $sendMail->sender_id = $request->sender_id;
-         $sendMail->subject = $request->subject;
-         $sendMail->body = $request->body;
-         $sendMail->alert_format = $request->alert_format;
-         $response = $sendMail->sendMailWithoutGenericTemplate();
+        // Method 1: Real-Time
+        // $sendMail = new \App\MicrosoftGraph\SendMail();
+        // $sendMail->toRecipients = $request->recipients;
+        // $sendMail->sender_id = $request->sender_id;
+        // $sendMail->subject = $request->subject;
+        // $sendMail->body = $request->body;
+        // $sendMail->alertFormat = $request->alert_format;
+        // $response = $sendMail->sendMailWithoutGenericTemplate();
+        // if ($response->getStatus() == 202) {
+        //     return redirect()->route('hradmin.notifications.notify')
+        //         ->with('success','Email with subject "' . $request->subject  . '" was successfully sent.');
+        // }
 
-        if ($response->getStatus() == 202) {
-            return redirect()->route('hradmin.notifications.notify')
-                ->with('success','Email with subject "' . $request->subject  . '" was successfully sent.');
-        }
+        // Method 2: Using Queue
+        $sendEmailJob = new SendEmailJob();
+        $sendEmailJob->toRecipients = $request->recipients;
+        $sendEmailJob->sender_id = $request->sender_id;
+        $sendEmailJob->subject = $request->subject;
+        $sendEmailJob->body = $request->body;
+        $sendEmailJob->alertFormat = $request->alert_format;
+        dispatch($sendEmailJob);
+
+        return redirect()->route('hradmin.notifications.notify')
+            ->with('success','Job for sending email with subject "' . $request->subject  . '" was successfully dispatched.');
+    
 
     }
 

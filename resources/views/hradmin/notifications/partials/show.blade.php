@@ -5,14 +5,13 @@
         <div class="col col-sm-8 font-weight-bold">{{ $notificationLog->subject }}</div>
     </div>
     <div class="row mt-2">
-        <div class="col col-sm-2">Recipients</div>
-        <div class="col col-sm-8 font-weight-bold">{{ $notificationLog->recipientNames() }}</div>
-    </div>
-    <div class="row mt-2">
         <div class="col col-sm-2">Sender:</div>
         <div class="col col-sm-8 font-weight-bold">{{ $notificationLog->sender->name }}</div>
     </div>
-
+    <div class="row mt-2">
+        <div class="col col-sm-2">Recipients</div>
+        <div class="col col-sm-8 font-weight-bold">{{ $notificationLog->recipientNames() }}</div>
+    </div>
     <div class="row mt-2">
         <div class="col col-sm-2">Body:</div>
         <div class="col col-sm-8 font-weight-bold">

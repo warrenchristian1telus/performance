@@ -43,6 +43,8 @@ class SendMail
 
     // Private property
     private $generic_template;  
+    private $default_email_prod_region;  // Azure - principle name 
+    private $default_email_test_region;  // Azure - principle name 
 
     public function __construct() 
     {
@@ -58,65 +60,10 @@ class SendMail
 
         $this->alertType = 'N';  /* Notification */
         $this->alertFormat = 'E';   /* E = E-mail, A = In App */
-    }
 
-    public function send() 
-    {
-
-        // Get the access token from the cache
-        $tokenCache = new TokenCache();
-        $accessToken = $tokenCache->getAccessToken();
-
-        // Create a Graph client
-        $graph = new Graph();
-        $graph->setAccessToken($accessToken);
-
-        $attendees = [];
-        foreach ($this->toAddresses as $toAddress) {
-            array_push($attendees, [
-                // Add the email address in the emailAddress property
-                'emailAddress' => [
-                    'address' => $toAddress,
-                ],
-            ]);
-        }
-
-        // Build message
-        $newMessage = [
-            "message" => [
-                "subject" => $this->subject,
-                "body" => [
-                    "contentType" => $this->bodyContentType,
-                    "content" => $this->body,
-                ],
-                'toRecipients' => $attendees
-            ],
-            "saveToSentItems" => $this->saveToSentItems ? "true" : "false",
-        ];
-
-        //  User - API https://graph.microsoft.com/v1.0/me/sendMail
-        $sendMailUrl = '/me/sendMail';
-        $response = $graph->createRequest('POST', $sendMailUrl)
-            ->addHeaders(['Prefer' => 'outlook.timezone="Pacific Standard Time"'])
-            ->attachBody($newMessage)
-            ->execute();
-
-        if ($this->saveToLog) {
-        // Insert Aduit log
-            $log = NotificationLog::Create([  
-                'recipients' => $this->subject,
-                'subject' => $this->subject,
-                'description' => $this->body,
-                'alert_type' => 'Notfication',
-                'alert_format' => 'E-mail',
-                'sender_id' => Auth::id(),
-                // 'template_id' ,
-                'status' => $response->getStatus(), 
-                'date_sent' => now(),
-            ]);
-        }   
-
-        return $response;
+        // Default Principle Name 
+        $this->default_email_prod_region = "travis.clark@gov.bc.ca";
+        $this->default_email_test_region = "HRadministror1@extest.gov.bc.ca";
 
     }
 
@@ -213,8 +160,22 @@ class SendMail
         ];
 
         $sender = User::where('id', $this->sender_id)->first();
+        
+        // Local user without Sender ID
+        if ($sender->azure_id) {
+            $graph_azure_id = $sender->azure_id;
+        } else {
+            if (App::environment(['production'])) {
+                $graph_azure_id = $this->default_email_prod_region;  // should be the generic one
+            } else if (App::environment(['local'])) {
+                $graph_azure_id = $this->default_email_test_region;
+            } else {
+                $graph_azure_id = $this->default_email_test_region;
+            }
+        }
+
+        $sendMailUrl = '/users/' . $graph_azure_id . '/sendMail';
         //  User - API https://graph.microsoft.com/v1.0/users/{id}/sendMail
-        $sendMailUrl = '/users/' . $sender->azure_id . '/sendMail';
         $response = $graph->createRequest('POST', $sendMailUrl)
             ->addHeaders(['Prefer' => 'outlook.timezone="Pacific Standard Time"'])
             ->attachBody($newMessage)
@@ -224,7 +185,7 @@ class SendMail
 
             // Insert Notification log
             $notification_log = NotificationLog::Create([  
-                //'recipients' => implode('|', $this->toRecipients),
+                'recipients' => (App::environment(['local'])) ? $this->SendToTestEmail : null,
                 'sender_id' => $this->sender_id,
                 'subject' => $this->subject,
                 'description' => $this->body,
@@ -242,7 +203,7 @@ class SendMail
                 ]);
             }
 
-        }   
+       }   
         
         return $response;
 

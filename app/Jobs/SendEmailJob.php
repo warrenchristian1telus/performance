@@ -14,14 +14,28 @@ class SendEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $toAddresses;
-    public $sender_id;
+    public $toRecipients;       /* array of user id */
+    public $sender_id;          /* user id (Model: User) */
+
+    public $subject;            /* String */
+    public $body;               /* String */
+    public $bodyContentType;    /* text or html, default is 'html' */
 
     // Generic Template 
-    public $template;
-    public $bindvariables;
+    public $template;           /* String - name of the template */
+    public $bindvariables;      
 
+    // Option 
+    public $importance;         /* low, normal, and high. */
+    public $saveToSentItems;    /* Boolean -- true or false */
 
+    // Audit Log related
+    public $saveToLog;          /* Boolean -- true or false */
+    public $alertType;
+    public $alertFormat;
+    
+    // Default email for Testing purpose (sent any email to this email)
+    public $SendToTestAccount;  /* jpoon@extest.gov.bc.ca */
 
     /**
      * Create a new job instance.
@@ -33,6 +47,11 @@ class SendEmailJob implements ShouldQueue
         //
         $this->toRecipients = [];
         $this->bindvariables = [];
+
+        $this->saveToLog = true;
+
+        $this->alertType = 'N';  /* Notification */
+        $this->alertFormat = 'E';   /* E = E-mail, A = In App */
     }
 
     /**
@@ -44,11 +63,21 @@ class SendEmailJob implements ShouldQueue
     {
         //
         $sendMail = new SendMail();
-        //$sendMail->toAddresses = $this->toAddresses;
         $sendMail->toRecipients = $this->toRecipients;
         $sendMail->sender_id = $this->sender_id;
-        $sendMail->template = $this->template;
-        $sendMail->bindvariables = $this->bindvariables;
-        $response = $sendMail->sendMailWithGenericTemplate();
+        $sendMail->subject = $this->subject;
+        $sendMail->body = $this->body;
+        $sendMail->saveToLog = $this->saveToLog;
+        $sendMail->alertFormat = $this->alertFormat;
+        $sendMail->alertType = $this->alertType;
+
+        if ($this->template) {
+            $sendMail->template = $this->template;
+            $sendMail->bindvariables = $this->bindvariables;
+    
+            $response = $sendMail->sendMailWithGenericTemplate();
+        } else {
+            $response = $sendMail->sendMailWithoutGenericTemplate();
+        }
     }
 }

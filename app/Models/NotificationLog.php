@@ -11,7 +11,7 @@ class NotificationLog extends Model
 
     protected $fillable = [
         'sender_id', 
-        //'recipients',
+        'recipients',    /* has value assign only when this is send in the lower region with test account */
         'subject',
         'description',
         'alert_type',

@@ -484,32 +484,16 @@ class GoalController extends Controller
             }
 
             // notify the employee when my supervisor reply my comment
-            if ($curr_user->azure_id) {
-                if (session()->get('original-auth-id') == $goal->user->reporting_to) {
-
-                    // Real-Time
-                    $sendMail = new SendMail();
-                    //$sendMail->toAddresses = [ $goal->user->email ];
-                    $sendMail->toRecipients = array($goal->user->id);  
-                    $sendMail->sender_id = $curr_user->id;
-                    $sendMail->template = 'SUPERVISOR_COMMENT_MY_GOAL';
-                    array_push($sendMail->bindvariables, $goal->user->name);
-                    array_push($sendMail->bindvariables, $goal->what);
-                    array_push($sendMail->bindvariables, $comment->comment);
-                    $response = $sendMail->sendMailWithGenericTemplate();
-
-                    // Using Queue
-                    // $sendEmailJob = new SendEmailJob();
-                    // $sendEmailJob->toAddresses = [ $goal->user->email ];
-                    // $sendEmailJob->sender_id = $curr_user->azure_id;
-                    // $sendEmailJob->template = 'SUPERVISOR_COMMENT_MY_GOAL';
-                    // array_push($sendEmailJob->bindvariables, $goal->user->name);
-                    // array_push($sendEmailJob->bindvariables, $goal->what);
-                    // array_push($sendEmailJob->bindvariables, $comment->comment);
-
-                    // dispatch($sendEmailJob);
-
-                }
+            if (($curr_user->reporting_to == $goal->user_id) and ($goal->user_id != Auth::id())) {
+                // Real-Time
+                $sendMail = new SendMail();
+                $sendMail->toRecipients = array($goal->user->id);  
+                $sendMail->sender_id = $curr_user->id;
+                $sendMail->template = 'SUPERVISOR_COMMENT_MY_GOAL';
+                array_push($sendMail->bindvariables, $goal->user->name);
+                array_push($sendMail->bindvariables, $goal->what);
+                array_push($sendMail->bindvariables, $comment->comment);
+                $response = $sendMail->sendMailWithGenericTemplate();
             }
         }
         return redirect()->back();

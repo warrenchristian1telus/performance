@@ -19,7 +19,7 @@
  </div>
 @endif
 
-<form action="{{ route('hradmin.notifications.notify') }}" method="post">
+<form action="{{ route('hradmin.notifications.send') }}" method="post">
 	@csrf
 
 <h6 class="text-bold">Step 1. Select employees to notify</h6>
@@ -47,6 +47,8 @@
 	</div>    
 </div>   
 
+
+@include('hradmin.notifications.partials.recipient-test')
 
 
 

@@ -135,8 +135,8 @@ class ConversationController extends Controller
         if ($type === 'past') {
             $textAboveFilter = 'Below are all completed conversations between you and your supervisor, and you and your direct reports. Use the filters to search for conversations by employee
             name, conversation type, and completion date range. Conversations marked with an "unlocked" icon are still within the two-week window of time that allows for any
-            additional content edits by either conversation participant. Conversations marked with a locked icon nave passed the two-week window of time to allow for any
-            additonal content edits by either conversation participant. If you need to unlock the conversation, contact vour system administrator.';
+            additional content edits by either conversation participant. Conversations marked with a locked icon have passed the two-week window of time to allow for any
+            additonal content edits by either conversation participant. If you need to unlock the conversation, contact your system administrator.';
         } else {
             $textAboveFilter = 'Below are all open conversations between you and your supervisor, and you and your direct reports. Use the filters to search for open conversations by employe name and conversation type. Conversations marked with an "unlocked" icon have been unlocked because of a special request made to your system administrator.';
         }

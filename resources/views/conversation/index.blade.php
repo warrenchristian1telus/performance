@@ -18,12 +18,12 @@
         <div class="row">
             <div class="col-12 pb-3">
                 {{ $textAboveFilter ?? ''}}
+                @include('my-team.partials.conversation-filters')
             </div>
-            @include('my-team.partials.conversation-filters')
             @if ($type == 'upcoming')
-            <b class="p-2">Conversation with My Supervisor</b>
+            <b class="p-2">Conversations with My Supervisor</b>
             
-            @foreach ($conversations as $c)
+            @forelse ($conversations as $c)
             <div class="col-12 col-md-12">
                 <div class="d-flex callout callout-info">
                     <div class="flex-fill btn-view-conversation"  style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
@@ -47,10 +47,14 @@
                     </div>
                 </div>
             </div>
-            @endforeach
+            @empty
+                <div class="col-12 text-center">
+                    No Conversations
+                </div>
+            @endforelse
             @if(Auth::user()->hasSupervisorRole())
-            <b class="p-2">Conversation with My Team</b>
-            @foreach ($myTeamConversations as $c)
+            <b class="p-2">Conversations with My Team</b>
+            @forelse ($myTeamConversations as $c)
             <div class="col-12 col-md-12">
                 <div class="d-flex callout callout-info">
                     <div class="flex-fill btn-view-conversation"  style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
@@ -74,12 +78,16 @@
                     </div>
                 </div>
             </div>
-            @endforeach
+            @empty
+                <div class="col-12 text-center">
+                    No Conversations
+                </div>
+            @endforelse
             @endif
           @else
-            <b class="p-2">Conversation with My Supervisor</b>
+            <b class="p-2">Conversations with My Supervisor</b>
             
-            @foreach ($conversations as $c)
+            @forelse ($conversations as $c)
             <div class="col-12 col-md-12">
                 <div class="d-flex callout callout-info">
                     <div class="flex-fill btn-view-conversation"  style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
@@ -104,10 +112,14 @@
                     </div>
                 </div>
             </div>
-            @endforeach
+            @empty
+                <div class="col-12 text-center">
+                    No Conversations
+                </div>
+            @endforelse
             @if(Auth::user()->hasSupervisorRole())
-            <b class="p-2">Conversation with My Team</b>
-            @foreach ($myTeamConversations as $c)
+            <b class="p-2">Conversations with My Team</b>
+            @forelse ($myTeamConversations as $c)
             <div class="col-12 col-md-12">
                 <div class="d-flex callout callout-info">
                     <div class="flex-fill btn-view-conversation"  style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
@@ -132,7 +144,11 @@
                     </div>
                 </div>
             </div>
-            @endforeach
+            @empty
+                <div class="col-12 text-center">
+                    No Conversations
+                </div>
+            @endforelse
             @endif
             @endif
         </div>

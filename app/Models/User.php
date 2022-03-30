@@ -147,6 +147,10 @@ class User extends Authenticatable
         return $this->reportees()->count();
     }
 
+    public function hasSupervisorRole() {
+        return $this->reportees()->count() > 0;
+    }
+
     public function canBeSeenBy($id) {
         if (!$this->reportingManager)
             return false;

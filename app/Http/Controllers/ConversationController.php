@@ -45,18 +45,7 @@ class ConversationController extends Controller
                         return $query;
                     });
             })->whereNotNull('signoff_user_id')->whereNotNull('supervisor_signoff_id');
-            if ($viewType === 'my-team') {
-                $query->where('user_id', '<>', $supervisorId);
-            }
-            else {
-                $query->where(function($query) use ($supervisorId) {
-                    $query->where('user_id', $supervisorId)->
-                    orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
-                        $query->where('participant_id', $supervisorId);
-                    });
-                });
-            }
-            $type = 'past';
+
             if ($request->has('user_id') && $request->user_id) {
                 $user_id = $request->user_id;
                 $query->where(function($query) use($user_id) {
@@ -77,9 +66,23 @@ class ConversationController extends Controller
             if ($request->has('end_date') && $request->end_date) {
                 $query->whereRaw("IF(`sign_off_time` > `supervisor_signoff_time`, `sign_off_time`, `supervisor_signoff_time`) <= '$request->end_date'");
             }
-            $conversations = $query->orderBy('date', 'asc')->paginate(10);
+            $myTeamQuery = clone $query;
 
-        } else {
+            // With My Team
+            $myTeamQuery->where('user_id', '<>', $supervisorId);
+            // With my Supervisor
+            $query->where(function($query) use ($supervisorId) {
+                $query->where('user_id', $supervisorId)->
+                orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
+                    $query->where('participant_id', $supervisorId);
+                });
+            });
+            $type = 'past';
+
+            $conversations = $query->orderBy('date', 'asc')->paginate(10);
+            $myTeamConversations = $myTeamQuery->orderBy('date', 'asc')->paginate(10);
+
+        } else { // Upcoming
             $conversations = $query->where(function($query) use ($authId, $supervisorId, $viewType) {
                 $query->where('user_id', $authId)->
                     orWhereHas('conversationParticipants', function($query) use ($authId, $supervisorId, $viewType) {
@@ -89,33 +92,55 @@ class ConversationController extends Controller
                 $query->whereNull('signoff_user_id')
                     ->orWhereNull('supervisor_signoff_id');
             });
-            if ($viewType === 'my-team') {
-                $query->where(function ($query) use($supervisorId) {
-                    $query->whereDoesntHave('conversationParticipants', function ($query) use ($supervisorId) {
-                        $query->where('participant_id', $supervisorId);
-                    });
-                    $query->where('user_id', '<>', $supervisorId);
+            if ($request->has('user_id') && $request->user_id) {
+                $user_id = $request->user_id;
+                $query->where(function($query) use($user_id) {
+                    $query->where('user_id', $user_id)->
+                        orWhereHas('conversationParticipants', function($query) use ($user_id) {
+                            $query->where('participant_id', $user_id);
+                            return $query;
+                        });
                 });
             }
-            else {
-                $query->where(function($query) use ($supervisorId) {
-                    $query->where('user_id', $supervisorId)->
-                    orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
-                        $query->where('participant_id', $supervisorId);
-                    });
-                });
+            if ($request->has('conversation_topic_id') && $request->conversation_topic_id) {
+                $query->where('conversation_topic_id', $request->conversation_topic_id);
             }
+            $myTeamQuery = clone $query;
+
+            // get Conversations with My Team 
+            $myTeamQuery->where(function ($query) use($supervisorId) {
+                $query->whereDoesntHave('conversationParticipants', function ($query) use ($supervisorId) {
+                    $query->where('participant_id', $supervisorId);
+                });
+                $query->where('user_id', '<>', $supervisorId);
+            });
+            
+            // get Conversations with my supervisor
+            $query->where(function($query) use ($supervisorId) {
+                $query->where('user_id', $supervisorId)->
+                orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
+                    $query->where('participant_id', $supervisorId);
+                });
+            });
+            
 
             $conversations = $query->orderBy('date', 'asc')->paginate(10);
+            $myTeamConversations = $myTeamQuery->orderBy('date', 'asc')->paginate(10);
             
         }
 
         $view = 'conversation.index';
-        $reportees = $viewType === 'my-team' ? $user->reportees()->get() : null;
-        $topics = $viewType === 'my-team' ? ConversationTopic::all() : null;
-
-        
-        return view($view, compact('type', 'conversations', 'conversationTopics', 'participants', 'conversationMessage', 'viewType', 'reportees', 'topics'));
+        $reportees = $user->reportees()->get();
+        $topics = ConversationTopic::all();
+        if ($type === 'past') {
+            $textAboveFilter = 'Below are all completed conversations between you and your supervisor, and you and your direct reports. Use the filters to search for conversations by employee
+            name, conversation type, and completion date range. Conversations marked with an "unlocked" icon are still within the two-week window of time that allows for any
+            additional content edits by either conversation participant. Conversations marked with a locked icon nave passed the two-week window of time to allow for any
+            additonal content edits by either conversation participant. If you need to unlock the conversation, contact vour system administrator.';
+        } else {
+            $textAboveFilter = 'Below are all open conversations between you and your supervisor, and you and your direct reports. Use the filters to search for open conversations by employe name and conversation type. Conversations marked with an "unlocked" icon have been unlocked because of a special request made to your system administrator.';
+        }
+        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'participants', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter'));
     }
 
     /**

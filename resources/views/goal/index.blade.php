@@ -35,7 +35,7 @@
             @endif
             @foreach ($goals as $goal)
 
-                <div class="col-12 col-md-6 col-lg-3">
+                <div class="col-12 col-lg-6 col-xl-4">
                     @include('goal.partials.card')
                 </div>
 

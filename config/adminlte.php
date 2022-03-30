@@ -263,12 +263,12 @@ return [
                     'text' => 'Team Goals',
                     'url'  => 'my-team/team-goals/share-my-goals',
                     'active' => ['my-team/team-goals/*']
-                ],
+                ]/* ,
                 [
                     'text' => 'Team Conversations',
                     'url'  => 'my-team/conversations',
                     'active' => ['my-team/conversations/*'],
-                ],
+                ], */
             ]
         ],
         [

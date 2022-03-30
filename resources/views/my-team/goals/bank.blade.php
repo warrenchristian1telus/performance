@@ -8,7 +8,7 @@ Create a goal for your employees to use in their own profile. Goals can be sugge
 </x-button>
 <div class="row">
     @foreach ($suggestedGoals as $goal)
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+    <div class="col-12 col-lg-6 col-xl-4">
         @include('goal.partials.card')
     </div>
     @endforeach

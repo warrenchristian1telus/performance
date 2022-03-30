@@ -61,7 +61,7 @@
 
             @if(!$goal->is_library)
             <div>
-                @if($type ?? '' !== 'supervisor' && !$disableEdit)
+                @if(($type ?? '') !== 'supervisor' && !$disableEdit)
                     @include('goal.partials.status-change')
                 @else
                     <x-goal-status :status="$goal->status"></x-goal-status>

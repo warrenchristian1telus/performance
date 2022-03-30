@@ -14,12 +14,15 @@
         @endif
     </div>
 
-    <div class="mt-4">
+    <div class="mt-2">
         <div class="row">
-            @if($viewType === 'my-team')
-                @include('my-team.partials.conversation-filters')
-            @endif
+            <div class="col-12 pb-3">
+                {{ $textAboveFilter ?? ''}}
+            </div>
+            @include('my-team.partials.conversation-filters')
             @if ($type == 'upcoming')
+            <b class="p-2">Conversation with My Supervisor</b>
+            
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
                 <div class="d-flex callout callout-info">
@@ -45,7 +48,37 @@
                 </div>
             </div>
             @endforeach
+            @if(Auth::user()->hasSupervisorRole())
+            <b class="p-2">Conversation with My Team</b>
+            @foreach ($myTeamConversations as $c)
+            <div class="col-12 col-md-12">
+                <div class="d-flex callout callout-info">
+                    <div class="flex-fill btn-view-conversation"  style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                        <h6>
+                            {{ $c->topic->name }}
+                        </h6>
+                        <span class="mr-2">
+                            With
+                            @foreach ($c->conversationParticipants as $p)
+                                {{$p->participant->name}}&nbsp;
+                            @endforeach
+                        </span>
+                    </div>
+                    <div class="d-flex flex-row-reverse align-items-center">
+                        <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $c->id }}" data-disallowed="{{ (!!$c->signoff_user_id || !!$c->supervisor_signoff_id) ? 'true' : 'false'}}">
+                            <i class="fa-trash fa"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                            View
+                        </button>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+            @endif
           @else
+            <b class="p-2">Conversation with My Supervisor</b>
+            
             @foreach ($conversations as $c)
             <div class="col-12 col-md-12">
                 <div class="d-flex callout callout-info">
@@ -72,7 +105,35 @@
                 </div>
             </div>
             @endforeach
-
+            @if(Auth::user()->hasSupervisorRole())
+            <b class="p-2">Conversation with My Team</b>
+            @foreach ($myTeamConversations as $c)
+            <div class="col-12 col-md-12">
+                <div class="d-flex callout callout-info">
+                    <div class="flex-fill btn-view-conversation"  style="cursor: pointer;" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                        <h6>
+                            {{ $c->topic->name }}
+                        </h6>
+                        <span class="mr-2">
+                            With
+                            @foreach ($c->conversationParticipants as $p)
+                                {{$p->participant->name}}&nbsp;
+                            @endforeach
+                        </span> |
+                        <span class="mx-2">
+                            <i class="fa fa-calendar text-primary mr-2"></i>
+                            {{ $c->last_sign_off_date->format('M d, Y') }}
+                        </span>
+                    </div>
+                    <div class="d-flex flex-row-reverse align-items-center">
+                        <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $c->id }}" data-toggle="modal" data-target="#viewConversationModal">
+                            View
+                        </button>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+            @endif
             @endif
         </div>
         <div class="float-right text-right">

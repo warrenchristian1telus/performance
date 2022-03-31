@@ -158,7 +158,7 @@ class Conversation extends Model
             $nextDueDate = $lastConv->sign_off_time->addMonths(4);
             $diff = Carbon::now()->diffInMonths($lastConv->sign_off_time->addMonths(4), false);
             return [
-                "Your last performance conversation was completed on ".$lastConv->sign_off_time->format('d-M-y').". You must complete your next performance conversation by ". $lastConv->sign_off_time->addMonths(4)->format('d-M-y'),
+                "Your last performance conversation was completed on ".$lastConv->sign_off_time->format('d-M-y').". Your next performance conversation is due by [DATE] ". $lastConv->sign_off_time->addMonths(4)->format('d-M-y'),
                 $diff < 0 ? "danger" : ($diff < 1 ? "warning" : "success")
             ];
         }

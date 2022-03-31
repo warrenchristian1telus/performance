@@ -51,11 +51,10 @@ class MyEmployeesDataTable extends DataTable
                 return view('my-team.partials.conversation', compact(["row", "conversation", 'removeBlankLink']));
             }) */
             ->addColumn('shared', function ($row) {
-                // $yesOrNo = ($row->id % 2 === 0) ? 'Yes' : 'No';
-                return view('my-team.partials.view-btn', compact(["row"])); // $row['id'];
+                $yesOrNo = $row->is_shared ? "Yes" : "No";
+                return view('my-team.partials.view-btn', compact(["row", "yesOrNo"])); // $row['id'];
             })
             ->addColumn('excused', function ($row) {
-                // $yesOrNo = ($row->id % 2 !== 0) ? 'Yes' : 'No';
                 $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
 
                 $excused = json_encode([

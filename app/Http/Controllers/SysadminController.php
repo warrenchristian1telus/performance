@@ -28,62 +28,18 @@ class SysadminController extends Controller
         } else {
             $level0 = $this->getOrgLevel0();
         }
-        $jobTitles = $this->getJobTitles();
+        // $jobTitles = $this->getJobTitles();
 
         $query = DB::table('employee_demo')
-        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4')
+        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4', 'effdt', 'hire_dt')
         ->wherein('employee_status', ['A', 'L', 'P', 'S']);
 
-         // if ($request->has('jobTitles') && $request->jobTitles) {
-         //     $query = $query->where('job_title', $request->jobTitles);
-         // }
-
-         if ($request->has('dd_level0') && $request->dd_level0 && $request->dd_level0 != 'all') {
-             $query = $query->where('organization', $request->dd_level0);
-         }
-
-         if ($request->has('dd_level1') && $request->dd_level1 && $request->dd_level1 != 'all') {
-             $query = $query->where('level1_program', $request->dd_level1);
-         }
-
-         if ($request->has('dd_level2') && $request->dd_level2 && $request->dd_level2 != 'all') {
-             $query = $query->where('level2_division', $request->dd_level2);
-         }
-
-         if ($request->has('dd_level3') && $request->dd_level3 && $request->dd_level3 != 'all') {
-             $query = $query->where('level3_branch', $request->dd_level3);
-         }
-
-         if ($request->has('dd_level4') && $request->dd_level4 && $request->dd_level4 != 'all') {
-             $query = $query->where('level4', $request->dd_level4);
-         }
-
-         // if ($request->has('activeSince') && $request->activeSince && $request->activeSince != 'any') {
-         //     $query = $query->where('activeSince', $request->activeSince);
-         // }
-
-        $iEmpl = $query->orderBy('employee_name')->paginate(10);
-
-        return view('sysadmin.employees.current', compact('level0', 'iEmpl', 'jobTitles', 'request'));
-    }
-
-    public function previous(Request $request)
-    {
-        $level0 = null;
-        if($request->level0) {
-            $level0 = $request->level0;
-        } else {
-            $level0 = $this->getOrgLevel0();
-        }
-        $jobTitles = $this->getJobTitles();
-
-        $query = DB::table('employee_demo')
-        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4')
-        ->wherenotin('employee_status', ['A', 'L', 'P', 'S']);
-
-        // if ($request->has('jobTitles') && $request->jobTitles) {
-        //     $query = $query->where('job_title', $request->jobTitles);
-        // }
+        $jobTitles = DB::table('employee_demo')
+        ->select('job_title as title', 'job_title')
+        ->wherein('employee_status', ['A', 'L', 'P', 'S'])
+        ->where(trim('job_title'), '<>', '')
+        ->groupby('job_title')
+        ->get('title', 'job_title');
 
         if ($request->has('dd_level0') && $request->dd_level0 && $request->dd_level0 != 'all') {
             $query = $query->where('organization', $request->dd_level0);
@@ -105,7 +61,77 @@ class SysadminController extends Controller
             $query = $query->where('level4', $request->dd_level4);
         }
 
-       $iEmpl = $query->orderBy('employee_name')->paginate(10);
+        if ($request->has('jobTitle') && $request->jobTitle && $request->jobTitle != 'all') {
+            $query = $query->where('job_title', $request->jobTitle);
+        }
+
+        if ($request->has('activeSince') && $request->activeSince) {
+            $query = $query->where('hire_dt', '>=', $request->activeSince);
+        }
+
+        if ($request->has('searchText') && $request->searchText) {
+            $query = $query->where(function ($query2) use ($request) {
+                $query2->where('employee_name', 'like', "%" . $request->searchText . "%");
+                $query2->orWhere('job_title', 'like', "%" . $request->searchText . "%");
+                $query2->orWhere('position_title', 'like', "%" . $request->searchText . "%");
+            });
+        }
+
+        $iEmpl = $query->orderBy('employee_name')->paginate(10);
+
+        return view('sysadmin.employees.current', compact('level0', 'iEmpl', 'jobTitles', 'request'));
+    }
+
+    public function previous(Request $request)
+    {
+        $level0 = null;
+        if($request->level0) {
+            $level0 = $request->level0;
+        } else {
+            $level0 = $this->getOrgLevel0();
+        }
+        // $jobTitles = $this->getJobTitles();
+
+        $query = DB::table('employee_demo')
+        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4', 'effdt', 'hire_dt')
+        ->wherenotin('employee_status', ['A', 'L', 'P', 'S']);
+
+        $jobTitles = DB::table('employee_demo')
+        ->select('job_title as title', 'job_title')
+        ->wherenotin('employee_status', ['A', 'L', 'P', 'S'])
+        ->where(trim('job_title'), '<>', '')
+        ->groupby('job_title')
+        ->get('title', 'job_title');
+
+        if ($request->has('dd_level0') && $request->dd_level0 && $request->dd_level0 != 'all') {
+            $query = $query->where('organization', $request->dd_level0);
+        }
+
+        if ($request->has('dd_level1') && $request->dd_level1 && $request->dd_level1 != 'all') {
+            $query = $query->where('level1_program', $request->dd_level1);
+        }
+
+        if ($request->has('dd_level2') && $request->dd_level2 && $request->dd_level2 != 'all') {
+            $query = $query->where('level2_division', $request->dd_level2);
+        }
+
+        if ($request->has('dd_level3') && $request->dd_level3 && $request->dd_level3 != 'all') {
+            $query = $query->where('level3_branch', $request->dd_level3);
+        }
+
+        if ($request->has('dd_level4') && $request->dd_level4 && $request->dd_level4 != 'all') {
+            $query = $query->where('level4', $request->dd_level4);
+        }
+
+        if ($request->has('jobTitle') && $request->jobTitle && $request->jobTitle != 'all') {
+            $query = $query->where('job_title', $request->jobTitle);
+        }
+
+        if ($request->has('inactiveSince') && $request->inactiveSince) {
+            $query = $query->where('effdt', '>=', $request->inactiveSince);
+        }
+
+        $iEmpl = $query->orderBy('employee_name')->paginate(10);
 
         return view('sysadmin.employees.previous', compact('level0', 'iEmpl', 'jobTitles', 'request'));
     }

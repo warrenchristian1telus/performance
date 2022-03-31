@@ -24,10 +24,30 @@ class HRadminController extends Controller
         $level0 = $this->getOrgLevel0();
         $this->getSearchCriterias($crit);
 
-        $iEmpl = DB::table('employee_demo')
-        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4', 'deptid')
-        ->orderby('employee_name')
-        ->paginate(10);
+        $query = DB::table('employee_demo')
+        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4', 'deptid');
+
+        if ($request->has('dd_level0') && $request->dd_level0 && $request->dd_level0 != 'all') {
+            $query = $query->where('organization', $request->dd_level0);
+        }
+
+        if ($request->has('dd_level1') && $request->dd_level1 && $request->dd_level1 != 'all') {
+            $query = $query->where('level1_program', $request->dd_level1);
+        }
+
+        if ($request->has('dd_level2') && $request->dd_level2 && $request->dd_level2 != 'all') {
+            $query = $query->where('level2_division', $request->dd_level2);
+        }
+
+        if ($request->has('dd_level3') && $request->dd_level3 && $request->dd_level3 != 'all') {
+            $query = $query->where('level3_branch', $request->dd_level3);
+        }
+
+        if ($request->has('dd_level4') && $request->dd_level4 && $request->dd_level4 != 'all') {
+            $query = $query->where('level4', $request->dd_level4);
+        }
+
+        $iEmpl = $query->orderBy('employee_name')->paginate(10);
 
         return view('hradmin.myorg', compact('level0', 'crit', 'iEmpl', 'request'));
     }
@@ -236,15 +256,6 @@ class HRadminController extends Controller
         return $level0;
     }
 
-    // public function getOrgLevel0() {
-    //     $level0 = DB::table('employee_demo')
-    //     ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key0"), 'organization')
-    //     ->where(trim('organization'), '<>', '')
-    //     ->groupby('organization')
-    //     ->get('key0', 'organization');
-    //     return $level0;
-    // }
-
     public function getOrgLevel1($id0) {
         if ($id0 == 'all') {
             $level1 = [['key1' => 'all', 'level1_program' => 'All']];
@@ -257,23 +268,6 @@ class HRadminController extends Controller
         };
         return $level1;
     }
-
-    // public function getOrgLevel1($id0) {
-    //     if ($id0 == 'all') {
-    //         $level1 = [['key1' => 'all', 'level1_program' => 'All']];
-    //         $level2 = [['key2' => 'all', 'level2_division' => 'All']];
-    //         $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
-    //         $level4 = [['key4' => 'all', 'level4' => 'All']];
-    //     }else{
-    //         $level1 = DB::table('employee_demo')
-    //         ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key1"), 'level1_program')
-    //         ->where(trim('level1_program'), '<>', '')
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
-    //         ->groupby('level1_program')
-    //         ->pluck('level1_program', 'key1');
-    //     };
-    //     return $level1;
-    // }
 
     public function getOrgLevel2($id0, $id1) {
         if ($id1 == 'all') {
@@ -289,24 +283,6 @@ class HRadminController extends Controller
         };
         return $level2;
     }
-
-    // public function getOrgLevel2($id0, $id1) {
-    //     if ($id1 == 'all') {
-    //         $level2 = [['key2' => 'all', 'level2_division' => 'All']];
-    //         $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
-    //         $level4 = [['key4' => 'all', 'level4' => 'All']];
-    //     }else{
-    //         $level2 = DB::table('employee_demo')
-    //         ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key2"), 'level2_division')
-    //         ->where(trim('level2_division'), '<>', '')
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
-    //         ->groupby('level2_division')
-    //         ->pluck('level2_division', 'key2');
-    //     };
-    //     return json_encode($level2);
-    // }
-
 
     public function getOrgLevel3($id0, $id1, $id2) {
         if ($id2 == 'all') {
@@ -324,23 +300,6 @@ class HRadminController extends Controller
         return $level3;
     }
 
-    // public function getOrgLevel3($id0, $id1, $id2) {
-    //     if ($id2 == 'all') {
-    //         $level3 = [['key3' => 'all', 'level3_branch' => 'All']];
-    //         $level4 = [['key4' => 'all', 'level4' => 'All']];
-    //     }else{
-    //         $level3 = DB::table('employee_demo')
-    //         ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level3_branch, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key3"), 'level3_branch')
-    //         ->where(trim('level3_branch'), '<>', '')
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id2)
-    //         ->groupby('level3_branch')
-    //         ->pluck('level3_branch', 'key3');
-    //     };
-    //     return json_encode($level3);
-    // }
-
     public function getOrgLevel4($id0, $id1, $id2, $id3) {
         if ($id3 == 'all') {
             $level4 = [['key4' => 'all', 'level4' => 'All']];
@@ -357,23 +316,6 @@ class HRadminController extends Controller
     };
         return $level4;
     }
-
-    // public function getOrgLevel4($id0, $id1, $id2, $id3) {
-    //     if ($id3 == 'all') {
-    //         $level4 = [['key4' => 'all', 'level4' => 'All']];
-    //     }else{
-    //         $level4 = DB::table('employee_demo')
-    //         ->select(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level4, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '') as key4"), 'level4')
-    //         ->where(trim('level4'), '<>', '')
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (organization, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id0)
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level1_program, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id1)
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level2_division, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id2)
-    //         ->where(DB::raw("REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (level3_branch, '.', ''), '\"', ''), '\'', ''), '-', ''), ',', ''), ' ', ''), '&', ''), '/', '')"), $id3)
-    //         ->groupby('level4')
-    //         ->pluck('level4', 'key4');
-    //     };
-    //     return json_encode($level4);
-    // }
 
     public function getJobTitles() {
         $jobTitles = DB::table('employee_demo')
@@ -420,6 +362,10 @@ class HRadminController extends Controller
             [
                 "id" => 'emp',
                 "name" => 'Employee ID'
+            ],
+            [
+                "id" => 'name',
+                "name" => 'Employee Name'
             ],
             [
                 "id" => 'cls',

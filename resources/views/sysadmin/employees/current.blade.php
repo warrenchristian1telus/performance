@@ -105,9 +105,11 @@
                     </table>
                 </div>
             </div>
+
+            {{ $iEmpl->links() }}
+
         </div>
     </div>
-    {{ $iEmpl->links() }}
 </div>
 
 @include('sysadmin.partials.organization_script')

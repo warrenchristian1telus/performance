@@ -12,6 +12,7 @@ use App\Http\Controllers\GoalController;
 use Illuminate\Http\Request;
 use App\Models\Organization;
 use App\Models\User;
+use App\Models\EmployeeDemo;
 use App\Models\Goal;
 use App\Models\GoalType;
 use App\Models\OrgNode;
@@ -24,8 +25,10 @@ class HRadminController extends Controller
         $level0 = $this->getOrgLevel0();
         $this->getSearchCriterias($crit);
 
-        $query = DB::table('employee_demo')
-        ->select('employee_id', 'guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4', 'deptid');
+        $query = DB::table('employee_demo as emp')
+        ->select('emp.employee_id', 'emp.guid', 'emp.employee_name', 'emp.job_title', 'emp.organization','emp.level1_program', 'emp.level2_division', 'emp.level3_branch', 'emp.level4', 'emp.deptid');
+        // ->addselect(function ($aa){});
+        // ->addselect(DB::raw("(select count(id) as goal_count from goals where user_id = emp.employee_id and status = 'active' group by user_id) as goal_count"));
 
         if ($request->has('dd_level0') && $request->dd_level0 && $request->dd_level0 != 'all') {
             $query = $query->where('organization', $request->dd_level0);
@@ -45,6 +48,31 @@ class HRadminController extends Controller
 
         if ($request->has('dd_level4') && $request->dd_level4 && $request->dd_level4 != 'all') {
             $query = $query->where('level4', $request->dd_level4);
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'emp') {
+            $query = $query->where('employee_id', 'like', "%" . $request->searchText . "%");
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'name') {
+            $query = $query->where('employee_name', 'like', "%" . $request->searchText . "%");
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'cls') {
+            $query = $query->where('classification', 'like', "%" . $request->searchText . "%");
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'dpt') {
+            $query = $query->where('deptid', 'like', "%" . $request->searchText . "%");
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'all') {
+            $query = $query->where(function ($query2) use ($request) {
+                $query2->where('employee_id', 'like', "%" . $request->searchText . "%");
+                $query2->orWhere('employee_name', 'like', "%" . $request->searchText . "%");
+                $query2->orWhere('classification', 'like', "%" . $request->searchText . "%");
+                $query2->orWhere('deptid', 'like', "%" . $request->searchText . "%");
+            });
         }
 
         $iEmpl = $query->orderBy('employee_name')->paginate(10);

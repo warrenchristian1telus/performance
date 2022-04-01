@@ -60,7 +60,8 @@ class User extends Authenticatable
 
     protected $appends = [
         'is_goal_shared_with_auth_user',
-        'is_conversation_shared_with_auth_user'
+        'is_conversation_shared_with_auth_user',
+        'is_shared'
     ];
 
     public function goals() {
@@ -114,6 +115,10 @@ class User extends Authenticatable
         }
 
         return in_array(2, $shared->shared_item);
+    }
+
+    public function getIsSharedAttribute() {
+        return SharedProfile::where('shared_id', $this->id)->count() > 0;
     }
 
     public function latestConversation()

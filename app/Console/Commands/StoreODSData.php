@@ -55,6 +55,8 @@ class StoreODSData extends Command
         ]
       );
 
+      ini_set('memory_limit', '10000M');
+
         $demodata = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))->get(env('ODS_EMPLOYEE_DEMO_URI'));
 
         $cutoff_time = Carbon::now();

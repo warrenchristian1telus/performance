@@ -24,4 +24,9 @@ class MyTeamGoalController extends Controller {
         return $myTeamController->showSugggestedGoals('my-team.goals.bank');
     }
 
+
+    public function updateItemsToShare(Request $request) {
+        $myTeamController = new MyTeamController();
+        return $myTeamController->updateItemsToShare($request);
+    }
 }

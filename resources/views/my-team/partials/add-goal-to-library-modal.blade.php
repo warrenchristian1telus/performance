@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-6">
                     <label>
-                        Share with <br>
+                        Available to <br>
                         <select multiple class="form-control items-to-share" name="itemsToShare[]">
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}" selected> {{$employee->name}}</option>

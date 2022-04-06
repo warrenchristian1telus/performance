@@ -40,6 +40,7 @@ Route::group(['middleware' => ['role:Supervisor']], function () {
     Route::prefix('my-team/team-goals')->name('my-team.')->group(function() {
         Route::get('/share-my-goals', [MyTeamGoalController::class, 'shareMyGoals'])->name('share-my-goals');
         Route::get('/team-goal-bank', [MyTeamGoalController::class, 'teamGoalBank'])->name('team-goal-bank');
+        Route::post('/sync-goal-sharing', [MyTeamGoalController::class, 'updateItemsToShare'])->name('sync-goals-sharing');
     });
 
 });

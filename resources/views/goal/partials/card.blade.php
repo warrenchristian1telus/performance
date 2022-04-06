@@ -41,7 +41,7 @@
           </div>
         @endif
         <div class="card-footer d-flex align-items-center">
-            @if(Auth::user()->reporteesCount() > 0 && request()->is('goal/current'))
+            @if(Auth::user()->reporteesCount() > 0 && (request()->is('goal/current') || request()->is('goal/library')))
                 @include('goal.partials.goal-share-with-dropdown')
             @endif
             <div class="flex-fill"></div>

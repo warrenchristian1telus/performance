@@ -100,10 +100,11 @@
             </div>
         </form>
         @if(Auth::user()->hasSupervisorRole())
+        @php $shareWithLabel = 'Available to' @endphp
         <div>
             <b>Team Goal Bank</b> <br>
         </div>
-        <form action="{{ route('my-team.sync-goals')}}" method="POST" id="share-my-goals-form">
+        <form action="{{ route('my-team.sync-goals-sharing')}}" method="POST" id="share-my-goals-form">
             @csrf
             <div class="d-none" id="syncGoalSharingData"></div>
         </form>
@@ -141,11 +142,24 @@
             $(document).ready(() => {
                 $(".search-users").each(function() {
                     const goalId = $(this).data('goal-id');
+                    const selectDropdown = this;
                     $(this).multiselect({
                         allSelectedText: 'All Direct Report',
                         selectAllText: 'All Direct Report',
                         includeSelectAllOption: true,
                         onDropdownHide: function () {
+                            document.getElementById("syncGoalSharingData").innerHTML = "";
+                            finalSelectedOptions = [...selectDropdown.options].filter(option => option.selected).map(option => option.value);
+                            finalSelectedOptions.forEach((value) => {
+                                const input = document.createElement("input");
+                                input.setAttribute('value', value);
+                                input.name = "itemsToShare[]";
+                                document.getElementById("syncGoalSharingData").appendChild(input);
+                            });
+                            const input = document.createElement("input");
+                            input.setAttribute('value', goalId);
+                            input.name = "goal_id";
+                            document.getElementById("syncGoalSharingData").appendChild(input);
                             const form = $("#share-my-goals-form").get()[0];
                             fetch(form.action,{method:'POST', body: new FormData(form)});
                         }

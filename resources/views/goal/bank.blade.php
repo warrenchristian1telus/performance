@@ -100,7 +100,7 @@
             </div>
         </form>
         @if(Auth::user()->hasSupervisorRole())
-        @php $shareWithLabel = 'Available to' @endphp
+        @php $shareWithLabel = 'Audience' @endphp
         <div>
             <b>Team Goal Bank</b> <br>
         </div>

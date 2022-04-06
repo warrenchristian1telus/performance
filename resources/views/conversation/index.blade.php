@@ -437,6 +437,8 @@
 
             $(document).on('show.bs.modal', '#viewConversationModal', function(e) {
                 $("#viewConversationModal").find("textarea").val('');
+                $("#viewConversationModal").find("input, textarea").prop("readonly", false);
+                $('#viewConversationModal').data('is-frozen', 0);
             });
 
             $(document).on('change', '#team_member_agreement', function () {
@@ -485,7 +487,6 @@
                         $('#info_comment5_edit').val(result.info_comment5);
                         $('#team_member_agreement').prop('checked', result.team_member_agreement ? true : false);
                         $('#team_member_agreement_2').prop('checked', result.team_member_agreement ? true : false);
-
                         user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
                         user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
                         let isNotThirdPerson = true;

@@ -56,6 +56,19 @@ class ConversationController extends Controller
                         });
                 });
             }
+            if ($request->has('user_name') && $request->user_name) {
+                $user_name = $request->user_name;
+                $query->where(function ($query) use ($user_name) {
+                    $query->whereHas('user', function ($query) use ($user_name) {
+                        $query->where('name', 'like', "%$user_name%");
+                    })
+                    ->orWhereHas('conversationParticipants', function($query) use ($user_name) {
+                        $query->whereHas('participant', function($query) use ($user_name) {
+                            $query->where('name', 'like', "%$user_name%");
+                        });
+                    });
+                });
+            }
             if ($request->has('conversation_topic_id') && $request->conversation_topic_id) {
                 $query->where('conversation_topic_id', $request->conversation_topic_id);
             }
@@ -102,6 +115,21 @@ class ConversationController extends Controller
                         });
                 });
             }
+
+            if ($request->has('user_name') && $request->user_name) {
+                $user_name = $request->user_name;
+                $query->where(function ($query) use ($user_name) {
+                    $query->whereHas('user', function ($query) use ($user_name) {
+                        $query->where('name', 'like', "%$user_name%");
+                    })
+                    ->orWhereHas('conversationParticipants', function($query) use ($user_name) {
+                        $query->whereHas('participant', function($query) use ($user_name) {
+                            $query->where('name', 'like', "%$user_name%");
+                        });
+                    });
+                });
+            }
+            
             if ($request->has('conversation_topic_id') && $request->conversation_topic_id) {
                 $query->where('conversation_topic_id', $request->conversation_topic_id);
             }

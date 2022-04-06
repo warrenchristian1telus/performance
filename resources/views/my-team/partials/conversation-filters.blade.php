@@ -3,7 +3,7 @@
         @csrf
         <div class="row mb-2">
             <div class="col-3">
-                <x-dropdown :list="$reportees" label="Employee Name" name="user_id" :selected="request()->user_id" blankOptionText="All"></x-dropdown>
+                <x-input label="Employee Name" name="user_name" :value="request()->user_name"></x-input>
             </div>
             <div class="col-3">
                 <x-dropdown :list="$topics" label="Conversation Type" name="conversation_topic_id" :selected="request()->conversation_topic_id" blankOptionText="All"></x-dropdown>

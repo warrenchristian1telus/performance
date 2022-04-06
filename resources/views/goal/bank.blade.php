@@ -8,6 +8,7 @@
             </div>
         </div>
         <div>
+            <b>My Goal Bank</b> <br>
             The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile.
             <br>
             <br>
@@ -98,7 +99,65 @@
                 </div>
             </div>
         </form>
+        @if(Auth::user()->hasSupervisorRole())
+        <div>
+            <b>Team Goal Bank</b> <br>
+        </div>
+        <form action="{{ route('my-team.sync-goals')}}" method="POST" id="share-my-goals-form">
+            @csrf
+            <div class="d-none" id="syncGoalSharingData"></div>
+        </form>
+        @push('css')
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
+        @endpush
+        @push('js')
+            <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
+        <script>
+            $(document).on('click', '[data-action="delete-goal"]', function () {
+                if (confirm($(this).data('confirmation'))) {
+                    let action = $("#delete-goal-form").attr('action');
+                    action = action.replace('xxx', $(this).data("goal-id"));
+                    $("#delete-goal-form").attr('action', action);
+                    $("#delete-goal-form").submit();
+                }
+            });
+            $(document).on('change', '.is-shared', function (e) {
+                let confirmMessage = "Making this goal private will hide it from all employees. Continue?";
+                if ($(this).val() == "1") {
+                    confirmMessage = "Sharing this goal will make it visible to the selected employees. Continue?"
+                }
+                if (!confirm(confirmMessage)) {
+                    // this.checked = !this.checked;
+                    $(this).val($(this).val() == "1" ? "0" : "1");
+                    e.preventDefault();
+                    return;
+                }
+                // $(this).parents("label").find("span").html(this.checked ? "Shared" : "Private");
+                const goalId = $(this).data('goal-id');
+                $("#search-users-" + goalId).multiselect($(this).val() == "1" ? 'enable' : 'disable');
+                const form = $(this).parents('form').get()[0];
+                fetch(form.action,{method:'POST', body: new FormData(form)});
+            });
+            $(document).ready(() => {
+                $(".search-users").each(function() {
+                    const goalId = $(this).data('goal-id');
+                    $(this).multiselect({
+                        allSelectedText: 'All Direct Report',
+                        selectAllText: 'All Direct Report',
+                        includeSelectAllOption: true,
+                        onDropdownHide: function () {
+                            const form = $("#share-my-goals-form").get()[0];
+                            fetch(form.action,{method:'POST', body: new FormData(form)});
+                        }
+                    });
+                });
+            });
+        </script>
+        @endpush
+        @include('my-team.goals.partials.bank')
+        @endif
     </div>
+
     @include('goal.partials.goal-detail-modal')
     <div class="modal fade" id="addGoalModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -129,6 +188,7 @@
             </div>
         </div>
     </div>
+    
     @push('css')
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     @endpush

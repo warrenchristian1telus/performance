@@ -263,7 +263,11 @@ class GoalController extends Controller
         $bankGoals = $query->get();
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
 
-        return view('goal.bank', compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));
+
+        $myTeamController = new MyTeamController();
+        $suggestedGoalsData = $myTeamController->showSugggestedGoals('my-team.goals.bank', false);
+        $cardDesign = 'my-team';
+        return view('goal.bank', array_merge(compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy', 'cardDesign'), $suggestedGoalsData));
     }
 
     private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes) {

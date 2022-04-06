@@ -9,15 +9,18 @@ use Illuminate\Support\Facades\Storage;
 
 class POCController extends Controller
 {
-    public function employeedemo()
+    public function employeedemo(unsigned &$top, unsigned)
     {
       $response = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])
         ->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))
-        ->get(env('ODS_EMPLOYEE_DEMO_URI'));
+        // ->withOptions(['top' => 100, 'skip' => 100])
+        ->get(env('ODS_EMPLOYEE_DEMO_URI') . '?$top=100&$skip=100');
         // ->paginate(100);
         // return view('poc.odsorghierarchy', ['response' => $response['value']]);
 
-        dd($response['value']);
+        // dd($response->count());
+        // dd($response['value']);
+        dd(count($response['value']));
         // dd($response);
         return view('poc.employeedemo', ['response' => $response['value']]);
     }
@@ -28,8 +31,8 @@ class POCController extends Controller
         ->get(env('ODS_DEMO_URI_3'));
         // return view('poc.odsorghierarchy', ['response' => $response['value']]);
 
-        // dd($response['value']);
-        dd($response);
+        dd($response['value']);
+        // dd($response);
         return view('poc.odsorghierarchy', ['response' => $response['value']]);
     }
   public function odsorghierarchy2()

@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-                <p>Curabitur eget interdum nisi. Curabitur nibh nisl, sollicitudin non nisi at, pellentesque tincidunt leo. Proin luctus commodo tristique. Donec nec ligula nec lorem tempor condimentum et nec purus. Etiam dignissim at dolor in varius. Fusce id posuere ante. In hac habitasse platea dictumst. Aliquam erat volutpat.</p
+                <p>Curabitur eget interdum nisi. Curabitur nibh nisl, sollicitudin non nisi at, pellentesque tincidunt leo. Proin luctus commodo tristique. Donec nec ligula nec lorem tempor condimentum et nec purus. Etiam dignissim at dolor in varius. Fusce id posuere ante. In hac habitasse platea dictumst. Aliquam erat volutpat.</p>
             </div>
         </div>
 		</div>

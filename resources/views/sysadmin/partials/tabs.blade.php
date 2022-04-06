@@ -1,47 +1,132 @@
-<div class="d-flex justify-content-center justify-content-lg-start mb-2">
-  <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.myorg' ? 'border-primary' : ''}}">
-      <x-button :href="route('sysadmin.myorg')" style="">
-          My Organization
-      </x-button>
-  </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.statistics' ? 'border-primary' : ''}}">
-        <x-button :href="route('sysadmin.statistics')" style="">
-            Statistics and Reports
-        </x-button>
+@if ($request->is('sysadmin/employees/*')) 
+    <div class="d-flex justify-content-center justify-content-lg-start mb-2">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.employees.currentemployees' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.employees.currentemployees')" style="">
+                Current Employees
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.employees.previousemployees' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.employees.previousemployees')" style="">
+                Past Employees
+            </x-button>
+        </div>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.goal-bank' ? 'border-primary' : ''}}">
-        <x-button :href="route('sysadmin.goal-bank')" style="">
-            Goal Bank
-        </x-button>
+@endif
+
+@if ($request->is('sysadmin/shared/*')) 
+    <div class="d-flex justify-content-center justify-content-lg-start mb-2">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.shared.shareemployee' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.shared.shareemployee')" style="">
+                Share an Employee
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.shared.manageshares' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.shared.manageshares')" style="">
+                Manage Existing Shares
+            </x-button>
+        </div>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.shared' ? 'border-primary' : ''}}">
-        <x-button :href="route('sysadmin.shared')" style="">
-            Shared Employees
-        </x-button>
+@endif
+
+@if ($request->is('sysadmin/excused/*')) 
+    <div class="d-flex justify-content-center justify-content-lg-start mb-2">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excused.excuseemployee' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.excused.excuseemployee')" style="">
+                Excuse an Employee
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excused.manageexcused' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.excused.manageexcused')" style="">
+                Manage Existing Excused
+            </x-button>
+        </div>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excused' ? 'border-primary' : ''}}">
-        <x-button :href="route('sysadmin.excused')" style="">
-            Excused Employees
-        </x-button>
+@endif
+
+@if ($request->is('sysadmin/goals/*')) 
+    <div class="d-flex justify-content-center justify-content-lg-start mb-2">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.goals.addgoal' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.goals.addgoal')" style="">
+                Add Goal to Goal Bank
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.goals.managegoals' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.goals.managegoals')" style="">
+                Manage Existing Goals
+            </x-button>
+        </div>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.notifications' ? 'border-primary' : ''}}">
-        <x-button :href="route('sysadmin.notifications')" style="">
-            Notifications Log
-        </x-button>
+@endif
+
+@if ($request->is('sysadmin/unlock/*')) 
+    <div class="d-flex justify-content-center justify-content-lg-start mb-2">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.unlock.unlockconversation
+            ' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.unlock.unlockconversation')" style="">
+                Unlock a Conversation
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.unlock.manageunlocked' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.unlock.manageunlocked')" style="">
+                Manage Existing Unlocked Conversations
+            </x-button>
+        </div>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.access' ? 'border-primary' : ''}}">
-        <x-button :href="route('sysadmin.access')" style="">
-            Access and Permissions
-        </x-button>
+@endif
+
+@if ($request->is('sysadmin/notifications/*')) 
+    <div class="d-flex justify-content-center justify-content-lg-start mb-2">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.notifications.createnotification' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.notifications.createnotification')" style="">
+                Create New Notifications
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.notifications.viewnotifications' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.notifications.viewnotifications')" style="">
+                View Past Notifications
+            </x-button>
+        </div>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.previous' ? 'border-primary' : ''}}">
-        <x-button :href="route('sysadmin.previous')" style="">
-            Previous Employees
-        </x-button>
+@endif
+
+@if ($request->is('sysadmin/access/*')) 
+    <div class="d-flex justify-content-center justify-content-lg-start mb-2">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.access.createaccess' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.access.createaccess')" style="">
+                Create New Access
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.access.manageaccess' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.access.manageaccess')" style="">
+                Manage Existing Access
+            </x-button>
+        </div>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.conversations' ? 'border-primary' : ''}}">
-        <x-button :href="route('sysadmin.conversations')" style="">
-            Conversations
-        </x-button>
+@endif
+
+@if ($request->is('sysadmin/statistics/*')) 
+    <div class="d-flex justify-content-center justify-content-lg-start mb-2">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.statistics.goalsummary' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.statistics.goalsummary')" style="">
+                Goal Summary
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.statistics.conversationsummary' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.statistics.conversationsummary')" style="">
+                Conversations Summary
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.statistics.sharedsummary' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.statistics.sharedsummary')" style="">
+                Shared Employee Summary
+            </x-button>
+        </div>
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.statistics.excusedsummary' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.statistics.excusedsummary')" style="">
+                Excused Employee Summary
+            </x-button>
+        </div>
     </div>
-</div>
+@endif
+
+

@@ -1,16 +1,18 @@
 @extends('sysadmin.layout')
 @section('tab-content')
+
 <div>
 	<div class="h4 p-3"><b>{{__('All BC Public Service Employees')}}</b></div>
 </div>
+
 <div>
-	<div class="card card-primary shadow mb-3" style="overflow-x: auto;">
+	<div class="card card-primary shadow mb-3" style="overflow-x: auto; width: 1700px">
 		<div>
 			<form action="" method="get" id="filter-menu">
                 @csrf
 				<table class="uk-table m-3">
 					<tbody>
-						@include('sysadmin.partials.organization_filter')
+						@include('hradmin.partials.organization_filter')
 						<tr style="text-align: left;" class="p-2 form-group">
 							<td style="text-align: left; width: 300px; " class="p-2 form-group">
 								<label for='criteria'>
@@ -33,6 +35,7 @@
                 {{ csrf_field() }}
 			</form>
 		</div>
+	{{-- <div class="card card-primary shadow mb-3" style="overflow-x: auto;"> --}}
         <div id="collapseOne" class="collapse {{$iEmpl ? 'show' : ''}}" aria-labelledby="headingOne" data-parent="#accordionLibrary">
 			<div class="table table-wrapper d-flex" style="width: 3600px">
 				<div class="md-card-content" style="overflow-x: auto; ">
@@ -110,7 +113,7 @@
 			{{ $iEmpl->links() }}
 
 		</div>
-	</div>
+	{{-- </div> --}}
 </div>
 
 

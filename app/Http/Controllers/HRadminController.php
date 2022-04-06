@@ -22,7 +22,12 @@ class HRadminController extends Controller
 {
     public function myorg(Request $request)
     {
-        $level0 = $this->getOrgLevel0();
+        $level0 = null;
+        if($request->level0) {
+            $level0 = $request->level0;
+        } else {
+            $level0 = $this->getOrgLevel0();
+        }
         $this->getSearchCriterias($crit);
 
         $query = DB::table('employee_demo as emp')
@@ -200,7 +205,71 @@ class HRadminController extends Controller
 
     public function manageexcused(Request $request)
     {
-        return view('hradmin.excused.manageexcused');
+        $level0 = null;
+        if($request->level0) {
+            $level0 = $request->level0;
+        } else {
+            $level0 = $this->getOrgLevel0();
+        }
+
+        $this->getSearchCriterias($crit);
+
+        $query = DB::table('employee_demo')
+        ->join('users', function($join){
+            $join->on('employee_Demo.employee_id', '=', 'users.id');
+        })
+        ->select('employee_id', 'employee_demo.guid', 'employee_name', 'job_title', 'organization','level1_program', 'level2_division', 'level3_branch', 'level4', 'excused_start_date', 'excused_end_date')
+        ->wherenotnull('excused_start_date')
+        ;
+
+        if ($request->has('dd_level0') && $request->dd_level0 && $request->dd_level0 != 'all') {
+            $query = $query->where('organization', $request->dd_level0);
+        }
+
+        if ($request->has('dd_level1') && $request->dd_level1 && $request->dd_level1 != 'all') {
+            $query = $query->where('level1_program', $request->dd_level1);
+        }
+
+        if ($request->has('dd_level2') && $request->dd_level2 && $request->dd_level2 != 'all') {
+            $query = $query->where('level2_division', $request->dd_level2);
+        }
+
+        if ($request->has('dd_level3') && $request->dd_level3 && $request->dd_level3 != 'all') {
+            $query = $query->where('level3_branch', $request->dd_level3);
+        }
+
+        if ($request->has('dd_level4') && $request->dd_level4 && $request->dd_level4 != 'all') {
+            $query = $query->where('level4', $request->dd_level4);
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'emp') {
+            $query = $query->where('employee_id', 'like', "%" . $request->searchText . "%");
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'name') {
+            $query = $query->where('employee_name', 'like', "%" . $request->searchText . "%");
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'cls') {
+            $query = $query->where('classification', 'like', "%" . $request->searchText . "%");
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'dpt') {
+            $query = $query->where('deptid', 'like', "%" . $request->searchText . "%");
+        }
+
+        if ($request->has('searchText') && $request->searchText && $request->criteria && $request->criteria == 'all') {
+            $query = $query->where(function ($query2) use ($request) {
+                $query2->where('employee_id', 'like', "%" . $request->searchText . "%");
+                $query2->orWhere('employee_name', 'like', "%" . $request->searchText . "%");
+                $query2->orWhere('classification', 'like', "%" . $request->searchText . "%");
+                $query2->orWhere('deptid', 'like', "%" . $request->searchText . "%");
+            });
+        }
+
+        $sEmpl = $query->orderBy('employee_name')->paginate(10);
+
+        return view('hradmin.excused.manageexcused', compact('level0', 'sEmpl', 'crit', 'request'));
     }
 
     public function managegoals(Request $request)

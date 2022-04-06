@@ -4,28 +4,28 @@ use App\Http\Controllers\SysadminController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('sysadmin/employees/current', [SysadminController::class, 'current'])->name('sysadmin.currentemployees');
-Route::get('sysadmin/employees/previous', [SysadminController::class, 'previous'])->name('sysadmin.previousemployees');
-Route::get('sysadmin/shared/shareemployee', [SysadminController::class, 'shareemployee'])->name('sysadmin.shareemployee');
-Route::get('sysadmin/shared/manageshares', [SysadminController::class, 'manageshares'])->name('sysadmin.manageshares');
-Route::get('sysadmin/excused/excuseemployee', [SysadminController::class, 'excuseemployee'])->name('sysadmin.excuseemployee');
-Route::get('sysadmin/excused/manageexcused', [SysadminController::class, 'manageexcused'])->name('sysadmin.manageexcused');
-Route::get('sysadmin/goals/addgoal', [SysadminController::class, 'addgoal'])->name('sysadmin.addgoal');
-Route::get('sysadmin/goals/goal-bank', [SysadminController::class, 'addgoal'])->name('sysadmin.goal-bank');
-Route::get('sysadmin/goals/managegoals', [SysadminController::class, 'managegoals'])->name('sysadmin.managegoals');
-Route::get('sysadmin/goals/goal-edit/{id}', [SysadminController::class, 'goaledit'])->name('sysadmin.goal-edit');
-Route::post('sysadmin/goals/goaladd', [SysadminController::class, 'goaladd'])->name('sysadmin.goaladd');
-Route::post('sysadmin/goals/goalupdate/{id}', [SysadminController::class, 'goalupdate'])->name('sysadmin.goalupdate');
-Route::get('sysadmin/unlock/unlockconversation', [SysadminController::class, 'unlockconversation'])->name('sysadmin.unlockconversation');
-Route::get('sysadmin/unlock/manageunlocked', [SysadminController::class, 'manageunlocked'])->name('sysadmin.manageunlocked');
-Route::get('sysadmin/notifications/createnotification', [SysadminController::class, 'createnotification'])->name('sysadmin.createnotification');
-Route::get('sysadmin/notifications/viewnotifications', [SysadminController::class, 'viewnotifications'])->name('sysadmin.viewnotifications');
-Route::get('sysadmin/access/createaccess', [SysadminController::class, 'createaccess'])->name('sysadmin.createaccess');
-Route::get('sysadmin/access/manageaccess', [SysadminController::class, 'manageaccess'])->name('sysadmin.manageaccess');
-Route::get('sysadmin/statistics/goalsummary', [SysadminController::class, 'goalsummary'])->name('sysadmin.goalsummary');
-Route::get('sysadmin/statistics/conversationsummary', [SysadminController::class, 'conversationsummary'])->name('sysadmin.conversationsummary');
-Route::get('sysadmin/statistics/sharedsummary', [SysadminController::class, 'sharedsummary'])->name('sysadmin.sharedsummary');
-Route::get('sysadmin/statistics/excusedsummary', [SysadminController::class, 'excusedsummary'])->name('sysadmin.excusedsummary');
+Route::get('sysadmin/employees/current', [SysadminController::class, 'current'])->name('sysadmin.employees.currentemployees');
+Route::get('sysadmin/employees/previous', [SysadminController::class, 'previous'])->name('sysadmin.employees.previousemployees');
+Route::get('sysadmin/shared/shareemployee', [SysadminController::class, 'shareemployee'])->name('sysadmin.shared.shareemployee');
+Route::get('sysadmin/shared/manageshares', [SysadminController::class, 'manageshares'])->name('sysadmin.shared.manageshares');
+Route::get('sysadmin/excused/excuseemployee', [SysadminController::class, 'excuseemployee'])->name('sysadmin.excused.excuseemployee');
+Route::get('sysadmin/excused/manageexcused', [SysadminController::class, 'manageexcused'])->name('sysadmin.excused.manageexcused');
+Route::get('sysadmin/goals/addgoal', [SysadminController::class, 'addgoal'])->name('sysadmin.goals.addgoal');
+Route::get('sysadmin/goals/goal-bank', [SysadminController::class, 'addgoal'])->name('sysadmin.goals.goal-bank');
+Route::get('sysadmin/goals/managegoals', [SysadminController::class, 'managegoals'])->name('sysadmin.goals.managegoals');
+Route::get('sysadmin/goals/goal-edit/{id}', [SysadminController::class, 'goaledit'])->name('sysadmin.goals.goal-edit');
+Route::post('sysadmin/goals/goaladd', [SysadminController::class, 'goaladd'])->name('sysadmin.goals.goaladd');
+Route::post('sysadmin/goals/goalupdate/{id}', [SysadminController::class, 'goalupdate'])->name('sysadmin.goal.goalupdate');
+Route::get('sysadmin/unlock/unlockconversation', [SysadminController::class, 'unlockconversation'])->name('sysadmin.unlock.unlockconversation');
+Route::get('sysadmin/unlock/manageunlocked', [SysadminController::class, 'manageunlocked'])->name('sysadmin.unlock.manageunlocked');
+Route::get('sysadmin/notifications/createnotification', [SysadminController::class, 'createnotification'])->name('sysadmin.notifications.createnotification');
+Route::get('sysadmin/notifications/viewnotifications', [SysadminController::class, 'viewnotifications'])->name('sysadmin.notifications.viewnotifications');
+Route::get('sysadmin/access/createaccess', [SysadminController::class, 'createaccess'])->name('sysadmin.access.createaccess');
+Route::get('sysadmin/access/manageaccess', [SysadminController::class, 'manageaccess'])->name('sysadmin.access.manageaccess');
+Route::get('sysadmin/statistics/goalsummary', [SysadminController::class, 'goalsummary'])->name('sysadmin.statistics.goalsummary');
+Route::get('sysadmin/statistics/conversationsummary', [SysadminController::class, 'conversationsummary'])->name('sysadmin.statistics.conversationsummary');
+Route::get('sysadmin/statistics/sharedsummary', [SysadminController::class, 'sharedsummary'])->name('sysadmin.statistics.sharedsummary');
+Route::get('sysadmin/statistics/excusedsummary', [SysadminController::class, 'excusedsummary'])->name('sysadmin.statistics.excusedsummary');
 
 
 

@@ -1,5 +1,6 @@
 @extends('sysadmin.layout')
 @section('tab-content')
+
 <div>
     <div class="h4 p-3">{{__('Past Employees')}}</div>
     <div class="p-3">
@@ -10,6 +11,7 @@
         </div>
     </div>
 </div>
+
 <div>
     <div class="card card-primary shadow mb-3" style="overflow-x: auto;">
         <div>

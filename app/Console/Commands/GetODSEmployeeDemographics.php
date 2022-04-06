@@ -54,7 +54,7 @@ class GetODSEmployeeDemographics extends Command
         ]
       );
 
-      $top = 10000;
+      $top = 1000;
       $skip = 0;
       $demodata = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))
       ->get( env('ODS_EMPLOYEE_DEMO_URI') . '?$top=' . $top . '&$skip=' . $skip );

@@ -91,11 +91,18 @@
 <x-slot name="css">
     <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 	<style>
-	.text-truncate {
+	.text-truncate-30 {
 		white-space: wrap; 
 		overflow: hidden;
 		text-overflow: ellipsis;
 		width: 30em;
+	}
+
+    .text-truncate-10 {
+		white-space: wrap; 
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 5em;
 	}
 	#notificationlog-table_filter label {
 		text-align: right !important;
@@ -133,7 +140,19 @@
 		columnDefs: [
                 {
                     render: function (data, type, full, meta) {
-                        return '<div data-toggle="tooltip" class="text-truncate" title="' + data + '">' + data + "</div>";
+                        console.log(data);
+                        array_tos = data.split(";");
+                        if (array_tos.length > 5) {
+                            text = '( ' + array_tos.length + ' recipients )';
+                        } else { text = data; }
+                        return '<span>' + text + "</span>";
+                    },
+                    targets: 2
+                },
+
+                {
+                    render: function (data, type, full, meta) {
+                        return '<div data-toggle="tooltip" class="text-truncate-30" title="' + data + '">' + data + "</div>";
                     },
                     targets: 1
                 },

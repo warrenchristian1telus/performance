@@ -271,96 +271,96 @@ return [
                 ], */
             ]
         ],
-        // [
-        //     'role' => 'listitem',
-        //     'text' => 'HR Administration',
-        //     'url'  => '#',
-        //     'icon' => 'fas fa-fw fa-cog',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'My Organization',
-        //             'url'  => 'hradmin/myorg',
-        //             'active' => ['hradmin/myorg']
-        //         ],
-        //         [
-        //             'text' => 'Share Employees',
-        //             'url'  => 'hradmin/shared/shareemployee',
-        //             'active' => ['hradmin/shared/*']
-        //         ],
-        //         [
-        //             'text' => 'Excuse Employees',
-        //             'url'  => 'hradmin/excused/excuseemployee',
-        //             'active' => ['hradmin/excused/*']
-        //         ],
-        //         [
-        //             'text' => 'Goal Bank',
-        //             'url'  => 'hradmin/goals/goal-bank',
-        //             'active' => ['hradmin/goals/*']
-        //         ],
-        //         [
-        //             'text' => 'Notifications',
-        //             'url'  => 'hradmin/notifications',
-        //             'active' => ['hradmin/notifications/*']
-        //         ],
-        //         [
-        //             'text' => 'Statistics and Reports',
-        //             'url'  => 'hradmin/statistics/goalsummary',
-        //             'active' => ['hradmin/statistics/*']
-        //         ],
-        //     ],
-        // ],
-        // [
-        //     'role' => 'listitem',
-        //     'text' => 'System Administration',
-        //     'url'  => '#',
-        //     'icon' => 'fas fa-fw fa-cog',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Employee List',
-        //             'url'  => 'sysadmin/employees/current',
-        //             'active' => ['sysadmin/employees/*']
-        //         ],
-        //         [
-        //             'text' => 'Share Employees',
-        //             'url'  => 'sysadmin/shared/shareemployee',
-        //             'active' => ['sysadmin/shared/*']
-        //         ],
-        //         [
-        //             'text' => 'Excuse Employees',
-        //             'url'  => 'sysadmin/excused/excuseemployee',
-        //             'active' => ['sysadmin/excused/*']
-        //         ],
-        //         [
-        //             'text' => 'Goal Bank',
-        //             'url'  => 'sysadmin/goals/goal-bank',
-        //             'active' => ['sysadmin/goals/*']
-        //         ],
-        //         [
-        //             'text' => 'Unlock Conversations',
-        //             'url'  => 'sysadmin/unlock/unlockconversation',
-        //             'active' => ['sysadmin/unlock/*']
-        //         ],
-        //         [
-        //             'text' => 'Notifications',
-        //             'url'  => 'sysadmin/notifications/createnotification',
-        //             'active' => ['sysadmin/notifications/*']
-        //         ],
-        //         [
-        //             'text' => 'Access and Permissions',
-        //             'url'  => 'sysadmin/access/createaccess',
-        //             'active' => ['sysadmin/access/*']
-        //         ],
-        //         [
-        //             'text' => 'Statistics and Reports',
-        //             'url'  => 'sysadmin/statistics/goalsummary',
-        //             'active' => ['sysadmin/statistics/*']
-        //         ],
-        //         [
-        //             'text' => 'Switch Identity',
-        //             'url'  => '#',
-        //         ],
-        //     ],
-        // ],
+        [
+            'role' => 'listitem',
+            'text' => 'HR Administration',
+            'url'  => '#',
+            'icon' => 'fas fa-fw fa-cog',
+            'submenu' => [
+                [
+                    'text' => 'My Organization',
+                    'url'  => 'hradmin/myorg',
+                    'active' => ['hradmin/myorg']
+                ],
+                [
+                    'text' => 'Share Employees',
+                    'url'  => 'hradmin/shared/shareemployee',
+                    'active' => ['hradmin/shared/*']
+                ],
+                [
+                    'text' => 'Excuse Employees',
+                    'url'  => 'hradmin/excused/excuseemployee',
+                    'active' => ['hradmin/excused/*']
+                ],
+                [
+                    'text' => 'Goal Bank',
+                    'url'  => 'hradmin/goals/goal-bank',
+                    'active' => ['hradmin/goals/*']
+                ],
+                [
+                    'text' => 'Notifications',
+                    'url'  => 'hradmin/notifications',
+                    'active' => ['hradmin/notifications/*']
+                ],
+                [
+                    'text' => 'Statistics and Reports',
+                    'url'  => 'hradmin/statistics/goalsummary',
+                    'active' => ['hradmin/statistics/*']
+                ],
+            ],
+        ],
+        [
+            'role' => 'listitem',
+            'text' => 'System Administration',
+            'url'  => '#',
+            'icon' => 'fas fa-fw fa-cog',
+            'submenu' => [
+                [
+                    'text' => 'Employee List',
+                    'url'  => 'sysadmin/employees/current',
+                    'active' => ['sysadmin/employees/*']
+                ],
+                [
+                    'text' => 'Share Employees',
+                    'url'  => 'sysadmin/shared/shareemployee',
+                    'active' => ['sysadmin/shared/*']
+                ],
+                [
+                    'text' => 'Excuse Employees',
+                    'url'  => 'sysadmin/excused/excuseemployee',
+                    'active' => ['sysadmin/excused/*']
+                ],
+                [
+                    'text' => 'Goal Bank',
+                    'url'  => 'sysadmin/goals/goal-bank',
+                    'active' => ['sysadmin/goals/*']
+                ],
+                [
+                    'text' => 'Unlock Conversations',
+                    'url'  => 'sysadmin/unlock/unlockconversation',
+                    'active' => ['sysadmin/unlock/*']
+                ],
+                [
+                    'text' => 'Notifications',
+                    'url'  => 'sysadmin/notifications/createnotification',
+                    'active' => ['sysadmin/notifications/*']
+                ],
+                [
+                    'text' => 'Access and Permissions',
+                    'url'  => 'sysadmin/access/createaccess',
+                    'active' => ['sysadmin/access/*']
+                ],
+                [
+                    'text' => 'Statistics and Reports',
+                    'url'  => 'sysadmin/statistics/goalsummary',
+                    'active' => ['sysadmin/statistics/*']
+                ],
+                [
+                    'text' => 'Switch Identity',
+                    'url'  => '#',
+                ],
+            ],
+        ],
         [
             'role' => 'listitem',
             'text' => 'Resources',

@@ -131,6 +131,7 @@
                     ["NumberedList", "BulletedList"],
                     ["Outdent", "Indent"],
                 ],
+                disableNativeSpellChecker: false
             });
             CKEDITOR.replace('measure_of_success', {
                 toolbar: "Custom",
@@ -139,6 +140,7 @@
                     ["NumberedList", "BulletedList"],
                     ["Outdent", "Indent"],
                 ],
+                disableNativeSpellChecker: false
             });
         });
     </script>

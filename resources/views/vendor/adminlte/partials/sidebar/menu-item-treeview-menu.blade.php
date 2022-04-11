@@ -2,7 +2,7 @@
 
     {{-- Menu toggler --}}
     <a class="nav-link py-3 {{ $item['class'] }} @isset($item['shift']) {{ $item['shift'] }} @endisset"
-       href="{{ $item['url'] ? url($item['url']) : '' }}" {!! $item['data-compiled'] ?? '' !!}>
+       href="{{ array_key_exists('url', $item) ? url($item['url']) : '' }}" {!! $item['data-compiled'] ?? '' !!}>
 
         <i class="mr-2 {{ $item['icon'] ?? 'far fa-fw fa-circle' }} {{
             isset($item['icon_color']) ? 'text-'.$item['icon_color'] : ''

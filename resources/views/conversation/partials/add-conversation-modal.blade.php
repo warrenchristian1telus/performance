@@ -30,7 +30,7 @@
                     </div>
                        <div class="col-6 col-md-6">
                        <label> Participants</label>
-                        <select class="form-control w-100 select2" style="width:100%;" multiple name="participant_id[]" id="participant_id">
+                        <select class="form-control w-100 select2" style="width:100%;" multiple name="participant_id[]" id="participant_id" data-maximum-selection-length="1">
                             @foreach($participants as $p)
                             <option value="{{ $p->id }}">{{ $p->name }}</option>
                             @endforeach

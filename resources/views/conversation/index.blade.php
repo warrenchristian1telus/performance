@@ -164,7 +164,9 @@
 
     <x-slot name="js">
         <script>
-            $("#participant_id").select2();
+            $("#participant_id").select2({
+                maximumSelectionLength: 1
+            });
             @php
                 $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
                 $user = App\Models\User::find($authId);
@@ -174,7 +176,7 @@
             var conversation_id = 0;
             var toReloadPage = false;
             $('#conv_participant_edit').select2({
-
+                maximumSelectionLength: 2,
                 ajax: {
                     url: '/participant'
                     , dataType: 'json'

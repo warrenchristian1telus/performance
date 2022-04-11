@@ -122,10 +122,13 @@
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
     <script>
-        $(document).on('change', '#view-profile-as', function () {
+        /* $(document).on('change', '#view-profile-as', function () {
             const url = '{{ route('my-team.view-profile-as', '')}}';
             window.location = url + "/" + $(this).val();
-        });
+        }); */
+        if (CKEDITOR) {
+            CKEDITOR.config.disableNativeSpellChecker = false;
+        }
     </script>
 </body>
 

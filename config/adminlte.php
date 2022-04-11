@@ -254,7 +254,7 @@ return [
             'role' => 'listitem',
             'text' => 'My Team',
             'id' => 'my-team-menu',
-            'url'  => 'my-team/my-employees',
+            /* 'url'  => '#', */
             'icon' => 'fas fa-fw fa-users',
             'active' => ['my-team/*'],
             'can' => ['my team'],
@@ -269,6 +269,16 @@ return [
                     'url'  => 'my-team/conversations',
                     'active' => ['my-team/conversations/*'],
                 ], */
+                [
+                    'text' => 'Team Members',
+                    'url'  => 'my-team/my-employees',
+                    'active' => ['my-team/my-employees/*'],
+                ],
+                [
+                    'text' => 'Notify Team Members',
+                    'url'  => 'my-team/notify-team-members',
+                    'active' => ['my-team/members/*'],
+                ]
             ]
         ],
         [

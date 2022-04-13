@@ -91,7 +91,7 @@ jobs:
           test -n "${BUILD_NAMESPACE}"
           test -n "${BRANCH}"
           echo "Current namespace is ${NAMESPACE}"
-          oc -n ${BUILD_NAMESPACE} policy add-role-to-group system:image-puller system:serviceaccounts:${NAMESPACE}
+          #oc -n ${BUILD_NAMESPACE} policy add-role-to-group system:image-puller system:serviceaccounts:${NAMESPACE}
           oc -n ${NAMESPACE} process -f openshift/app/db-backup-deploy.yml \
           -p NAME=${DB_BACKUP_APP} \
           -p IMAGE_STREAM_TAG=${DB_BACKUP_APP}:latest \

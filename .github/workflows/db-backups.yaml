@@ -17,7 +17,7 @@ jobs:
     env:
       BUILD_ID: ${{ github.event.number }}
       BUILD_NAMESPACE: 332842-tools
-      BRANCH: main
+      BRANCH: automated-db-backups 
       BUILD_TAG: latest
       APP: performance
       DB_BACKUP_APP: db-backup
@@ -63,7 +63,7 @@ jobs:
       CRON_PASSWORD: ${{ secrets.CRON_PASSWORD }}
       NAMESPACE: 332842-dev
       BUILD_NAMESPACE: 332842-tools
-      BRANCH: main
+      BRANCH: automated-db-backups 
       APP: performance
       APP_HOST: performance-332842-dev.apps.silver.devops.gov.bc.ca
       DB_BACKUP_APP: db-backup

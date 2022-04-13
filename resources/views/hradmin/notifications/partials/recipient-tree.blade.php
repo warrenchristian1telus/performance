@@ -36,10 +36,10 @@
                 </h6>
             </div>
 
-            <div id="collapse-{{ $org->id }}" class="collapse" data-XXXparent="#accordion" aria-labelledby="heading-{{ $org->id }}">
+            <div id="collapse-{{ $org->id }}" class="collapse" data-parent="#accordion-level0" aria-labelledby="heading-{{ $org->id }}">
                 <div class="card-body">
                     {{--  Nested PROGRAM - Start  --}}
-                    <div id="accordion-1XXX">
+                    <div id="accordion-1">
                         @foreach($org->children as $program)
                         <div class="card">
                             @if ($program->children->count() > 0 )    
@@ -58,10 +58,10 @@
                                 </h6>
                             </div>
 
-                            <div id="collapse-{{ $program->id }}" class="collapse" data-XXXparent="#accordion-1" aria-labelledby="heading-{{ $program->id }}">
+                            <div id="collapse-{{ $program->id }}" class="collapse" data-parent="#accordion-1" aria-labelledby="heading-{{ $program->id }}">
                                 <div class="card-body">
                                     {{--  Nested DIVISION - Start  --}}
-                                    <div id="accordion-2XXX">
+                                    <div id="accordion-2">
                                         @foreach($program->children as $division)
                                         <div class="card">
                                             @if ($division->children->count() > 0 )    
@@ -78,10 +78,10 @@
                                                 </h6>
                                             </div>    
                                         
-                                            <div id="collapse-{{ $division->id }}" class="collapse" data-XXXparent="#accordion-2" aria-labelledby="heading-{{ $division->id }}">
+                                            <div id="collapse-{{ $division->id }}" class="collapse" data-parent="#accordion-2" aria-labelledby="heading-{{ $division->id }}">
                                                 <div class="card-body">
                                                     {{-- Nested BRANCH - Start --}}
-                                                    <div id="accordion-3XXX">
+                                                    <div id="accordion-3">
                                                         @foreach($division->children as $branch)
                                                         <div class="card">
                                                             @if ($branch->children->count() > 0 )    
@@ -97,10 +97,10 @@
                                                                     </a>
                                                                     </h6> 
                                                                 </div>
-                                                                <div id="collapse-{{ $branch->id }}" class="collapse" data-XXXparent="#accordion-3" aria-labelledby="heading-{{ $branch->id }}">
+                                                                <div id="collapse-{{ $branch->id }}" class="collapse" data-parent="#accordion-3" aria-labelledby="heading-{{ $branch->id }}">
                                                                     <div class="card-body">
                                                                         {{--  Nested LEVEL4 - Start --}}
-                                                                        <div id="accordion-4XXX">
+                                                                        <div id="accordion-4">
                                                                             @foreach($branch->children as $level4)
                                                                                 <div class="card" style="margin-bottom: 0 !important;">
                                                                                     <div class="card-header employees" id="heading-{{ $level4->id }}">
@@ -118,7 +118,7 @@
                                                                                 </div>
 
                                                                                 {{-- level4 -- Employee Listing - Start --}}                                              
-                                                                                <div id="collapse-{{ $level4->id }}" class="collapse" data-XXXparent="#accordion-4" aria-labelledby="heading-{{ $level4->id }}">
+                                                                                <div id="collapse-{{ $level4->id }}" class="collapse" data-parent="#accordion-4" aria-labelledby="heading-{{ $level4->id }}">
                                                                                     <div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" role="status" style="display:none">
                                                                                         <span class="sr-only">Loading...</span>
                                                                                     </div>
@@ -147,7 +147,7 @@
                                                                 </div>
 
                                                                 {{-- BRANCH -- Employee Listing - Start --}}                                                                                         
-                                                                <div id="collapse-{{ $branch->id }}" class="collapse" data-XXXparent="#accordion-4" aria-labelledby="heading-{{ $branch->id }}">
+                                                                <div id="collapse-{{ $branch->id }}" class="collapse" data-parent="#accordion-4" aria-labelledby="heading-{{ $branch->id }}">
                                                                     <div class="card-header employee-list" id="employees-{{ $branch->id }}" value="{{ $branch->id }}"></div>
                                                                 </div>
                                                                 {{-- BRANCH -- Employee Listing - End --}}                                                                                         
@@ -177,7 +177,7 @@
                                             </div>
 
                                             {{-- DVISION -- Employee Listing - Start --}}                                                                                         
-                                            <div id="collapse-{{ $division->id }}" class="collapse" data-XXXparent="#accordion-4" aria-labelledby="heading-{{ $division->id }}">
+                                            <div id="collapse-{{ $division->id }}" class="collapse" data-parent="#accordion-3" aria-labelledby="heading-{{ $division->id }}">
                                                 <div class="card-header employee-list" id="employees-{{ $division->id }}" value="{{ $division->id }}"></div>
                                             </div>
                                             {{-- DVISION -- Employee Listing - End --}}                                                                                         
@@ -206,7 +206,7 @@
                             </div>
 
                             {{-- PROGRAM -- Employee Listing - Start --}}                                                                                         
-                            <div id="collapse-{{ $program->id }}" class="collapse" data-XXXparent="#accordion-4" aria-labelledby="heading-{{ $program->id }}">
+                            <div id="collapse-{{ $program->id }}" class="collapse" data-parent="#accordion-2" aria-labelledby="heading-{{ $program->id }}">
                                 <div class="card-header employee-list" id="employees-{{ $program->id }}" value="{{ $program->id }}"></div>
                             </div>
                             {{-- PROGRAM -- Employee Listing - End --}}                                                                                         
@@ -392,6 +392,7 @@ $(document).ready(function() {
             $.ajax({
                 url: '/hradmin/notifications/employees/' + tree_id,
                 type: 'GET',
+                data: $("#notify-form").serialize(),
                 dataType: 'html',
                 beforeSend: function() {
                     //$('#pageLoader').show();  
@@ -551,6 +552,25 @@ $(document).ready(function() {
 
         }
 
+    });
+
+    $("#accordion-level0").on('shown.bs.collapse', function () {
+        // do something
+        el = $('a.toggle-accordion');
+        if ( !el.hasClass("active")) {
+            el.addClass( "active");
+        }
+    });
+
+    $("#accordion-level0").on('hidden.bs.collapse', function () {
+        
+        count = $('div.collapse.show').length;
+        if (count == 0) {
+            el = $('a.toggle-accordion');
+            if ( el.hasClass("active")) {
+                el.removeClass( "active");
+            }
+        }
     });
 
     $(".toggle-accordion").on("click", function(e) {

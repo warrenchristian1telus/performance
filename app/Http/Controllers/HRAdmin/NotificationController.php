@@ -504,9 +504,29 @@ class NotificationController extends Controller
 
     public function getEmployees(Request $request,  $id) {
 
-        
-        $org = OrganizationTree::where('id', $id)->first();
-        $employees = $org ? $org->employees() : [];
+    
+        $level0 = $request->dd_level0 ? OrganizationTree::where('id', $request->dd_level0)->first() : null;
+        $level1 = $request->dd_level1 ? OrganizationTree::where('id', $request->dd_level1)->first() : null;
+        $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
+        $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
+        $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
+        $job_titles = $request->job_titles ? EmployeeDemo::whereIn('job_title', $request->job_titles)->select('job_title')
+                    ->groupBy('job_title')->pluck('job_title') : null;
+
+        list($sql_level0, $sql_level1, $sql_level2, $sql_level3, $sql_level4) = 
+            $this->baseFilteredSQLs($request, $level0, $level1, $level2, $level3, $level4, $job_titles);
+       
+        $rows = $sql_level4->where('organization_trees.id', $id)
+            ->union( $sql_level3->where('organization_trees.id', $id) )
+            ->union( $sql_level2->where('organization_trees.id', $id) )
+            ->union( $sql_level1->where('organization_trees.id', $id) )
+            ->union( $sql_level0->where('organization_trees.id', $id) );
+
+        $employees = $rows->get();
+        //$orgs = OrganizationTree::whereIn('id', $rows->toArray() )->get()->toTree();    
+
+        // $org = OrganizationTree::where('id', $id)->first();
+        // $employees = $org ? $org->employees() : [];
         $parent_id = $id;
         
         // if($request->ajax()){

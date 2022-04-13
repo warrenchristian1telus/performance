@@ -61,6 +61,7 @@
         var oTable = $('#employee-list-table').DataTable({
             "scrollX": true,
             retrieve: true,
+            "searching": false,
             processing: true,
             serverSide: true,
             select: true,

@@ -3,7 +3,8 @@
 name: Deploy Backup container to Openshift
   
 on:
- workflow_dispatch:
+  push:
+  workflow_dispatch:
 
 jobs:
   

@@ -91,7 +91,12 @@
                 <div class="col-sm-6">
                     <x-input label="End Date " class="error-target" type="date" name="target_date"  />
                      <small  class="text-danger error-target_date"></small>
-                </div><!-- 
+                </div>
+                <div class="col-sm-6">
+                    <x-dropdown :list="$tags" label="Tags" name="tag_ids[]"/>
+                    <small  class="text-danger error-tag_ids"></small>
+                </div>
+                <!-- 
                 <div class="col-12">
                     <div class="card mt-3 p-3" icon="fa-question">
                         <span>Supporting Material</span>

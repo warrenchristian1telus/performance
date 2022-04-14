@@ -19,6 +19,7 @@ use App\Http\Requests\Goals\CreateGoalRequest;
 use App\Http\Requests\Goals\EditSuggestedGoalRequest;
 use App\MicrosoftGraph\SendMail;
 use App\Jobs\SendEmailJob;
+use App\Models\Tag;
 
 class GoalController extends Controller
 {
@@ -31,6 +32,7 @@ class GoalController extends Controller
     {
         $authId = Auth::id();
         $goaltypes = GoalType::all()->toArray();
+        $tags = Tag::all()->toArray();
         $user = User::find($authId);
 
         $myTeamController = new MyTeamController(); 
@@ -44,7 +46,7 @@ class GoalController extends Controller
             $goals = $query->where('status', 'active')
             ->paginate(8);
             $type = 'current';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags'));
         } else if ($request->is("goal/supervisor")) {
             //$user = Auth::user();
             // TO remove already copied goals.
@@ -57,8 +59,7 @@ class GoalController extends Controller
         }
         $goals = $query->where('status', '<>', 'active')
         ->paginate(4);
-
-        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees'));
+        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags'));
     }
 
     /**
@@ -266,6 +267,7 @@ class GoalController extends Controller
 
         $myTeamController = new MyTeamController();
         $suggestedGoalsData = $myTeamController->showSugggestedGoals('my-team.goals.bank', false);
+
         return view('goal.bank', array_merge(compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
     }
 

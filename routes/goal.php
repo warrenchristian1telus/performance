@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoalCommentController;
 use App\Http\Controllers\GoalController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +13,7 @@ Route::get('goal/library/{id}', [GoalController::class, 'showForLibrary'])->name
 Route::get('goal/supervisor/{id}', [GoalController::class, 'getSupervisorGoals'])->name('goal.supervisor');
 Route::post('goal/supervisor/{id}/copy', [GoalController::class, 'copyGoal'])->name('goal.supervisor.copy');
 Route::post('goal/library/copy-multiple', [GoalController::class, 'saveFromLibraryMultiple'])->name('goal.library.save-multiple');
+Route::delete('goal/comment/{id}', [GoalCommentController::class, 'delete'])->name('goal.comment.delete');
 
 Route::get('goal', function () {
     return redirect()->route('goal.current');

@@ -82,7 +82,7 @@ class Goal extends Model implements Auditable
   public function comments()
   {
     // TODO: Order of comments
-    return $this->hasMany('App\Models\GoalComment')->whereNull('parent_id')->orderBy('created_at','ASC')->limit(10);
+    return $this->hasMany('App\Models\GoalComment')->whereNull('parent_id')->withTrashed()->orderBy('created_at','ASC')->limit(10);
   }
 
   public function getStartDateHumanAttribute() {
@@ -97,5 +97,10 @@ class Goal extends Model implements Auditable
   public function sharedWith()
   {
     return $this->belongsToMany('App\Models\User', 'goals_shared_with', 'goal_id', 'user_id')->withTimestamps();
+  }
+
+  public function tags()
+  {
+    return $this->belongsToMany(Tag::class, 'goal_tags')->withTimestamps();
   }
 }

@@ -74,14 +74,19 @@
                                 <x-profile-pic></x-profile-pic>
                                 <div class="border flex-fill p-2 rounded">
                                     <b>{{$comment->user->name}}</b> on {{$comment->created_at->format('M d, Y H:i A')}}<br>
-                                    {!!$comment->comment!!}
+                                    {!! (!$comment->trashed()) ? $comment->comment : '<i>Comment is deleted.</i>' !!}
+                                    <div>
+                                        @if(!$comment->trashed() && $comment->canBeDeleted())<x-button icon='trash' style="link" class="comment-delete" :data-comment-id="$comment->id" size="sm">Delete</x-button>@endif
+                                    </div>
                                     <div>
                                         @foreach($comment->replies as $reply)
                                         <div class="card mt-2 p-2 d-flex flex-row bg-light">
                                             <x-profile-pic></x-profile-pic>
                                             <div class="flex-fill">
                                                 <b>{{$reply->user->name}}</b> on {{$reply->created_at->format('M d, Y H:i A')}}<br>
-                                                {!!$reply->comment!!}
+                                                {!! (!$reply->trashed()) ? $reply->comment : '<i>Comment is deleted.</i>' !!}
+                                                @if(!$reply->trashed() && $reply->canBeDeleted())<x-button icon='trash' style="link" class="comment-delete" :data-comment-id="$reply->id" size="sm">Delete</x-button>@endif
+                                                
                                             </div>
                                         </div>
                                         @endforeach
@@ -126,6 +131,10 @@
                 </div>
             </div>
         </div>
+        <form action="{{route('goal.comment.delete', 'xxx')}}" method="POST" id="delete-comment-form">
+            @csrf
+            @method("DELETE")
+        </form>
         @include('goal.partials.supervisor-goal')
 
     @push('js')
@@ -202,6 +211,14 @@
         const commentId = $(this).data("comment-id");
         $(this).siblings(".reply-box").toggleClass("d-none");
     });
+    $(document).on('click','.comment-delete', function(e){
+        if (confirm("Are you sure you want to delete this comment ?")) {
+            const commentId = $(this).data("comment-id");
+            const form = document.getElementById("delete-comment-form");
+            fetch(form.action.replace("xxx", commentId),{method:'POST', body: new FormData(form)});
+        }
+    });
+    
     $('body').popover({
         selector: '[data-toggle]',
         trigger: 'hover',

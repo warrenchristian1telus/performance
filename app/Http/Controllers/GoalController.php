@@ -457,7 +457,7 @@ class GoalController extends Controller
             }
 
             if ($request->parent_id != null) {
-                $original_comment = GoalComment::findOrFail($request->parent_id);
+                $original_comment = GoalComment::withTrashed()->findOrFail($request->parent_id);
                 if (($original_comment->user_id != Auth::id()) and ($goal->user_id != Auth::id())) {
                     //user replying to somebody else's comment
                     $newNotify = new DashboardNotification;

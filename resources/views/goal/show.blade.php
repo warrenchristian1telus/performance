@@ -230,6 +230,7 @@
             const commentId = $(this).data("comment-id");
             const form = document.getElementById("delete-comment-form");
             fetch(form.action.replace("xxx", commentId),{method:'POST', body: new FormData(form)});
+            window.location.reload();
         }
     });
 

@@ -14,13 +14,14 @@ class Conversation extends Model
     use HasFactory, SoftDeletes;
 
     protected $with = ['topic', 'conversationParticipants', 'conversationParticipants.participant'];
-    protected $appends = ['c_date', 'c_time', 'questions', 'date_time', 'is_current_user_participant', 'is_with_supervisor', 'last_sign_off_date'];
+    protected $appends = ['c_date', 'c_time', 'questions', 'date_time', 'is_current_user_participant', 'is_with_supervisor', 'last_sign_off_date', 'is_locked'];
 
     protected $casts = [
         'date' => 'datetime:Y-m-d',
         'time' => 'datetime:H:i:s',
         'sign_off_time' => 'datetime:Y-m-d',
-        'supervisor_signoff_time' => 'datetime:Y-m-d'
+        'supervisor_signoff_time' => 'datetime:Y-m-d',
+        'initial_signoff' => 'datetime:Y-m-d'
     ];
 
     public function topic()
@@ -30,6 +31,13 @@ class Conversation extends Model
     public function conversationParticipants()
     {
         return $this->hasMany('App\Models\ConversationParticipant');
+    }
+
+    public function getIsLockedAttribute() {
+        if (!$this->initial_signoff) {
+            return false;
+        }
+        return $this->initial_signoff->addDays(14)->isPast();
     }
 
     public function getInfoComment1Attribute() {

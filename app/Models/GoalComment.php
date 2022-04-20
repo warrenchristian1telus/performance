@@ -22,4 +22,8 @@ class GoalComment extends Model
     public function canBeDeleted() {
         return ($this->user_id === Auth::id());
     }
+
+    public function canBeEdited() {
+        return (!$this->trashed()) && $this->user_id === Auth::id();
+    }
 }

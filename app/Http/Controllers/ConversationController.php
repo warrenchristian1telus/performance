@@ -316,6 +316,10 @@ class ConversationController extends Controller
             $conversation->empl_agree2 = $request->check_two;
             $conversation->empl_agree3 = $request->check_three;
             $conversation->team_member_agreement = $request->team_member_agreement;
+
+            if (!$conversation->initial_signoff) {
+                $conversation->initial_signoff = Carbon::now();
+            }
         }
         $conversation->update();
 

@@ -49,4 +49,12 @@
     <div class="form-control-plaintext">
         {{$goal['target_date_human']}}
     </div>
+    <b>{{__("Tags")}}</b>
+    <div class="form-control-plaintext">
+        @foreach($goal->tags as $tag)
+            <div class="btn btn-outline-primary btn-sm" style="cursor: default;">
+                {{$tag['name']}}
+            </div>
+        @endforeach
+    </div>
 </div>

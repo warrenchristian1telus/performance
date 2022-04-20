@@ -229,6 +229,9 @@
                         </div>
                     </form>
                 </div>
+                <div class="mt-3 alert alert-default-warning d-none" id="locked-message">
+                    Conversation records can be un-signed and edited for up to two weeks from initial completion date. After the two week period, a request to unlock the conversation record will need to be submitted to your HR Administrator if changes are required.
+                </div>
                 @endif
                 <div class="mt-3 alert alert-default-warning alert-dismissible" id="supervisor-signoff-message">
                     <span class="h5"><i class="icon fas fa-exclamation-circle"></i><b class="name"></b> has <b class="not d-none">not</b> signed this record of conversation <span class="time"></span></span>

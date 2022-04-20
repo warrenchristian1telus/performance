@@ -489,6 +489,10 @@
                         $('#info_comment5_edit').val(result.info_comment5);
                         $('#team_member_agreement').prop('checked', result.team_member_agreement ? true : false);
                         $('#team_member_agreement_2').prop('checked', result.team_member_agreement ? true : false);
+
+                        $("#locked-message").addClass("d-none");
+                        $("#unsignoff-form-block").show();
+                        $("#signoff-form-block").show();
                         user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
                         user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
                         let isNotThirdPerson = true;
@@ -607,6 +611,13 @@
                             $('#info_to_capture').removeClass('d-none');
                         }else {
                             $('#info_to_capture').addClass('d-none');
+                        }
+
+                        //Is Locked
+                        if (result.is_locked) {
+                            $("#locked-message").removeClass("d-none");
+                            $("#unsignoff-form-block").hide();
+                            $("#signoff-form-block").hide();
                         }
 
                         //Additional Info to Capture

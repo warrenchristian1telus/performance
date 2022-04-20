@@ -93,7 +93,7 @@
                      <small  class="text-danger error-target_date"></small>
                 </div>
                 <div class="col-sm-6">
-                    <x-dropdown :list="$tags" label="Tags" name="tag_ids[]"/>
+                    <x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
                     <small  class="text-danger error-tag_ids"></small>
                 </div>
                 <!-- 
@@ -238,6 +238,8 @@
         });
     });
 
+    
+
     $(document).on('click', '.btn-link', function(e) {
         let linkedGoals = [];
         if(e.target.innerText == 'Link'){
@@ -261,6 +263,7 @@
     });
 
         $(document).ready(() => {
+            $(".tags").multiselect();
             $(".search-users").each(function() {
                 const goalId = $(this).data('goal-id');
                 const selectDropdown = this;

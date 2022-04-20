@@ -84,9 +84,11 @@ class GoalController extends Controller
         $input = $request->validated();
 
         $input['user_id'] = Auth::id();
+        $tags = $input['tag_ids'];
+        unset($input['tag_ids']);
 
-        Goal::create($input);
-
+        $goal = Goal::create($input);
+        $goal->tags()->sync($tags);
         return response()->json(['success' => true, 'message' => 'Goal Created successfully']);
     }
 
@@ -157,8 +159,9 @@ class GoalController extends Controller
         ->firstOrFail();
 
         $goaltypes = GoalType::all(['id', 'name']);
+        $tags = Tag::all(["id","name"])->toArray();
 
-        return view('goal.edit', compact("goal", "goaltypes"));
+        return view('goal.edit', compact("goal", "goaltypes", "tags"));
         // return redirect()->route('goal.edit', $id);
     }
 
@@ -174,7 +177,10 @@ class GoalController extends Controller
         $goal = Goal::withoutGlobalScope(NonLibraryScope::class)->findOrFail($id);
         $input = $request->validated();
 
+        $tags = $input['tag_ids'];
+        unset($input['tag_ids']);        
         $goal->update($input);
+        $goal->tags()->sync($tags);
 
         return redirect()->route($goal->is_library ? 'my-team.suggested-goals' : 'goal.index');
     }

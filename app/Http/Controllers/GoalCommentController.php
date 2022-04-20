@@ -15,4 +15,11 @@ class GoalCommentController extends Controller
         }
         return $this->respondeWith($goalComment);
     }
+
+    public function edit(Request $request, $id) {
+        $goalComment = GoalComment::findOrFail($id);
+        $goalComment->comment = $request->comment;
+        $goalComment->save();
+        return $this->respondeWith($goalComment);
+    }
 }

@@ -1,4 +1,3 @@
-
 <x-side-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -28,15 +27,27 @@
                 <div class="col-sm-6">
                     <x-input label="End Date" type="date" name="target_date" :value="$goal->target_date ? $goal->target_date->format('Y-m-d') : ''" />
                 </div>
+                <div class="col-sm-6">
+                    <x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goal->tags->toArray(), 'id')" class="tags" multiple/>
+                </div>
                 <div class="col-12 text-center mb-3">
                     <x-button type="submit" class="btn-lg"> Save </x-button>
                 </div>
             </div>
         </form>
     </div>
+    @push('css')
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
+    @endpush
 
     @push('js')
+    <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
 
+    <script>
+        $(document).ready(() => {
+            $('.tags').multiselect();
+        });
+    </script>
     <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){

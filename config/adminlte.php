@@ -286,11 +286,13 @@ return [
             'text' => 'HR Administration',
             'url'  => '#',
             'icon' => 'fas fa-fw fa-cog',
+            'active' => ['hradmin/*'],
+            'can' => ['hr admin'],
             'submenu' => [
                 [
                     'text' => 'My Organization',
                     'url'  => 'hradmin/myorg',
-                    'active' => ['hradmin/myorg']
+                    'active' => ['hradmin/myorg/*']
                 ],
                 [
                     'text' => 'Share Employees',
@@ -304,18 +306,13 @@ return [
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'hradmin/goals/goal-bank',
+                    'url'  => 'hradmin/goals/addgoals',
                     'active' => ['hradmin/goals/*']
                 ],
                 [
                     'text' => 'Notifications',
                     'url'  => 'hradmin/notifications',
                     'active' => ['hradmin/notifications/*']
-                ],
-                [
-                    'text' => 'Statistics and Reports',
-                    'url'  => 'hradmin/statistics/goalsummary',
-                    'active' => ['hradmin/statistics/*']
                 ],
             ],
         ],
@@ -324,6 +321,8 @@ return [
             'text' => 'System Administration',
             'url'  => '#',
             'icon' => 'fas fa-fw fa-cog',
+            'active' => ['sysadmin/*'],
+            'can' => ['sys admin'],
             'submenu' => [
                 [
                     'text' => 'Employee List',
@@ -359,15 +358,6 @@ return [
                     'text' => 'Access and Permissions',
                     'url'  => 'sysadmin/access/createaccess',
                     'active' => ['sysadmin/access/*']
-                ],
-                [
-                    'text' => 'Statistics and Reports',
-                    'url'  => 'sysadmin/statistics/goalsummary',
-                    'active' => ['sysadmin/statistics/*']
-                ],
-                [
-                    'text' => 'Switch Identity',
-                    'url'  => '#',
                 ],
             ],
         ],

@@ -238,7 +238,6 @@ class SysadminController extends Controller
 
         $sEmpl = $query->orderBy('employee_name')->paginate(10);
 
-
         return view('sysadmin.shared.manageshares', compact('request', 'sEmpl', 'crit', 'level0'));
     }
 

@@ -17,7 +17,7 @@
         <div>
             <form action="" method="get">
 				@csrf
-				<table class="uk-table m-3">
+				<table class="uk-table m-3" style="overflow-x: auto; width: 1500px">
                     <tbody>
                         @include('hradmin.partials.organization_filter')
                         <tr style="text-align: left;" class="p-1 form-group">
@@ -31,7 +31,7 @@
                                 <label>
                                     Search
                                 </label>
-								<input type="text" name="searchtext" class="form-control" value="{{request()->searchtext}}">
+								<input type="text" name="searchText" class="form-control" value="{{request()->searchtext}}">
                             </td>
                             <td style="text-align: left; width: 150px; " class="p-1 form-group">
                                 <button class="btn btn-primary mt-4 px-5">Search</button>
@@ -45,7 +45,7 @@
         <div id="collapseOne" class="collapse {{$sEmpl ? 'show' : ''}}" aria-labelledby="headingOne" data-parent="#accordionLibrary">
             <div class="table table-wrapper" style="width: 3400px">
                 <div class="md-card-content" style="overflow-x: auto;">
-                    <table class="uk-table m-3">
+                    <table class="table table-bordered data-table">
                         <thead>
                             <tr>
                                 <th style="text-align: left; width: 500px; "> Employee Name</th>
@@ -85,10 +85,10 @@
                                 </td>
 								<td>
 									<div class="d-flex flex-row-reverse align-items-center">
-										<button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $o->employee_id }}" >
+										{{-- <button class="btn btn-danger btn-sm float-right ml-2 delete-btn" data-id="{{ $o->employee_id }}" >
 											<i class="fa-trash fa"></i>
-										</button>
-										<button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $o->employee_id }}" data-toggle="modal">
+										</button> --}}
+										<button class="btn btn-primary btn-sm float-left" data-id="{{ $o->employee_id }}" data-toggle="modal">
 											{{-- <button class="btn btn-primary btn-sm float-right ml-2 btn-view-conversation" data-id="{{ $o->employee_id }}" data-toggle="modal" data-target="#viewConversationModal"> --}}
 											View
 										</button>
@@ -111,3 +111,30 @@
 @include('hradmin.partials.organization_script')
 
 @endsection
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+{{-- <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script> --}}
+
+<script type="text/javascript">
+  $(function () {
+    
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('hradmin.myorg.test') }}",
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'name', name: 'name'},
+            {data: 'email', name: 'email'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+    
+  });
+</script>
+

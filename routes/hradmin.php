@@ -2,24 +2,47 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HRadminController;
+use App\Http\Controllers\MyOrganizationController;
+use App\Http\Controllers\MyOrgController;
 use App\Http\Controllers\GenericTemplateController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\HRAdmin\NotificationController;
+use App\Http\Controllers\HRAdmin\HRGoalController;
+use App\Http\Controllers\SharedEmployeesController;
 
 
-Route::get('hradmin/myorg', [HRadminController::class, 'myorg'])->name('hradmin.myorg');
-Route::get('hradmin/shared/shareemployee', [HRadminController::class, 'shareemployee'])->name('hradmin.shareemployee');
-Route::get('hradmin/shared/manageshares', [HRadminController::class, 'manageshares'])->name('hradmin.manageshares');
-Route::get('hradmin/excused/excuseemployee', [HRadminController::class, 'excuseemployee'])->name('hradmin.excuseemployee');
-Route::get('hradmin/excused/manageexcused', [HRadminController::class, 'manageexcused'])->name('hradmin.manageexcused');
-Route::get('hradmin/goals/addgoal', [HRadminController::class, 'addgoal'])->name('hradmin.addgoal');
-Route::get('hradmin/goals/goal-bank', [HRadminController::class, 'addgoal'])->name('hradmin.goal-bank');
-Route::get('hradmin/goals/managegoals', [HRadminController::class, 'managegoals'])->name('hradmin.managegoals');
-Route::get('hradmin/goals/goal-edit/{id}', [HRadminController::class, 'goaledit'])->name('hradmin.goal-edit');
-Route::post('hradmin/goals/goaladd', [HRadminController::class, 'goaladd'])->name('hradmin.goaladd');
-Route::post('hradmin/goals/goalupdate/{id}', [HRadminController::class, 'goalupdate'])->name('hradmin.goalupdate');
+Route::get('/hradmin/org-organizations', [HRadminController::class,'getOrganizations']);
+Route::get('/hradmin/org-programs', [HRadminController::class,'getPrograms']);
+Route::get('/hradmin/org-divisions', [HRadminController::class,'getDivisions']);
+Route::get('/hradmin/org-branches', [HRadminController::class,'getBranches']);
+Route::get('/hradmin/org-level4', [HRadminController::class,'getLevel4']);
 
-//Route::get('hradmin/notifications/createnotification', [HRadminController::class, 'createnotification'])->name('hradmin.createnotification');
-//Route::get('hradmin/notifications/viewnotifications', [HRadminController::class, 'viewnotifications'])->name('hradmin.viewnotifications');
+
+Route::get('hradmin/myorg', [MyOrganizationController::class, 'index'])->name('hradmin.myorg');
+Route::get('hradmin/myorg/myorganization', [MyOrganizationController::class, 'getList'])->name('hradmin.myorg.myorganization');
+Route::post('hradmin/myorg/myorganization', [MyOrganizationController::class, 'index'])->name('hradmin.myorg.myorganization');
+
+
+Route::get('hradmin/shared/shareemployee', [HRadminController::class, 'shareemployee'])->name('hradmin.shared.shareemployee');
+Route::get('hradmin/shared/manageshares', [HRadminController::class, 'manageshares'])->name('hradmin.shared.manageshares');
+
+
+//Goal Routes
+Route::get('/hradmin/goals/addgoals', [HRGoalController::class, 'addgoals'])->name('hradmin.goals.addgoals');
+Route::post('hradmin/goals/addgoals', [HRGoalController::class, 'addgoals'])->name('hradmin.goals.addgoals');
+Route::get('hradmin/goals/listgoals', [HRGoalController::class, 'listgoals'])->name('hradmin.goals.listgoals');
+Route::get('hradmin/goals/showgoals', [HRGoalController::class, 'showGoals'])->name('hradmin.goals.showgoals');
+
+
+Route::get('hradmin/excused/excuseemployee', [HRadminController::class, 'excuseemployee'])->name('hradmin.excused.excuseemployee');
+Route::get('hradmin/excused/manageexcused', [HRadminController::class, 'manageexcused'])->name('hradmin.excused.manageexcused');
+Route::get('hradmin/goals/addgoal', [HRadminController::class, 'addgoal'])->name('hradmin.goals.addgoal');
+Route::get('hradmin/goals/goal-bank', [HRadminController::class, 'addgoal'])->name('hradmin.goals.goal-bank');
+Route::get('hradmin/goals/goal-edit/{id}', [HRadminController::class, 'goaledit'])->name('hradmin.goals.goal-edit');
+Route::post('hradmin/goals/goaladd', [HRadminController::class, 'goaladd'])->name('hradmin.goals.goaladd');
+Route::post('hradmin/goals/goalupdate/{id}', [HRadminController::class, 'goalupdate'])->name('hradmin.goals.goalupdate');
+
+
 Route::group(['middleware' => ['auth']], function() {    
     Route::get('/hradmin/notifications', [NotificationController::class, 'index'])->name('hradmin.notifications');
     Route::get('/hradmin/notifications/detail/{notification_id}', [NotificationController::class, 'show']);
@@ -42,10 +65,11 @@ Route::group(['middleware' => ['auth']], function() {
     
 });
 
-Route::get('hradmin/statistics/goalsummary', [HRadminController::class, 'goalsummary'])->name('hradmin.goalsummary');
-Route::get('hradmin/statistics/conversationsummary', [HRadminController::class, 'conversationsummary'])->name('hradmin.conversationsummary');
-Route::get('hradmin/statistics/sharedsummary', [HRadminController::class, 'sharedsummary'])->name('hradmin.sharedsummary');
-Route::get('hradmin/statistics/excusedsummary', [HRadminController::class, 'excusedsummary'])->name('hradmin.excusedsummary');
+
+Route::get('hradmin/statistics/goalsummary', [HRadminController::class, 'goalsummary'])->name('hradmin.statistics.goalsummary');
+Route::get('hradmin/statistics/conversationsummary', [HRadminController::class, 'conversationsummary'])->name('hradmin.statistics.conversationsummary');
+Route::get('hradmin/statistics/sharedsummary', [HRadminController::class, 'sharedsummary'])->name('hradmin.statistics.sharedsummary');
+Route::get('hradmin/statistics/excusedsummary', [HRadminController::class, 'excusedsummary'])->name('hradmin.statistics.excusedsummary');
 
 
 Route::get('hradmin/level0', 'App\Http\Controllers\HRadminController@getOrgLevel0')->name('hradmin.level0');

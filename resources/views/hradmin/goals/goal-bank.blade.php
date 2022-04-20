@@ -87,42 +87,42 @@
 
                             <tr>
                                 <td style="text-align: left; width: 500px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->title }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->title }}</a>
                                 </td>
                                 <td style="text-align: left; width: 250px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->GoalTypeValue }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->GoalTypeValue }}</a>
                                 </td>
                                 <td style="text-align: left; width: 100px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->MandatoryValue }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->MandatoryValue }}</a>
                                 </td>
                                 <td style="text-align: left; width: 200px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ \Carbon\Carbon::parse($o->start_date)->format('F d, Y') }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ \Carbon\Carbon::parse($o->start_date)->format('F d, Y') }}</a>
                                 </td>
                                 <td style="text-align: left; width: 200px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ \Carbon\Carbon::parse($o->target_date)->format('F d, Y') }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ \Carbon\Carbon::parse($o->target_date)->format('F d, Y') }}</a>
                                 </td>
                                 <td style="text-align: left; width: 200px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->name }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->name }}</a>
                                 </td>
                                 <td style="text-align: left; width: 150px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->Audience }} Employees</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->Audience }} Employees</a>
                                 </td>
                                 <td style="text-align: left; width: 400px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->level1_program }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->level1_program }}</a>
                                 </td>
                                 <td style="text-align: left; width: 400px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->level2_division }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->level2_division }}</a>
                                 </td>
                                 <td style="text-align: left; width: 400px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->level3_branch }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->level3_branch }}</a>
                                 </td>
                                 <td style="text-align: left; width: 400px; ">
-                                    <a href='{{route("hradmin.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->level4 }}</a>
+                                    <a href='{{route("hradmin.goals.goal-edit", $o->id)}} class="edit-goal-detail highlighter" data-id="{{$o->id}}'>{{ $o->level4 }}</a>
                                 </td>
                                 <td m-1 style="text-align: left; width: 150px; ">
                                     <x-button
                                     size="sm"
-                                    :href='route("hradmin.goal-edit", $o->id)'
+                                    :href='route("hradmin.goals.goal-edit", $o->id)'
                                     :tooltip="__('Click to Edit the details of this goal.')"
                                     tooltipPosition="bottom" class="mr-2 edit-goal-detail" aria-label="Edit Item">{{__('Edit')}}
                                 </x-button>
@@ -167,7 +167,7 @@
             <div class="d-flex justify-content-around">
 
                 <div class="container-fluid">
-                    <form action="{{ route ('hradmin.goaladd', $newGoal, $newGoal->id)}}" method="POST">
+                    <form action="{{ route ('hradmin.goals.goaladd', $newGoal, $newGoal->id)}}" method="POST">
                         @csrf
                         @method('PUT')
                         <tbody>

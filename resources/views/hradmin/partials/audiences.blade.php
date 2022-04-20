@@ -6,8 +6,8 @@
     <i class="fa fa-chevron-down"></i>
 </button>
 <div id="when_to_use"  class="collapse p-3">
-    <!-- @if(count($aud_level1)) -->
-        <!-- @include('sysadmin.partials.audience_level1', ['aud_level1' => $aud_level1, 'data-parent' => $org->organization, 'dataLevel' => '1']) -->
-    <!-- @endif -->
+    {{-- @if(count($aud_level1)) --}}
+        {{-- @include('sysadmin.partials.audience_level1', ['aud_level1' => $aud_level1, 'dataparent' => $org->organization, 'dataLevel' => '1']) --}}
+    {{-- @endif --}}
 </div>
 @endforeach

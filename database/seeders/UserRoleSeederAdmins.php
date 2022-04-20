@@ -1,0 +1,122 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
+class UserRoleSeederAdmins extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $this->setupHRAdminRole();
+        $this->setupSysAdminRole();
+    }
+
+    public function setupHRAdminRole() {
+
+        $permissions = [
+            [
+                'name' => 'dashboard',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'goals',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'conversions',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'my team',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'hr admin',
+                'guard_name' => 'web'
+            ]
+        ];
+
+        $this->setupUserRolePermission(
+            [999, 998, 1901],
+            $permissions,
+            'HR Admin'
+        );
+
+    }
+
+    public function setupSysAdminRole() {
+
+        $permissions = [
+            [
+                'name' => 'dashboard',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'goals',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'conversions',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'my team',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'sys admin',
+                'guard_name' => 'web'
+            ]
+        ];
+
+        $this->setupUserRolePermission(
+            [999, 998, 1901],
+            $permissions,
+            'Sys Admin'
+        );
+
+    }
+
+    public function setupUserRolePermission($userIds, $permissions, $roleName, $userIdsNotIn = false) {
+        
+        $query = new User;
+        
+        if ($userIdsNotIn) {
+            $query = $query->whereNotIn("id", $userIds);
+        } else {
+            $query = $query->whereIn("id", $userIds);
+        }
+
+        $users = $query->get();
+
+        $permissionObj = $this->createPermissions($permissions);
+
+        $role = Role::updateOrCreate([
+            'name' => $roleName,
+        ]);
+
+        $role->syncPermissions(array_map(function ($p) {
+            return $p->id;
+        }, $permissionObj));
+
+    }
+
+
+    public function createPermissions($permissions) : array {
+        $permissionsObj = [];
+        foreach ($permissions as $permission) {
+            $per = Permission::updateOrCreate($permission, $permission);
+            array_push($permissionsObj, $per);
+        }
+        return $permissionsObj;
+    }
+}

@@ -126,7 +126,7 @@
             const url = '{{ route('my-team.view-profile-as', '')}}';
             window.location = url + "/" + $(this).val();
         }); */
-        if (CKEDITOR) {
+        if (typeof CKEDITOR !== 'undefined') {
             CKEDITOR.config.disableNativeSpellChecker = false;
         }
     </script>

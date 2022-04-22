@@ -263,7 +263,10 @@
     });
 
         $(document).ready(() => {
-            $(".tags").multiselect();
+            $(".tags").multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true
+            });
             $(".search-users").each(function() {
                 const goalId = $(this).data('goal-id');
                 const selectDropdown = this;

@@ -101,6 +101,7 @@
         </form>
         @if(Auth::user()->hasSupervisorRole())
         @php $shareWithLabel = 'Audience' @endphp
+        @php $doNotShowInfo = true @endphp
         <div>
             <b>Team Goal Bank</b> <br>
         </div>

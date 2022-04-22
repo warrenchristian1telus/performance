@@ -45,7 +45,10 @@
 
     <script>
         $(document).ready(() => {
-            $('.tags').multiselect();
+            $('.tags').multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true
+            });
         });
     </script>
     <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>

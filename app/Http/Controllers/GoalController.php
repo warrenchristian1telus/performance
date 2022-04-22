@@ -55,7 +55,7 @@ class GoalController extends Controller
             /* ->whereNotIn('goals.id', $referencedGoals ) */
             ->paginate(8);
             $type = 'supervisor';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags'));
         }
         $goals = $query->where('status', '<>', 'active')
         ->paginate(4);

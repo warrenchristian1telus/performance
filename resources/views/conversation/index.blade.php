@@ -95,6 +95,7 @@
                             {{ $c->topic->name }}
                         </h6>
                         <span class="mr-2">
+                            <i class="fa fa-{{ $c->is_locked ? 'lock' : 'unlock'}}"></i>
                             With
                             @foreach ($c->conversationParticipants as $p)
                                 {{$p->participant->name}}&nbsp;
@@ -127,6 +128,7 @@
                             {{ $c->topic->name }}
                         </h6>
                         <span class="mr-2">
+                            <i class="fa fa-{{ $c->is_locked ? 'lock' : 'unlock'}}"></i>
                             With
                             @foreach ($c->conversationParticipants as $p)
                                 {{$p->participant->name}}&nbsp;

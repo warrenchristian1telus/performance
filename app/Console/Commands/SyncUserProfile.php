@@ -91,8 +91,12 @@ class SyncUserProfile extends Command
 
         $employees = EmployeeDemo::whereNotIn('guid', ['', ' '])
             ->whereNotIn('employee_email', ['', ' '])
-            ->whereNotNull('date_updated')
-            ->where('date_updated', '>=', $last_sync_at )
+            ->where(function ($query) use ($last_sync_at) {
+                $query->whereNull('date_updated');
+                $query->orWhere('date_updated', '>=', $last_sync_at );
+            })
+            //->whereNotNull('date_updated')
+            //->where('date_updated', '>=', $last_sync_at )
             //->whereIn('employee_id',['105823', '060061', '107653',
             //'115637','131116','139238','145894','146113','152843','152921','163102'] )
             ->orderBy('employee_id')
@@ -101,6 +105,7 @@ class SyncUserProfile extends Command
             ->get(['employee_id', 'empl_record', 'employee_email', 'guid', 'idir',
                 'employee_first_name', 'employee_last_name', 'job_indicator',
                 'position_start_date', 'supervisor_emplid', 'date_updated', 'date_deleted']);
+
 
         // Step 1 : Create and Update User Profile (no update on reporting to)
         $this->info( now() );

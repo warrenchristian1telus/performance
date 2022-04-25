@@ -17,14 +17,14 @@ class SendDailyNotification extends Command
      *
      * @var string
      */
-    protected $signature = 'daily:notification';
+    protected $signature = 'notify:daily';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Respectively notify people who has  overdue conversation daily via email.';
+    protected $description = 'Daily email notification';
     
     /**
      * Create a new command instance.

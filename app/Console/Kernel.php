@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         Commands\SendDailyNotification::class,
+        Commands\SendWeeklyNotification::class,
     ];
 
     /**
@@ -26,9 +27,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('daily:notification')
+        $schedule->command('notify:daily')
             ->daily()
             ->at('8:00');
+
+        $schedule->command('notify:weekly')    
+            ->weeklyOn(1, '6:00');
 
         $schedule->command('command:getODSOrganizations')
           ->timezone('America/Vancouver')

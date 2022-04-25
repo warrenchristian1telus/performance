@@ -147,7 +147,7 @@
                                                                 </div>
 
                                                                 {{-- BRANCH -- Employee Listing - Start --}}                                                                                         
-                                                                <div id="collapse-{{ $branch->id }}" class="collapse" data-parent="#accordion-4" aria-labelledby="heading-{{ $branch->id }}">
+                                                                <div id="collapse-{{ $branch->id }}" class="collapse" data-parent="#accordion-3" aria-labelledby="heading-{{ $branch->id }}">
                                                                     <div class="card-header employee-list" id="employees-{{ $branch->id }}" value="{{ $branch->id }}"></div>
                                                                 </div>
                                                                 {{-- BRANCH -- Employee Listing - End --}}                                                                                         
@@ -177,7 +177,7 @@
                                             </div>
 
                                             {{-- DVISION -- Employee Listing - Start --}}                                                                                         
-                                            <div id="collapse-{{ $division->id }}" class="collapse" data-parent="#accordion-3" aria-labelledby="heading-{{ $division->id }}">
+                                            <div id="collapse-{{ $division->id }}" class="collapse" data-parent="#accordion-2" aria-labelledby="heading-{{ $division->id }}">
                                                 <div class="card-header employee-list" id="employees-{{ $division->id }}" value="{{ $division->id }}"></div>
                                             </div>
                                             {{-- DVISION -- Employee Listing - End --}}                                                                                         
@@ -206,7 +206,7 @@
                             </div>
 
                             {{-- PROGRAM -- Employee Listing - Start --}}                                                                                         
-                            <div id="collapse-{{ $program->id }}" class="collapse" data-parent="#accordion-2" aria-labelledby="heading-{{ $program->id }}">
+                            <div id="collapse-{{ $program->id }}" class="collapse" data-parent="#accordion-1" aria-labelledby="heading-{{ $program->id }}">
                                 <div class="card-header employee-list" id="employees-{{ $program->id }}" value="{{ $program->id }}"></div>
                             </div>
                             {{-- PROGRAM -- Employee Listing - End --}}                                                                                         
@@ -431,18 +431,20 @@ $(document).ready(function() {
 
     $("#accordion-level0 .card-header").on("click","a", function(e) {
         //e.preventDefault(); 	
+
         if (e.target.tagName != "INPUT") {
             // do link
             //alert("Doing link functionality");
         } else {
             e.stopPropagation();
-
-            var location  = '#collapse-' + $(e.target).val();
+    
+            //var location  = '#collapse-' + $(e.target).val();
+            var location = $(this).attr('href') ;
 
             if (e.target.checked) {
                 // expand itself
                 $(location).collapse();
-
+    
                 // to-do : checked all the following 
                 items = $(location).find('input:checkbox');
                 $.each(items, function(index, item) {

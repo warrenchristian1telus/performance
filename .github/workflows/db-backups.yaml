@@ -125,8 +125,8 @@ jobs:
       APP_HOST: performance-332842-test.apps.silver.devops.gov.bc.ca
       DB_BACKUP_APP: db-backup
       DB_NAME: performance-db
-    needs:
-      - build
+    # needs:
+    #   - build
     steps:
        # - name: Print env
        #   run: |

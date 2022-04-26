@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\SysadminController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SysadminController;
+use App\Http\Controllers\SysAdmin\UnlockConversationController;
 
 
 Route::get('sysadmin/employees/current', [SysadminController::class, 'current'])->name('sysadmin.employees.currentemployees');
@@ -16,8 +17,20 @@ Route::get('sysadmin/goals/managegoals', [SysadminController::class, 'managegoal
 Route::get('sysadmin/goals/goal-edit/{id}', [SysadminController::class, 'goaledit'])->name('sysadmin.goals.goal-edit');
 Route::post('sysadmin/goals/goaladd', [SysadminController::class, 'goaladd'])->name('sysadmin.goals.goaladd');
 Route::post('sysadmin/goals/goalupdate/{id}', [SysadminController::class, 'goalupdate'])->name('sysadmin.goal.goalupdate');
-Route::get('sysadmin/unlock/unlockconversation', [SysadminController::class, 'unlockconversation'])->name('sysadmin.unlock.unlockconversation');
-Route::get('sysadmin/unlock/manageunlocked', [SysadminController::class, 'manageunlocked'])->name('sysadmin.unlock.manageunlocked');
+
+Route::group(['middleware' => ['auth']], function() {    
+//Route::get('sysadmin/unlock/unlockconversation', [SysadminController::class, 'unlockconversation'])->name('sysadmin.unlock.unlockconversation');
+Route::get('/sysadmin/unlock/unlockconversation', [UnlockConversationController::class, 'index'])->name('sysadmin.unlock.unlockconversation');
+Route::post('/sysadmin/unlock/unlockconversation', [UnlockConversationController::class, 'index'])->name('sysadmin.unlock.unlockconversation.search');
+Route::get('/sysadmin/unlock/locked-conversation-list', [UnlockConversationController::class, 'getDatatableConversations'])->name('sysadmin.unlock.lockedconversation.list');
+Route::put('/sysadmin/unlock/unlockconversation/{id}', [UnlockConversationController::class, 'update'])->name('sysadmin.unlock.unlockconversation.store');
+//Route::get('sysadmin/unlock/manageunlocked', [SysadminController::class, 'manageunlocked'])->name('sysadmin.unlock.manageunlocked');
+Route::get('/sysadmin/unlock/manageunlocked', [UnlockConversationController::class, 'indexManageUnlocked'])->name('sysadmin.unlock.manageunlocked');
+Route::post('/sysadmin/unlock/manageunlocked', [UnlockConversationController::class, 'indexManageUnlocked'])->name('sysadmin.unlock.manageunlocked.search');
+Route::get('/sysadmin/unlock/unlocked-conversation-list', [UnlockConversationController::class, 'getDatatableManagedUnlocked'])->name('sysadmin.unlock.unlockconversation.list');
+
+});
+
 Route::get('sysadmin/notifications/createnotification', [SysadminController::class, 'createnotification'])->name('sysadmin.notifications.createnotification');
 Route::get('sysadmin/notifications/viewnotifications', [SysadminController::class, 'viewnotifications'])->name('sysadmin.notifications.viewnotifications');
 Route::get('sysadmin/access/createaccess', [SysadminController::class, 'createaccess'])->name('sysadmin.access.createaccess');

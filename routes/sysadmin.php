@@ -1,19 +1,51 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SysadminController;
+use App\Http\Controllers\CurrentEmployeesController;
+use App\Http\Controllers\HRadminController;
+use App\Http\Controllers\PastEmployeesController;
+use App\Http\Controllers\ManageExistingSharesController;
+use App\Http\Controllers\ManageExistingExcusedController;
+use App\Http\Controllers\ManageGoalBankController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SysAdmin\UnlockConversationController;
 
 
-Route::get('sysadmin/employees/current', [SysadminController::class, 'current'])->name('sysadmin.employees.currentemployees');
-Route::get('sysadmin/employees/previous', [SysadminController::class, 'previous'])->name('sysadmin.employees.previousemployees');
+// Route::get('/hradmin/org-organizations', [HRadminController::class,'getOrganizations']);
+// Route::get('/hradmin/org-programs', [HRadminController::class,'getPrograms']);
+// Route::get('/hradmin/org-divisions', [HRadminController::class,'getDivisions']);
+// Route::get('/hradmin/org-branches', [HRadminController::class,'getBranches']);
+// Route::get('/hradmin/org-level4', [HRadminController::class,'getLevel4']);
+
+Route::get('sysadmin/employees/currentemployees', [CurrentEmployeesController::class, 'index'])->name('sysadmin.employees.currentemployees');
+Route::get('sysadmin/employees/currentemployeeslist', [CurrentEmployeesController::class, 'getList'])->name('sysadmin.employees.currentemployeeslist');
+Route::post('sysadmin/employees/currentemployees', [CurrentEmployeesController::class, 'index'])->name('sysadmin.employees.currentemployees');
+
+Route::get('sysadmin/employees/pastemployees', [PastEmployeesController::class, 'index'])->name('sysadmin.employees.pastemployees');
+Route::get('sysadmin/employees/pastemployeeslist', [PastEmployeesController::class, 'getList'])->name('sysadmin.employees.pastemployeeslist');
+Route::post('sysadmin/employees/pastemployees', [PastEmployeesController::class, 'index'])->name('sysadmin.employees.pastemployees');
+
 Route::get('sysadmin/shared/shareemployee', [SysadminController::class, 'shareemployee'])->name('sysadmin.shared.shareemployee');
-Route::get('sysadmin/shared/manageshares', [SysadminController::class, 'manageshares'])->name('sysadmin.shared.manageshares');
+
+Route::get('sysadmin/shared/manageexistingshares', [ManageExistingSharesController::class, 'index'])->name('sysadmin.shared.manageexistingshares');
+Route::get('sysadmin/employees/manageexistingshareslist', [ManageExistingSharesController::class, 'getList'])->name('sysadmin.employees.manageexistingshareslist');
+Route::post('sysadmin/shared/manageexistingshares', [ManageExistingSharesController::class, 'index'])->name('sysadmin.shared.manageexistingshares');
+
 Route::get('sysadmin/excused/excuseemployee', [SysadminController::class, 'excuseemployee'])->name('sysadmin.excused.excuseemployee');
-Route::get('sysadmin/excused/manageexcused', [SysadminController::class, 'manageexcused'])->name('sysadmin.excused.manageexcused');
+
+Route::get('sysadmin/excused/manageexistingexcused', [ManageExistingExcusedController::class, 'index'])->name('sysadmin.excused.manageexistingexcused');
+Route::get('sysadmin/excused/manageexistingexcusedlist', [ManageExistingExcusedController::class, 'getList'])->name('sysadmin.excused.manageexistingexcusedlist');
+Route::post('sysadmin/excused/manageexistingexcused', [ManageExistingExcusedController::class, 'index'])->name('sysadmin.excused.manageexistingexcused');
+
+Route::get('sysadmin/goals/managegoalbank', [ManageGoalBankController::class, 'index'])->name('sysadmin.goals.managegoalbank');
+Route::get('sysadmin/goals/managegoalbanklist', [ManageGoalBankController::class, 'getList'])->name('sysadmin.goals.managegoalbanklist');
+Route::post('sysadmin/goals/managegoalbank', [ManageGoalBankController::class, 'index'])->name('sysadmin.goals.managegoalbank');
+
+
+
 Route::get('sysadmin/goals/addgoal', [SysadminController::class, 'addgoal'])->name('sysadmin.goals.addgoal');
 Route::get('sysadmin/goals/goal-bank', [SysadminController::class, 'addgoal'])->name('sysadmin.goals.goal-bank');
-Route::get('sysadmin/goals/managegoals', [SysadminController::class, 'managegoals'])->name('sysadmin.goals.managegoals');
+// Route::get('sysadmin/goals/managegoals', [SysadminController::class, 'managegoals'])->name('sysadmin.goals.managegoals');
 Route::get('sysadmin/goals/goal-edit/{id}', [SysadminController::class, 'goaledit'])->name('sysadmin.goals.goal-edit');
 Route::post('sysadmin/goals/goaladd', [SysadminController::class, 'goaladd'])->name('sysadmin.goals.goaladd');
 Route::post('sysadmin/goals/goalupdate/{id}', [SysadminController::class, 'goalupdate'])->name('sysadmin.goal.goalupdate');
@@ -31,6 +63,11 @@ Route::get('/sysadmin/unlock/unlocked-conversation-list', [UnlockConversationCon
 
 });
 
+
+// Route::get('sysadmin/employees/current', [SysadminController::class, 'current'])->name('sysadmin.employees.currentemployees');
+// Route::get('sysadmin/employees/previous', [SysadminController::class, 'previous'])->name('sysadmin.employees.previousemployees');
+Route::get('sysadmin/unlock/unlockconversation', [SysadminController::class, 'unlockconversation'])->name('sysadmin.unlock.unlockconversation');
+Route::get('sysadmin/unlock/manageunlocked', [SysadminController::class, 'manageunlocked'])->name('sysadmin.unlock.manageunlocked');
 Route::get('sysadmin/notifications/createnotification', [SysadminController::class, 'createnotification'])->name('sysadmin.notifications.createnotification');
 Route::get('sysadmin/notifications/viewnotifications', [SysadminController::class, 'viewnotifications'])->name('sysadmin.notifications.viewnotifications');
 Route::get('sysadmin/access/createaccess', [SysadminController::class, 'createaccess'])->name('sysadmin.access.createaccess');

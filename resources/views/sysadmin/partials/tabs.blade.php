@@ -5,8 +5,8 @@
                 Current Employees
             </x-button>
         </div>
-        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.employees.previousemployees' ? 'border-primary' : ''}}">
-            <x-button :href="route('sysadmin.employees.previousemployees')" style="">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.employees.pastemployees' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.employees.pastemployees')" style="">
                 Past Employees
             </x-button>
         </div>
@@ -20,8 +20,8 @@
                 Share an Employee
             </x-button>
         </div>
-        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.shared.manageshares' ? 'border-primary' : ''}}">
-            <x-button :href="route('sysadmin.shared.manageshares')" style="">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.shared.manageexistingshares' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.shared.manageexistingshares')" style="">
                 Manage Existing Shares
             </x-button>
         </div>
@@ -35,8 +35,8 @@
                 Excuse an Employee
             </x-button>
         </div>
-        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excused.manageexcused' ? 'border-primary' : ''}}">
-            <x-button :href="route('sysadmin.excused.manageexcused')" style="">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excused.manageexistingexcused' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.excused.manageexistingexcused')" style="">
                 Manage Existing Excused
             </x-button>
         </div>
@@ -50,9 +50,9 @@
                 Add Goal to Goal Bank
             </x-button>
         </div>
-        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.goals.managegoals' ? 'border-primary' : ''}}">
-            <x-button :href="route('sysadmin.goals.managegoals')" style="">
-                Manage Existing Goals
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.goals.managegoalbank' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.goals.managegoalbank')" style="">
+                Manage Goal Bank
             </x-button>
         </div>
     </div>

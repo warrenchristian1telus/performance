@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 
-
-
-class MyOrganizationController extends Controller
+class CurrentEmployeesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -67,7 +65,7 @@ class MyOrganizationController extends Controller
 
         $criteriaList = $this->search_criteria_list();
 
-        return view('hradmin.myorg.myorganization', compact ('request', 'criteriaList'));
+        return view('sysadmin.employees.currentemployees', compact ('request', 'criteriaList'));
     }
 
     public function getList(Request $request)
@@ -79,25 +77,28 @@ class MyOrganizationController extends Controller
             $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
             $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
             $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
+
+
             $query = User::withoutGlobalScopes()
             ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
-            ->when($level0, function($q) use($level0) {return $q->where('organization', $level0->name);})
-            ->when($level1, function($q) use($level1) {return $q->where('level1_program', $level1->name);})
-            ->when($level2, function($q) use($level2) {return $q->where('level2_division', $level2->name);})
-            ->when($level3, function($q) use($level3) {return $q->where('level3_branch', $level3->name);})
-            ->when($level4, function($q) use($level4) {return $q->where('level4', $level4->name);})
-            ->when($request->criteria == 'id', function($q) use($request){return $q->where('employee_id', 'like', "%" . $request->search_text . "%");})
-            ->when($request->criteria == 'name', function($q) use($request){return $q->where('employee_name', 'like', "%" . $request->search_text . "%");})
-            ->when($request->criteria == 'job', function($q) use($request){return $q->where('job_title', 'like', "%" . $request->search_text . "%");})
-            ->when($request->criteria == 'dpt', function($q) use($request){return $q->where('deptid', 'like', "%" . $request->search_text . "%");})
+            ->wherein('employee_demo.employee_status', ['A', 'L', 'P', 'S'])
+            ->when($level0, function($q) use($level0) {return $q->where('employee_demo.organization', $level0->name);})
+            ->when($level1, function($q) use($level1) {return $q->where('employee_demo.level1_program', $level1->name);})
+            ->when($level2, function($q) use($level2) {return $q->where('employee_demo.level2_division', $level2->name);})
+            ->when($level3, function($q) use($level3) {return $q->where('employee_demo.level3_branch', $level3->name);})
+            ->when($level4, function($q) use($level4) {return $q->where('employee_demo.level4', $level4->name);})
+            ->when($request->criteria == 'name', function($q) use($request){return $q->where('employee_demo.employee_name', 'like', "%" . $request->search_text . "%");})
+            ->when($request->criteria == 'emp', function($q) use($request){return $q->where('employee_demo.employee_id', 'like', "%" . $request->search_text . "%");})
+            ->when($request->criteria == 'job', function($q) use($request){return $q->where('employee_demo.job_title', 'like', "%" . $request->search_text . "%");})
+            ->when($request->criteria == 'dpt', function($q) use($request){return $q->where('employee_demo.deptid', 'like', "%" . $request->search_text . "%");})
             ->when($request->criteria == 'all', function($q) use ($request) 
             {
                 return $q->where(function ($query2) use ($request) 
                 {
-                    $query2->where('employee_id', 'like', "%" . $request->search_text . "%")
-                    ->orWhere('employee_name', 'like', "%" . $request->search_text . "%")
-                    ->orWhere('job_title', 'like', "%" . $request->search_text . "%")
-                    ->orWhere('deptid', 'like', "%" . $request->search_text . "%");
+                    $query2->where('employee_demo.employee_id', 'like', "%" . $request->search_text . "%")
+                    ->orWhere('employee_demo.employee_name', 'like', "%" . $request->search_text . "%")
+                    ->orWhere('employee_demo.job_title', 'like', "%" . $request->search_text . "%")
+                    ->orWhere('employee_demo.deptid', 'like', "%" . $request->search_text . "%");
                 });
             })
             ->select
@@ -111,35 +112,12 @@ class MyOrganizationController extends Controller
                 'employee_demo.level3_branch',
                 'employee_demo.level4',
                 'employee_demo.deptid',
-                'users.excused_start_date',
                 'users.id'
             );
             // ->get();
-            // ->paginate(10);
-            // return Datatables::of($query)->addIndexColumn()
-            return Datatables::of($query)->addIndexColumn()
-            ->addColumn('activeGoals', function($row) {
-                $countActiveGoals = $row->activeGoals()->count() . ' Goals';
-                return $countActiveGoals;
-            })
-            ->addColumn('nextConversationDue', function ($row) {
-                $nextConversation = Conversation::nextConversationDue(User::find($row["id"]));
-                return $nextConversation;
-            })
-            ->addColumn('excused', function ($row) {
-                $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
-                return $yesOrNo;
-            })
-            ->addColumn('shared', function ($row) {
-                $yesOrNo = $row->is_shared ? "Yes" : "No";
-                return $yesOrNo;
-            })
-            ->addColumn('reportees', function($row) {
-                $countReportees = $row->reportees()->count() ?? '0';
-                return $countReportees;
-            })
+            return Datatables::of($query)
+            ->addIndexColumn()
             ->make(true);
-            // ->toJson();
         }
     }
 

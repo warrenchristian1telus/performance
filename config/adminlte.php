@@ -326,7 +326,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Employee List',
-                    'url'  => 'sysadmin/employees/current',
+                    'url'  => 'sysadmin/employees/currentemployees',
                     'active' => ['sysadmin/employees/*']
                 ],
                 [

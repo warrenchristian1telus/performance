@@ -1,52 +1,53 @@
-@extends('hradmin.layout')
+@extends('sysadmin.layout')
 @section('tab-content')
 
 <div class="card">
 	<div class="card-body">
-        <div class="h4">{{__('All BC Public Service Employees')}}</div>
-		@include('hradmin.partials.filter')
+        <div class="h4">{{__('Current Employees')}}</div>
+		@include('sysadmin.partials.filter')
 		<p></p>
-        <table class="table table-bordered myorgtable" id="myorgtable" style="width: 100%; overflow-x: auto; "></table>
+        <table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
 	</div>    
 </div>   
 @endsection
 
 
 @push('css')
-    <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <x-slot name="css">
-        <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
         <style>
-        .text-truncate-30 {
-            white-space: wrap; 
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 30em;
-        }
-    
-        .text-truncate-10 {
-            white-space: wrap; 
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 5em;
-        }
-        #myorgtable_filter label {
-            text-align: right !important;
-        }
+            .text-truncate-30 {
+                white-space: wrap; 
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 30em;
+            }
+        
+            .text-truncate-10 {
+                white-space: wrap; 
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 5em;
+            }
+            #filtertable_filter label {
+                text-align: right !important;
+            }
         </style>
     </x-slot>
     
 @endpush
 @push('js')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>  
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
         $(document).ready()
         {
             $(function ()
             {
-                var table = $('.myorgtable').DataTable
+                var table = $('.filtertable').DataTable 
                 (
                     {
                         processing: true,
@@ -56,7 +57,7 @@
                         deferRender: true,
                         ajax: 
                         {
-                            url: "{{ route('hradmin.myorg.myorganization') }}",
+                            url: "{{ route('sysadmin.employees.currentemployeeslist') }}",
                             data: function (d) 
                             {
                                 d.dd_level0 = $('#dd_level0').val();
@@ -67,9 +68,6 @@
                                 d.criteria = $('#criteria').val();
                                 d.search_text = $('#search_text').val();
                             }
-                        },
-                        "rowCallback": function( row, data ) 
-                        {
                         },
                         columns: 
                         [
@@ -82,11 +80,6 @@
                             {title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'employee_demo.level3_branch', searchable: true},
                             {title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'employee_demo.level4', searchable: true},
                             {title: 'Dept', ariaTitle: 'Dept', target: 0, type: 'string', data: 'deptid', name: 'employee_demo.deptid', searchable: true},
-                            {title: 'Active Goals', ariaTitle: 'Active Goals', target: 0, type: 'string', data: 'activeGoals', name: 'activeGoals', searchable: false},
-                            {title: 'Next Conversation', ariaTitle: 'Next Conversation', target: 0, type: 'date', data: 'nextConversationDue', name: 'nextConversationDue', searchable: false},
-                            {title: 'Excused', ariaTitle: 'Excused', target: 0, type: 'string', data: 'excused', name: 'excused', searchable: false},
-                            {title: 'Shared', ariaTitle: 'Shared', target: 0, type: 'string', data: 'shared', name: 'shared', searchable: false},
-                            {title: 'Direct Reports', ariaTitle: 'Direct Reports', target: 0, type: 'string', data: 'reportees', name: 'reportees', searchable: false},
                             {title: 'User ID', ariaTitle: 'User ID', target: 0, type: 'num', data: 'id', name: 'users.id', searchable: true, visible: false},
                         ]
                     }

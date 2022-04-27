@@ -10,6 +10,7 @@ use App\Models\Conversation;
 use App\Models\ConversationParticipant;
 use App\Models\ConversationTopic;
 use App\Models\Participant;
+use App\Models\SharedProfile;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -360,7 +361,8 @@ class ConversationController extends Controller
         $allTemplates = ConversationTopic::all();
         $participants = session()->has('original-auth-id') ? User::where('id', Auth::id())->get() : $user->reportees()->get();
         $reportingManager = $user->reportingManager()->get();
-        $participants = $participants->toBase()->merge($reportingManager);
+        $sharedProfile = SharedProfile::where('shared_with', Auth::id())->with('sharedUser')->get()->pluck('sharedUser');
+        $participants = $participants->toBase()->merge($reportingManager)->merge($sharedProfile);
         return view('conversation.partials.template-detail-modal-body', compact('template','allTemplates','participants','reportingManager'));
     }
 }

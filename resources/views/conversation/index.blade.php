@@ -159,7 +159,6 @@
         </div>
     </div>
 
-    @include('conversation.partials.add-conversation-modal')
     @include('conversation.partials.view-conversation-modal')
 
         @include('conversation.partials.delete-hidden-form')

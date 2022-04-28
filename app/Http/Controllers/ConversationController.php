@@ -33,7 +33,7 @@ class ConversationController extends Controller
         $supervisorId = (!$supervisor) ? null : $supervisor->id;
         $conversationMessage = Conversation::warningMessage();
         $conversationTopics = ConversationTopic::all();
-        $participants = Participant::all();
+        // $participants = Participant::all();
         $query = Conversation::with('conversationParticipants');
         $type = 'upcoming';
         if ($request->is('conversation/past') || $request->is('my-team/conversations/past')) {
@@ -169,7 +169,7 @@ class ConversationController extends Controller
         } else {
             $textAboveFilter = 'Below are all open conversations between you and your supervisor, and you and your direct reports. Use the filters to search for open conversations by employe name and conversation type. Conversations marked with an "unlocked" icon have been unlocked because of a special request made to your system administrator.';
         }
-        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'participants', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter'));
+        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter'));
     }
 
     /**

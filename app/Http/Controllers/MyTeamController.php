@@ -34,7 +34,7 @@ class MyTeamController extends Controller
         $goaltypes = GoalType::all();
         $eReasons = ExcusedReason::all();
         $conversationTopics = ConversationTopic::all();
-        $participants = Participant::all();
+        // $participants = Participant::all();
 
         $goals = Goal::where('user_id', Auth::id())
             ->where('status', 'active')
@@ -47,7 +47,7 @@ class MyTeamController extends Controller
         $showSignoff = false;
         $myEmpTable = $myEmployeesDataTable->html();
         $sharedEmpTable = $sharedEmployeeDataTable->html();
-        return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons', 'showSignoff'));
+        return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons', 'showSignoff'));
         // return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type'));
     }
 

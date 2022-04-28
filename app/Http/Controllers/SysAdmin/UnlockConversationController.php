@@ -160,8 +160,10 @@ class UnlockConversationController extends Controller
             //             ->groupBy('job_title')->pluck('job_title') : null;
     
             $sql = $this->baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4);
-            
+
             $conversations = $sql->where(function($q) use ($request) {
+                $q->whereNotNull('initial_signoff');
+            })->where(function($q) use ($request) {
                 $q->whereNull('conversations.unlock_until')
                     ->orWhere('conversations.unlock_until','<', today() );
             });
@@ -204,13 +206,10 @@ class UnlockConversationController extends Controller
                 ->addColumn('unlock', function ($conversation) {
 
                     $icon = 'fa-lock';
-                    if ( (is_null($conversation->sign_off_time) ||  
-                            $conversation->sign_off_time >= today()->addDays(14)) && 
-                         (is_null($conversation->supervisor_signoff_time) || 
-                            $conversation->supervisor_signoff_time  >= today()->addDays(14)) ) {
+                    if (!( $conversation->is_locked )) {
                         $icon = 'fa-unlock-alt';    
-                    }
-                    if ( $conversation->unlock_until && $conversation->unlock_until >= today() ) {
+                    } 
+                    if ( $conversation->is_unlock ) {
                         $icon = 'fa-unlock-alt';    
                     }
                     //$icon = $conversation->getIsLockedAttribute() ? 'fa-unlock-alt' : 'fa-lock';
@@ -277,7 +276,7 @@ class UnlockConversationController extends Controller
     protected function update(Request $request, $id) {
 
         $request->validate([
-            'unlock_until'   => 'required|date|after:today',
+            'unlock_until'   => 'required|date|after:yesterday',
         ]);
 
         $conversation  = Conversation::find($id);

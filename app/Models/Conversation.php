@@ -21,7 +21,8 @@ class Conversation extends Model
         'time' => 'datetime:H:i:s',
         'sign_off_time' => 'datetime:Y-m-d',
         'supervisor_signoff_time' => 'datetime:Y-m-d',
-        'initial_signoff' => 'datetime:Y-m-d'
+        'initial_signoff' => 'datetime:Y-m-d',
+        'unlock_until' => 'datetime:Y-m-d'
     ];
 
     public function topic()
@@ -212,4 +213,13 @@ class Conversation extends Model
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function getIsUnlockAttribute() {
+        if (!$this->unlock_until) {
+            return false;
+        }
+        return !($this->unlock_until->isPast());
+        
+    }
+
 }

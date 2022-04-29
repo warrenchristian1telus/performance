@@ -6,7 +6,7 @@
     @else
         @include('adminlte::partials.common.brand-logo-xs')
     @endif
-    <div class="text-center my-3">
+    <div id="sidebar-profile-picture" class="text-center my-3">
         <div class="d-flex flex-column align-items-center">
             <!-- comment by James Poon on 2021-Dec-03 
             <img src="{{asset('img/profile-pic.png')}}" alt="" class="rounded-circle" style="max-width:90px; max-height:90px">

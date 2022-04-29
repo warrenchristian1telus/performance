@@ -45,10 +45,10 @@ return [
     |
     */
 
-    'logo' => 'Performance',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
-    'logo_img_xl' => null,
+    'logo' => '',
+    'logo_img' => 'img/PDPLogo_50x50.png',
+    'logo_img_class' => 'brand-image elevation-3',
+    'logo_img_xl' => 'img/PDPLogo_210x33.png',
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Performance',
 
@@ -144,7 +144,7 @@ return [
     |
     */
 
-    'sidebar_mini' => true,
+    'sidebar_mini' => 'lg',
     'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
@@ -187,7 +187,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',

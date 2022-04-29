@@ -32,7 +32,6 @@ WORKDIR /app
 COPY . /app
 RUN cat /app/crontab.txt >> /etc/crontab
 RUN sudo /etc/init.d/cron start
-RUN sudo /etc/init.d/cron enable
 
 
 RUN composer update --ignore-platform-reqs

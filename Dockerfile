@@ -31,8 +31,8 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
 
-RUN cat /app/crontab.txt >> /etc/crontab
-ADD /etc/crontab /etc/cron.d/laravel-scheduler-cron
+#RUN cat /app/crontab.txt >> /etc/crontab
+COPY /app/crontab.txt /etc/cron.d/laravel-scheduler-cron
 RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
 
 RUN apt-get install -y supervisor

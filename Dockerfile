@@ -31,6 +31,8 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
 RUN cat /app/crontab.txt >> /etc/crontab
+RUN apt-get install supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 
 RUN composer update --ignore-platform-reqs
@@ -45,9 +47,9 @@ EXPOSE 8000
 
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app
-RUN chgrp -R 0 /etc/init.d/ && \
-    chmod -R g=u //etc/init.d/
 USER 1001
 
-CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
+#CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
 #CMD php artisan serve --host=0.0.0.0 --port=8000
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

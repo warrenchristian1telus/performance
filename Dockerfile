@@ -31,7 +31,6 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
 RUN cat /app/crontab.txt >> /etc/crontab
-RUN sudo /etc/init.d/cron start
 
 
 RUN composer update --ignore-platform-reqs
@@ -49,4 +48,4 @@ RUN chgrp -R 0 /app && \
 USER 1001
 
 
-CMD php artisan serve --host=0.0.0.0 --port=8000
+CMD (/etc/init.d/cron start &) && php artisan serve --host=0.0.0.0 --port=8000

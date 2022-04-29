@@ -48,4 +48,4 @@ RUN chgrp -R 0 /app && \
 USER 1001
 
 
-CMD (sudo /etc/init.d/cron start &) && php artisan serve --host=0.0.0.0 --port=8000
+CMD cron -f && php artisan serve --host=0.0.0.0 --port=8000

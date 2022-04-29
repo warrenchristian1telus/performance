@@ -31,7 +31,7 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
 RUN cat /app/crontab.txt >> /etc/crontab
-RUN apt-get install supervisor
+RUN apt-get install -y supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 

@@ -45,7 +45,7 @@ RUN php artisan config:clear
 
 EXPOSE 8000
 
-chgrp -R 0 /var/run/crond.pid && \
+RUN chgrp -R 0 /var/run/crond.pid && \
         chmod -R g=u /var/run/crond.pid
 
 RUN chgrp -R 0 /app && \

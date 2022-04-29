@@ -30,7 +30,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN docker-php-ext-install pdo pdo_mysql mbstring 
 WORKDIR /app
 COPY . /app
+
 RUN cat /app/crontab.txt >> /etc/crontab
+ADD /etc/crontab /etc/cron.d/laravel-scheduler-cron
+RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
+
 RUN apt-get install -y supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -44,9 +48,6 @@ RUN composer require awobaz/compoships --ignore-platform-reqs
 RUN php artisan config:clear
 
 EXPOSE 8000
-
-RUN chgrp -R 0 /var/run/crond.pid && \
-        chmod -R g=u /var/run/crond.pid
 
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app

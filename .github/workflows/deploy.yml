@@ -31,7 +31,7 @@ jobs:
     env:
       BUILD_ID: ${{ github.event.number }}
       BUILD_NAMESPACE: 332842-tools
-      BRANCH: perf-devops
+      BRANCH: laravel-cron-scheduler
       BUILD_TAG: latest
       APP: performance
     steps:
@@ -75,7 +75,7 @@ jobs:
      BUILD_ID: ${{ github.event.number }}
      NAMESPACE: 332842-dev
      BUILD_NAMESPACE: 332842-tools
-     BRANCH: perf-devops
+     BRANCH: laravel-cron-scheduler
      APP: performance
      APP_HOST: performance-332842-dev.apps.silver.devops.gov.bc.ca
      DB_NAME: performance

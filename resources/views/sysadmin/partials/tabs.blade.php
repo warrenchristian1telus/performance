@@ -1,4 +1,4 @@
-@if ($request->is('sysadmin/employees/*')) 
+@if (request()->is('sysadmin/employees/*')) 
     <div class="d-flex justify-content-center justify-content-lg-start mb-2">
         <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.employees.currentemployees' ? 'border-primary' : ''}}">
             <x-button :href="route('sysadmin.employees.currentemployees')" style="">
@@ -13,7 +13,7 @@
     </div>
 @endif
 
-@if ($request->is('sysadmin/shared/*')) 
+@if (request()->is('sysadmin/shared/*')) 
     <div class="d-flex justify-content-center justify-content-lg-start mb-2">
         <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.shared.shareemployee' ? 'border-primary' : ''}}">
             <x-button :href="route('sysadmin.shared.shareemployee')" style="">
@@ -28,7 +28,7 @@
     </div>
 @endif
 
-@if ($request->is('sysadmin/excused/*')) 
+@if (request()->is('sysadmin/excused/*')) 
     <div class="d-flex justify-content-center justify-content-lg-start mb-2">
         <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excused.excuseemployee' ? 'border-primary' : ''}}">
             <x-button :href="route('sysadmin.excused.excuseemployee')" style="">
@@ -43,7 +43,7 @@
     </div>
 @endif
 
-@if ($request->is('sysadmin/goals/*')) 
+@if (request()->is('sysadmin/goals/*')) 
     <div class="d-flex justify-content-center justify-content-lg-start mb-2">
         <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.goals.addgoal' ? 'border-primary' : ''}}">
             <x-button :href="route('sysadmin.goals.addgoal')" style="">
@@ -58,7 +58,7 @@
     </div>
 @endif
 
-@if ($request->is('sysadmin/unlock/*')) 
+@if (request()->is('sysadmin/unlock/*')) 
     <div class="d-flex justify-content-center justify-content-lg-start mb-2">
         <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.unlock.unlockconversation
             ' ? 'border-primary' : ''}}">
@@ -74,7 +74,7 @@
     </div>
 @endif
 
-@if ($request->is('sysadmin/notifications/*')) 
+@if (request()->is('sysadmin/notifications/*')) 
     <div class="d-flex justify-content-center justify-content-lg-start mb-2">
         <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.notifications.createnotification' ? 'border-primary' : ''}}">
             <x-button :href="route('sysadmin.notifications.createnotification')" style="">
@@ -89,7 +89,7 @@
     </div>
 @endif
 
-@if ($request->is('sysadmin/access/*')) 
+@if (request()->is('sysadmin/access/*')) 
     <div class="d-flex justify-content-center justify-content-lg-start mb-2">
         <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.access.createaccess' ? 'border-primary' : ''}}">
             <x-button :href="route('sysadmin.access.createaccess')" style="">
@@ -104,7 +104,7 @@
     </div>
 @endif
 
-@if ($request->is('sysadmin/statistics/*')) 
+@if (request()->is('sysadmin/statistics/*')) 
     <div class="d-flex justify-content-center justify-content-lg-start mb-2">
         <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.statistics.goalsummary' ? 'border-primary' : ''}}">
             <x-button :href="route('sysadmin.statistics.goalsummary')" style="">

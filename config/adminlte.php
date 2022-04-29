@@ -313,7 +313,7 @@ return [
                     'text' => 'Notifications',
                     'url'  => 'hradmin/notifications',
                     'active' => ['hradmin/notifications/*']
-                ],
+                ]
             ],
         ],
         [
@@ -359,6 +359,11 @@ return [
                     'url'  => 'sysadmin/access/createaccess',
                     'active' => ['sysadmin/access/*']
                 ],
+                [
+                    'text' => 'Switch Identity',
+                    'url'  => 'sysadmin/switch-identity',
+                    'active' => ['sysadmin/switch-identity/*']
+                ]
             ],
         ],
         [

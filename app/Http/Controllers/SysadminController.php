@@ -838,6 +838,10 @@ class SysadminController extends Controller
         ];
     }
 
+    public function switchIdentity() {
+        return view('sysadmin.switch-identity.index');
+    }
+
 
 
 

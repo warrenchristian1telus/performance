@@ -7,6 +7,7 @@ on:
       - dev
       - test
       - prod
+      - laravel-cron-scheduler
 jobs:
   #Print variables for logging and debugging purposes
   checkEnv:

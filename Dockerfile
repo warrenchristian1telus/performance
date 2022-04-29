@@ -47,5 +47,5 @@ RUN chgrp -R 0 /app && \
     chmod -R g=u /app
 USER 1001
 
-
-CMD cron -f && php artisan serve --host=0.0.0.0 --port=8000
+CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
+#CMD php artisan serve --host=0.0.0.0 --port=8000

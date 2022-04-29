@@ -30,6 +30,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN docker-php-ext-install pdo pdo_mysql mbstring 
 WORKDIR /app
 COPY . /app
+RUN /etc/crontab /app/crontab.txt
+RUN service cron start && service cron enable
 
 RUN composer update --ignore-platform-reqs
 

@@ -85,10 +85,12 @@ class ConversationController extends Controller
             // With My Team
             $myTeamQuery->where('user_id', '<>', $supervisorId);
             // With my Supervisor
-            $query->where(function($query) use ($supervisorId) {
-                $query->where('user_id', $supervisorId)->
-                orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
-                    $query->where('participant_id', $supervisorId);
+            $sharedSupervisorIds = SharedProfile::where('shared_id', Auth::id())->with('sharedWithUser')->get()->pluck('shared_with')->toArray();
+            array_push($sharedSupervisorIds, $supervisorId);
+            $query->where(function($query) use ($sharedSupervisorIds) {
+                $query->whereIn('user_id', $sharedSupervisorIds)->
+                orWhereHas('conversationParticipants', function ($query) use ($sharedSupervisorIds) {
+                    $query->whereIn('participant_id', $sharedSupervisorIds);
                 });
             });
             $type = 'past';
@@ -145,10 +147,12 @@ class ConversationController extends Controller
             });
             
             // get Conversations with my supervisor
-            $query->where(function($query) use ($supervisorId) {
-                $query->where('user_id', $supervisorId)->
-                orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
-                    $query->where('participant_id', $supervisorId);
+            $sharedSupervisorIds = SharedProfile::where('shared_id', Auth::id())->with('sharedWithUser')->get()->pluck('shared_with')->toArray();
+            array_push($sharedSupervisorIds, $supervisorId);
+            $query->where(function($query) use ($sharedSupervisorIds) {
+                $query->whereIn('user_id', $sharedSupervisorIds)->
+                orWhereHas('conversationParticipants', function ($query) use ($sharedSupervisorIds) {
+                    $query->whereIn('participant_id', $sharedSupervisorIds);
                 });
             });
             

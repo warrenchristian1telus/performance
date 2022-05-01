@@ -117,7 +117,7 @@ class ManageGoalBankController extends Controller
             return Datatables::of($query)
             ->addIndexColumn()
             ->addColumn('mandatory', function ($row) {
-                return $row->is_mandatory ? "Yes" : "No";
+                return $row->is_mandatory ? "Mandatory" : "Suggested";
             })
             ->editColumn('created_at', function ($row) {
                 return $row->created_at ? $row->created_at->format('F d, Y') : null;

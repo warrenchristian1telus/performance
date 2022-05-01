@@ -96,8 +96,8 @@
                 Create New Access
             </x-button>
         </div>
-        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.access.manageaccess' ? 'border-primary' : ''}}">
-            <x-button :href="route('sysadmin.access.manageaccess')" style="">
+        <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.access.manageexistingaccess' ? 'border-primary' : ''}}">
+            <x-button :href="route('sysadmin.access.manageexistingaccess')" style="">
                 Manage Existing Access
             </x-button>
         </div>

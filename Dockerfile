@@ -35,9 +35,12 @@ COPY . /app
 COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
 RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
 
-RUN crontab -u 1001 /etc/cron.d/laravel-scheduler-cron && \
-    chmod u+s /usr/sbin/cron
-COPY --chown=1001:1001 . .
+RUN crontab /etc/cron.d/laravel-scheduler-cron
+
+
+# RUN crontab -u 1001 /etc/cron.d/laravel-scheduler-cron && \
+#     chmod u+s /usr/sbin/cron
+# COPY --chown=1001:1001 . .
 
 
 RUN apt-get install -y supervisor

@@ -13,6 +13,7 @@ jobs:
   checkEnv:
     name: Check Env variables
     runs-on: ubuntu-latest
+    if: {{ github.ref_name }} == 'dev'
     steps:
       - name: Print Env Vars
         run: |
@@ -28,7 +29,7 @@ jobs:
   #   name: Build APP
   #   runs-on: ubuntu-latest
   #   # if: ${{ github.event.pull_request.merged == true}}
-  #   if: ${{ github.ref_name }} == 'dev' || ${{ github.ref_name }} == 'test' || ${{ github.ref_name }} == 'prod' ||
+  #   if: ${{ github.ref_name }} == 'dev' || ${{ github.ref_name }} == 'test' || ${{ github.ref_name }} == 'prod'
   #   env:
   #     BUILD_ID: ${{ github.event.number }}
   #     BUILD_NAMESPACE: 332842-tools

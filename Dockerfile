@@ -31,17 +31,17 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
 
-#RUN cat /app/crontab.txt >> /etc/crontab
-COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
-RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
+# #RUN cat /app/crontab.txt >> /etc/crontab
+# COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
+# RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
 
-RUN crontab -u 1001 /etc/cron.d/laravel-scheduler-cron && \
-    chmod u+s /usr/sbin/cron
-COPY --chown=1001:1001 . .
+# RUN crontab -u 1001 /etc/cron.d/laravel-scheduler-cron && \
+#     chmod u+s /usr/sbin/cron
+# COPY --chown=1001:1001 . .
 
 
-RUN apt-get install -y supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# RUN apt-get install -y supervisor
+# COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 
 RUN composer update --ignore-platform-reqs
@@ -62,6 +62,6 @@ USER 1001
 
 
 #CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
-#CMD php artisan serve --host=0.0.0.0 --port=8000
+CMD php artisan serve --host=0.0.0.0 --port=8000
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

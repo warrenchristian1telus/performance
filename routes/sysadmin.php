@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\SysadminController;
 use App\Http\Controllers\CurrentEmployeesController;
-use App\Http\Controllers\HRadminController;
 use App\Http\Controllers\PastEmployeesController;
+use App\Http\Controllers\CreateAccessController;
 use App\Http\Controllers\ManageExistingAccessController;
 use App\Http\Controllers\ManageExistingSharesController;
 use App\Http\Controllers\ManageExistingExcusedController;
@@ -14,12 +14,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['role:Sys Admin']], function () {
 
-
-    // Route::get('/hradmin/org-organizations', [HRadminController::class,'getOrganizations']);
-// Route::get('/hradmin/org-programs', [HRadminController::class,'getPrograms']);
-// Route::get('/hradmin/org-divisions', [HRadminController::class,'getDivisions']);
-// Route::get('/hradmin/org-branches', [HRadminController::class,'getBranches']);
-// Route::get('/hradmin/org-level4', [HRadminController::class,'getLevel4']);
 
 Route::get('sysadmin/employees/currentemployees', [CurrentEmployeesController::class, 'index'])->name('sysadmin.employees.currentemployees');
 Route::get('sysadmin/employees/currentemployeeslist', [CurrentEmployeesController::class, 'getList'])->name('sysadmin.employees.currentemployeeslist');
@@ -72,11 +66,13 @@ Route::get('sysadmin/notifications/viewnotifications', [SysadminController::clas
 
 
 
-Route::get('sysadmin/access/createaccess', [SysadminController::class, 'createaccess'])->name('sysadmin.access.createaccess');
-
+Route::get('sysadmin/access/createaccess', [CreateAccessController::class, 'index'])->name('sysadmin.access.createaccess');
+Route::get('/sysadmin/access/org-tree', [CreateAccessController::class,'loadOrganizationTree']);
+Route::get('/sysadmin/access/users', [CreateAccessController::class, 'getUsers'])->name('sysadmin.access.users.list');
 // Route::get('sysadmin/access/manageaccess', [ManageExistingAccessController::class, 'manageaccess'])->name('sysadmin.access.manageaccess');
 Route::get('sysadmin/access/manageexistingaccess', [ManageExistingAccessController::class, 'index'])->name('sysadmin.access.manageexistingaccess');
 Route::post('sysadmin/access/manageexistingaccess/{id}', [ManageExistingAccessController::class, 'update'])->name('sysadmin.access.manageexistingaccessupdate');
+Route::get('sysadmin/access/get_access_entry/{role_id}/{model_id}', [ManageExistingAccessController::class, 'get_access_entry']);
 Route::get('sysadmin/access/manageexistingaccesslist', [ManageExistingAccessController::class, 'getList'])->name('sysadmin.access.manageexistingaccesslist');
 Route::get('sysadmin/access/accessedit/{id}', [ManageExistingAccessController::class, 'edit'])->name('sysadmin.access.accessedit');
 Route::post('sysadmin/access/accessupdate/{id}', [ManageExistingAccessController::class, 'update'])->name('sysadmin.access.accessupdate');
@@ -90,12 +86,21 @@ Route::get('sysadmin/statistics/excusedsummary', [SysadminController::class, 'ex
 Route::get('sysadmin/switch-identity', [SysadminController::class, 'switchIdentity'])->name('sysadmin.switch-identity');
 
 
+
+
+
+});
+
+
+Route::get('/sysadmin/org-organizations', [SysadminController::class,'getOrganizations']);
+Route::get('/sysadmin/org-programs', [SysadminController::class,'getPrograms']);
+Route::get('/sysadmin/org-divisions', [SysadminController::class,'getDivisions']);
+Route::get('/sysadmin/org-branches', [SysadminController::class,'getBranches']);
+Route::get('/sysadmin/org-level4', [SysadminController::class,'getLevel4']);
+
+
 Route::get('sysadmin/level0', 'App\Http\Controllers\SysadminController@getOrgLevel0')->name('sysadmin.level0');
 Route::get('sysadmin/level1/{id0}', 'App\Http\Controllers\SysadminController@getOrgLevel1')->name('sysadmin.level1');
 Route::get('sysadmin/level2/{id0}/{id1}', 'App\Http\Controllers\SysadminController@getOrgLevel2')->name('sysadmin.level2');
 Route::get('sysadmin/level3/{id0}/{id1}/{id2}', 'App\Http\Controllers\SysadminController@getOrgLevel3')->name('sysadmin.level3');
 Route::get('sysadmin/level4/{id0}/{id1}/{id2}/{id3}', 'App\Http\Controllers\SysadminController@getOrgLevel4')->name('sysadmin.level4');
-
-
-
-});

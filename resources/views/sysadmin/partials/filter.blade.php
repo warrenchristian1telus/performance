@@ -59,7 +59,7 @@
                     </td>
                     <td style="text-align: left; align: center; vertical-align: bottom; width: 300px; " class="p-1 form-group">
                         <span class="float-left float-bottom">  
-                            {{-- <button type="submit" class="btn btn-primary" name="btn_search" value="btn_search" id="btn_search" style="width: 140px; " formaction="{{ route('hradmin.myorg') }}">Search</button> --}}
+                            {{-- <button type="submit" class="btn btn-primary" name="btn_search" value="btn_search" id="btn_search" style="width: 140px; " formaction="{{ route('sysadmin.myorg') }}">Search</button> --}}
                             <button type="submit" class="btn btn-primary" name="btn_search" value="btn_search" id="btn_search" style="width: 140px; " formaction="">Search</button>
                             <button type="reset" class="btn btn-secondary" name="btn_search_reset" value="btn_reset" id="btn_search_reset" style="width: 140px; " formaction="">Reset</button>
                         </span>
@@ -100,7 +100,7 @@
         placeholder: 'Select Organization',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-organizations'
+            url: '/sysadmin/org-organizations'
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -122,7 +122,7 @@
         placeholder: 'Select Level 1',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-programs' 
+            url: '/sysadmin/org-programs' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -145,7 +145,7 @@
         placeholder: 'Select Level 2',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-divisions' 
+            url: '/sysadmin/org-divisions' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -169,7 +169,7 @@
         placeholder: 'Select Level 3',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-branches' 
+            url: '/sysadmin/org-branches' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -194,7 +194,7 @@
         placeholder: 'Select Level 4',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-level4' 
+            url: '/sysadmin/org-level4' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {

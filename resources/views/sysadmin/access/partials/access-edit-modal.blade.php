@@ -1,11 +1,12 @@
 <form action="" method="post" enctype="multipart/form-data">
     {{ method_field('put') }}
     {{ csrf_field() }}
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal fade editModal" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
-                    <h5 class="modal-title" id="accessDetailLabel">Edit Employee Access Level</h5>
+                    {{-- <h5 class="modal-title" id="accessDetailLabel">Edit Employee Access Level</h5> --}}
+                    <h5 class="modal-title" type="hidden" id="accessDetailLabel">Edit Employee Access Level</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -52,39 +53,29 @@
     </div>
 </form>
 
+
 @push('js')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>  
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-
-            $('#editModal').on('show.bs.modal', function(e){
-                console_log('ABC');
-                // if (!data) return e.preventDefault();
-                var values = $(e.relatedTarget);
-                var v_email = values.data('email');
-                var v_roleid = values.data('roleid');
-                var v_id = values.data('id');
-                var v_reason = values.data('reason');
-                var modal = $(this);
-                modal.find('.modal-title accessDetailLabel').text('Edit Employee Access Level: ' + v_email);
-                modal.find('.modal-body select').text(v_roleid);
-                $('#reason').val($(this).data('reason'));
-            });
-
-            function console_log( $data ){
-                echo '<script>';
-                echo 'console.log('. json_encode( $data ) . ')';
-                echo '</script>';
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>  
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
+    <script type="text/javascript">
+        $(document).ready() 
+        {
+            // $('body').popover({
+            //     selecttor: ['data-toggle'],
+            //     trigger: 'hover',
+            // });
+        
+            $(document).on('show.bs.modal'), '#editModal', function(e) {
+                $('#reason').val('ASD UHYGFR EDFFGHJKL');
+                $('#editModal').find('input').prop('readonly', false);
+                $("#editModal").find("x-input").val('JIUHJU HYGTGF');
+                $("#editModal").find("select").val('JIUHJU HYGTGF');
             }
-            
-            // $('[data-toggle="tooltip"]').tooltip();
-
-    });
-
-
-</script>
+        }
+    </script>
 @endpush
+
 

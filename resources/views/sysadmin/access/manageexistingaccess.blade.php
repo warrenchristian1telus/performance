@@ -44,10 +44,9 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
-        $(document).ready()
+        $(document).ready() 
         {
-            $(function ()
-            {
+            $(function(){
                 var table = $('.filtertable').DataTable
                 (
                     {
@@ -56,11 +55,9 @@
                         scrollX: true,
                         stateSave: true,
                         deferRender: true,
-                        ajax: 
-                        {
+                        ajax: {
                             url: "{{ route('sysadmin.access.manageexistingaccesslist') }}",
-                            data: function (d) 
-                            {
+                            data: function(d) {
                                 d.dd_level0 = $('#dd_level0').val();
                                 d.dd_level1 = $('#dd_level1').val();
                                 d.dd_level2 = $('#dd_level2').val();
@@ -70,8 +67,7 @@
                                 d.search_text = $('#search_text').val();
                             }
                         },
-                        columns: 
-                        [
+                        columns: [
                             {title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_demo.employee_id', searchable: true},
                             {title: 'Name', ariaTitle: 'Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_demo.employee_name', searchable: true},
                             {title: 'eMail', ariaTitle: 'eMail', target: 0, type: 'string', data: 'email', name: 'users.email', searchable: true},
@@ -84,66 +80,114 @@
                             {title: 'Dept', ariaTitle: 'Dept', target: 0, type: 'string', data: 'deptid', name: 'employee_demo.deptid', searchable: true},
                             {title: 'Access Level', ariaTitle: 'Access Level', target: 0, type: 'string', data: 'longname', name: 'roles.longname', searchable: true},
                             {title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
-                            {title: 'User ID', ariaTitle: 'User ID', target: 0, type: 'num', data: 'id', name: 'users.id', searchable: false, visible: false},
+                            {title: 'Model ID', ariaTitle: 'Model ID', target: 0, type: 'num', data: 'model_id', name: 'model_has_roles.model_id', searchable: false, visible: false},
                             {title: 'Role ID', ariaTitle: 'Role ID', target: 0, type: 'num', data: 'role_id', name: 'model_has_roles.role_id', searchable: false, visible: false},
                             {title: 'Reason', ariaTitle: 'Reason', target: 0, type: 'num', data: 'reason', name: 'model_has_roles.reason', searchable: false, visible: false},
                        ]
                     }
                 );
 
-                // $('.body').on('click'), '#modalbutton' 
-                // {
-                //     $('#email').val($(this).data('email'));
-                //     $('#accessselect').val($(this).data('role_id'));
-                //     $('#id').val($(this).data('id'));
-                //     $('#reason').val($(this).data('reason'));
-                // }
-
-                // $('#modalbutton').click(function()
-                // {
-                //     $('#email').val($(this).data('email'));
-                //     $('#accessselect').val($(this).data('role_id'));
-                //     $('#id').val($(this).data('id'));
-                //     $('#reason').val($(this).data('reason'));
-                    
-
-                //     // var userid = $(this).data('id');
-
-                //     // $.ajax({
-                //     //     url: '{{"(sysadmin.access.accessedit"}}',
-                //     //     type: 'post',
-                //     //     data: 
-                //     //     {
-                //     //         id: userid
-                //     //     },
-                //     //     success: function(response)
-                //     //     {
-                //     //         $('.modal-body').html(response);
-                //     //     }
-                //     // })
-                // });
-
-                // $(document).on('click', '#modalbutton', function()
-                // {
-                //     var v_id = $('#employee_id').text();
-                //     var v_roleid = $('#role_id').text();
-                //     var v_email = $('#email').text();
-                //     var v_reason = $('#reason').text();
-
-                //     $('#editModal').modal('show');
-                //     // $('#accessselect').val(v_roleid);
-                //     // $('#reason').val(v_reason);
-                //     // $('#email').val(v_email);
-                    
-                // });
-
-
-
-
-
             });
 
+            // $('.modalbutton').on('click', function(){
+            //     const c_role_id = $(this).attr('data-roleid');
+            //     const c_model_id = $(this).attr('data-modelid');
+            //     // $ajax({
+            //     //     url: 'sysadmin/access/get_access_entry/'+role_id+'/'+model_id,
+            //     //     type: 'GET',
+            //         // data: {
+            //         //     "role_id: role_id",
+            //         //     "model_type: model_type",
+            //         //     "model_id: model_id",
+            //         //     "reason: reason", 
+            //         // },
+            //     //     success:function(data){ 
+            //     //         console.log(data);
+            //     //         $('#reason').html(data.reason);
+            //     //         $('#accessselect').html(data.role_id);
+            //     //     }
+            //     // });
+            // });
+
+
         }
+    </script>
+@endpush
+
+
+@push('js')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>  
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
+    <script type="text/javascript">
+        $(document).ready() 
+        {
+            // $('body').popover({
+            //     selecttor: ['data-toggle'],
+            //     trigger: 'hover',
+            // });
+
+            button.find('#search_text').val('9876784hfufgurjjh');
+            $('#accessselect').val('IUYHGYTRFRED');
+
+        }
+     
+            $('#editModal').on('show.bs.modal', function(e) {
+                var button = $(event.relatedTarget);
+                var roleId = button.data('data-roleid');
+                var modelId = button.data('data-modelid');
+                var reason = button.data('data-reason');
+                var email = button.data('data-email');
+                var modal = $(this);
+                modal.find('#reason').val(reason);
+                modal.find('#reason').val('IOUJHUYT');
+                modal.find('#access_form input').val('WERTYUI');
+                modal.find('#access_form reason').val('YTGFHJBN');
+                $('#reason').val(reason);
+                $('#reason').val('ASDFGHJKL');
+                $('.reason').val(reason);
+                $('.reason').val('ASDFGHJKL');
+                var modalTitle = modal.querySelector('.modal-title');
+                modalTitle.textContent = 'TRFGHGJH$RERYUUJJHG JJG H G G';
+                var modalBodyInput = modal.querySelector('.modal-body input');
+                modalBodyInput.value = 'POLKJIJHUYHGFYTFGTYF';
+                $('#accessselect').val('ssHUYsHYfdTRF');
+                $('#accessselect').val('IUYHGTFRTYUI');
+                var anyValue = button.getAttribute('data-reason');
+                console.log( $('select[name=accessselect]').val() );
+                $('.accessselect').val('ssHUYsHYfdTRF');
+                $('.accessselect').val('IUYHGTFRTYUI');
+
+                button.find('#search_text').val('9876784hfufgurjjh');
+                $('#search_text').val('KIUYHGBNMKYGHBNMJKIUYG');
+
+
+                // $("#viewConversationModal").find("textarea").val('');
+                // $("#viewConversationModal").find("input, textarea").prop("readonly", false);
+                // $('#viewConversationModal').data('is-frozen', 0);
+
+            })
+
+
+
+        $(document).on('show.bs.modal'), '#editModal', function(e) {
+                $('#reason').val('ASD UHYGFR EDFFGHJKL');
+                $('#editModal').find('input, textarea').prop('readonly', false);
+                $("#editModal").find("x-input").val('JIUHJUHYGTGF');
+                $('.reason').val('kajskdjas');
+                $('.reason').val('ASDFGHJKL');
+                $('#accessselect').val('ssHUYsHYfdTRF');
+                $('#accessselect').val('IUYHGTFRTYUI');
+                $(this).find('#access_form').find('[name=reason]').val('YMCA');
+                $('#search_text').val('OIUYTNHYH');
+                console.log( $('select[name=accessselect]').val() );
+
+            }
+
+
+
     </script>
 @endpush
 

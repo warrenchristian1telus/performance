@@ -35,7 +35,7 @@ COPY . /app
 COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
 RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
 
-RUN crontab /etc/cron.d/laravel-scheduler-cron
+RUN /usr/bin/crontab /etc/cron.d/laravel-scheduler-cron
 
 
 # RUN crontab -u 1001 /etc/cron.d/laravel-scheduler-cron && \

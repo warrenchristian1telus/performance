@@ -1,11 +1,58 @@
-$theme-colors: (
-  "primary": #1a5a96
-);
+// Fonts
+@import "@bcgov/bc-sans/css/BCSans.css";
+
+// Variables
+@import 'variables';
+
 @import 'node_modules/admin-lte/build/scss/adminlte.scss';
+
+
 @import 'custom-switch';
 .tooltip-dropdown {
   .dropdown-toggle::after {
     margin-top: 0.55em;
     float: right;
   }
+}
+
+// Custom siderbar color 
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+  background-color: #FCBA19 !important;
+}
+
+// Custom the card heading on the goal page
+.card-primary:not(.card-outline) > .card-header {
+  background-color: #6685A3 !important;
+}
+
+.card-primary:not(.card-outline) > .card-header .btn-primary {
+  background-color: #6685A3 !important;
+  border-color: #6685A3 !important;
+}
+
+// Login page
+.login-page, .register-page {
+  background-color: #1a5a96 !important;
+}
+
+
+// Tab for difference links 
+a.btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark, .btn-link ), 
+a.btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark, .btn-link ):hover,
+a.btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark, .btn-link ):active,
+a.btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark, .btn-link ):visited 
+{
+  color: #003366 !important;
+}
+
+a.btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark, .btn-link ):hover,
+a.btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark, .btn-link ):active,
+a.btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark, .btn-link ):visited 
+{
+  font-weight:bold !important;
+}
+
+div.border-primary a {
+  font-weight:bold !important;
 }

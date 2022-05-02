@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ConversationSeeder::class);
         $this->call(ExcusedReasonSeeder::class);
         $this->call(AccessLevelsSeeder::class);
+        $this->call(RoleSeeder_Add_Longnames::class);
         // Items below are for user testing in Test environment
         // $this->call(UserTableSeeder_Additional_20220125::class);
         // $this->call(SupervisorGoalSeeder_Additional_20220125::class);

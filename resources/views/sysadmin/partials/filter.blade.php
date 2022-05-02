@@ -1,9 +1,9 @@
-<div class="card" style="width: 1530px">
+<div class="card" style="width: 100%">
     <form action="" method="get">
-        <table class="uk-table m-3" style="overflow-x: auto; width: 1500px">
+        <table class="uk-table m-3" style="overflow-x: auto; width: 98%">
             <tbody>
                 <tr style="text-align: left;" class="p-1 form-group">
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level0'>Organization</label>
                         <select class="form-control" name="dd_level0" id="dd_level0">
                             @if ( old('dd_level0') && session()->get('level0') )
@@ -11,7 +11,7 @@
                             @endif
                         </select>
                     </td>
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level1'>Level 1</label>
                         <select class="form-control" name="dd_level1" id="dd_level1">
                             @if ( old('dd_level1') && session()->get('level1') )
@@ -19,7 +19,7 @@
                             @endif
                         </select>
                     </td>
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level2'>Level 2</label>
                         <select class="form-control" name="dd_level2" id="dd_level2">
                             @if ( old('dd_level2') && session()->get('level2') )
@@ -27,7 +27,7 @@
                             @endif
                         </select>
                     </td>
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level3'>Level 3</label>
                         <select class="form-control" name="dd_level3" id="dd_level3">
                             @if ( old('dd_level3') && session()->get('level3') )
@@ -35,7 +35,7 @@
                             @endif
                         </select>
                     </td>
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level4'>Level 4</label>
                         <select class="form-control" name="dd_level4" id="dd_level4">
                             @if ( old('dd_level4') && session()->get('level4') )

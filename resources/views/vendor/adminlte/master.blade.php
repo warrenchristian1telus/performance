@@ -130,6 +130,20 @@
             CKEDITOR.config.disableNativeSpellChecker = false;
         }
     </script>
+
+    <script>
+        // Hide the Profile Picture when the main sidebar collapse
+        $(function() { 
+            $(document).on('shown.lte.pushmenu', function()  {
+                console.log('shown');
+                $('div#sidebar-profile-picture').show(100);
+            }).on('collapsed.lte.pushmenu', function() {
+                console.log('hide');
+                $('div#sidebar-profile-picture').hide(100);
+            });
+        });
+    </script>
+
 </body>
 
 </html>

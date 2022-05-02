@@ -91,7 +91,7 @@ class ManageExistingExcusedController extends Controller
             ->when($request->criteria == 'emp', function($q) use($request){return $q->where('employee_id', 'like', "%" . $request->search_text . "%");})
             ->when($request->criteria == 'job', function($q) use($request){return $q->where('job_title', 'like', "%" . $request->search_text . "%");})
             ->when($request->criteria == 'dpt', function($q) use($request){return $q->where('deptid', 'like', "%" . $request->search_text . "%");})
-            ->when($request->criteria == 'all', function($q) use ($request) 
+            ->when([$request->criteria == 'all', $request->search_text] , function($q) use ($request) 
             {
                 return $q->where(function ($query2) use ($request) 
                 {

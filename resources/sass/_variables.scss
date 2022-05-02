@@ -1,0 +1,37 @@
+// Body
+$body-bg: #f2f2f2;          //$body-bg: #f8fafc;
+$body-color:   #313132;
+
+// Typography
+//$font-family-sans-serif: 'Nunito', sans-serif;
+$font-family-sans-serif: 'BCSans', 'Noto Sans', Verdana, Arial, sans-serif;
+$font-family-monospace:  'BCSans', SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Colors
+$blue: #1A5A96;   // $blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #D8292F;     //$red: #e3342f;
+$orange: #f6993f;
+$yellow: #EED202;  //$yellow: #ffed4a;
+$green: #2E8540;   //$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #1A5A96;  //$cyan: #6cb2eb;
+
+
+$primary:       $blue;
+$success:       $green;
+$info:          $cyan;
+$warning:       $yellow;
+$danger:        $red;
+
+
+// Adminlte variables
+$sidebar-dark-bg: #003366;
+$sidebar-dark-hover-bg: #FCBA19;
+$sidebar-dark-active-color: #FCBA19;
+
+

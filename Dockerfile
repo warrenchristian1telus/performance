@@ -61,7 +61,7 @@ RUN chgrp -R 0 /app && \
     chmod -R g=u /app
 USER 1001
 
-
+RUN echo "root" > /etc/cron.d/cron.allow
 RUN echo "1001" > /etc/cron.d/cron.allow
 
 #CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]

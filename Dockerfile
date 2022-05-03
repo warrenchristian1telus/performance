@@ -31,7 +31,7 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring
 WORKDIR /app
 COPY . /app
 
-RUN groupadd -r 1001 && useradd -r -g 1001 1001
+RUN groupadd -r docker-user && useradd -r -g docker-user docker-user
 
 #RUN cat /app/crontab.txt >> /etc/crontab
 COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
@@ -68,7 +68,9 @@ EXPOSE 8000
 
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app
-USER 1001
+#USER 1001
+
+USER docker-user
 
 
 

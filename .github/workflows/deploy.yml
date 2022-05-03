@@ -20,6 +20,7 @@ jobs:
           echo Git Build ID: ${{ github.event.number }}
           echo Git Pull Request Ref: ${{ github.event.pull_request.head.sha }}
           echo OC CLI Version: $(oc version)
+          echo Git Branch name: ${{ github.ref_name }}
   
   #Build the app
 
@@ -27,7 +28,7 @@ jobs:
     name: Build APP
     runs-on: ubuntu-latest
     # if: ${{ github.event.pull_request.merged == true}}
-    if: ${{ github.ref_name }} == 'dev'
+    #if: ${{ github.ref_name }} == 'dev'
     env:
       BUILD_ID: ${{ github.event.number }}
       BUILD_NAMESPACE: 332842-tools

@@ -248,7 +248,7 @@
         $('#dd_level2').val(null).trigger('change');
         $('#dd_level3').val(null).trigger('change');
         $('#dd_level4').val(null).trigger('change');
-        // $('#criteria').val('all').trigger('change');
+        $('#criteria').val('all').trigger('change');
         $('#search_text').val(null);
     });
 

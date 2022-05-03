@@ -1,8 +1,8 @@
-<form action="" method="post" enctype="multipart/form-data">
-    {{ method_field('put') }}
+<form action="manageexistingaccessupdate" method="post" enctype="multipart/form-data">
+    {{ method_field('PUT') }}
     {{ csrf_field() }}
-    <div class="modal fade editModal" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal fade editModal" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     {{-- <h5 class="modal-title" id="accessDetailLabel">Edit Employee Access Level</h5> --}}
@@ -21,12 +21,13 @@
                 <div class="modal-body p-3">
                     <form id="access_form" action="" method="POST">
                         @csrf
-                        <div class="row p-3">
-                            <div class="col">
+                        <div class="row  p-3">
+                            <div class="col col-4">
+                                <input id="model_id" name="model_id" type="hidden" value="secret">
                                 <label for='accessselect' title='Access Level Tooltip'>Access Level
                                 <select name="accessselect" class="form-control" id="accessselect">
-                                    @foreach($roles as $selectId => $selectName)
-                                        <option value=" {{ $selectId }} "> {{ $selectName }} </option>
+                                    @foreach($roles as $rid => $desc)
+                                        <option value = {{ $rid }} > {{ $desc }} </option>
                                     @endforeach
                                 </select>
                                 </label>
@@ -35,47 +36,26 @@
                                 <x-input id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
                             </div>
                         </div>
-                            
+                        <table class="table table-bordered admintable" id="admintable" style="width: 100%; overflow-x: auto; "></table>
                     </form>
                 </div>
                 <div class="modal-footer p-3">
                     <div class="col">
-                        <button id="removeButton" name="removeButton" type="button" class="btn btn-outline-danger float-left" aria-label="Remove Access">Remove Access</button>
+                        {{-- <form action="{{ route('sysadmin.access.manageexistingaccessdelete') }}" method="delete" enctype="multipart/form-data"> --}}
+                        <form action="#" method="delete" enctype="multipart/form-data">
+                            @method('DELETE')
+                            @csrf
+                            <button id="removeButton" name="removeButton" type="button" class="btn btn-outline-danger float-left" onClick="return confirm('Are you sure?')" aria-label="Remove Access">Remove Access</button>
+                        </form>
                     </div>
                     <div class="col">
                         <button id="cancelButton" name="cancelButton" type="button" class="btn btn-secondary float-right" style="margin:5px;" data-dismiss="modal" aria-label="Cancel">Cancel</button>                    
                         <div class="space"></div>
-                        <button id="saveButton" name="saveButton" type="submit" class="btn btn-primary float-right" style="margin:5px;" role="save" data-toggle="modal" data-target="#updateModal" aria-label="Save Changes">Save Changes</button>                    
+                        <button id="saveButton" name="saveButton" type="submit" class="btn btn-primary float-right" onClick="return confirm('Are you sure?')" style="margin:5px;" role="save" data-toggle="modal" data-target="#updateModal" aria-label="Save Changes">Save Changes</button>                    
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
-
-@push('js')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>  
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
-    <script type="text/javascript">
-        $(document).ready() 
-        {
-            // $('body').popover({
-            //     selecttor: ['data-toggle'],
-            //     trigger: 'hover',
-            // });
-        
-            $(document).on('show.bs.modal'), '#editModal', function(e) {
-                $('#reason').val('ASD UHYGFR EDFFGHJKL');
-                $('#editModal').find('input').prop('readonly', false);
-                $("#editModal").find("x-input").val('JIUHJU HYGTGF');
-                $("#editModal").find("select").val('JIUHJU HYGTGF');
-            }
-        }
-    </script>
-@endpush
-
 

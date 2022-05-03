@@ -130,7 +130,7 @@ class CreateAccessController extends Controller
         $notificationLog = NotificationLog::where('id', $request->notification_id)->first();
 
         if($request->ajax()){
-            return view('hradmin.notifications.partials.show', compact('notificationLog') ); 
+            return view('sysadmin.access.partials.show', compact('notificationLog') ); 
         } 
     }
 
@@ -208,7 +208,7 @@ class CreateAccessController extends Controller
         $criteriaList = $this->search_criteria_list();
         
 
-        return view('hradmin.notifications.notify', compact('alert_format_list', 'criteriaList','matched_emp_ids', 'old_selected_emp_ids') );
+        return view('syadmin.access.notify', compact('alert_format_list', 'criteriaList','matched_emp_ids', 'old_selected_emp_ids') );
     
     }
 
@@ -261,7 +261,7 @@ class CreateAccessController extends Controller
         $empIdsByOrgId = $rows->groupBy('id')->all();
 
         if($request->ajax()){
-            return view('hradmin.notifications.partials.recipient-tree', compact('orgs','countByOrg','empIdsByOrgId') );
+            return view('sysadmin.access.partials.recipient-tree', compact('orgs','countByOrg','empIdsByOrgId') );
         } 
 
     }
@@ -346,7 +346,7 @@ class CreateAccessController extends Controller
     
         //run validation which will redirect on failure
         if ($validator->fails()) {
-            return redirect()->action([NotificationController::class, 'notify'] )
+            return redirect()->action([CreateAccessController::class, 'getList'] )
                ->withErrors($validator)->withInput();
             //return redirect()->to( route('hradmin.notifications.notify') )->withErrors($validator)->withInput();
           }
@@ -364,30 +364,30 @@ class CreateAccessController extends Controller
                 ->pluck('users.id') ;
 
 
-        // Method 1: Real-Time
-        $sendMail = new \App\MicrosoftGraph\SendMail();
-        $sendMail->toRecipients = $toRecipients->toArray();
-        $sendMail->sender_id = $request->sender_id;
-        $sendMail->subject = $request->subject;
-        $sendMail->body = $request->body;
-        $sendMail->alertFormat = $request->alert_format;
-        $response = $sendMail->sendMailWithoutGenericTemplate();
-        if ($response->getStatus() == 202) {
-            return redirect()->route('hradmin.notifications.notify')
-                ->with('success','Email with subject "' . $request->subject  . '" was successfully sent.');
-        }
+        // // Method 1: Real-Time
+        // $sendMail = new \App\MicrosoftGraph\SendMail();
+        // $sendMail->toRecipients = $toRecipients->toArray();
+        // $sendMail->sender_id = $request->sender_id;
+        // $sendMail->subject = $request->subject;
+        // $sendMail->body = $request->body;
+        // $sendMail->alertFormat = $request->alert_format;
+        // $response = $sendMail->sendMailWithoutGenericTemplate();
+        // if ($response->getStatus() == 202) {
+        //     return redirect()->route('hradmin.notifications.notify')
+        //         ->with('success','Email with subject "' . $request->subject  . '" was successfully sent.');
+        // }
 
-        // Method 2: Using Queue
-        $sendEmailJob = (new SendEmailJob())->delay( now()->addSeconds(1) );
-        $sendEmailJob->bccRecipients = $bccRecipients->toArray();  // $request->recipients;
-        $sendEmailJob->sender_id = $request->sender_id;
-        $sendEmailJob->subject = $request->subject;
-        $sendEmailJob->body = $request->body;
-        $sendEmailJob->alertFormat = $request->alert_format;
-        $ret = dispatch($sendEmailJob);
+        // // Method 2: Using Queue
+        // $sendEmailJob = (new SendEmailJob())->delay( now()->addSeconds(1) );
+        // $sendEmailJob->bccRecipients = $bccRecipients->toArray();  // $request->recipients;
+        // $sendEmailJob->sender_id = $request->sender_id;
+        // $sendEmailJob->subject = $request->subject;
+        // $sendEmailJob->body = $request->body;
+        // $sendEmailJob->alertFormat = $request->alert_format;
+        // $ret = dispatch($sendEmailJob);
 
-        return redirect()->route('hradmin.notifications.notify')
-            ->with('success','Job for sending email with subject "' . $request->subject  . '" was successfully dispatched.');
+        // return redirect()->route('hradmin.notifications.notify')
+        //     ->with('success','Job for sending email with subject "' . $request->subject  . '" was successfully dispatched.');
     
 
     }
@@ -586,7 +586,7 @@ class CreateAccessController extends Controller
         $parent_id = $id;
         
         // if($request->ajax()){
-            return view('hradmin.notifications.partials.employee', compact('parent_id', 'employees') ); 
+            return view('sysadmin.access.partials.employee', compact('parent_id', 'employees') ); 
         // } 
     }
 

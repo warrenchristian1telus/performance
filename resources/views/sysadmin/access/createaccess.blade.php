@@ -1,82 +1,90 @@
 @extends('sysadmin.layout')
 @section('tab-content')
 
-<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
-<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
+<div class="card">
+	<div class="card-body">
+        <div class="h4">{{__('Create New Access')}}</div>
+	</div>    
 
-@include('sysadmin/access/partials/confirm-new-modal')
+	<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
+	<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
+
+	@include('sysadmin/access/partials/confirm-new-modal')
 
 
- @if ($message = Session::get('success'))
-	<div class="alert alert-success">
-		<p>{{ $message }}</p>
-	</div>
-@endif
+	@if ($message = Session::get('success'))
+		<div class="alert alert-success">
+			<p>{{ $message }}</p>
+		</div>
+	@endif
 
-<div>
-	<form action="" method="post" enctype="multipart/form-data">
-		{{ method_field('put') }}
-		{{ csrf_field() }}
+	<div>
+		<form action="" method="post" enctype="multipart/form-data">
+			{{ method_field('put') }}
+			{{ csrf_field() }}
 
-		<div class="h5 p-3">{{__('Step 1. Select access level and reason for assigning access')}}</div>
+			<div class="h5 p-3">{{__('Step 1. Select access level and reason for assigning access')}}</div>
 
-		<div class="card p-3">
-			<div class="row p-3">
-
-				<div class="col">
-					<label for='accessselect' title='Access Level Tooltip'>Access Level
-					<select name="accessselect" class="form-control" id="accessselect">
-						@foreach($roles as $selectId => $selectName)
-							<option value=" {{ $selectId }} "> {{ $selectName }} </option>
-						@endforeach
-					</select>
-					</label>
-				</div>
-				<div class="col col-8">
-					<x-input id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
+			{{-- <div class="card p-3"> --}}
+			<div class="p-3">
+				<div class="card p-3"  display="flex">
+					<div class="col col-2" display="inline">
+						<label for='accessselect' title='Access Level Tooltip'>Access Level
+							<select name="accessselect" class="form-control" id="accessselect">
+								@foreach($roles as $selectId => $selectName)
+									<option value=" {{ $selectId }} "> {{ $selectName }} </option>
+								@endforeach
+							</select>
+						</label>
+					</div>
+					<div class="col col-6" display="inline">
+						<x-input id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
+					</div>
 				</div>
 			</div>
 
-		</div>
+			{{-- </div> --}}
+
+			<div class="h5 p-3">{{__('Step 2. Select employees to assign')}}</div>
+			<div class="p-3">
+				@include('sysadmin.partials.filter')
+			</div>
+
+			{{-- <div class="p-3"> --}}
+				<nav card>
+					<div class="nav nav-tabs" id="nav-tab" role="tablist">
+						<a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
+						<a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
+					</div>
+				</nav>
+			{{-- </div> --}}
+			<div class="tab-content" id="nav-tabContent">
+				<div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+					@include('sysadmin.partials.recipient-list')
+				</div>
+				<div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
+					<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
+						<span class="sr-only">Loading...</span>
+					</div> 
+				</div>
 			
-
-		<div class="h5 p-3">{{__('Step 2. Select employees to assign')}}</div>
-
-		@include('sysadmin.partials.filter')
-
-
-		<nav>
-			<div class="nav nav-tabs" id="nav-tab" role="tablist">
-				<a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
-				<a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
 			</div>
-		</nav>
-		<div class="tab-content" id="nav-tabContent">
-			<div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
-				@include('sysadmin.partials.recipient-list')
-			</div>
-			<div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
-				<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
-					<span class="sr-only">Loading...</span>
-				</div> 
-			</div>
-		
-		</div>
 
-		<div class="h5 p-3">{{__('Step 3. Select ministries to assign to (for HR Administrators only)')}}</div>
-		
-		<div class="h5 p-3">{{__('Step 4. Assign selected employees')}}</div>
+			<div class="h5 p-3">{{__('Step 3. Select ministries to assign to (for HR Administrators only)')}}</div>
+			
+			<div class="h5 p-3">{{__('Step 4. Assign selected employees')}}</div>
 
-		<div class="row p-3">
-			<div class="col">
-				<button id="saveButton" name="saveButton" type="submit" class="btn btn-primary float-left" style="margin:5px;" role="save" data-toggle="modal" data-target="#updateModal" aria-label="Save Changes">Assign Emplloyees</button>                    
-				<div class="space"></div>
-				<button id="cancelButton" name="cancelButton" type="button" class="btn btn-secondary float-left" style="margin:5px;" data-dismiss="modal" aria-label="Cancel">Cancel</button>                    
+			<div class="row p-3">
+				<div class="col">
+					<button id="saveButton" name="saveButton" type="submit" class="btn btn-primary float-left" style="margin:5px;" role="save" data-toggle="modal" data-target="#updateModal" aria-label="Save Changes">Assign Emplloyees</button>                    
+					<div class="space"></div>
+					<button id="cancelButton" name="cancelButton" type="button" class="btn btn-secondary float-left" style="margin:5px;" data-dismiss="modal" aria-label="Cancel">Cancel</button>                    
+				</div>
 			</div>
-		</div>
 
-	</form>
-</div>		
+		</form>
+	</div>		
+</div>   
 		
 @endsection
 

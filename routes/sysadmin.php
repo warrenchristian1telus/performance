@@ -66,14 +66,20 @@ Route::get('sysadmin/notifications/viewnotifications', [SysadminController::clas
 
 
 
+// Route::get('/hradmin/notifications/employee-list', [NotificationController::class, 'getDatatableEmployees'])->name('hradmin.notifications.employee.list');
+Route::get('/sysadmin/access/employee-list', [CreateAccessController::class, 'getDatatableEmployees'])->name('sysadmin.access.employee.list');
 Route::get('sysadmin/access/createaccess', [CreateAccessController::class, 'index'])->name('sysadmin.access.createaccess');
-Route::get('/sysadmin/access/org-tree', [CreateAccessController::class,'loadOrganizationTree']);
-Route::get('/sysadmin/access/users', [CreateAccessController::class, 'getUsers'])->name('sysadmin.access.users.list');
+Route::get('sysadmin/access/org-tree', [CreateAccessController::class,'loadOrganizationTree']);
+Route::get('sysadmin/access/users', [CreateAccessController::class, 'getUsers'])->name('sysadmin.access.users.list');
 // Route::get('sysadmin/access/manageaccess', [ManageExistingAccessController::class, 'manageaccess'])->name('sysadmin.access.manageaccess');
 Route::get('sysadmin/access/manageexistingaccess', [ManageExistingAccessController::class, 'index'])->name('sysadmin.access.manageexistingaccess');
-Route::post('sysadmin/access/manageexistingaccess/{id}', [ManageExistingAccessController::class, 'update'])->name('sysadmin.access.manageexistingaccessupdate');
+Route::put('sysadmin/access/manageexistingaccessupdate', [ManageExistingAccessController::class, 'update'])->name('sysadmin.access.manageexistingaccessupdate');
+Route::get('sysadmin/access/manageexistingaccessdelete', [ManageExistingAccessController::class, 'destroy'])->name('sysadmin.access.manageexistingaccess');
+Route::delete('sysadmin/access/manageexistingaccessdelete', [ManageExistingAccessController::class, 'destroy'])->name('sysadmin.access.manageexistingaccessdelete');
 Route::get('sysadmin/access/get_access_entry/{role_id}/{model_id}', [ManageExistingAccessController::class, 'get_access_entry']);
 Route::get('sysadmin/access/manageexistingaccesslist', [ManageExistingAccessController::class, 'getList'])->name('sysadmin.access.manageexistingaccesslist');
+Route::get('sysadmin/access/manageexistingaccessadmin/{model_id}', [ManageExistingAccessController::class, 'getAdminOrgs'])->name('sysadmin.access.manageexistingaccessadmin');
+// Route::get('sysadmin/access/manageexistingaccessadmin', [ManageExistingAccessController::class, 'getAdminOrgs'])->name('sysadmin.access.manageexistingaccessadmin');
 Route::get('sysadmin/access/accessedit/{id}', [ManageExistingAccessController::class, 'edit'])->name('sysadmin.access.accessedit');
 Route::post('sysadmin/access/accessupdate/{id}', [ManageExistingAccessController::class, 'update'])->name('sysadmin.access.accessupdate');
 

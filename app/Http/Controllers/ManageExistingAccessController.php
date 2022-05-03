@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminOrg;
 use App\Models\User;
 use App\Models\Conversation;
 use App\Models\EmployeeDemo;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -128,15 +130,33 @@ class ManageExistingAccessController extends Controller
                 return '<button 
                 class="btn btn-xs btn-primary modalbutton" 
                 role="button" 
-                data-roleid="{{ $row->role_id }}" 
-                data-modelid="{{ $row->model_id }}" 
-                data-reason="{{ $row->reason }}" 
-                data-email="{{ $row->email }}" 
+                data-roleid="' . $row->role_id . '" 
+                data-modelid="' . $row->model_id . '" 
+                data-reason="' . $row->reason . '" 
+                data-email="' . $row->email . '" 
+                data-longname="' . $row->longname . '" 
                 data-toggle="modal"
                 data-target="#editModal"
                 role="button">Update</button>';
             })
             ->rawColumns(['action'])
+            ->make(true);
+        }
+    }
+
+    public function getAdminOrgs(Request $request, $model_id) {
+        if ($request->ajax()) {
+            $query = AdminOrg::where('user_id', '=', $model_id)
+            ->select (
+                'user_id',
+                'organization',
+                'level1_program',
+                'level2_division',
+                'level3_branch',
+                'level4',
+            );
+            return Datatables::of($query)
+            ->addIndexColumn()
             ->make(true);
         }
     }
@@ -219,8 +239,19 @@ class ManageExistingAccessController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request) {
         //
+        //check if user is same as request, notify and do nothing if so
+        // Log::info('try saving...');
+
+        // else
+
+            $query = DB::table('model_has_roles')
+            ->where('model_id', '=', $request->input('model_id'))
+            ->wherein('role_id', [3, 4])
+            ->update(['role_id' => $request->input('accessselect'), 'reason' => $request->input('reason')]);
+            return redirect()->back();
+
     }
 
     /**
@@ -229,7 +260,16 @@ class ManageExistingAccessController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        //
+    public function destroy(Request $request) {
+        $query = DB::table('model_has_roles')
+        ->where('model_id', '=', $request->input('model_id'))
+        ->wherein('role_id', [3, 4])
+        ->delete();
+        if($query) {
+            $orgs = AdminiOrg::where('user_id', '=', $request->input('model_id'))
+            ->delete();
+        }
+        return redirect()->back();
+
     }
 }

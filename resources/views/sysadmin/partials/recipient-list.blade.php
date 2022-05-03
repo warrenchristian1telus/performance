@@ -67,7 +67,7 @@
             select: true,
             'order': [[1, 'asc']],
             ajax: {
-                url: '{!! route('hradmin.notifications.employee.list') !!}',
+                url: '{!! route('sysadmin.access.employee.list') !!}',
                 data: function (d) {
                     d.dd_level0 = $('#dd_level0').val();
                     d.dd_level1 = $('#dd_level1').val();

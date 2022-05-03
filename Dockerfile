@@ -76,6 +76,6 @@ USER docker-user
 
 #CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
 #CMD php artisan serve --host=0.0.0.0 --port=8000
-CMD cron && php artisan serve --host=0.0.0.0 --port=8000
+CMD php artisan serve --host=0.0.0.0 --port=8000
 
 #CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

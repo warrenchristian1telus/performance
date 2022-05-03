@@ -34,6 +34,8 @@ COPY . /app
 #RUN cat /app/crontab.txt >> /etc/crontab
 COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
 RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
+RUN echo "root" > /etc/cron.d/cron.allow
+RUN echo "1001" >> /etc/cron.d/cron.allow
 
 #RUN /usr/bin/crontab /etc/cron.d/laravel-scheduler-cron
 
@@ -55,14 +57,15 @@ RUN composer require awobaz/compoships --ignore-platform-reqs
 
 RUN php artisan config:clear
 
+
+
 EXPOSE 8000
 
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app
 USER 1001
 
-RUN echo "root" > /etc/cron.d/cron.allow
-RUN echo "1001" > /etc/cron.d/cron.allow
+
 
 #CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
 #CMD php artisan serve --host=0.0.0.0 --port=8000

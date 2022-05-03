@@ -38,7 +38,7 @@ RUN echo "root" > /etc/cron.d/cron.allow
 RUN echo "1001" >> /etc/cron.d/cron.allow
 RUN echo "1005640000" >> /etc/cron.d/cron.allow
 
-RUN cat etc/cron.d/cron.allow
+RUN cat /etc/cron.d/cron.allow
 
 #RUN /usr/bin/crontab /etc/cron.d/laravel-scheduler-cron
 

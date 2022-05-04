@@ -4,11 +4,16 @@
           Excuse New Employee(s)
         </x-button>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excusedemployees' ? 'border-primary' : ''}}">
+    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excused.manageexistingexcused' ? 'border-primary' : ''}}">
+      <x-button :href="route('sysadmin.excused.manageexistingexcused')" style="">
+          Manage Existing Excused
+      </x-button>
+  </div>
+{{-- <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.excusedemployees' ? 'border-primary' : ''}}">
         <x-button role="tab" :href="route('sysadmin.excusedemployees')" style="">
           Managed Excused Employees
         </x-button>
-    </div>
+    </div> --}}
     {{-- <div class="px-4 py-1 mr-2 border-bottom {{ str_contains( Route::current()->getName(), 'generic-template' ) ? 'border-primary' : ''}}">
       <x-button role="tab" :href="route('generic-template.index')" style="">
         Generic Template

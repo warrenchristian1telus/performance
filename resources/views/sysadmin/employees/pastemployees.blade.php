@@ -1,5 +1,6 @@
 @extends('sysadmin.layout')
 @section('tab-content')
+<div class="col-md-8"> @include('sysadmin.partials.tabs')</div>
 
 <div class="card">
 	<div class="card-body">

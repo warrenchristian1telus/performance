@@ -30,7 +30,7 @@
 <div class="card">
 	<div class="card-body">
 
-			<h2 class="mb-4">Notification Log</h2>
+			<h2 class="mb-4">Excuse New Employee(s)</h2>
 
 		<form id="search-form">
 				@csrf

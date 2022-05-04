@@ -1,5 +1,6 @@
 @extends('sysadmin.layout')
 @section('tab-content')
+<div class="col-md-8"> @include('sysadmin.partials.tabs')</div>
 
 <div>
     <div class="h4 p-2">{{__('Add a New Goal to a Goal Bank')}}</div>

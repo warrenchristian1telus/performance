@@ -4,9 +4,14 @@
           Share new Employee(s)
         </x-button>
     </div>
-    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.sharedemployees' ? 'border-primary' : ''}}">
+    {{-- <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.sharedemployees' ? 'border-primary' : ''}}">
         <x-button role="tab" :href="route('sysadmin.sharedemployees')" style="">
           Managed Shared Employees
         </x-button>
-    </div>
+    </div> --}}
+    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'sysadmin.shared.manageexistingshares' ? 'border-primary' : ''}}">
+      <x-button :href="route('sysadmin.shared.manageexistingshares')" style="">
+          Manage Existing Shares
+      </x-button>
+  </div>
 </div>

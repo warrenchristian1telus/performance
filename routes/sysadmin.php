@@ -4,11 +4,16 @@ use App\Http\Controllers\SysadminController;
 use App\Http\Controllers\CurrentEmployeesController;
 use App\Http\Controllers\PastEmployeesController;
 use App\Http\Controllers\CreateAccessController;
+use App\Http\Controllers\GenericTemplateController;
 use App\Http\Controllers\ManageExistingAccessController;
 use App\Http\Controllers\ManageExistingSharesController;
 use App\Http\Controllers\ManageExistingExcusedController;
 use App\Http\Controllers\ManageGoalBankController;
 use App\Http\Controllers\SysAdmin\UnlockConversationController;
+use App\Http\Controllers\SysAdmin\NotificationController;
+use App\Http\Controllers\SysAdmin\ExcusedEmployeesController;
+use App\Http\Controllers\SysAdmin\AccessPermissionsController;
+use App\Http\Controllers\SysAdmin\SharedEmployeesController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -61,8 +66,8 @@ Route::group(['middleware' => ['auth']], function()
 });
 
 
-Route::get('sysadmin/notifications/createnotification', [SysadminController::class, 'createnotification'])->name('sysadmin.notifications.createnotification');
-Route::get('sysadmin/notifications/viewnotifications', [SysadminController::class, 'viewnotifications'])->name('sysadmin.notifications.viewnotifications');
+// Route::get('sysadmin/notifications/createnotification', [SysadminController::class, 'createnotification'])->name('sysadmin.notifications.createnotification');
+// Route::get('sysadmin/notifications/viewnotifications', [SysadminController::class, 'viewnotifications'])->name('sysadmin.notifications.viewnotifications');
 
 
 
@@ -94,6 +99,95 @@ Route::get('sysadmin/statistics/sharedsummary', [SysadminController::class, 'sha
 Route::get('sysadmin/statistics/excusedsummary', [SysadminController::class, 'excusedsummary'])->name('sysadmin.statistics.excusedsummary');
 Route::get('sysadmin/switch-identity', [SysadminController::class, 'switchIdentity'])->name('sysadmin.switch-identity');
 
+
+//Shared Employees
+Route::group(['middleware' => ['auth']], function() {    
+    Route::get('/sysadmin/sharedemployees', [SharedEmployeesController::class, 'index'])->name('sysadmin.sharedemployees');
+    Route::get('/sysadmin/sharedemployees/detail/{notification_id}', [SharedEmployeesController::class, 'show']);
+    Route::get('/sysadmin/sharedemployees/notify', [SharedEmployeesController::class, 'notify'])->name('sysadmin.sharedemployees.notify');
+    Route::post('/sysadmin/sharedemployees/notify', [SharedEmployeesController::class, 'notify'])->name('sysadmin.sharedemployees.search');
+    Route::post('/sysadmin/sharedemployees/notify-send', [SharedEmployeesController::class, 'send'])->name('sysadmin.sharedemployees.send');
+    Route::get('/sysadmin/sharedemployees/users', [SharedEmployeesController::class, 'getUsers'])->name('sysadmin.sharedemployees.users.list');
+    
+    Route::get('/sysadmin/sharedemployees/org-tree', [SharedEmployeesController::class,'loadOrganizationTree']);
+    Route::get('/sysadmin/sharedemployees/org-organizations', [SharedEmployeesController::class,'getOrganizations']);
+    Route::get('/sysadmin/sharedemployees/org-programs', [SharedEmployeesController::class,'getPrograms']);
+    Route::get('/sysadmin/sharedemployees/org-divisions', [SharedEmployeesController::class,'getDvisions']);
+    Route::get('/sysadmin/sharedemployees/org-branches', [SharedEmployeesController::class,'getBranches']);
+    Route::get('/sysadmin/sharedemployees/org-level4', [SharedEmployeesController::class,'getLevel4']);
+    Route::get('/sysadmin/sharedemployees/job-titles', [SharedEmployeesController::class,'getJobTitles']);
+    Route::get('/sysadmin/sharedemployees/employees/{id}', [SharedEmployeesController::class,'getEmployees']);
+    Route::get('/sysadmin/sharedemployees/employee-list', [SharedEmployeesController::class, 'getDatatableEmployees'])->name('sysadmin.sharedemployees.employee.list');
+    
+});
+
+
+//Excused Employees
+Route::group(['middleware' => ['auth']], function() {    
+    Route::get('/sysadmin/excusedemployees', [ExcusedEmployeesController::class, 'index'])->name('sysadmin.excusedemployees');
+    Route::get('/sysadmin/excusedemployees/detail/{notification_id}', [ExcusedEmployeesController::class, 'show']);
+    Route::get('/sysadmin/excusedemployees/notify', [ExcusedEmployeesController::class, 'notify'])->name('sysadmin.excusedemployees.notify');
+    Route::post('/sysadmin/excusedemployees/notify', [ExcusedEmployeesController::class, 'notify'])->name('sysadmin.excusedemployees.search');
+    Route::post('/sysadmin/excusedemployees/notify-send', [ExcusedEmployeesController::class, 'send'])->name('sysadmin.excusedemployees.send');
+    Route::get('/sysadmin/excusedemployees/users', [ExcusedEmployeesController::class, 'getUsers'])->name('sysadmin.excusedemployees.users.list');
+    
+    Route::get('/sysadmin/excusedemployees/org-tree', [ExcusedEmployeesController::class,'loadOrganizationTree']);
+    Route::get('/sysadmin/excusedemployees/org-organizations', [ExcusedEmployeesController::class,'getOrganizations']);
+    Route::get('/sysadmin/excusedemployees/org-programs', [ExcusedEmployeesController::class,'getPrograms']);
+    Route::get('/sysadmin/excusedemployees/org-divisions', [ExcusedEmployeesController::class,'getDvisions']);
+    Route::get('/sysadmin/excusedemployees/org-branches', [ExcusedEmployeesController::class,'getBranches']);
+    Route::get('/sysadmin/excusedemployees/org-level4', [ExcusedEmployeesController::class,'getLevel4']);
+    Route::get('/sysadmin/excusedemployees/job-titles', [ExcusedEmployeesController::class,'getJobTitles']);
+    Route::get('/sysadmin/excusedemployees/employees/{id}', [ExcusedEmployeesController::class,'getEmployees']);
+    Route::get('/sysadmin/excusedemployees/employee-list', [ExcusedEmployeesController::class, 'getDatatableEmployees'])->name('sysadmin.excusedemployees.employee.list');
+    
+});
+
+
+//Notifications
+Route::group(['middleware' => ['auth']], function() {    
+    Route::get('/sysadmin/notifications', [NotificationController::class, 'index'])->name('sysadmin.notifications');
+    Route::get('/sysadmin/notifications/detail/{notification_id}', [NotificationController::class, 'show']);
+    Route::get('/sysadmin/notifications/notify', [NotificationController::class, 'notify'])->name('sysadmin.notifications.notify');
+    Route::post('/sysadmin/notifications/notify', [NotificationController::class, 'notify'])->name('sysadmin.notifications.search');
+    Route::post('/sysadmin/notifications/notify-send', [NotificationController::class, 'send'])->name('sysadmin.notifications.send');
+    Route::get('/sysadmin/notifications/users', [NotificationController::class, 'getUsers'])->name('sysadmin.notifications.users.list');
+    Route::resource('/sysadmin/notifications/generic-template', GenericTemplateController::class)->except(['destroy']);
+    Route::get('graph-users', [GenericTemplateController::class,'getUsers']);
+    
+    Route::get('/sysadmin/notifications/org-tree', [NotificationController::class,'loadOrganizationTree']);
+    Route::get('/sysadmin/notifications/org-organizations', [NotificationController::class,'getOrganizations']);
+    Route::get('/sysadmin/notifications/org-programs', [NotificationController::class,'getPrograms']);
+    Route::get('/sysadmin/notifications/org-divisions', [NotificationController::class,'getDvisions']);
+    Route::get('/sysadmin/notifications/org-branches', [NotificationController::class,'getBranches']);
+    Route::get('/sysadmin/notifications/org-level4', [NotificationController::class,'getLevel4']);
+    Route::get('/sysadmin/notifications/job-titles', [NotificationController::class,'getJobTitles']);
+    Route::get('/sysadmin/notifications/employees/{id}', [NotificationController::class,'getEmployees']);
+    Route::get('/sysadmin/notifications/employee-list', [NotificationController::class, 'getDatatableEmployees'])->name('sysadmin.notifications.employee.list');
+    
+});
+
+
+//Access and Permissions
+Route::group(['middleware' => ['auth']], function() {    
+    Route::get('/sysadmin/accesspermissions', [AccessPermissionsController::class, 'index'])->name('sysadmin.accesspermissions');
+    Route::get('/sysadmin/accesspermissions/detail/{notification_id}', [AccessPermissionsController::class, 'show']);
+    Route::get('/sysadmin/accesspermissions/notify', [AccessPermissionsController::class, 'notify'])->name('sysadmin.accesspermissions.notify');
+    Route::post('/sysadmin/accesspermissions/notify', [AccessPermissionsController::class, 'notify'])->name('sysadmin.accesspermissions.search');
+    Route::post('/sysadmin/accesspermissions/notify-send', [AccessPermissionsController::class, 'send'])->name('sysadmin.accesspermissions.send');
+    Route::get('/sysadmin/accesspermissions/users', [AccessPermissionsController::class, 'getUsers'])->name('sysadmin.accesspermissions.users.list');
+    
+    Route::get('/sysadmin/accesspermissions/org-tree', [AccessPermissionsController::class,'loadOrganizationTree']);
+    Route::get('/sysadmin/accesspermissions/org-organizations', [AccessPermissionsController::class,'getOrganizations']);
+    Route::get('/sysadmin/accesspermissions/org-programs', [AccessPermissionsController::class,'getPrograms']);
+    Route::get('/sysadmin/accesspermissions/org-divisions', [AccessPermissionsController::class,'getDvisions']);
+    Route::get('/sysadmin/accesspermissions/org-branches', [AccessPermissionsController::class,'getBranches']);
+    Route::get('/sysadmin/accesspermissions/org-level4', [AccessPermissionsController::class,'getLevel4']);
+    Route::get('/sysadmin/accesspermissions/job-titles', [AccessPermissionsController::class,'getJobTitles']);
+    Route::get('/sysadmin/accesspermissions/employees/{id}', [AccessPermissionsController::class,'getEmployees']);
+    Route::get('/sysadmin/accesspermissions/employee-list', [AccessPermissionsController::class, 'getDatatableEmployees'])->name('sysadmin.accesspermissions.employee.list');
+    
+});
 
 
 

@@ -330,14 +330,24 @@ return [
                     'active' => ['sysadmin/employees/*']
                 ],
                 [
-                    'text' => 'Share Employees',
+                    'text' => 'Share Employees (Old)',
                     'url'  => 'sysadmin/shared/shareemployee',
                     'active' => ['sysadmin/shared/*']
                 ],
                 [
-                    'text' => 'Excuse Employees',
+                    'text' => 'Share Employees (New)',
+                    'url'  => 'sysadmin/sharedemployees',
+                    'active' => ['sysadmin/sharedemployees/*']
+                ],
+                [
+                    'text' => 'Excuse Employees (Old)',
                     'url'  => 'sysadmin/excused/excuseemployee',
                     'active' => ['sysadmin/excused/*']
+                ],
+                [
+                    'text' => 'Excuse Employees (New)',
+                    'url'  => 'sysadmin/excusedemployees',
+                    'active' => ['sysadmin/excusedemployees/*']
                 ],
                 [
                     'text' => 'Goal Bank',
@@ -350,14 +360,22 @@ return [
                     'active' => ['sysadmin/unlock/*']
                 ],
                 [
+                    // 'text' => 'Notifications',
+                    // 'url'  => 'sysadmin/notifications/createnotification',
+                    // 'active' => ['sysadmin/notifications/*']
                     'text' => 'Notifications',
-                    'url'  => 'sysadmin/notifications/createnotification',
+                    'url'  => 'sysadmin/notifications',
                     'active' => ['sysadmin/notifications/*']
                 ],
                 [
-                    'text' => 'Access and Permissions',
+                    'text' => 'Access and Permissions (Old)',
                     'url'  => 'sysadmin/access/createaccess',
                     'active' => ['sysadmin/access/*']
+                ],
+                [
+                    'text' => 'Access and Permissions (New)',
+                    'url'  => 'sysadmin/accesspermissions',
+                    'active' => ['sysadmin/accesspermissions/*']
                 ],
                 [
                     'text' => 'Switch Identity',

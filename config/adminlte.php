@@ -374,7 +374,7 @@ return [
                 ],
                 [
                     'text' => 'Access and Permissions (New)',
-                    'url'  => 'sysadmin/accesspermissions',
+                    'url'  => 'sysadmin/accesspermissions/notify',
                     'active' => ['sysadmin/accesspermissions/*']
                 ],
                 [

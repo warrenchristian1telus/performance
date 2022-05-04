@@ -19,11 +19,11 @@
 
 
 
- @if ($message = Session::get('success'))
+ {{-- @if ($message = Session::get('success'))
  <div class="alert alert-success">
 	 <p>{{ $message }}</p>
  </div>
-@endif
+@endif --}}
 
 <br><h6 class="text-bold">Step 1. Select employees to assign</h6><br>
 {{-- 
@@ -73,7 +73,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 				<button class="btn btn-primary mt-2" type="submit" 
-					name="btn_send" value="btn_send">Send message</button>
+					name="btn_send" value="btn_send">Grant</button>
             </div>
 			
         </div>
@@ -109,104 +109,29 @@
 
 
   <br><h6 class="text-bold">Step 2. Select access level and reason for assigning access</h6> <br>
-
-
-<div class="card">
-	<div class="card-body">
-
-			<div class="form-row mb-2">
-{{-- 
-			  <div class="col-6">
-				<label for="recipients">To</label>
-				<select class="form-control select2 @error('recipients') is-invalid @enderror" 
-					name="recipients[]" id="recipients" multiple="multiple">
-					@if (old('recipients')) 
-						@foreach ( Session::get('old_recipients') ?? [] as $key =>$value )
-							<option value="{{ $key }}" selected="selected">{{ $value }}</option>
-						@endforeach
-					@endif
-				</select>
-				@error('recipients')
-					<span class="invalid-feedback">
-					{{  $message  }}
-					</span>
-				@enderror
-			  </div>
- --}}				
-			  <div class="col-4">
-				<label for="sender_id" >From</label>
-				<select class="form-control select2 @error('sender_id') is-invalid @enderror" 
-						name="sender_id" id="sender_id" >
-					@if (old('sender_id')) 
-						@foreach ( Session::get('old_sender_ids') ?? [] as $key =>$value )
-							<option value="{{ $key }}" selected="selected">{{ $value }}</option>
-						@endforeach
-					@endif
-				</select>
-				@error('sender_id')
-					<span class="invalid-feedback">
-					{{  $message  }}
-					</span>
-				@enderror
-			  </div>
-			</div>
-			<div class="form-row mb-2">
-			  <div class="col-8">
-				<label for="subject">Subject</label>
-				<input type="text" name="subject" class="form-control @error('subject') is-invalid @enderror" 
-				    placeholder="Subject" value="{{ old('subject') }}">
-				@error('subject')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-			  	@enderror
-			  </div>
-
-			  <div class="col-2">
-				<label for="alert_format">Alert format</label>
-				<select  class="form-control @error('alert_format') is-invalid @enderror" id="alert_format" name="alert_format">
-					@foreach ($alert_format_list as $key => $value)
-					  <option value="{{ $key }}" {{ old('alert_format') == $value ?? 'selected'}}>{{ $value }}</option>
-					@endforeach
-				  </select>     
-				@error('alert_format')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-			  	@enderror
-			  </div>
-
-			</div>
-			<div class="form-row mb-2">
-				<div class="col-10">
-				  <label for="body">Body</label>
-				  <textarea type="text" id="body" name="body" class="form-control  @error('body') is-invalid @enderror" 
-				     placeholder="Type the content here" rows="3">{{ old('body') }}</textarea>
-				  @error('body')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-				  @enderror
-				</div>
-			  </div>
-
-	</div>    
-</div>   
-
-<br><h6 class="text-bold">Step 3. Select ministries to assign to</h6><br>
-<div class="card">
-	<div class="card-body">
-		<div class="form-row mb-2 p-3" style="text-align:center">
-			<input class="" type="checkbox"  id="chkbox_declare" name="chkbox_declare" value="">
-			<p class="px-3">I wish to excuse the selected employees from having to complete their MyPerformance Profile.</p>
-		</div>
-		<div class="form-row mb-2">
-			<div class="alert alert-warning alert-dismissible no-border"  style="border-color:#d5e6f6; background-color:#d5e6f6" role="alert">
-				<span class="h5" aria-hidden="true"><i class="icon fa fa-exclamation-triangle  "></i><b>Note:  By doing so, these employees will not show up in current and historical performance reports.</b></span>
-			</div>
-		</div>
+  <div class="row  p-3">
+	<div class="col col-4">
+		<label for='accessselect' title='Access Level Tooltip'>Access Level
+		<select name="accessselect" class="form-control" id="accessselect">
+			@foreach($roles as $rid => $desc)
+				<option value = {{ $rid }} > {{ $desc }} </option>
+			@endforeach
+		</select>
+		</label>
+	</div>
+	<div class="col col-8">
+		<x-input id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
 	</div>
 </div>
+
+
+
+<br><h6 class="text-bold">Step 3. Select ministries to assign to (for HR Administrator only)</h6><br>
+<div class="nav nav-tabs" id="nav-tab" role="tablist">
+	<a class="nav-item nav-link" id="go-tree" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
+
+  </div>
+
 
 <br><h6 class="text-bold">Step 4. Assign selected employees</h6><br>
 <div class="col-md-3 mb-2">
@@ -271,12 +196,15 @@
 	let g_selected_employees = {!!json_encode($old_selected_emp_ids)!!};
 	let g_employees_by_org = [];
 
+	$('#accessselect').val(4);
+	$('#accessselect').prop('disabled', true);
+
 	function confirmSendNotifyModal(){
 		count = g_selected_employees.length;
 		if (count == 0) {
-			$('#sendNotifyModal .modal-body p').html('Are you sure to send out this message ?');
+			$('#sendNotifyModal .modal-body p').html('Are you sure to grant administrator access ?');
 		} else {
-			$('#sendNotifyModal .modal-body p').html('Are you sure to send out this message to this ' + count + ' selected recipient(s) ?');
+			$('#sendNotifyModal .modal-body p').html('Are you sure to grant administrator access to ' + count + ' selected users?');
 		}
 		$('#sendNotifyModal').modal();
 	}
@@ -364,6 +292,50 @@
 					redrawTreeCheckboxes();
 			}
 		});
+
+		$('#accessselect').on('change', function(e) {
+
+			target = $('#go-tree'); 
+
+			// To do -- ajax called to load the tree
+			if($.trim($(target).attr('loaded'))=='') {
+	            //console.log('loading employees');
+				$.when( 
+						$.ajax({
+							url: '/sysadmin/accesspermissions/org-tree',
+							type: 'GET',
+							data: $("#notify-form").serialize(),
+							dataType: 'html',
+							beforeSend: function() {
+								$("#tree-loading-spinner").show();                    
+							},
+							success: function (result) {
+								$(target).html(''); 
+								$(target).html(result);
+
+								$('#go-tree').attr('loaded','loaded');
+							},
+							complete: function() {
+								
+							$(".tree-loading-spinner").hide();
+							},
+							error: function () {
+								alert("error");
+								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+							}
+						})
+					
+				).then(function( data, textStatus, jqXHR ) {
+  					//alert( jqXHR.status ); // Alerts 200
+					nodes = $('#accordion-level0 input:checkbox');
+					redrawTreeCheckboxes();	
+				}); 
+			
+			} else {
+					redrawTreeCheckboxes();
+			}
+		});
+
 
 		function redrawTreeCheckboxes() {
 			// redraw the selection 

@@ -77,19 +77,6 @@ Route::get('sysadmin/access/createaccess', [CreateAccessController::class, 'inde
 Route::get('sysadmin/access/org-tree', [CreateAccessController::class,'loadOrganizationTree']);
 Route::get('sysadmin/access/users', [CreateAccessController::class, 'getUsers'])->name('sysadmin.access.users.list');
 // Route::get('sysadmin/access/manageaccess', [ManageExistingAccessController::class, 'manageaccess'])->name('sysadmin.access.manageaccess');
-Route::get('sysadmin/access/manageexistingaccess', [ManageExistingAccessController::class, 'index'])->name('sysadmin.access.manageexistingaccess');
-Route::put('sysadmin/access/manageexistingaccessupdate', [ManageExistingAccessController::class, 'update']);
-
-// Route::get('sysadmin/access/manageexistingaccessdelete', [ManageExistingAccessController::class, 'destroy'])->name('sysadmin.access.manageexistingaccess');
-Route::get('sysadmin/access/manageexistingaccessdelete/{model_id}', [ManageExistingAccessController::class, 'destroy']);
-Route::delete('sysadmin/access/manageexistingaccessdelete/{model_id}', [ManageExistingAccessController::class, 'destroy']);
-
-Route::get('sysadmin/access/get_access_entry/{role_id}/{model_id}', [ManageExistingAccessController::class, 'get_access_entry']);
-Route::get('sysadmin/access/manageexistingaccesslist', [ManageExistingAccessController::class, 'getList'])->name('sysadmin.access.manageexistingaccesslist');
-Route::get('sysadmin/access/manageexistingaccessadmin/{model_id}', [ManageExistingAccessController::class, 'getAdminOrgs'])->name('sysadmin.access.manageexistingaccessadmin');
-// Route::get('sysadmin/access/manageexistingaccessadmin', [ManageExistingAccessController::class, 'getAdminOrgs'])->name('sysadmin.access.manageexistingaccessadmin');
-Route::get('sysadmin/access/accessedit/{id}', [ManageExistingAccessController::class, 'edit'])->name('sysadmin.access.accessedit');
-Route::post('sysadmin/access/accessupdate/{id}', [ManageExistingAccessController::class, 'update']);
 
 
 
@@ -187,6 +174,22 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/sysadmin/accesspermissions/employees/{id}', [AccessPermissionsController::class,'getEmployees']);
     Route::get('/sysadmin/accesspermissions/employee-list', [AccessPermissionsController::class, 'getDatatableEmployees'])->name('sysadmin.accesspermissions.employee.list');
     
+    Route::get('sysadmin/accesspermissions/manageexistingaccess', [AccessPermissionsController::class, 'manageindex'])->name('sysadmin.accesspermissions.manageindex');
+    Route::put('sysadmin/accesspermissions/manageexistingaccessupdate', [AccessPermissionsController::class, 'manageupdate']);
+    
+    // Route::get('sysadmin/access/manageexistingaccessdelete', [ManageExistingAccessController::class, 'destroy'])->name('sysadmin.access.manageexistingaccess');
+    Route::get('sysadmin/accesspermissions/manageexistingaccessdelete/{model_id}', [AccessPermissionsController::class, 'managedestroy']);
+    Route::delete('sysadmin/accesspermissions/manageexistingaccessdelete/{model_id}', [AccessPermissionsController::class, 'managedestroy']);
+    
+    Route::get('sysadmin/accesspermissions/get_access_entry/{role_id}/{model_id}', [AccessPermissionsController::class, 'get_access_entry']);
+    Route::get('sysadmin/accesspermissions/manageexistingaccesslist', [AccessPermissionsController::class, 'getList'])->name('sysadmin.accesspermissions.manageexistingaccesslist');
+    Route::get('sysadmin/accesspermissions/manageexistingaccessadmin/{model_id}', [AccessPermissionsController::class, 'getAdminOrgs'])->name('sysadmin.accesspermissions.manageexistingaccessadmin');
+    // Route::get('sysadmin/accesspermissions/manageexistingaccessadmin', [AccessPermissionsController::class, 'getAdminOrgs'])->name('sysadmin.accesspermissions.manageexistingaccessadmin');
+    Route::get('sysadmin/accesspermissions/accessedit/{id}', [AccessPermissionsController::class, 'manageedit'])->name('sysadmin.accesspermissions.accessedit');
+    Route::post('sysadmin/accesspermissions/accessupdate/{id}', [AccessPermissionsController::class, 'manageupdate']);
+    
+
+
 });
 
 

@@ -329,23 +329,23 @@ return [
                     'url'  => 'sysadmin/employees/currentemployees',
                     'active' => ['sysadmin/employees/*']
                 ],
+                // [
+                //     'text' => 'Share Employees (Old)',
+                //     'url'  => 'sysadmin/shared/shareemployee',
+                //     'active' => ['sysadmin/shared/*']
+                // ],
                 [
-                    'text' => 'Share Employees (Old)',
-                    'url'  => 'sysadmin/shared/shareemployee',
-                    'active' => ['sysadmin/shared/*']
-                ],
-                [
-                    'text' => 'Share Employees (New)',
+                    'text' => 'Share Employees',
                     'url'  => 'sysadmin/sharedemployees',
                     'active' => ['sysadmin/sharedemployees/*']
                 ],
+                // [
+                //     'text' => 'Excuse Employees (Old)',
+                //     'url'  => 'sysadmin/excused/excuseemployee',
+                //     'active' => ['sysadmin/excused/*']
+                // ],
                 [
-                    'text' => 'Excuse Employees (Old)',
-                    'url'  => 'sysadmin/excused/excuseemployee',
-                    'active' => ['sysadmin/excused/*']
-                ],
-                [
-                    'text' => 'Excuse Employees (New)',
+                    'text' => 'Excuse Employees',
                     'url'  => 'sysadmin/excusedemployees',
                     'active' => ['sysadmin/excusedemployees/*']
                 ],
@@ -367,13 +367,13 @@ return [
                     'url'  => 'sysadmin/notifications',
                     'active' => ['sysadmin/notifications/*']
                 ],
+                // [
+                //     'text' => 'Access and Permissions (Old)',
+                //     'url'  => 'sysadmin/access/createaccess',
+                //     'active' => ['sysadmin/access/*']
+                // ],
                 [
-                    'text' => 'Access and Permissions (Old)',
-                    'url'  => 'sysadmin/access/createaccess',
-                    'active' => ['sysadmin/access/*']
-                ],
-                [
-                    'text' => 'Access and Permissions (New)',
+                    'text' => 'Access and Permissions',
                     'url'  => 'sysadmin/accesspermissions/notify',
                     'active' => ['sysadmin/accesspermissions/*']
                 ],

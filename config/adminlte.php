@@ -336,7 +336,7 @@ return [
                 // ],
                 [
                     'text' => 'Share Employees',
-                    'url'  => 'sysadmin/sharedemployees',
+                    'url'  => 'sysadmin/sharedemployees/notify',
                     'active' => ['sysadmin/sharedemployees/*']
                 ],
                 // [
@@ -346,7 +346,7 @@ return [
                 // ],
                 [
                     'text' => 'Excuse Employees',
-                    'url'  => 'sysadmin/excusedemployees',
+                    'url'  => 'sysadmin/excusedemployees/notify',
                     'active' => ['sysadmin/excusedemployees/*']
                 ],
                 [

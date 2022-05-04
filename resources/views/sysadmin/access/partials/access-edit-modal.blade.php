@@ -41,7 +41,7 @@
                 </div>
                 <div class="modal-footer p-3">
                     <div class="col">
-                        {{-- <form action="{{ route('sysadmin.access.manageexistingaccessdelete') }}" method="delete" enctype="multipart/form-data"> --}}
+                        {{-- <form action="{{ route('sysadmin.access.manageexistingaccess') }}" method="delete" enctype="multipart/form-data"> --}}
                         <form action="#" method="delete" enctype="multipart/form-data">
                             @method('DELETE')
                             @csrf

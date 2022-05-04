@@ -49,7 +49,7 @@
     <script type="text/javascript">
         jq = jQuery.noConflict();
         jq(function( $ ) {
-            console.log('jq ready');
+            // console.log('jq ready');
 
             var table = $('.filtertable').DataTable
             (
@@ -162,22 +162,23 @@
 
         $('#removeButton').on('click', function(event) {
             console.log('Delete button clicked');
+            var model_id = $('#model_id').val();
+            // console.log('model_id='+model_id);
+            var token = $('meta[name="csrf-token"]').attr('content');
             event.preventDefault();
             $.ajax ( {
                 type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "{{ route('sysadmin.access.manageexistingaccessdelete') }}",
+                url: 'manageexistingaccessdelete/'+model_id,
                 data: {
-                    '_method': 'delete'
+                    'model_id':model_id,
+                    '_token':token,
+                    '_method':"DELETE",
                 },
                 success: function (result) {
-                    history.back();
+                    // console.log('Access Deleted');
+                    window.location.href = 'manageexistingaccess';
                 }
             });
-
-
         });
 
 

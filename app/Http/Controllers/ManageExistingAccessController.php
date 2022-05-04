@@ -266,7 +266,8 @@ class ManageExistingAccessController extends Controller
         ->wherein('role_id', [3, 4])
         ->delete();
         if($query) {
-            $orgs = AdminiOrg::where('user_id', '=', $request->input('model_id'))
+            $orgs = DB::table('admin_orgs')
+            ->where('user_id', '=', $request->input('model_id'))
             ->delete();
         }
         return redirect()->back();

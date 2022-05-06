@@ -40,10 +40,12 @@ RUN crontab -u docker-user /etc/cron.d/laravel-scheduler-cron && \
     chmod u+s /usr/sbin/cron
 RUN chown -R docker-user:docker-user /etc/cron.d/laravel-scheduler-cron
 
+RUN echo 'EXTRA_OPTS="-L 2"' >> /etc/default/cron
+
 # RUN chmod +s /etc/cron.d/laravel-scheduler-cron; chown root /etc/cron.d/laravel-scheduler-cron
 # RUN echo "root" > /etc/cron.d/cron.allow
 # RUN echo "1001" >> /etc/cron.d/cron.allow
-# RUN echo "1005640000" >> /etc/cron.d/cron.allow
+#RUN echo "1005640000" >> /etc/cron.d/cron.allow
 
 # RUN cat /etc/cron.d/cron.allow
 

@@ -38,6 +38,7 @@ COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
 RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
 RUN crontab -u docker-user /etc/cron.d/laravel-scheduler-cron && \
     chmod u+s /usr/sbin/cron
+RUN chown -R docker-user:docker-user /etc/cron.d/laravel-scheduler-cron
 
 # RUN chmod +s /etc/cron.d/laravel-scheduler-cron; chown root /etc/cron.d/laravel-scheduler-cron
 # RUN echo "root" > /etc/cron.d/cron.allow

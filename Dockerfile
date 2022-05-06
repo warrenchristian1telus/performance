@@ -36,6 +36,7 @@ RUN groupadd -r docker-user && useradd -r -g docker-user docker-user
 #RUN cat /app/crontab.txt >> /etc/crontab
 COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
 RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
+RUN chmod +s /etc/cron.d/laravel-scheduler-cron; chown root /etc/cron.d/laravel-scheduler-cron
 RUN echo "root" > /etc/cron.d/cron.allow
 RUN echo "1001" >> /etc/cron.d/cron.allow
 RUN echo "1005640000" >> /etc/cron.d/cron.allow
@@ -75,6 +76,6 @@ USER docker-user
 
 #CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
 #CMD php artisan serve --host=0.0.0.0 --port=8000
-CMD /etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000
+#CMD /etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000
 
-#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

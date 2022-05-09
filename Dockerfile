@@ -16,6 +16,8 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y openssl zip unzip 
     zlib1g \
     sudo \
     wget \
+    vim \
+    rsyslog \
     cron 
 
 RUN apt install ca-certificates apt-transport-https wget gnupg -y
@@ -36,7 +38,7 @@ RUN groupadd -r docker-user && useradd -r -g docker-user docker-user
 #RUN cat /app/crontab.txt >> /etc/crontab
 COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
 RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
-RUN crontab -u docker-user /etc/cron.d/laravel-scheduler-cron && \
+RUN crontab -u root /etc/cron.d/laravel-scheduler-cron && \
     chmod u+s /usr/sbin/cron
 RUN chown -R root:root /etc/cron.d/laravel-scheduler-cron
 

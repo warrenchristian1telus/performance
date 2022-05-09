@@ -71,7 +71,7 @@ RUN composer require awobaz/compoships --ignore-platform-reqs
 
 RUN php artisan config:clear
 
-RUN service rsyslog enable
+RUN service rsyslog start
 
 
 

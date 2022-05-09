@@ -16,8 +16,6 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y openssl zip unzip 
     zlib1g \
     sudo \
     wget \
-    vim \
-    rsyslog \
     cron 
 
 RUN apt install ca-certificates apt-transport-https wget gnupg -y

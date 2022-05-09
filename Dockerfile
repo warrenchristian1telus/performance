@@ -36,11 +36,11 @@ COPY . /app
 RUN groupadd -r docker-user && useradd -r -g docker-user docker-user
 
 #RUN cat /app/crontab.txt >> /etc/crontab
-COPY /crontab.txt /etc/cron.d/laravel-scheduler-cron
-RUN chmod 0644 /etc/cron.d/laravel-scheduler-cron
-RUN crontab -u root /etc/cron.d/laravel-scheduler-cron && \
+COPY /crontab.txt /etc/cron.d/laravel_scheduler_cron
+RUN chmod 0644 /etc/cron.d/laravel_scheduler_cron
+RUN crontab -u root /etc/cron.d/laravel_scheduler_cron && \
     chmod u+s /usr/sbin/cron
-RUN chown -R root:root /etc/cron.d/laravel-scheduler-cron
+RUN chown -R root:root /etc/cron.d/laravel_scheduler_cron
 
 RUN echo 'EXTRA_OPTS="-L 2"' >> /etc/default/cron
 
@@ -87,6 +87,6 @@ USER docker-user
 
 #CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
 #CMD php artisan serve --host=0.0.0.0 --port=8000
-CMD service rsyslog start && cron && php artisan serve --host=0.0.0.0 --port=8000
+CMD cron && php artisan serve --host=0.0.0.0 --port=8000
 
 #CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

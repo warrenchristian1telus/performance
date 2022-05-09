@@ -72,7 +72,7 @@ RUN composer require awobaz/compoships --ignore-platform-reqs
 RUN php artisan config:clear
 
 RUN sed  -i 's/\#cron/cron/g' /etc/rsyslog.conf
-RUN service rsyslog restart
+# RUN service rsyslog restart
 
 
 
@@ -87,6 +87,6 @@ USER docker-user
 
 #CMD ["sh","-c","/etc/init.d/cron start && php artisan serve --host=0.0.0.0 --port=8000"]
 #CMD php artisan serve --host=0.0.0.0 --port=8000
-CMD cron && php artisan serve --host=0.0.0.0 --port=8000
+CMD service rsyslog start && cron && php artisan serve --host=0.0.0.0 --port=8000
 
 #CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

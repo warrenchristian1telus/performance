@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('notify:daily')
             ->daily()
-            ->at('8:00');
+            ->at('10:00');
 
         $schedule->command('notify:weekly')    
             ->weeklyOn(1, '6:00');

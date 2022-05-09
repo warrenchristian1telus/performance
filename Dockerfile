@@ -71,7 +71,8 @@ RUN composer require awobaz/compoships --ignore-platform-reqs
 
 RUN php artisan config:clear
 
-RUN service rsyslog start
+RUN sed  -i 's/\#cron/cron/g' rsyslog.conf
+RUN service rsyslog restart
 
 
 

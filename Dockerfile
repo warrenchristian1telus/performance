@@ -71,6 +71,8 @@ RUN composer require awobaz/compoships --ignore-platform-reqs
 
 RUN php artisan config:clear
 
+RUN service rsyslog enable
+
 
 
 EXPOSE 8000

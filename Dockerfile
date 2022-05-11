@@ -38,8 +38,8 @@ RUN groupadd -r docker-user && useradd -r -g docker-user docker-user
 #RUN cat /app/crontab.txt >> /etc/crontab
 COPY /crontab.txt /etc/cron.d/laravel_scheduler_cron
 RUN chmod 0644 /etc/cron.d/laravel_scheduler_cron
-#RUN crontab -u root /etc/cron.d/laravel_scheduler_cron && \
-#    chmod u+s /usr/sbin/cron
+RUN crontab -u root /etc/cron.d/laravel_scheduler_cron && \
+chmod u+s /usr/sbin/cron
 RUN chown -R root:root /etc/cron.d/laravel_scheduler_cron
 
 RUN echo 'EXTRA_OPTS="-L 2"' >> /etc/default/cron

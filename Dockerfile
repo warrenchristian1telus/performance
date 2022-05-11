@@ -44,6 +44,8 @@ chmod u+s /usr/sbin/cron
 RUN chown -R root:root /etc/cron.d/laravel_scheduler_cron
 
 RUN echo 'EXTRA_OPTS="-L 2"' >> /etc/default/cron
+RUN echo "EXTRA_OPTS='-L 2'">> /etc/default/cron
+
 
 # RUN chmod +s /etc/cron.d/laravel-scheduler-cron; chown root /etc/cron.d/laravel-scheduler-cron
 # RUN echo "root" > /etc/cron.d/cron.allow

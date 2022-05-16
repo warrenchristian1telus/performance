@@ -154,7 +154,7 @@ Route::group(['middleware' => ['auth']], function() {
     
 });
 
- 
+
 //Access and Permissions
 Route::group(['middleware' => ['auth']], function() {    
     Route::get('/sysadmin/accesspermissions', [AccessPermissionsController::class, 'index'])->name('sysadmin.accesspermissions');

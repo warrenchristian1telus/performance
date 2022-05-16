@@ -36,7 +36,7 @@ COPY . /app
 RUN groupadd -r docker-user && useradd -r -g docker-user docker-user
 
 #RUN cat /app/crontab.txt >> /etc/crontab
-#COPY /crontab.txt /etc/cron.d/laravel_scheduler_cron
+COPY /crontab.txt /etc/cron.d/laravel_scheduler_cron
 COPY /crontab.txt /etc/crontab
 RUN chmod 0644 /etc/cron.d/laravel_scheduler_cron   
 RUN crontab -u root /etc/cron.d/laravel_scheduler_cron && \

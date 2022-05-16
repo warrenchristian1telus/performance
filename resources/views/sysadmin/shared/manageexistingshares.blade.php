@@ -1,5 +1,6 @@
 @extends('sysadmin.layout')
 @section('tab-content')
+@include('sysadmin.sharedemployees.partials.tabs')
 
 <div class="card">
 	<div class="card-body">

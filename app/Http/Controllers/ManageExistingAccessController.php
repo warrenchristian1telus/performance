@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminOrg;
 use App\Models\User;
 use App\Models\Conversation;
 use App\Models\EmployeeDemo;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -71,10 +73,8 @@ class ManageExistingAccessController extends Controller
         return view('sysadmin.access.manageexistingaccess', compact ('request', 'criteriaList', 'roles'));
     }
 
-    public function getList(Request $request)
-    {
-        if ($request->ajax()) 
-        {
+    public function getList(Request $request) {
+        if ($request->ajax()) {
             $level0 = $request->dd_level0 ? OrganizationTree::where('id', $request->dd_level0)->first() : null;
             $level1 = $request->dd_level1 ? OrganizationTree::where('id', $request->dd_level1)->first() : null;
             $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
@@ -87,7 +87,7 @@ class ManageExistingAccessController extends Controller
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
             ->where('model_has_roles.model_type', 'App\Models\User')
-            ->whereIntegerInRaw('model_has_roles.role_id', [3, 4])
+            ->whereIn('model_has_roles.role_id', [3, 4])
             ->when($level0, function($q) use($level0) {return $q->where('organization', $level0->name);})
             ->when($level1, function($q) use($level1) {return $q->where('level1_program', $level1->name);})
             ->when($level2, function($q) use($level2) {return $q->where('level2_division', $level2->name);})
@@ -98,12 +98,9 @@ class ManageExistingAccessController extends Controller
             ->when($request->criteria == 'job', function($q) use($request){return $q->where('job_title', 'like', "%" . $request->search_text . "%");})
             ->when($request->criteria == 'dpt', function($q) use($request){return $q->where('deptid', 'like', "%" . $request->search_text . "%");})
             // ->when([$request->criteria == 'all', $request->search_text], function($q) use ($request) 
-            ->when($request->criteria == 'all', function($q) use ($request) 
-            {
-                return $q->where(function ($query2) use ($request) 
-                {
-                    if($request->search_text)
-                    {
+            ->when($request->criteria == 'all', function($q) use ($request) {
+                return $q->where(function ($query2) use ($request) {
+                    if($request->search_text) {
                         $query2->where('employee_id', 'like', "%" . $request->search_text . "%")
                         ->orWhere('employee_name', 'like', "%" . $request->search_text . "%")
                         ->orWhere('job_title', 'like', "%" . $request->search_text . "%")
@@ -111,8 +108,7 @@ class ManageExistingAccessController extends Controller
                     }
                 });
             })
-            ->select
-            (
+            ->select (
                 'employee_demo.employee_id',
                 'employee_demo.employee_name', 
                 'users.email',
@@ -126,21 +122,41 @@ class ManageExistingAccessController extends Controller
                 'model_has_roles.role_id',
                 'model_has_roles.reason',
                 'roles.longname',
-                'users.id',
+                'model_has_roles.model_id',
             );
             return Datatables::of($query)
             ->addIndexColumn()
-            ->addcolumn('action', function($row) {
-
-                return '<button class="btn btn-xs btn-primary modalbutton" role="button"
-                    data-targetid="{{ $row->id }}"
-                    data-email="{{ $row->email }}"
-                    data-accessselect="{{ $row->role_id }}"
-                    data-reason="{{ $row->reason }}"
-                    data-toggle="modal"
-                    data-target="#editModal">Update</button>';
+            ->addcolumn('action', function($row){
+                return '<button 
+                class="btn btn-xs btn-primary modalbutton" 
+                role="button" 
+                data-roleid="' . $row->role_id . '" 
+                data-modelid="' . $row->model_id . '" 
+                data-reason="' . $row->reason . '" 
+                data-email="' . $row->email . '" 
+                data-longname="' . $row->longname . '" 
+                data-toggle="modal"
+                data-target="#editModal"
+                role="button">Update</button>';
             })
             ->rawColumns(['action'])
+            ->make(true);
+        }
+    }
+
+    public function getAdminOrgs(Request $request, $model_id) {
+        if ($request->ajax()) {
+            $query = AdminOrg::where('user_id', '=', $model_id)
+            ->select (
+                'user_id',
+                'organization',
+                'level1_program',
+                'level2_division',
+                'level3_branch',
+                'level4',
+            );
+            return Datatables::of($query)
+            ->addIndexColumn()
             ->make(true);
         }
     }
@@ -153,6 +169,14 @@ class ManageExistingAccessController extends Controller
             'job' => 'Job Title', 
             'dpt' => 'Department ID'
         ];
+    }
+
+    public function get_access_entry($roleId, $modelId) {
+        return DB::table('model_has_roles')
+        ->whereIn('model_id', [3, 4])
+        ->where('model_type', '=', 'App\Models\User')
+        ->where('role_id', '=', $roleId)
+        ->where('model_id', '=', $modelId);
     }
 
     /**
@@ -193,8 +217,7 @@ class ManageExistingAccessController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $users = User::where('id', '=', $id)
         ->select('email')
         ->get();
@@ -216,9 +239,19 @@ class ManageExistingAccessController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request) {
         //
+        //check if user is same as request, notify and do nothing if so
+        // Log::info('try saving...');
+
+        // else
+
+            $query = DB::table('model_has_roles')
+            ->where('model_id', '=', $request->input('model_id'))
+            ->wherein('role_id', [3, 4])
+            ->update(['role_id' => $request->input('accessselect'), 'reason' => $request->input('reason')]);
+            return redirect()->back();
+
     }
 
     /**
@@ -227,8 +260,17 @@ class ManageExistingAccessController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(Request $request) {
+        $query = DB::table('model_has_roles')
+        ->where('model_id', '=', $request->input('model_id'))
+        ->wherein('role_id', [3, 4])
+        ->delete();
+        if($query) {
+            $orgs = DB::table('admin_orgs')
+            ->where('user_id', '=', $request->input('model_id'))
+            ->delete();
+        }
+        return redirect()->back();
+
     }
 }

@@ -112,7 +112,7 @@ class SyncUserProfile extends Command
         $this->info('Step 1 - Create and Update User Profile (but no update on reporting to)' );
 
 
-        $password = Hash::make('mywatchdog');
+        $password = Hash::make(env('SYNC_USER_PROFILE_SECRET'));
         foreach ($employees as $employee) {
 
           //$reporting_to = $this->getReportingUserId($employee);

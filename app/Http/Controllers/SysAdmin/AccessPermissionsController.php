@@ -178,10 +178,18 @@ class AccessPermissionsController extends Controller
         // Matched Employees 
         $demoWhere = $this->baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4);
         $sql = clone $demoWhere; 
-        $matched_emp_ids = $sql->select([ 'employee_id', 'employee_name', 'job_title', 'employee_email', 
+        $matched_emp_ids = $sql->select([ 'employee_demo.employee_id', 'employee_demo.employee_name', 'employee_demo.job_title', 'employee_demo.employee_email', 
                 'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division',
                 'employee_demo.level3_branch','employee_demo.level4', 'employee_demo.deptid', 'employee_demo.job_title'])
-                ->orderBy('employee_id')
+                ->join('users', 'employee_demo.guid', '=', 'users.guid')
+                ->whereNotExists( function( $q) {
+                    $q->select(DB::raw(1))
+                    ->from('model_has_roles')
+                    // ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+                    ->whereRaw('users.id = model_has_roles.model_id');
+                }) 
+            
+            ->orderBy('employee_id')
                 ->pluck('employee_demo.employee_id');        
         
         // $alert_format_list = NotificationLog::ALERT_FORMAT;

@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 
@@ -314,59 +315,12 @@ class AccessPermissionsController extends Controller
     }
 
 
-    public function send(Request $request) 
+    public function saveAccess(Request $request) 
     {
-
         $selected_emp_ids = $request->selected_emp_ids ? json_decode($request->selected_emp_ids) : [];
         $request->userCheck = $selected_emp_ids;
         $selected_org_nodes = $request->selected_org_nodes ? json_decode($request->selected_org_nodes) : [];
 
-        // dd($selected_org_nodes);
-
-        // array for build the select option on the page
-        if ($request->recipients) {
-            $recipients = User::whereIn('id', $request->recipients)->pluck('name','id');
-            $request->session()->flash('old_recipients', 
-                 $recipients
-            );
-        }
-
-        if ($request->sender_id) {
-            $sender_ids = User::whereIn('id', array($request->sender_id) )->pluck('name','id');
-            $request->session()->flash('old_sender_ids', 
-                 $sender_ids
-            );
-        }
-
-        // //setup Validator and passing request data and rules
-        // $validator = Validator::make(request()->all(), [
-        //     'sender_id'          => 'required',
-        //     //'recipients'         => 'required',
-        //     'orgCheck'         => 'required',
-        //     'userCheck'         => 'required',
-        //     'subject'            => 'required',
-        //     'body'               => 'required',
-        // ]);
-
-        // //hook to add additional rules by calling the ->after method
-        // $validator->after(function ($validator) {
-        //     if (request('sender_id')) {
-        //         $user = User::find(request('sender_id'));
-        //         if ( !($user->azure_id) ) {
-        //             $validator->errors()->add('sender_id', 'The selected sender is not an Azure AD user.'); 
-        //         }
-        //     }
-
-        // });
-    
-        // //run validation which will redirect on failure
-        // if ($validator->fails()) {
-        //     return redirect()->action([NotificationController::class, 'notify'] )
-        //        ->withErrors($validator)->withInput();
-        //     //return redirect()->to( route('sysadmin.accesspermissions.notify') )->withErrors($validator)->withInput();
-        //   }
-
-        // Send a notification to all participants that you would like to schedule a conversation 
         $current_user = User::find(Auth::id());
 
         $employee_ids = ($request->userCheck) ? $request->userCheck : [];
@@ -381,12 +335,11 @@ class AccessPermissionsController extends Controller
 
         if($request->input('accessselect') == 3) {
             $organizationList = OrganizationTree::select('id', 'organization', 'level1_program', 'level2_division', 'level3_branch', 'level4')
-            ->whereIn('id', $selected_org_nodes)
+            ->whereIn('id', $request->eorgCheck)
             ->distinct()
             ->orderBy('id')
             ->get();
         }
-        // dd($organizationList);
 
         foreach ($toRecipients as $newId) {
             $result = DB::table('model_has_roles')
@@ -397,68 +350,47 @@ class AccessPermissionsController extends Controller
                 ['reason' => $request->input('reason')  ]
             );
 
+            if($request->input('accessselect') == '4') {
+                $delete_result = DB::table('admin_orgs')
+                ->where('user_id', $newId->id)
+                // ->where('version', '!=', '1')
+                ->delete();
+            }
+
             if($request->input('accessselect') == '3') {
                 foreach($organizationList as $org1) {
                     $result = DB::table('admin_orgs')
                     ->updateOrInsert(
-                        ['model_id' => $newId->id
+                        ['user_id' => $newId->id
                         , 'version' => '5'
-                        , 'organization' => $org1.organization.val()
-                        , 'level1_program' => $org1.level1_program.val()
-                        , 'level2_division' => $org1.level2_division.val()
-                        , 'level3_branch' => $org1.level3_branch.val()
-                        , 'level4' => $org1.level4.val()],
+                        , 'organization' => $org1->organization
+                        , 'level1_program' => $org1->level1_program
+                        , 'level2_division' => $org1->level2_division
+                        , 'level3_branch' => $org1->level3_branch
+                        , 'level4' => $org1->level4],
                         [],
                     );
                     if(!$result){
                         break;
                     }
                 }
-                // if($result){
-                    $backup_result = DB::table('admin_orgs')
-                    ->where('user_id', $newId->id)
-                    ->where('version', '1')
-                    ->update(['version' => '9']);
-                    $update_result = DB::table('admin_orgs')
-                    ->where('user_id', $newId->id)
-                    ->where('version', '5')
-                    ->update(['version' => '1']);
-                    $delete_result = DB::table('admin_orgs')
-                    ->where('user_id', $newId->id)
-                    ->where('version', '!=', '1')
-                    ->delete();
-                // }
+                $backup_result = DB::table('admin_orgs')
+                ->where('user_id', $newId->id)
+                ->where('version', '1')
+                ->update(['version' => '9']);
+                $update_result = DB::table('admin_orgs')
+                ->where('user_id', $newId->id)
+                ->where('version', '5')
+                ->update(['version' => '1']);
+                $delete_result = DB::table('admin_orgs')
+                ->where('user_id', $newId->id)
+                ->where('version', '!=', '1')
+                ->delete();
             };  
         }
 
- 
-
-        // // Method 1: Real-Time
-        // $sendMail = new \App\MicrosoftGraph\SendMail();
-        // $sendMail->toRecipients = $toRecipients->toArray();
-        // $sendMail->sender_id = $request->sender_id;
-        // $sendMail->subject = $request->subject;
-        // $sendMail->body = $request->body;
-        // $sendMail->alertFormat = $request->alert_format;
-        // $response = $sendMail->sendMailWithoutGenericTemplate();
-        // if ($response->getStatus() == 202) {
-        //     return redirect()->route('sysadmin.accesspermissions.notify')
-        //         ->with('success','Email with subject "' . $request->subject  . '" was successfully sent.');
-        // }
-
-        // // Method 2: Using Queue
-        // $sendEmailJob = (new SendEmailJob())->delay( now()->addSeconds(1) );
-        // $sendEmailJob->bccRecipients = $bccRecipients->toArray();  // $request->recipients;
-        // $sendEmailJob->sender_id = $request->sender_id;
-        // $sendEmailJob->subject = $request->subject;
-        // $sendEmailJob->body = $request->body;
-        // $sendEmailJob->alertFormat = $request->alert_format;
-        // $ret = dispatch($sendEmailJob);
-
         return redirect()->route('sysadmin.accesspermissions.notify')
-            ->with('success','Create HR/SYS Admin access "' . $request->subject  . '" was successfully dispatched.');
-    
-
+            ->with('success', 'Create HR/SYS Admin access successful.');
     }
 
     public function getUsers(Request $request)
@@ -469,7 +401,6 @@ class AccessPermissionsController extends Controller
                     ->whereNotNull('email')->paginate();
 
         return ['data'=> $users];
-                  
     }
 
 
@@ -573,7 +504,6 @@ class AccessPermissionsController extends Controller
             ->limit(300)
             ->get();
 
-
         $formatted_orgs = [];
         foreach ($orgs as $org) {
             $formatted_orgs[] = ['id' => $org->id, 'text' => $org->name ];
@@ -601,7 +531,6 @@ class AccessPermissionsController extends Controller
             ->groupBy('name')
             ->limit(300)
             ->get();
-
 
         $eformatted_orgs = [];
         foreach ($eorgs as $org) {
@@ -644,7 +573,6 @@ class AccessPermissionsController extends Controller
     } 
 
     public function geteBranches(Request $request) {
-
         $elevel0 = $request->elevel0 ? OrganizationTree::where('id', $request->elevel0)->first() : null;
         $elevel1 = $request->elevel1 ? OrganizationTree::where('id', $request->elevel1)->first() : null;
         $elevel2 = $request->elevel2 ? OrganizationTree::where('id', $request->elevel2)->first() : null;
@@ -676,7 +604,6 @@ class AccessPermissionsController extends Controller
     } 
 
     public function getLevel4(Request $request) {
-
         $level0 = $request->level0 ? OrganizationTree::where('id', $request->level0)->first() : null;
         $level1 = $request->level1 ? OrganizationTree::where('id', $request->level1)->first() : null;
         $level2 = $request->level2 ? OrganizationTree::where('id', $request->level2)->first() : null;
@@ -712,7 +639,6 @@ class AccessPermissionsController extends Controller
     } 
 
     public function geteLevel4(Request $request) {
-
         $elevel0 = $request->elevel0 ? OrganizationTree::where('id', $request->elevel0)->first() : null;
         $elevel1 = $request->elevel1 ? OrganizationTree::where('id', $request->elevel1)->first() : null;
         $elevel2 = $request->elevel2 ? OrganizationTree::where('id', $request->elevel2)->first() : null;
@@ -748,7 +674,6 @@ class AccessPermissionsController extends Controller
     } 
 
     public function getJobTitles() {
-
         $rows = EmployeeDemo::select('job_title')
            ->whereNotIn('job_title', ['', ' '])
            ->orderBy('job_title')
@@ -760,19 +685,14 @@ class AccessPermissionsController extends Controller
         }
    
         return response()->json($formatted_data);
-
     }
 
     public function getEmployees(Request $request,  $id) {
-
-    
         $level0 = $request->dd_level0 ? OrganizationTree::where('id', $request->dd_level0)->first() : null;
         $level1 = $request->dd_level1 ? OrganizationTree::where('id', $request->dd_level1)->first() : null;
         $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
         $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
         $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
-        // $job_titles = $request->job_titles ? EmployeeDemo::whereIn('job_title', $request->job_titles)->select('job_title')
-        //             ->groupBy('job_title')->pluck('job_title') : null;
 
         list($sql_level0, $sql_level1, $sql_level2, $sql_level3, $sql_level4) = 
             $this->baseFilteredSQLs($request, $level0, $level1, $level2, $level3, $level4, $job_titles);
@@ -784,10 +704,7 @@ class AccessPermissionsController extends Controller
             ->union( $sql_level0->where('organization_trees.id', $id) );
 
         $employees = $rows->get();
-        //$orgs = OrganizationTree::whereIn('id', $rows->toArray() )->get()->toTree();    
 
-        // $org = OrganizationTree::where('id', $id)->first();
-        // $employees = $org ? $org->employees() : [];
         $parent_id = $id;
         
         // if($request->ajax()){
@@ -804,7 +721,6 @@ class AccessPermissionsController extends Controller
             'dpt' => 'Department ID'
         ];
     }
-
 
     protected function baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4) {
         // Base Where Clause
@@ -844,7 +760,6 @@ class AccessPermissionsController extends Controller
         ->when( $request->search_text && $request->criteria == 'dpt', function ($q) use($request) {
             return $q->orWhereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
         });
-     
 
         return $demoWhere;
     }
@@ -869,9 +784,7 @@ class AccessPermissionsController extends Controller
         return $demoWhere;
     }
 
-
     protected function baseFilteredSQLs($request, $level0, $level1, $level2, $level3, $level4) {
-
         // Base Where Clause
         $demoWhere = $this->baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4);
 
@@ -918,7 +831,6 @@ class AccessPermissionsController extends Controller
     }
 
     protected function ebaseFilteredSQLs($request, $elevel0, $elevel1, $elevel2, $elevel3, $elevel4) {
-
         // Base Where Clause
         $demoWhere = $this->ebaseFilteredWhere($request, $elevel0, $elevel1, $elevel2, $elevel3, $elevel4);
 
@@ -963,7 +875,6 @@ class AccessPermissionsController extends Controller
             });
 
         return  [$esql_level0, $esql_level1, $esql_level2, $esql_level3, $esql_level4];
-
     }
 
         /**
@@ -1025,7 +936,6 @@ class AccessPermissionsController extends Controller
             $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
             $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
             $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
-
 
             $query = User::withoutGlobalScopes()
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
@@ -1090,15 +1000,17 @@ class AccessPermissionsController extends Controller
     }
 
     public function getAdminOrgs(Request $request, $model_id) {
+        // dd($request);
         if ($request->ajax()) {
             $query = AdminOrg::where('user_id', '=', $model_id)
+            ->where('version', '=', '1')
             ->select (
-                'user_id',
                 'organization',
                 'level1_program',
                 'level2_division',
                 'level3_branch',
                 'level4',
+                'user_id',
             );
             return Datatables::of($query)
             ->addIndexColumn()
@@ -1148,13 +1060,27 @@ class AccessPermissionsController extends Controller
         // Log::info('try saving...');
 
         // else
-
+        // dd($request);
+        if($request->accessselect) {
+            if($request->accessselect == 4) {
+                $query = DB::table('model_has_roles')
+                ->where('model_id', '=', $request->model_id)
+                ->whereIn('role_id', [3, 4])
+                ->update(['role_id' => $request->accessselect, 'reason' => $request->reason]);
+            }
+            if($request->accessselect == 3) {
+                $query = DB::table('model_has_roles')
+                ->where('model_id', '=', $request->model_id)
+                ->where('role_id', 3)
+                ->update(['reason' => $request->reason]);
+            }
+        } else {
             $query = DB::table('model_has_roles')
-            ->where('model_id', '=', $request->input('model_id'))
-            ->wherein('role_id', [3, 4])
-            ->update(['role_id' => $request->input('accessselect'), 'reason' => $request->input('reason')]);
-            return redirect()->back();
+            ->where('model_id', '=', $request->model_id)
+            ->update(['reason' => $request->reason]);
+        }
 
+        return redirect()->back();
     }
 
     /**
@@ -1174,7 +1100,6 @@ class AccessPermissionsController extends Controller
             ->delete();
         }
         return redirect()->back();
-
     }
 
 

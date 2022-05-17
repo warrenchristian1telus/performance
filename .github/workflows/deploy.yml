@@ -33,7 +33,7 @@ jobs:
       BUILD_ID: ${{ github.event.number }}
       BUILD_NAMESPACE: 332842-tools
       BRANCH: ${{ github.ref_name }}
-      BUILD_TAG: latest
+      BUILD_TAG: ${{ github.ref_name }}
       APP: performance
     steps:
       # Checkout the PR branch
@@ -270,7 +270,7 @@ jobs:
                 -p DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
                 -p GIT_PROJECT=performance \
                 -p BUILD_NAMESPACE="332842-tools" \
-                -p IMAGE_STREAM_TAG="performance:latest" \
+                -p IMAGE_STREAM_TAG="performance:prod" \
                 -p GIT_URL="https://github.com/performance.git" \
                 -p GIT_TAG=openshift \
                 -p GITHUB_AUTH_TOKEN="${{ secrets.AUTH_TOKEN }}" | \

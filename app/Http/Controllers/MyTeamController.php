@@ -31,6 +31,7 @@ class MyTeamController extends Controller
      */
     public function myEmployees(MyEmployeesDataTable $myEmployeesDataTable, SharedEmployeeDataTable $sharedEmployeeDataTable)
     {
+        $tags = Tag::all()->toArray();
         $goaltypes = GoalType::all();
         $eReasons = ExcusedReason::all();
         $conversationTopics = ConversationTopic::all();
@@ -47,7 +48,7 @@ class MyTeamController extends Controller
         $showSignoff = false;
         $myEmpTable = $myEmployeesDataTable->html();
         $sharedEmpTable = $sharedEmployeeDataTable->html();
-        return view('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons', 'showSignoff'));
+        return view('my-team/my-employees',compact('goals', 'tags', 'employees', 'goaltypes', 'conversationTopics', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons', 'showSignoff'));
         // return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type'));
     }
 

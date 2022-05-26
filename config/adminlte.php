@@ -351,8 +351,8 @@ return [
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'sysadmin/goals/goal-bank',
-                    'active' => ['sysadmin/goals/*']
+                    'url'  => 'sysadmin/goalbank/index',
+                    'active' => ['sysadmin/goalbank/*']
                 ],
                 [
                     'text' => 'Unlock Conversations',
@@ -374,7 +374,7 @@ return [
                 // ],
                 [
                     'text' => 'Access and Permissions',
-                    'url'  => 'sysadmin/accesspermissions/notify',
+                    'url'  => 'sysadmin/accesspermissions/index',
                     'active' => ['sysadmin/accesspermissions/*']
                 ],
                 [

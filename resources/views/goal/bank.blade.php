@@ -1,19 +1,19 @@
 <x-side-layout>
     <div class="container-fluid">
-        {{-- <div class="row ">
+        <div class="row ">
             <div class="col-md-6 col-6">
                 <x-slot name="header">
                     @include('goal.partials.tabs')
                 </x-slot>
             </div>
-        </div> --}}
+        </div>
         <div>
             <b>My Goal Bank</b> <br>
-            {{-- The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile.
+            The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile.
             <br>
-            <br> --}}
-        </div>
-        {{-- <form action="" method="get" id="filter-menu">
+            <br>
+        </div>s
+        <form action="" method="get" id="filter-menu">
             <div class="row">
                 <div class="col">
                     <label>
@@ -174,10 +174,10 @@
         </script>
         @endpush
         @include('my-team.goals.partials.bank')
-        @endif --}}
+        @endif
     </div>
 
-    {{-- @include('goal.partials.goal-detail-modal')
+    @include('goal.partials.goal-detail-modal')
     <div class="modal fade" id="addGoalModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
@@ -292,5 +292,5 @@
                 });
             });
         </script>
-    @endpush --}}
+    @endpush
 </x-side-layout>

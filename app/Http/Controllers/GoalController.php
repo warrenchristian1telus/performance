@@ -226,7 +226,6 @@ class GoalController extends Controller
         $tags = Tag::all()->toArray();
         $tags_input = $request->tag_ids;     
 
-        Log::info('AAA');
         $adminGoals = Goal::withoutGlobalScopes()
         ->join('goal_bank_orgs', 'goals.id', '=', 'goal_bank_orgs.goal_id')
         ->join('admin_orgs', function($join) use ($request) {
@@ -243,7 +242,6 @@ class GoalController extends Controller
         ->select('goals.*');
         // ->paginate(10);
 
-        Log::info('BBB');
         $query = Goal::withoutGlobalScope(NonLibraryScope::class)
         ->where('is_library', true)
         ->with('goalType')
@@ -251,7 +249,6 @@ class GoalController extends Controller
         ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
         ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id');    
         
-        Log::info('CCC');
         if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
             if ($request->is_mandatory == "1") {
                 $query = $query->where('is_mandatory', $request->is_mandatory);
@@ -264,24 +261,20 @@ class GoalController extends Controller
             }
         }
 
-        Log::info('DDD');
         if ($request->has('goal_type') && $request->goal_type) {
             $query = $query->whereHas('goalType', function($query) use ($request) {
                 return $query->where('goal_type_id', $request->goal_type);
             });
         }
         
-        Log::info('EEE');
         if ($request->has('tag_id') && $request->tag_id) {
             $query = $query->where('goal_tags.tag_id', "=", "$request->tag_id");
         }
 
-        Log::info('FFF');
         if ($request->has('title') && $request->title) {
             $query = $query->where('goal_tags.goal_id', "LIKE", "%$request->title%");
         }
 
-        Log::info('GGG');
         if ($request->has('date_added') && $request->date_added && Str::lower($request->date_added) !== 'any') {
             $dateRange = explode("-",$request->date_added);
             $dateRange[0] = trim($dateRange[0]);
@@ -294,19 +287,16 @@ class GoalController extends Controller
             $query = $query->whereDate('created_at', '<=', $endDate);
         }
 
-        Log::info('HHH');
         if ($request->has('created_by') && $request->created_by) {
             $query = $query->where('user_id', $request->created_by);
         }
 
-        Log::info('III');
         $query->whereHas('sharedWith', function($query) {
             $query->where('user_id', Auth::id());
         });
         // $query->groupBy('goals.id');
         // $bankGoals = $query->get();
         
-        Log::info('JJJ');
         // $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
         $query = $query->select('goals.*');
         $query = $query->union($adminGoals);
@@ -315,12 +305,17 @@ class GoalController extends Controller
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
 
 
-        Log::info('KKK');
         $myTeamController = new MyTeamController();
         $suggestedGoalsData = $myTeamController->showSugggestedGoals('my-team.goals.bank', false);
 
-        Log::info('LLL');
-        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        // $compacted = compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy');
+        // dd($compacted);
+        // $merged = array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData);
+        // dd($merged);
+
+        return view('goal.bank', compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));
+        // return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        // return view('goal.bank', compact(array_merge('bankGoals', $suggestedGoalsData), 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'));
     }
 
     private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes, &$tagsList) {

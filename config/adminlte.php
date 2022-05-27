@@ -313,7 +313,13 @@ return [
                     'text' => 'Notifications',
                     'url'  => 'hradmin/notifications',
                     'active' => ['hradmin/notifications/*']
+                ],
+                [
+                    'text' => 'Statiscts and Reports',
+                    'url'  => 'hradmin/statistics/goalsummary',
+                    'active' => ['hradmin/statistics/*']
                 ]
+
             ],
         ],
         [

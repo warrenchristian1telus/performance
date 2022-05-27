@@ -12,7 +12,7 @@
             The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile.
             <br>
             <br>
-        </div>s
+        </div>
         <form action="" method="get" id="filter-menu">
             <div class="row">
                 <div class="col">

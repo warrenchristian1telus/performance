@@ -146,7 +146,8 @@ class MyTeamController extends Controller
         $goaltypes = GoalType::all();
         $eReasons = ExcusedReason::all();
         $conversationTopics = ConversationTopic::all();
-        $participants = Participant::all();
+        // $participants = Participant::all();
+        $participants = Participant::select('id', 'name')->get();
 
         $goals = Goal::where('user_id', Auth::id())
             ->where('status', 'active')
@@ -289,7 +290,8 @@ class MyTeamController extends Controller
         $goaltypes = GoalType::all();
         $eReasons = ExcusedReason::all();
         $conversationTopics = ConversationTopic::all();
-        $participants = Participant::all();
+        // $participants = Participant::all();
+        $participants = Participant::select('id', 'name')->get();
         $tags = Tag::all()->toArray();
         $goals = Goal::where('user_id', Auth::id())
             ->where('status', 'active')

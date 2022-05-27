@@ -222,92 +222,93 @@ class GoalController extends Controller
     }
 
     public function goalBank(Request $request) {
-        $tags = Tag::all()->toArray();
-        $tags_input = $request->tag_ids;     
+        // $tags = Tag::all()->toArray();
+        // $tags_input = $request->tag_ids;     
 
-        $adminGoals = Goal::withoutGlobalScopes()
-        ->join('goal_bank_orgs', 'goals.id', '=', 'goal_bank_orgs.goal_id')
-        ->join('admin_orgs', function($join) use ($request) {
-            $join->on('admin_orgs.organization', '=', 'goal_bank_orgs.organization')
-            ->on('admin_orgs.level1_program', '=', 'goal_bank_orgs.level1_program')
-            ->on('admin_orgs.level2_division', '=', 'goal_bank_orgs.level2_division')
-            ->on('admin_orgs.level3_branch', '=', 'goal_bank_orgs.level3_branch')
-            ->on('admin_orgs.level4', '=', 'goal_bank_orgs.level4');
-        })
-        ->where('admin_orgs.user_id', '=', Auth::id())
-        ->where('admin_orgs.version', '=', 1)
-        ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
-        ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id')    
-        ->select('goals.*');
-        // ->paginate(10);
+        // $adminGoals = Goal::withoutGlobalScopes()
+        // ->join('goal_bank_orgs', 'goals.id', '=', 'goal_bank_orgs.goal_id')
+        // ->join('admin_orgs', function($join) use ($request) {
+        //     $join->on('admin_orgs.organization', '=', 'goal_bank_orgs.organization')
+        //     ->on('admin_orgs.level1_program', '=', 'goal_bank_orgs.level1_program')
+        //     ->on('admin_orgs.level2_division', '=', 'goal_bank_orgs.level2_division')
+        //     ->on('admin_orgs.level3_branch', '=', 'goal_bank_orgs.level3_branch')
+        //     ->on('admin_orgs.level4', '=', 'goal_bank_orgs.level4');
+        // })
+        // ->where('admin_orgs.user_id', '=', Auth::id())
+        // ->where('admin_orgs.version', '=', 1)
+        // ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
+        // ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id')    
+        // ->select('goals.*');
+        // // ->paginate(10);
 
-        $query = Goal::withoutGlobalScope(NonLibraryScope::class)
-        ->where('is_library', true)
-        ->with('goalType')
-        ->with('user')
-        ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
-        ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id');    
+        // $query = Goal::withoutGlobalScope(NonLibraryScope::class)
+        // ->where('is_library', true)
+        // ->with('goalType')
+        // ->with('user')
+        // ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
+        // ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id');    
         
-        if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
-            if ($request->is_mandatory == "1") {
-                $query = $query->where('is_mandatory', $request->is_mandatory);
-            }
-            else {
-                $query = $query->where(function ($query) {
-                    $query->whereNull('is_mandatory');
-                    $query->orWhere('is_mandatory', 0);
-                });
-            }
-        }
+        // if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
+        //     if ($request->is_mandatory == "1") {
+        //         $query = $query->where('is_mandatory', $request->is_mandatory);
+        //     }
+        //     else {
+        //         $query = $query->where(function ($query) {
+        //             $query->whereNull('is_mandatory');
+        //             $query->orWhere('is_mandatory', 0);
+        //         });
+        //     }
+        // }
 
-        if ($request->has('goal_type') && $request->goal_type) {
-            $query = $query->whereHas('goalType', function($query) use ($request) {
-                return $query->where('id', $request->goal_type);
-            });
-        }
+        // if ($request->has('goal_type') && $request->goal_type) {
+        //     $query = $query->whereHas('goalType', function($query) use ($request) {
+        //         return $query->where('id', $request->goal_type);
+        //     });
+        // }
         
-        if ($request->has('tag_id') && $request->tag_id) {
-            $query = $query->where('goal_tags.tag_id', "=", "$request->tag_id");
-        }
+        // if ($request->has('tag_id') && $request->tag_id) {
+        //     $query = $query->where('goal_tags.tag_id', "=", "$request->tag_id");
+        // }
 
-        if ($request->has('title') && $request->title) {
-            $query = $query->where('goal_tags.goal_id', "LIKE", "%$request->title%");
-        }
+        // if ($request->has('title') && $request->title) {
+        //     $query = $query->where('goal_tags.goal_id', "LIKE", "%$request->title%");
+        // }
 
-        if ($request->has('date_added') && $request->date_added && Str::lower($request->date_added) !== 'any') {
-            $dateRange = explode("-",$request->date_added);
-            $dateRange[0] = trim($dateRange[0]);
-            $dateRange[1] = trim($dateRange[1]);
+        // if ($request->has('date_added') && $request->date_added && Str::lower($request->date_added) !== 'any') {
+        //     $dateRange = explode("-",$request->date_added);
+        //     $dateRange[0] = trim($dateRange[0]);
+        //     $dateRange[1] = trim($dateRange[1]);
 
-            $startDate = Carbon::createFromFormat('M d, Y', $dateRange[0]);
-            $endDate = Carbon::createFromFormat('M d, Y', $dateRange[1]);
+        //     $startDate = Carbon::createFromFormat('M d, Y', $dateRange[0]);
+        //     $endDate = Carbon::createFromFormat('M d, Y', $dateRange[1]);
 
-            $query = $query->whereDate('created_at', '>=', $startDate);
-            $query = $query->whereDate('created_at', '<=', $endDate);
-        }
+        //     $query = $query->whereDate('created_at', '>=', $startDate);
+        //     $query = $query->whereDate('created_at', '<=', $endDate);
+        // }
 
-        if ($request->has('created_by') && $request->created_by) {
-            $query = $query->where('user_id', $request->created_by);
-        }
+        // if ($request->has('created_by') && $request->created_by) {
+        //     $query = $query->where('user_id', $request->created_by);
+        // }
 
-        $query->whereHas('sharedWith', function($query) {
-            $query->where('user_id', Auth::id());
-        });
-        // $query->groupBy('goals.id');
-        // $bankGoals = $query->get();
+        // $query->whereHas('sharedWith', function($query) {
+        //     $query->where('user_id', Auth::id());
+        // });
+        // // $query->groupBy('goals.id');
+        // // $bankGoals = $query->get();
         
+        // // $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
+        // $query = $query->select('goals.*');
+        // $query = $query->union($adminGoals);
+        // // $query = $query->groupBy('goals.id');
+        // $bankGoals = $query->paginate(10);
         // $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
-        $query = $query->select('goals.*');
-        $query = $query->union($adminGoals);
-        // $query = $query->groupBy('goals.id');
-        $bankGoals = $query->paginate(10);
-        $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
 
 
-        $myTeamController = new MyTeamController();
-        $suggestedGoalsData = $myTeamController->showSugggestedGoals('my-team.goals.bank', false);
+        // $myTeamController = new MyTeamController();
+        // $suggestedGoalsData = $myTeamController->showSugggestedGoals('my-team.goals.bank', false);
 
-        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        // return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        return view('goal.bank');
     }
 
     private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes, &$tagsList) {

@@ -1,17 +1,17 @@
 <x-side-layout>
     <div class="container-fluid">
-        <div class="row ">
+        {{-- <div class="row ">
             <div class="col-md-6 col-6">
                 <x-slot name="header">
                     @include('goal.partials.tabs')
                 </x-slot>
             </div>
-        </div>
+        </div> --}}
         <div>
             <b>My Goal Bank</b> <br>
-            The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile.
+            {{-- The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile.
             <br>
-            <br>
+            <br> --}}
         </div>
         {{-- <form action="" method="get" id="filter-menu">
             <div class="row">

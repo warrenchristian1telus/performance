@@ -262,7 +262,7 @@ class GoalController extends Controller
 
         if ($request->has('goal_type') && $request->goal_type) {
             $query = $query->whereHas('goalType', function($query) use ($request) {
-                return $query->where('id', $request->goal_type);
+                return $query->where('goal_type_id', $request->goal_type);
             });
         }
         

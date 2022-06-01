@@ -14,6 +14,7 @@ use App\Http\Controllers\SysAdmin\GoalBankController;
 use App\Http\Controllers\SysAdmin\NotificationController;
 use App\Http\Controllers\SysAdmin\ExcusedEmployeesController;
 use App\Http\Controllers\SysAdmin\AccessPermissionsController;
+use App\Http\Controllers\SysAdmin\EmployeeSharesController;
 use App\Http\Controllers\SysAdmin\SharedEmployeesController;
 use Illuminate\Support\Facades\Route;
 
@@ -101,7 +102,11 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::get('/sysadmin/goalbank/editone/{id}', [GoalBankController::class, 'editone'])->name('sysadmin.goalbank.editone');
         Route::post('/sysadmin/goalbank/editone/{id}', [GoalBankController::class, 'editone'])->name('sysadmin.goalbank.editonepost');
         Route::get('/sysadmin/goalbank/deletegoal/{id}', [GoalBankController::class, 'deletegoal'])->name('sysadmin.goalbank.deletegoalget');
-        Route::delete('/sysadmin/goalbank/deletegoal/{id}', [GoalBankController::class, 'deletegoal'])->name('sysadmin.goalbank.deletegoal');
+        Route::get('/sysadmin/goalbank/deleteorg/{id}', [GoalBankController::class, 'deleteorg'])->name('sysadmin.goalbank.deleteorgget');
+        Route::post('/sysadmin/goalbank/deleteorg/{id}', [GoalBankController::class, 'deleteorg'])->name('sysadmin.goalbank.deleteorg');
+        Route::get('/sysadmin/goalbank/deleteindividual/{id}', [GoalBankController::class, 'deleteindividual'])->name('sysadmin.goalbank.deleteindividualget');
+        Route::post('/sysadmin/goalbank/deleteindividual/{id}', [GoalBankController::class, 'deleteindividual'])->name('sysadmin.goalbank.deleteindividual');
+        Route::post('/sysadmin/goalbank/deletegoal/{id}', [GoalBankController::class, 'deletegoal'])->name('sysadmin.goalbank.deletegoal');
         Route::get('/sysadmin/goalbank/updategoal', [GoalBankController::class, 'updategoal'])->name('sysadmin.goalbank.updategoalget');
         Route::post('/sysadmin/goalbank/updategoal', [GoalBankController::class, 'updategoal'])->name('sysadmin.goalbank.updategoal');
         Route::get('/sysadmin/goalbank/updategoalone', [GoalBankController::class, 'updategoalone'])->name('sysadmin.goalbank.updategoaloneget');
@@ -199,7 +204,35 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         
     });
 
-    
+
+    //Access and Permissions
+    Route::group(['middleware' => ['auth']], function() {    
+        Route::get('/sysadmin/employeeshares/addindex', [EmployeeSharesController::class, 'addindex'])->name('sysadmin.employeeshares.addindex');
+        Route::post('/sysadmin/employeeshares/addindex', [EmployeeSharesController::class, 'addindex'])->name('sysadmin.employeeshares.addindexpost');
+        Route::post('/sysadmin/employeeshares/saveall', [EmployeeSharesController::class, 'saveall'])->name('sysadmin.employeeshares.saveall');
+
+        Route::get('/sysadmin/employeeshares/manageindex', [EmployeeSharesController::class, 'manageindex'])->name('sysadmin.employeeshares.manageindex');
+        Route::post('/sysadmin/employeeshares/manageindex', [EmployeeSharesController::class, 'manageindex'])->name('sysadmin.employeeshares.manageindexpost');
+        Route::get('/sysadmin/employeeshares/manageindexlist', [EmployeeSharesController::class, 'manageindexlist'])->name('sysadmin.employeeshares.manageindexlist');
+
+        Route::get('/sysadmin/employeeshares/org-tree', [EmployeeSharesController::class,'loadOrganizationTree']);
+        Route::get('/sysadmin/employeeshares/org-organizations', [EmployeeSharesController::class,'getOrganizations']);
+        Route::get('/sysadmin/employeeshares/org-programs', [EmployeeSharesController::class,'getPrograms']);
+        Route::get('/sysadmin/employeeshares/org-divisions', [EmployeeSharesController::class,'getDivisions']);
+        Route::get('/sysadmin/employeeshares/org-branches', [EmployeeSharesController::class,'getBranches']);
+        Route::get('/sysadmin/employeeshares/org-level4', [EmployeeSharesController::class,'getLevel4']);
+        Route::get('/sysadmin/employeeshares/employee-list', [EmployeeSharesController::class, 'getDatatableEmployees'])->name('sysadmin.employeeshares.employee.list');
+
+        Route::get('/sysadmin/employeeshares/eorg-tree', [EmployeeSharesController::class,'eloadOrganizationTree']);
+        Route::get('/sysadmin/employeeshares/eorg-organizations', [EmployeeSharesController::class,'egetOrganizations']);
+        Route::get('/sysadmin/employeeshares/eorg-programs', [EmployeeSharesController::class,'egetPrograms']);
+        Route::get('/sysadmin/employeeshares/eorg-divisions', [EmployeeSharesController::class,'egetDivisions']);
+        Route::get('/sysadmin/employeeshares/eorg-branches', [EmployeeSharesController::class,'egetBranches']);
+        Route::get('/sysadmin/employeeshares/eorg-level4', [EmployeeSharesController::class,'egetLevel4']);
+        Route::get('/sysadmin/employeeshares/eemployee-list', [EmployeeSharesController::class, 'egetDatatableEmployees'])->name('sysadmin.employeeshares.eemployee.list');
+});
+  
+
     //Access and Permissions
     Route::group(['middleware' => ['auth']], function() {    
         Route::get('/sysadmin/accesspermissions', [AccessPermissionsController::class, 'index'])->name('sysadmin.accesspermissions');

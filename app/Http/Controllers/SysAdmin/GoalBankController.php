@@ -255,6 +255,66 @@ class GoalBankController extends Controller
     
     }
 
+    public function getgoalorgs(Request $request, $goal_id) {
+        $level0 = $request->dd_level0 ? OrganizationTree::where('id', $request->dd_level0)->first() : null;
+        $level1 = $request->dd_level1 ? OrganizationTree::where('id', $request->dd_level1)->first() : null;
+        $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
+        $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
+        $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
+        if ($request->ajax()) {
+            $query = GoalBankOrg::where('goal_id', '=', $goal_id)
+            ->when( $level0, function ($q) use($level0) {
+                return $q->where('goal_bank_orgs.organization', '=', $level0->name);
+            })
+            ->when( $level1, function ($q) use($level1) {
+                return $q->where('goal_bank_orgs.level1_program', $level1->name);
+            })
+            ->when( $level2, function ($q) use($level2) {
+                return $q->where('goal_bank_orgs.level2_division', $level2->name);
+            })
+            ->when( $level3, function ($q) use($level3) {
+                return $q->where('goal_bank_orgs.level3_branch', $level3->name);
+            })
+            ->when( $level4, function ($q) use($level4) {
+                return $q->where('goal_bank_orgs.level4', $level4->name);
+            })
+            ->select (
+                'organization',
+                'level1_program',
+                'level2_division',
+                'level3_branch',
+                'level4',
+                'goal_id',
+                'id'
+            );
+            return Datatables::of($query)
+            ->addIndexColumn()
+            ->addcolumn('action', function($row) {
+                $btn = '<a href="/sysadmin/goalbank/deleteorg/' . $row->id . '" class="btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete Org" id="delete_org" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
+                return $btn;
+            })
+            ->rawColumns(['goal_type_name', 'created_by', 'action'])
+             ->make(true);
+        }
+    }
+
+    public function deleteorg(Request $request, $id)
+    {
+        $query = GoalBankOrg::where('id', '=', $id)
+        ->delete();
+
+        return redirect()->back();
+    }
+
+    public function deleteindividual(Request $request, $id)
+    {
+        $query = DB::table('goals_shared_with')
+        ->where('id', '=', $id)
+        ->delete();
+
+        return redirect()->back();
+    }
+
     public function editpage(Request $request, $id) 
     {
         $goalTypes = GoalType::all()->toArray();
@@ -354,6 +414,7 @@ class GoalBankController extends Controller
                 ->pluck('employee_demo.employee_id');        
         
         $criteriaList = $this->search_criteria_list();
+        $ecriteriaList = $this->search_criteria_list();
         $roles = DB::table('roles')
         ->whereIntegerInRaw('id', [3, 4])
         ->pluck('longname', 'id');
@@ -361,7 +422,7 @@ class GoalBankController extends Controller
 
         $goaldetail = Goal::withoutGlobalScopes()->find($request->id);
 
-        return view('sysadmin.goalbank.editgoal', compact('criteriaList','matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
+        return view('sysadmin.goalbank.editgoal', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
     
     }
 
@@ -472,6 +533,7 @@ class GoalBankController extends Controller
         ->pluck('employee_demo.employee_id');        
         
         $criteriaList = $this->search_criteria_list();
+        $ecriteriaList = $this->search_criteria_list();
         $roles = DB::table('roles')
         ->whereIntegerInRaw('id', [3, 4])
         ->pluck('longname', 'id');
@@ -479,7 +541,7 @@ class GoalBankController extends Controller
 
         $goaldetail = Goal::withoutGlobalScopes()->find($request->id);
 
-        return view('sysadmin.goalbank.editone', compact('criteriaList','matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
+        return view('sysadmin.goalbank.editone', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
     
     }
 
@@ -632,9 +694,17 @@ class GoalBankController extends Controller
 
             $sql = clone $demoWhere; 
 
-            $employees = $sql->select([ 'employee_id', 'employee_name', 'job_title', 'employee_email', 
-                'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division',
-                'employee_demo.level3_branch','employee_demo.level4', 'employee_demo.deptid']);
+            $employees = $sql->select([ 
+                'employee_id'
+                , 'employee_name'
+                , 'job_title'
+                , 'employee_email'
+                , 'employee_demo.organization'
+                , 'employee_demo.level1_program'
+                , 'employee_demo.level2_division'
+                , 'employee_demo.level3_branch'
+                , 'employee_demo.level4'
+                , 'employee_demo.deptid']);
 
             return Datatables::of($employees)
                 ->addColumn('select_users', static function ($employee) {
@@ -1065,23 +1135,8 @@ class GoalBankController extends Controller
         foreach ($eorgs as $org) {
             $eformatted_orgs[] = ['id' => $org->id, 'text' => $org->name ];
         }
-
         return response()->json($eformatted_orgs);
     } 
-
-    // public function getJobTitles() {
-    //     $rows = EmployeeDemo::select('job_title')
-    //        ->whereNotIn('job_title', ['', ' '])
-    //        ->orderBy('job_title')
-    //        ->distinct()->get();
-
-    //     $formatted_data = [];
-    //        foreach ($rows as $item) {
-    //            $formatted_data[] = ['id' => $item->job_title, 'text' => $item->job_title ];
-    //     }
-   
-    //     return response()->json($formatted_data);
-    // }
 
     public function getEmployees(Request $request,  $id) {
         $level0 = $request->dd_level0 ? OrganizationTree::where('id', $request->dd_level0)->first() : null;
@@ -1317,7 +1372,12 @@ class GoalBankController extends Controller
         $request->session()->flash('level3', $level3);
         $request->session()->flash('level4', $level4);
 
-        $criteriaList = $this->search_criteria_list();
+        $criteriaList = array(
+            'all' => 'All',
+            'gt' => 'Goal Title', 
+            'cby'=> 'Created By',
+        );
+    
         $roles = DB::table('roles')
         ->whereIntegerInRaw('id', [3, 4])
         ->pluck('longname', 'id');
@@ -1417,7 +1477,7 @@ class GoalBankController extends Controller
             ->addcolumn('action', function($row) {
                 $btn = '<a href="' . route('sysadmin.goalbank.editpage', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Goal for Organization" value="'. $row->id .'"><i class="fas fa-users"></i>&nbsp;Edit</a>';
                 $btn = $btn . '&nbsp;<a href="' . route('sysadmin.goalbank.editone', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Goal For Individuals" value="'. $row->id .'"><i class="fas fa-user-edit"></i>&nbsp;Edit</a>';
-                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="view-modal btn btn-xs btn-danger" aria-label="Delete" id="deletebtn" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
+                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="/sysadmin/goalbank/deletegoal/' . $row->id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
                 return $btn;
             })
             ->rawColumns(['goal_type_name', 'created_by', 'action'])
@@ -1425,50 +1485,35 @@ class GoalBankController extends Controller
         }
     }
 
-    public function getgoalorgs(Request $request, $goal_id) {
-        if ($request->ajax()) {
-            $query = GoalBankOrg::where('goal_id', '=', $goal_id)
-            ->select (
-                'organization',
-                'level1_program',
-                'level2_division',
-                'level3_branch',
-                'level4',
-                'goal_id',
-            );
-            return Datatables::of($query)
-            ->addIndexColumn()
-            ->addcolumn('action', function($row) {
-                $btn = '<a href="javascript:void(0)" class="view-modal btn btn-xs btn-danger" aria-label="Delete" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
-                return $btn;
-            })
-            ->rawColumns(['goal_type_name', 'created_by', 'action'])
-             ->make(true);
-        }
-    }
-
     public function getgoalinds(Request $request, $goal_id) {
+        $level0 = $request->dd_level0 ? OrganizationTree::where('id', $request->dd_level0)->first() : null;
+        $level1 = $request->dd_level1 ? OrganizationTree::where('id', $request->dd_level1)->first() : null;
+        $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
+        $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
+        $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
         if ($request->ajax()) {
             $query = Goal::withoutGlobalScopes()
             ->where('goals.id', '=', $goal_id)
-            ->join('goals_shared_with', 'goals.id', '=', 'goals_shared_with.goal_id')
+            ->leftjoin('goals_shared_with', 'goals.id', '=', 'goals_shared_with.goal_id')
             ->join('users', 'users.id', '=', 'goals_shared_with.user_id')
-            ->join('employee_demo', 'employee_demo.guid', '=', 'users.guid')
+            ->leftjoin('employee_demo', 'employee_demo.guid', '=', 'users.guid')
             ->select (
                 'employee_demo.employee_id',
                 'employee_demo.employee_name',
+                'employee_demo.job_title',
                 'employee_demo.organization',
                 'employee_demo.level1_program',
                 'employee_demo.level2_division',
                 'employee_demo.level3_branch',
                 'employee_demo.level4',
                 'employee_demo.deptid',
-                'goals.id',
+                'goals.id as goal_id',
+                'goals_shared_with.id as share_id'
             );
             return Datatables::of($query)
             ->addIndexColumn()
             ->addcolumn('action', function($row) {
-                $btn = '<a href="javascript:void(0)" class="view-modal btn btn-xs btn-danger" aria-label="Delete" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
+                $btn = '<a href="/sysadmin/goalbank/deleteindividual/' . $row->share_id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_user" value="'. $row->share_id .'"><i class="fa fa-trash"></i></a>';
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -1581,16 +1626,18 @@ class GoalBankController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deletegoal(Request $request) {
-        // $query = DB::table('model_has_roles')
-        // ->where('model_id', '=', $request->input('model_id'))
-        // ->wherein('role_id', [3, 4])
-        // ->delete();
-        // // if($query) {
-        //     $orgs = DB::table('admin_orgs')
-        //     ->where('user_id', '=', $request->input('model_id'))
-        //     ->delete();
-        // // }
+    public function deletegoal(Request $request, $goal_id) {
+        $query1 = DB::table('goal_tags')
+        ->where('goal_id', '=', $goal_id)
+        ->delete();
+        $query2 = GoalBankOrg::where('goal_id', '=', $goal_id)
+        ->delete();
+        $query3 = DB::table('goals_shared_with')
+        ->where('goal_id', '=', $goal_id)
+        ->delete();
+        $query4 = DB::table('goals')
+        ->where('id', '=', $goal_id)
+        ->delete();
         return redirect()->back();
     }
 

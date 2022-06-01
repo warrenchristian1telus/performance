@@ -5,7 +5,7 @@
         </h2> 
     </x-slot>
 
-	<small><a href="{{ url()->previous() }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
+	<small><a href=" {{ route('sysadmin.goalbank.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
 
 	<br><br>
 
@@ -20,6 +20,12 @@
 		<h6 class="text-bold">Step 1. Update Goal Details</h6>
 		<br>
 
+		<div class="row">
+			<div class="col m-2">
+				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goaldetail->tags->toArray(), 'id')" class="tags" multiple />
+				<small  class="text-danger error-tag_ids"></small>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col m-2">
 				<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" :selected="$goaldetail->goal_type_id" />
@@ -54,19 +60,13 @@
 				<small  class="text-danger error-target_date"></small>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col m-2">
-				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goaldetail->tags->toArray(), 'id')" class="tags" multiple />
-				<small  class="text-danger error-tag_ids"></small>
-			</div>
-		</div>
 
 		<div class="card">
 			<div class="card-body">
 				<label label="Current Audience" name="current_audience" > Current Individual Audience </label>
 				@include('sysadmin.goalbank.partials.filter')
 				<div class="p-3">  
-					<table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
+					<table class="table table-bordered currenttable" id="currenttable" style="width: 100%; overflow-x: auto; "></table>
 				</div>
 			</div>
 		</div>
@@ -205,7 +205,7 @@
 			$(document).ready(function(){
 
 
-				var table = $('.filtertable').DataTable
+				var table = $('.currenttable').DataTable
 				(
 					{
 						processing: true,
@@ -236,10 +236,53 @@
 							{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
 							{title: 'Dept ID', ariaTitle: 'Dept ID', target: 0, type: 'string', data: 'deptid', name: 'deptid', searchable: true},
 							{title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
-							{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'id', name: 'goal_id', searchable: false, visible: false},
+							{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'goal_id', name: 'goal_id', searchable: false, visible: false},
+							{title: 'ID', ariaTitle: 'ID', target: 0, type: 'num', data: 'share_id', name: 'share_id', searchable: false, visible: false},
 						]
 					}
 				);
+
+				$('#btn_search').click(function(e) {
+					e.preventDefault();
+					$('#currenttable').DataTable().destroy();
+					$('#currenttable').empty();
+					$('#currenttable').DataTable(
+						{
+							processing: true,
+							serverSide: true,
+							scrollX: true,
+							stateSave: true,
+							deferRender: true,
+							ajax: {
+								url: "{{ route('sysadmin.goalbank.getgoalinds', $goaldetail->id) }}",
+								type: 'GET',
+								data: function(d) {
+									d.dd_level0 = $('#dd_level0').val();
+									d.dd_level1 = $('#dd_level1').val();
+									d.dd_level2 = $('#dd_level2').val();
+									d.dd_level3 = $('#dd_level3').val();
+									d.dd_level4 = $('#dd_level4').val();
+									d.criteria = $('#criteria').val();
+									d.search_text = $('#search_text').val();
+								}
+							},
+							columns: [
+								{title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id', searchable: true},
+								{title: 'Name', ariaTitle: 'Employee Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name', searchable: true},
+								{title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'job_title', searchable: true},
+								{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},
+								{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true},
+								{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true},
+								{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true},
+								{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
+								{title: 'Dept ID', ariaTitle: 'Dept ID', target: 0, type: 'string', data: 'deptid', name: 'deptid', searchable: true},
+								{title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
+								{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'goal_id', name: 'goal_id', searchable: false, visible: false},
+								{title: 'ID', ariaTitle: 'ID', target: 0, type: 'num', data: 'share_id', name: 'share_id', searchable: false, visible: false},
+							]
+						}
+					);
+				});
 
 				$(".tags").multiselect({
                 	enableFiltering: true,
@@ -318,7 +361,7 @@
                         }
                     } else {
 						// alert("error");
-                        $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply filter before clicking on Tree.');
+                        $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
 					}
 				});
 
@@ -472,42 +515,57 @@
 
 			$('#ebtn_search').click(function(e) {
 				target = $('#enav-tree'); 
+				ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
+                if(ddnotempty) {
+					// To do -- ajax called to load the tree
+					$.when( 
+						$.ajax({
+							url: '/sysadmin/goalbank/eorg-tree',
+							// url: $url,
+							type: 'GET',
+							data: $("#notify-form").serialize(),
+							dataType: 'html',
 
-				// To do -- ajax called to load the tree
-				$.when( 
-					$.ajax({
-						url: '/sysadmin/goalbank/eorg-tree',
-						// url: $url,
-						type: 'GET',
-						data: $("#notify-form").serialize(),
-						dataType: 'html',
+							beforeSend: function() {
+								$("#etree-loading-spinner").show();                    
+							},
 
-						beforeSend: function() {
-							$("#etree-loading-spinner").show();                    
-						},
+							success: function (result) {
+								$('#enav-tree').html(''); 
+								$('#enav-tree').html(result);
+								$('#enav-tree').attr('loaded','loaded');
+							},
 
-						success: function (result) {
-							$('#enav-tree').html(''); 
-							$('#enav-tree').html(result);
-							$('#enav-tree').attr('loaded','loaded');
-						},
+							complete: function() {
+								$("#etree-loading-spinner").hide();
+							},
 
-						complete: function() {
-							$("#etree-loading-spinner").hide();
-						},
-
-						error: function () {
-							alert("error");
-							$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-						}
-					})
-					
-				).then(function( data, textStatus, jqXHR ) {
-					//alert( jqXHR.status ); // Alerts 200
-					enodes = $('#eaccordion-level0 input:checkbox');
-					eredrawTreeCheckboxes();	
-				}); 
+							error: function () {
+								alert("error");
+								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+							}
+						})
+						
+					).then(function( data, textStatus, jqXHR ) {
+						//alert( jqXHR.status ); // Alerts 200
+						enodes = $('#eaccordion-level0 input:checkbox');
+						eredrawTreeCheckboxes();	
+					}); 
+				} else {
+					$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+				}
 			});
+
+			$('#btn_search_reset').click(function(e) {
+					e.preventDefault();
+					$('#search_text').val(null);
+					$('#dd_level0').val(null);
+					$('#dd_level1').val(null);
+					$('#dd_level2').val(null);
+					$('#dd_level3').val(null);
+					$('#dd_level4').val(null);
+					// $('#btn_search').click();
+        		});
 
 			$(window).on('beforeunload', function(){
 				$('#pageLoader').show();

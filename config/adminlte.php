@@ -342,8 +342,8 @@ return [
                 // ],
                 [
                     'text' => 'Share Employees',
-                    'url'  => 'sysadmin/sharedemployees/notify',
-                    'active' => ['sysadmin/sharedemployees/*']
+                    'url'  => 'sysadmin/employeeshares/addindex',
+                    'active' => ['sysadmin/employeeshares/*']
                 ],
                 // [
                 //     'text' => 'Excuse Employees (Old)',

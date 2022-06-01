@@ -118,6 +118,13 @@
                 }
             );
 
+            $('#lvlgroup0').hide();
+            $('#lvlgroup1').hide();
+            $('#lvlgroup2').hide();
+            $('#lvlgroup3').hide();
+            $('#lvlgroup4').hide();
+            $('#blank5th').hide();
+
         });
 
         $('#editModal').on('show.bs.modal', function(event) {

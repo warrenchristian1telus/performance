@@ -6,7 +6,7 @@ use App\Http\Controllers\PastEmployeesController;
 use App\Http\Controllers\CreateAccessController;
 use App\Http\Controllers\GenericTemplateController;
 use App\Http\Controllers\ManageExistingAccessController;
-use App\Http\Controllers\ManageExistingSharesController;
+// use App\Http\Controllers\ManageExistingSharesController;
 use App\Http\Controllers\ManageExistingExcusedController;
 use App\Http\Controllers\ManageGoalBankController;
 use App\Http\Controllers\SysAdmin\UnlockConversationController;
@@ -96,7 +96,6 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::get('/sysadmin/goalbank', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank');
         Route::get('/sysadmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.createindex');
         Route::post('/sysadmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.search');
-        // Route::post('/sysadmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.createindexpost');
         Route::get('/sysadmin/goalbank/editpage/{id}', [GoalBankController::class, 'editpage'])->name('sysadmin.goalbank.editpage');
         Route::post('/sysadmin/goalbank/editpage/{id}', [GoalBankController::class, 'editpage'])->name('sysadmin.goalbank.editpagepost');
         Route::get('/sysadmin/goalbank/editone/{id}', [GoalBankController::class, 'editone'])->name('sysadmin.goalbank.editone');
@@ -138,25 +137,25 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
 
 
     //Shared Employees
-    Route::group(['middleware' => ['auth']], function() {    
-        Route::get('/sysadmin/sharedemployees', [SharedEmployeesController::class, 'index'])->name('sysadmin.sharedemployees');
-        Route::get('/sysadmin/sharedemployees/detail/{notification_id}', [SharedEmployeesController::class, 'show']);
-        Route::get('/sysadmin/sharedemployees/notify', [SharedEmployeesController::class, 'notify'])->name('sysadmin.sharedemployees.notify');
-        Route::post('/sysadmin/sharedemployees/notify', [SharedEmployeesController::class, 'notify'])->name('sysadmin.sharedemployees.search');
-        Route::post('/sysadmin/sharedemployees/notify-send', [SharedEmployeesController::class, 'send'])->name('sysadmin.sharedemployees.send');
-        Route::get('/sysadmin/sharedemployees/users', [SharedEmployeesController::class, 'getUsers'])->name('sysadmin.sharedemployees.users.list');
+    // Route::group(['middleware' => ['auth']], function() {    
+    //     Route::get('/sysadmin/sharedemployees', [SharedEmployeesController::class, 'index'])->name('sysadmin.sharedemployees');
+    //     Route::get('/sysadmin/sharedemployees/detail/{notification_id}', [SharedEmployeesController::class, 'show']);
+    //     Route::get('/sysadmin/sharedemployees/notify', [SharedEmployeesController::class, 'notify'])->name('sysadmin.sharedemployees.notify');
+    //     Route::post('/sysadmin/sharedemployees/notify', [SharedEmployeesController::class, 'notify'])->name('sysadmin.sharedemployees.search');
+    //     Route::post('/sysadmin/sharedemployees/notify-send', [SharedEmployeesController::class, 'send'])->name('sysadmin.sharedemployees.send');
+    //     Route::get('/sysadmin/sharedemployees/users', [SharedEmployeesController::class, 'getUsers'])->name('sysadmin.sharedemployees.users.list');
         
-        Route::get('/sysadmin/sharedemployees/org-tree', [SharedEmployeesController::class,'loadOrganizationTree']);
-        Route::get('/sysadmin/sharedemployees/org-organizations', [SharedEmployeesController::class,'getOrganizations']);
-        Route::get('/sysadmin/sharedemployees/org-programs', [SharedEmployeesController::class,'getPrograms']);
-        Route::get('/sysadmin/sharedemployees/org-divisions', [SharedEmployeesController::class,'getDivisions']);
-        Route::get('/sysadmin/sharedemployees/org-branches', [SharedEmployeesController::class,'getBranches']);
-        Route::get('/sysadmin/sharedemployees/org-level4', [SharedEmployeesController::class,'getLevel4']);
-        Route::get('/sysadmin/sharedemployees/job-titles', [SharedEmployeesController::class,'getJobTitles']);
-        Route::get('/sysadmin/sharedemployees/employees/{id}', [SharedEmployeesController::class,'getEmployees']);
-        Route::get('/sysadmin/sharedemployees/employee-list', [SharedEmployeesController::class, 'getDatatableEmployees'])->name('sysadmin.sharedemployees.employee.list');
+    //     Route::get('/sysadmin/sharedemployees/org-tree', [SharedEmployeesController::class,'loadOrganizationTree']);
+    //     Route::get('/sysadmin/sharedemployees/org-organizations', [SharedEmployeesController::class,'getOrganizations']);
+    //     Route::get('/sysadmin/sharedemployees/org-programs', [SharedEmployeesController::class,'getPrograms']);
+    //     Route::get('/sysadmin/sharedemployees/org-divisions', [SharedEmployeesController::class,'getDivisions']);
+    //     Route::get('/sysadmin/sharedemployees/org-branches', [SharedEmployeesController::class,'getBranches']);
+    //     Route::get('/sysadmin/sharedemployees/org-level4', [SharedEmployeesController::class,'getLevel4']);
+    //     Route::get('/sysadmin/sharedemployees/job-titles', [SharedEmployeesController::class,'getJobTitles']);
+    //     Route::get('/sysadmin/sharedemployees/employees/{id}', [SharedEmployeesController::class,'getEmployees']);
+    //     Route::get('/sysadmin/sharedemployees/employee-list', [SharedEmployeesController::class, 'getDatatableEmployees'])->name('sysadmin.sharedemployees.employee.list');
         
-    });
+    // });
 
 
     //Excused Employees
@@ -205,7 +204,7 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
     });
 
 
-    //Access and Permissions
+    //Shared Employees
     Route::group(['middleware' => ['auth']], function() {    
         Route::get('/sysadmin/employeeshares/addindex', [EmployeeSharesController::class, 'addindex'])->name('sysadmin.employeeshares.addindex');
         Route::post('/sysadmin/employeeshares/addindex', [EmployeeSharesController::class, 'addindex'])->name('sysadmin.employeeshares.addindexpost');

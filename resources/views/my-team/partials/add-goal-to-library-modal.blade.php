@@ -5,7 +5,7 @@
       <div class="modal-header bg-primary">
         <h5 class="modal-title" id="addGoalToLibraryLabel">Add Goal to Bank</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" style="color:white">&times;</span>
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body p-4">
@@ -13,7 +13,7 @@
             @csrf
             <div class="row">
                 <div class="col-6">
-                    <x-tooltip-dropdown-outside name="goal_type_id" :options="$goaltypes" label="Goal Type" popoverstr="{{$type_desc_str}}" tooltipField="description" displayField="name" />
+                    <x-tooltip-dropdown name="goal_type_id" :options="$goaltypes" label="Goal Type" tooltipField="description" displayField="name" />
                 </div>
                 <div class="col-6">
                     <x-input label="Goal Title" name="title"  tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
@@ -83,12 +83,6 @@
             selector: '[data-toggle]',
             trigger: 'hover',
         });
-        
-        $('.modal').popover({
-            selector: '[data-toggle-select]',
-            trigger: 'click',
-        });
-        
         $(document).on('show.bs.modal', '#addGoalModal', function(e) {
             $('#what').val('');
             $('#measure_of_success').val('');

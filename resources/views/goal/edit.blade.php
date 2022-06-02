@@ -89,5 +89,11 @@
             }
         };
     </script>
+    <script>
+    $('body').popover({
+        selector: '[data-toggle]',
+        trigger: 'hover',
+    });
+    </script>
     @endpush
 </x-side-layout>

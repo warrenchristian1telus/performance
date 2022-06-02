@@ -171,7 +171,7 @@ class GoalController extends Controller
         ->with('tags')        
         ->firstOrFail();
 
-        $goaltypes = GoalType::all(['id', 'name']);
+        $goaltypes = GoalType::all()->toArray();
         $tags = Tag::all(["id","name", "description"])->toArray();
 
         return view('goal.edit', compact("goal", "goaltypes", "tags"));

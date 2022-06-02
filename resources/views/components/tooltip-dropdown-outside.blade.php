@@ -15,7 +15,11 @@ if ($selectedValue != null) {
     $selectedValue = $options[0][$valueField];
 }
 
-$popoverstr = implode($popoverarr, '<br/><br/>');
+if(is_array($popoverarr)) {
+    $popoverstr = implode($popoverarr, '<br/><br/>');
+} else {
+    $popoverstr = $popoverarr;
+}
 @endphp
 <div class='tooltip-dropdown'>
     <label class="mb-0">

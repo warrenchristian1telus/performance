@@ -51,12 +51,13 @@ class GoalController extends Controller
                 array_push($type_desc_arr, $item);
             }
         }
+        $type_desc_str = implode($type_desc_arr, '<br/><br/>');
         
         if ($request->is("goal/current")) {
             $goals = $query->where('status', 'active')
             ->paginate(8);
             $type = 'current';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags', 'type_desc_arr'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags', 'type_desc_str'));
         } else if ($request->is("goal/supervisor")) {
             //$user = Auth::user();
             // TO remove already copied goals.
@@ -65,12 +66,12 @@ class GoalController extends Controller
             /* ->whereNotIn('goals.id', $referencedGoals ) */
             ->paginate(8);
             $type = 'supervisor';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags', 'type_desc_arr'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags', 'type_desc_str'));
         }
         $goals = $query->where('status', '<>', 'active')
         ->paginate(4);
         
-        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags', 'type_desc_arr'));
+        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags', 'type_desc_str'));
     }
 
     /**
@@ -332,8 +333,9 @@ class GoalController extends Controller
                 array_push($type_desc_arr, $item);
             }
         }
+        $type_desc_str = implode($type_desc_arr, '<br/><br/>');
 
-        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'type_desc_arr', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'type_desc_str', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
     }
 
     private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes, &$tagsList) {

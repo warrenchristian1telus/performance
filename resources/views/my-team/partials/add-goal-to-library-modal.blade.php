@@ -13,7 +13,7 @@
             @csrf
             <div class="row">
                 <div class="col-6">
-                    <x-tooltip-dropdown-outside name="goal_type_id" :options="$goaltypes" label="Goal Type" :popoverarr="$type_desc_arr" tooltipField="description" displayField="name" />
+                    <x-tooltip-dropdown-outside name="goal_type_id" :options="$goaltypes" label="Goal Type" popoverstr="{{$type_desc_str}}" tooltipField="description" displayField="name" />
                 </div>
                 <div class="col-6">
                     <x-input label="Goal Title" name="title"  tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />

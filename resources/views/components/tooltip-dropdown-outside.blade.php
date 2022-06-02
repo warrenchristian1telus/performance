@@ -1,4 +1,4 @@
-@props(['label' => '', 'placement' => 'right', 'html' => true, 'options' => [], 'selectedValue' => null, 'valueField' => 'id', 'displayField' => 'text', 'popoverarr' => [], 'tooltipField' => 'tooltip', 'name'] )
+@props(['label' => '', 'placement' => 'right', 'html' => true, 'options' => [], 'selectedValue' => null, 'valueField' => 'id', 'displayField' => 'text', 'popoverstr' => '', 'tooltipField' => 'tooltip', 'name'] )
 @php 
 $selectedDisplay = $options[0][$displayField];
 $selectedTooltip = $options[0][$tooltipField];
@@ -14,12 +14,10 @@ if ($selectedValue != null) {
 } else {
     $selectedValue = $options[0][$valueField];
 }
+$popoverstr = str_replace("&lt;","<",$popoverstr);
+$popoverstr = str_replace("&gt;",">",$popoverstr);
 
-if(is_array($popoverarr)) {
-    $popoverstr = implode($popoverarr, '<br/><br/>');
-} else {
-    $popoverstr = $popoverarr;
-}
+error_log($popoverstr);
 @endphp
 <div class='tooltip-dropdown'>
     <label class="mb-0">

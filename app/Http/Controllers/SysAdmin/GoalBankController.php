@@ -351,7 +351,8 @@ class GoalBankController extends Controller
         return redirect()->back();
     }
 
-    public function editpage(CreateGoalRequest $request, $id) 
+    // public function editpage(CreateGoalRequest $request, $id) 
+    public function editpage(Request $request, $id) 
     {
         $goalTypes = GoalType::all()->toArray();
         $this->getDropdownValues($mandatoryOrSuggested);
@@ -462,7 +463,8 @@ class GoalBankController extends Controller
     
     }
 
-    public function editone(CreateGoalRequest $request, $id) 
+    // public function editone(CreateGoalRequest $request, $id) 
+    public function editone(Request $request, $id) 
     {
         $goalTypes = GoalType::all()->toArray();
         $this->getDropdownValues($mandatoryOrSuggested);

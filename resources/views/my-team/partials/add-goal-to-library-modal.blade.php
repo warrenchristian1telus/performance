@@ -80,7 +80,7 @@
     <script>
 
         $('body').popover({
-            selector: '[data-toggle-body]',
+            selector: '[data-toggle]',
             trigger: 'hover',
         });
         

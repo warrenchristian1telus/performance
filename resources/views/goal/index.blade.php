@@ -154,7 +154,7 @@
     <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
     <script>
         $('body').popover({
-            selector: '[data-toggle-body]',
+            selector: '[data-toggle]',
             trigger: 'hover',
         });
         

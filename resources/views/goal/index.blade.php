@@ -57,7 +57,7 @@
       <div class="modal-header bg-primary">
         <h5 class="modal-title" id="addGoalModalLabel">Create New Goal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true" style="color:white">&times;</span>
         </button>
       </div>
       <div class="modal-body p-4">
@@ -66,11 +66,15 @@
             <div class="row">
                 <div class="col-6">
 
-                    <x-tooltip-dropdown name="goal_type_id" :options="$goaltypes" label="Goal Type" tooltipField="description" displayField="name" />
+                    <x-tooltip-dropdown-outside name="goal_type_id" :options="$goaltypes" label="Goal Type" :popoverarr="$type_desc_arr" tooltipField="description" displayField="name" />
                     </div>
                        <div class="col-6">
                     <x-input label="Goal Title" id="goal_title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
                     <small class="text-danger error-title"></small>
+                    </div>
+                    <div class="col-sm-6">
+                        <x-xdropdown :list="$tags" label="Tags" name="tag_ids[]"  class="tags" tooltipField="description" displayField="name" multiple/>
+                        <small  class="text-danger error-tag_ids"></small>
                     </div>
                        <div class="col-12">
                         <label style="font-weight: normal;">
@@ -92,10 +96,7 @@
                     <x-input label="End Date " class="error-target" type="date" name="target_date"  />
                      <small  class="text-danger error-target_date"></small>
                 </div>
-                <div class="col-sm-6">
-                    <x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
-                    <small  class="text-danger error-tag_ids"></small>
-                </div>
+                
                 <!-- 
                 <div class="col-12">
                     <div class="card mt-3 p-3" icon="fa-question">
@@ -152,10 +153,15 @@
     
     <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
     <script>
-    $('body').popover({
-        selector: '[data-toggle]',
-        trigger: 'hover',
-    });
+        $('body').popover({
+            selector: '[data-toggle-body]',
+            trigger: 'hover',
+        });
+        
+        $('.modal').popover({
+            selector: '[data-toggle-select]',
+            trigger: 'click',
+        });
 /* 
     $('select[name="goal_type_id"]').trigger('change');
 

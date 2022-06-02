@@ -79,9 +79,11 @@ class PastEmployeesController extends Controller
             $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
 
 
-            $query = User::withoutGlobalScopes()
+            // $query = User::withoutGlobalScopes()
+            $query = DB::table('users')
             ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
-            ->wherenotin('employee_status', ['A', 'L', 'P', 'S'])
+            // ->wherenotin('employee_status', ['A', 'L', 'P', 'S'])
+            ->whereNotNull('employee_demo.date_deleted')
             ->when($level0, function($q) use($level0) {return $q->where('organization', $level0->name);})
             ->when($level1, function($q) use($level1) {return $q->where('level1_program', $level1->name);})
             ->when($level2, function($q) use($level2) {return $q->where('level2_division', $level2->name);})
@@ -114,8 +116,27 @@ class PastEmployeesController extends Controller
                 'employee_demo.deptid',
                 'users.id',
             );
-            // ->get();
             return Datatables::of($query)->addIndexColumn()
+            ->addColumn('activeGoals', function($row) {
+                $countActiveGoals = $row->activeGoals()->count() . ' Goals';
+                return $countActiveGoals;
+            })
+            ->addColumn('nextConversationDue', function ($row) {
+                $nextConversation = Conversation::nextConversationDue(User::find($row["id"]));
+                return $nextConversation;
+            })
+            ->addColumn('excused', function ($row) {
+                $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
+                return $yesOrNo;
+            })
+            ->addColumn('shared', function ($row) {
+                $yesOrNo = $row->is_shared ? "Yes" : "No";
+                return $yesOrNo;
+            })
+            ->addColumn('reportees', function($row) {
+                $countReportees = $row->reportees()->count() ?? '0';
+                return $countReportees;
+            })
             ->make(true);
         }
     }

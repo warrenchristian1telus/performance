@@ -1,206 +1,465 @@
 <x-side-layout title="{{ __('Dashboard') }}">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary leading-tight" role="banner">
-            System Administration
-        </h2> 
-		@include('sysadmin.accesspermissions.partials.tabs')
-    </x-slot>
-
-<!-- Modal (Notification detail) -->
-<div class="modal fade" id="notification-modal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-charity-name" id="notification-modal-label">Notification Detail</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            <!-- content will be load here -->                          
-            <div id="notification-modal-body"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-            </div>
+    <div name="header" class="container-header p-n2 "> 
+        <div class="container-fluid">
+            <h3>Access and Permissions</h3>
+            @include('sysadmin.accesspermissions.partials.tabs')
         </div>
     </div>
-</div>
 
-<div class="card">
-	<div class="card-body">
+	<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
+	<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
 
-			<h2 class="mb-4">Notification Log</h2>
 
-		<form id="search-form">
-				@csrf
-			<div class="form-row">
-				<div class="col-md-2 mb-2">
-				<label for="date_sent_from">Date Sent (From)</label>
-				<input type="date" class="form-control" id="date_sent_from" name="date_sent_from" placeholder="" value="">
+	<br>
+	<h6 class="text-bold">Step 1. Select employees to assign</h6>
+	<br>
+
+	<form id="notify-form" action="{{ route('sysadmin.accesspermissions.saveaccess') }}" method="post">
+		@csrf
+		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
+		{{-- <input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value=""> --}}
+
+
+		<!----modal starts here--->
+		<div id="saveAccessModal" class="modal" role='dialog'>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Confirmation</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						    <span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>Are you sure to send out this message ?</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Grant Access</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					</div>
+					
 				</div>
-				<div class="col-md-2 mb-2">
-				<label for="date_sent_to">Date Sent (To)</label>
-				<input type="date" class="form-control" id="date_sent_to" name="date_sent_to" placeholder="" value="">
-				</div>
-				<div class="col-md-2 mb-2">
-				<label for="recipients">Recipients</label>
-					<input type="text" class="form-control" id="recipients" name="recipients" placeholder="name">
-				</div>
-				<div class="col-md-2 mb-2">
-				<label for="alert_format">Alert Format</label>
-				<select  class="form-control @error('alert_format') is-invalid @enderror" id="alert_format" name="alert_format">
-					<option value="">Select Alert Format</option>
-					@foreach ($alert_format_list as $key => $value)
-					  <option value="{{ $key }}" {{ old('alert_format') == $value ?? 'selected'}}>{{ $value }}</option>
-					@endforeach
-				  </select>     
-{{-- 
-				<input type="text" class="form-control" id="alert_format" placeholder="" value="">
- --}}				  
-				</div>
-				<div class="col-md-1 mb-1">
-					<label></label>
-					<button class="btn btn-primary mt-2" type="submit">Search</button>
-				</div>
-				
 			</div>
-
-		</form>
-
-		<p></p>
-		<table class="table table-bordered" id="notificationlog-table">
-			<thead>
-				<tr>
-					<th>Date Sent</th>
-					<th>Subject</th>
-					<th>Recipients</th>
-					<th>Alert Type</th>
-					<th>Alert Format</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-		</table>
-
-	</div>    
-</div>   
-
-
-
-<x-slot name="css">
-    <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-	<style>
-	.text-truncate-30 {
-		white-space: wrap; 
-		overflow: hidden;
-		text-overflow: ellipsis;
-		width: 30em;
-	}
-
-    .text-truncate-10 {
-		white-space: wrap; 
-		overflow: hidden;
-		text-overflow: ellipsis;
-		width: 5em;
-	}
-	#notificationlog-table_filter label {
-		text-align: right !important;
-	}
-</style>
-</x-slot>
-
-<x-slot name="js">
-    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
-    <script>
-
-    var oTable = $('#notificationlog-table').DataTable({
-        retrieve: true,
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '{!! route('sysadmin.accesspermissions') !!}',
-            data: function (d) {
-                d.date_sent_from = $('input[name=date_sent_from]').val();
-                d.date_sent_to = $('input[name=date_sent_to]').val();
-				d.recipients = $('input[name=recipients]').val();
-				d.alert_format = $('select[name=alert_format]').val();
-			}
-        },
-        columns: [
-			{data: 'date_sent', name: 'date_sent'},
-            {data: 'subject', name: 'subject' },
-            {data: 'recipients', name: 'recipients'},
-            {data: 'alert_type_name', name: 'alert_type_name'},
-            {data: 'alert_format_name', name: 'alert_format_name'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-        ],
-		columnDefs: [
-                {
-                    render: function (data, type, full, meta) {
-                        console.log(data);
-                        array_tos = data.split(";");
-                        if (array_tos.length > 5) {
-                            text = '( ' + array_tos.length + ' recipients )';
-                        } else { text = data; }
-                        return '<span>' + text + "</span>";
-                    },
-                    targets: 2
-                },
-
-                {
-                    render: function (data, type, full, meta) {
-                        return '<div data-toggle="tooltip" class="text-truncate-30" title="' + data + '">' + data + "</div>";
-                    },
-                    targets: 1
-                },
-				{
-					render: function (data, type, full, meta) {
-                        return "<small>" + data + "</small>";
-                    },
-                    targets: 0
-				}
-             ]
-    });
+		</div>
+		<!--Modal ends here--->	
 	
-    $('#search-form').on('submit', function(e) {
-        e.preventDefault();
-		 console.log( $('select[name=alert_format]').val() );
-        oTable.draw();
-    });
+		@include('sysadmin.accesspermissions.partials.filter')
 
-      // dispaly Detail in Modal
-      $(document).on("click", ".notification-modal" , function(e) {
-                e.preventDefault();
+        <div class="p-3">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
+                    <a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+                    @include('sysadmin.accesspermissions.partials.recipient-list')
+                </div>
+                <div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
+                    <div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<br>
+		<h6 class="text-bold">Step 2. Select access level and reason for assigning access</h6> 
+		<br>
+		<div class="row  p-3">
+			<div class="col col-4">
+				<label for='accessselect' title='Access Level Tooltip'>Access Level
+					<select name="accessselect" class="form-control" id="accessselect">
+						@foreach($roles as $rid => $desc)
+							<option value = {{ $rid }} > {{ $desc }} </option>
+						@endforeach
+					</select>
+				</label>
+			</div>
+			<div class="col col-8">
+				<x-input id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
+			</div>
+		</div>
 
-          $.ajax({
-            url: '/sysadmin/accesspermissions/detail/' + $(this).attr('value') ,
-            type: 'GET',
-            dataType: 'html'
-          })
-          .done(function(data){
-          
-            //$('notification-modal-label').html('Charity detail');
-            $('#notification-modal-body').html('');    
-            $('#notification-modal-body').html(data); // load response 
-            $('#notification-modal').modal('show');
-            //$('#modal-loader').hide();        // hide ajax loader   
-          })
-          .fail(function(){
-              $('#notification-modal-body').html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-              //$('#modal-loader').hide();
-              $('#notification-modal').modal('show');
-          });
+		<br>
+		<h6 class="text-bold">Step 3. Select ministries to assign to (for HR Administrator only)</h6>
+		<br>
 
-      });
+		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
+
+		@include('sysadmin.accesspermissions.partials.filter2')
+
+		<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
+			<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+
+		<br>
+		<h6 class="text-bold">Step 4. Assign selected employees</h6>
+		<br>
+		<div class="col-md-3 mb-2">
+			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveAccessModal()" name="btn_send" value="btn_send">Assign Employees</button>
+			<button class="btn btn-secondary mt-2">Cancel</button>
+		</div>
+
+	</form>
+
+	<h6 class="m-20">&nbsp;</h6>
+	<h6 class="m-20">&nbsp;</h6>
+	<h6 class="m-20">&nbsp;</h6>
 
 
+	<x-slot name="css">
+		<style>
+
+			.select2-container .select2-selection--single {
+				height: 38px !important;
+			}EmployeeID
+
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 38px !important;
+			}
+
+			.pageLoader{
+				/* background: url(../images/loader.gif) no-repeat center center; */
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				z-index: 9999999;
+				background-color: #ffffff8c;
+
+			}
+
+			.pageLoader .spinner {
+				/* background: url(../images/loader.gif) no-repeat center center; */
+				position: fixed;
+				top: 25%;
+				left: 47%;
+				/* height: 100%;
+				width: 100%; */
+				width: 10em;
+				height: 10em;
+				z-index: 9000000;
+			}
+
+		</style>
+	</x-slot>
+
+	<x-slot name="js">
+
+		<script>
+			let g_matched_employees = {!!json_encode($matched_emp_ids)!!};
+			let g_selected_employees = {!!json_encode($old_selected_emp_ids)!!};
+			let g_selected_orgnodes = {!!json_encode($old_selected_org_nodes)!!};
+			let g_employees_by_org = [];
+
+			function confirmSaveAccessModal(){
+				count = g_selected_employees.length;
+				if (count == 0) {
+					$('#saveAccessModal .modal-body p').html('Are you sure to grant administrator access ?');
+				} else {
+					$('#saveAccessModal .modal-body p').html('Are you sure to grant administrator access to ' + count + ' selected users?');
+				}
+				$('#saveAccessModal').modal();
+			}
+
+			$(document).ready(function(){
+
+				$('#pageLoader').hide();
+
+				$('#notify-form').keydown(function (e) {
+					if (e.keyCode == 13) {
+						e.preventDefault();
+						return false;
+					}
+				});
+
+				$('#notify-form').submit(function() {
+					// console.log('Search Button Clicked');			
+
+					// assign back the selected employees to server
+					var text = JSON.stringify(g_selected_employees);
+					$('#selected_emp_ids').val( text );
+					var text2 = JSON.stringify(g_selected_orgnodes);
+					$('#selected_org_nodes').val( text2 );
+					return true; // return false to cancel form action
+				});
 
 
-    </script>
+				// Tab  -- LIST Page  activate
+				$("#nav-list-tab").on("click", function(e) {
+					table  = $('#employee-list-table').DataTable();
+					table.rows().invalidate().draw();
+				});
 
-</x-slot>
 
+				// Tab  -- TREE activate
+				$("#nav-tree-tab").on("click", function(e) {
+					target = $('#nav-tree'); 
+                    ddnotempty = $('#dd_level0').val() + $('#dd_level1').val() + $('#dd_level2').val() + $('#dd_level3').val() + $('#dd_level4').val();
+                    if(ddnotempty) {
+                        // To do -- ajax called to load the tree
+                        if($.trim($(target).attr('loaded'))=='') {
+                            $.when( 
+                                $.ajax({
+                                    url: '/sysadmin/accesspermissions/org-tree',
+                                    type: 'GET',
+                                    data: $("#notify-form").serialize(),
+                                    dataType: 'html',
+                                    beforeSend: function() {
+                                        $("#tree-loading-spinner").show();                    
+                                    },
+                                    success: function (result) {
+                                        $(target).html(''); 
+                                        $(target).html(result);
+
+                                        $('#nav-tree').attr('loaded','loaded');
+                                    },
+                                    complete: function() {
+                                        $(".tree-loading-spinner").hide();
+                                    },
+                                    error: function () {
+                                        alert("error");
+                                        $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+                                    }
+                                })
+                                
+                            ).then(function( data, textStatus, jqXHR ) {
+                                //alert( jqXHR.status ); // Alerts 200
+                                nodes = $('#accordion-level0 input:checkbox');
+                                redrawTreeCheckboxes();	
+                            }); 
+                        
+                        } else {
+                            redrawTreeCheckboxes();
+                        }
+                    } else {
+						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+					}
+				});
+
+				function redrawTreeCheckboxes() {
+					// redraw the selection 
+					nodes = $('#accordion-level0 input:checkbox');
+					$.each( nodes, function( index, chkbox ) {
+						if (g_employees_by_org.hasOwnProperty(chkbox.value)) {
+							all_emps = g_employees_by_org[ chkbox.value ].map( function(x) {return x.employee_id} );
+							b = all_emps.every(v=> g_selected_employees.indexOf(v) !== -1);
+							if (all_emps.every(v=> g_selected_employees.indexOf(v) !== -1)) {
+								$(chkbox).prop('checked', true);
+								$(chkbox).prop("indeterminate", false);
+							} else if (all_emps.some(v=> g_selected_employees.indexOf(v) !== -1)) {
+								$(chkbox).prop('checked', false);
+								$(chkbox).prop("indeterminate", true);
+							} else {
+								$(chkbox).prop('checked', false);
+								$(chkbox).prop("indeterminate", false);
+							}
+						} 
+					});
+
+					// reset checkbox state
+					reverse_list = nodes.get().reverse();
+					$.each( reverse_list, function( index, chkbox ) {
+						if (g_employees_by_org.hasOwnProperty(chkbox.value)) {
+							pid = $(chkbox).attr('pid');
+							do {
+								value = '#orgCheck' + pid;
+								toggle_indeterminate( value );
+								pid = $('#orgCheck' + pid).attr('pid');    
+							} 
+							while (pid);
+						}
+					});
+				}
+
+				function eredrawTreeCheckboxes() {
+					// redraw the selection 
+					//console.log('eredraw triggered');
+					enodes = $('#eaccordion-level0 input:checkbox');
+					$.each( enodes, function( index, chkbox ) {
+						if (eg_employees_by_org.hasOwnProperty(chkbox.value)) {
+							eall_emps = eg_employees_by_org[ chkbox.value ].map( function(x) {return x.employee_id} );
+							b = eall_emps.every(v=> g_selected_orgnodes.indexOf(v) !== -1);
+
+							if (eall_emps.every(v=> g_selected_orgnodes.indexOf(v) !== -1)) {
+								$(chkbox).prop('checked', true);
+								$(chkbox).prop("indeterminate", false);
+							} else if (eall_emps.some(v=> g_selected_orgnodes.indexOf(v) !== -1)) {
+								$(chkbox).prop('checked', false);
+								$(chkbox).prop("indeterminate", true);
+							} else {
+								$(chkbox).prop('checked', false);
+								$(chkbox).prop("indeterminate", false);
+							}
+						} else {
+							if ( $(chkbox).attr('name') == 'userCheck[]') {
+								if (g_selected_orgnodes.includes(chkbox.value)) {
+									$(chkbox).prop('checked', true);
+								} else {
+									$(chkbox).prop('checked', false);
+								}
+							}
+						}
+					});
+
+					// reset checkbox state
+					ereverse_list = enodes.get().reverse();
+					$.each( ereverse_list, function( index, chkbox ) {
+						if (eg_employees_by_org.hasOwnProperty(chkbox.value)) {
+							pid = $(chkbox).attr('pid');
+							do {
+								value = '#eorgCheck' + pid;
+								etoggle_indeterminate( value );
+								pid = $('#eorgCheck' + pid).attr('pid');    
+							} 
+							while (pid);
+						}
+					});
+
+				}
+
+				// Set parent checkbox
+				function toggle_indeterminate( prev_input ) {
+					// Loop to checked the child
+					var c_indeterminated = 0;
+					var c_checked = 0;
+					var c_unchecked = 0;
+					prev_location = $(prev_input).parent().attr('href');
+					nodes = $(prev_location).find("input:checkbox[name='orgCheck[]']");
+					$.each( nodes, function( index, chkbox ) {
+						if (chkbox.checked) {
+							c_checked++;
+						} else if ( chkbox.indeterminate ) {
+							c_indeterminated++;
+						} else {
+							c_unchecked++;
+						}
+					});
+					
+					if (c_indeterminated > 0) {
+						$(prev_input).prop('checked', false);
+						$(prev_input).prop("indeterminate", true);
+					} else if (c_checked > 0 && c_unchecked > 0) {
+						$(prev_input).prop('checked', false);
+						$(prev_input).prop("indeterminate", true);
+					} else if (c_checked > 0 && c_unchecked == 0 ) {
+						$(prev_input).prop('checked', true);
+						$(prev_input).prop("indeterminate", false);
+					} else {
+						$(prev_input).prop('checked', false);
+						$(prev_input).prop("indeterminate", false);
+					}
+				}
+
+				// Set parent checkbox
+				function etoggle_indeterminate( prev_input ) {
+					// Loop to checked the child
+					var c_indeterminated = 0;
+					var c_checked = 0;
+					var c_unchecked = 0;
+					prev_location = $(prev_input).parent().attr('href');
+					nodes = $(prev_location).find("input:checkbox[name='eorgCheck[]']");
+					$.each( nodes, function( index, chkbox ) {
+						if (chkbox.checked) {
+							c_checked++;
+						} else if ( chkbox.indeterminate ) {
+							c_indeterminated++;
+						} else {
+							c_unchecked++;
+						}
+					});
+					
+					if (c_indeterminated > 0) {
+						$(prev_input).prop('checked', false);
+						$(prev_input).prop("indeterminate", true);
+					} else if (c_checked > 0 && c_unchecked > 0) {
+						$(prev_input).prop('checked', false);
+						$(prev_input).prop("indeterminate", true);
+					} else if (c_checked > 0 && c_unchecked == 0 ) {
+						$(prev_input).prop('checked', true);
+						$(prev_input).prop("indeterminate", false);
+					} else {
+						$(prev_input).prop('checked', false);
+						$(prev_input).prop("indeterminate", false);
+					}
+				}
+
+				$('#ebtn_search').click(function(e) {
+					target = $('#enav-tree'); 
+					ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
+                    if(ddnotempty) {
+						// To do -- ajax called to load the tree
+						$.when( 
+							$.ajax({
+								url: '/sysadmin/accesspermissions/eorg-tree',
+								// url: $url,
+								type: 'GET',
+								data: $("#notify-form").serialize(),
+								dataType: 'html',
+
+								beforeSend: function() {
+									$("#etree-loading-spinner").show();                    
+								},
+
+								success: function (result) {
+									$('#enav-tree').html(''); 
+									$('#enav-tree').html(result);
+									$('#enav-tree').attr('loaded','loaded');
+								},
+
+								complete: function() {
+									$("#etree-loading-spinner").hide();
+								},
+
+								error: function () {
+									alert("error");
+									$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+								}
+							})
+							
+						).then(function( data, textStatus, jqXHR ) {
+							//alert( jqXHR.status ); // Alerts 200
+							enodes = $('#eaccordion-level0 input:checkbox');
+							eredrawTreeCheckboxes();	
+						}); 
+					} else {
+						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+					};
+				});
+
+			});
+
+			$(window).on('beforeunload', function(){
+				$('#pageLoader').show();
+			});
+
+			$(window).resize(function(){
+				location.reload();
+				return;
+			});
+
+			// Model -- Confirmation Box
+
+			// var modalConfirm = function(callback) {
+			// 	$("#btn-confirm").on("click", function(){
+			// 		$("#mi-modal").modal('show');
+			// 	});
+			// 	$("#modal-btn-si").on("click", function(){
+			// 		callback(true);
+			// 		$("#mi-modal").modal('hide');
+			// 	});
+				
+			// 	$("#modal-btn-no").on("click", function(){
+			// 		callback(false);
+			// 		$("#mi-modal").modal('hide');
+			// 	});
+			// };
+
+		</script>
+	</x-slot>
 
 </x-side-layout>

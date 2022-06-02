@@ -829,7 +829,7 @@ class GoalBankController extends Controller
             ->with('success', 'Add new goal successful.');
     }
 
-    public function updategoal(Request $request) 
+    public function updategoal(CreateGoalRequest $request) 
     {
         $selected_org_nodes = $request->selected_org_nodes ? json_decode($request->selected_org_nodes) : [];
         $current_user = Auth::id();
@@ -875,7 +875,7 @@ class GoalBankController extends Controller
 
     }
 
-    public function updategoalone(Request $request) 
+    public function updategoalone(CreateGoalRequest $request) 
     {
         $selected_emp_ids = $request->selected_emp_ids ? json_decode($request->selected_emp_ids) : [];
         $request->userCheck = $selected_emp_ids;

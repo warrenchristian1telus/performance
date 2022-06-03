@@ -12,8 +12,13 @@
             @method('PUT')
             <div class="row">
                 <div class="col-12">
-                    <x-tooltip-dropdown name="goal_type_id" :options="$goaltypes" label="Goal Type" tooltipField="description" displayField="name" :selectedValue="$goal->goal_type_id" />
+                    <x-tooltip-dropdown-outside name="goal_type_id" :options="$goaltypes" label="Goal Type" popoverstr="{{$type_desc_str}}" tooltipField="description" displayField="name" />
                     <x-input label="Goal Title" name="title" :value="$goal->title"/>
+                </div>                                
+                <div class="col-12">
+                    <x-xdropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goal->tags->toArray(), 'id')" class="tags" multiple/>
+                </div>
+                <div class="col-12">
                     <!-- <x-textarea id="what" label="What" name="what" :value="$goal->what" /> -->
                     <label for='what'>Description</label>
                     <textarea id="what" name="what" :value="$goal->what">{!!$goal->what!!}</textarea>
@@ -26,9 +31,6 @@
                 </div>
                 <div class="col-sm-6">
                     <x-input label="End Date" type="date" name="target_date" :value="$goal->target_date ? $goal->target_date->format('Y-m-d') : ''" />
-                </div>
-                <div class="col-sm-6">
-                    <x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goal->tags->toArray(), 'id')" class="tags" multiple/>
                 </div>
                 <div class="col-12 text-center mb-3">
                     <x-button type="submit" class="btn-lg"> Save </x-button>
@@ -86,6 +88,11 @@
                 return "If you continue you will lose any unsaved information";
             }
         };
+        
+        $('body').popover({
+            selector: '[data-toggle-select]',
+            trigger: 'click',
+        });
     </script>
     @endpush
 </x-side-layout>

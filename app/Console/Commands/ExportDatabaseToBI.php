@@ -25,7 +25,7 @@ class ExportDatabaseToBI extends Command
         ['name' => 'goals_shared_with',             'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'goal_comments',                 'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'goal_tags',                     'delta' => 'updated_at',    'hidden' => null ],
-        // ['name' => 'goal_types',                    'delta' => 'updated_at',    'hidden' => null ],
+        ['name' => 'goal_types',                    'delta' => 'updated_at',    'hidden' => null ],
         // ['name' => 'job_sched_audit',               'delta' => null,            'hidden' => null ],
         // ['name' => 'linked_goals',                  'delta' => null,            'hidden' => null ],
         // ['name' => 'migrations',                    'delta' => null,            'hidden' => null ],

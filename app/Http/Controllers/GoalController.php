@@ -43,11 +43,21 @@ class GoalController extends Controller
         ->with('user')
         ->with('goalType');
         $type = 'past';
+        
+        $type_desc_arr = array();
+        foreach($goaltypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+                array_push($type_desc_arr, $item);
+            }
+        }
+        $type_desc_str = implode('<br/><br/>',$type_desc_arr);
+        
         if ($request->is("goal/current")) {
             $goals = $query->where('status', 'active')
             ->paginate(8);
             $type = 'current';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags', 'type_desc_str'));
         } else if ($request->is("goal/supervisor")) {
             //$user = Auth::user();
             // TO remove already copied goals.
@@ -56,11 +66,12 @@ class GoalController extends Controller
             /* ->whereNotIn('goals.id', $referencedGoals ) */
             ->paginate(8);
             $type = 'supervisor';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags', 'type_desc_str'));
         }
         $goals = $query->where('status', '<>', 'active')
         ->paginate(4);
-        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags'));
+        
+        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags', 'type_desc_str'));
     }
 
     /**
@@ -83,13 +94,18 @@ class GoalController extends Controller
     public function store(CreateGoalRequest $request)
     {
         $input = $request->validated();
-
+        $tags = '';
         $input['user_id'] = Auth::id();
-        $tags = $input['tag_ids'];
-        unset($input['tag_ids']);
+        
+        if(isset($input['tag_ids'])) {
+            $tags = $input['tag_ids'];
+            unset($input['tag_ids']);
+        }
 
         $goal = Goal::create($input);
-        $goal->tags()->sync($tags);
+        if ($tags != '') {
+            $goal->tags()->sync($tags);
+        }
         return response()->json(['success' => true, 'message' => 'Goal Created successfully']);
     }
 
@@ -160,10 +176,19 @@ class GoalController extends Controller
         ->with('tags')        
         ->firstOrFail();
 
-        $goaltypes = GoalType::all(['id', 'name']);
+        $goaltypes = GoalType::all()->toArray();
         $tags = Tag::all(["id","name", "description"])->toArray();
+        
+        $type_desc_arr = array();
+        foreach($goaltypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+                array_push($type_desc_arr, $item);
+            }
+        }
+        $type_desc_str = implode('<br/><br/>',$type_desc_arr);
 
-        return view('goal.edit', compact("goal", "goaltypes", "tags"));
+        return view('goal.edit', compact("goal", "goaltypes", "type_desc_str", "tags"));
         // return redirect()->route('goal.edit', $id);
     }
 
@@ -315,8 +340,16 @@ class GoalController extends Controller
         // dd($compacted);
         // $merged = array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData);
         // dd($merged);
+        $type_desc_arr = array();
+        foreach($goalTypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+                array_push($type_desc_arr, $item);
+            }
+        }
+        $type_desc_str = implode('<br/><br/>',$type_desc_arr);
 
-        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'type_desc_str', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
     }
 
     private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes, &$tagsList) {

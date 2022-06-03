@@ -48,7 +48,17 @@ class MyTeamController extends Controller
         $showSignoff = false;
         $myEmpTable = $myEmployeesDataTable->html();
         $sharedEmpTable = $sharedEmployeeDataTable->html();
-        return view('my-team/my-employees',compact('goals', 'tags', 'employees', 'goaltypes', 'conversationTopics', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons', 'showSignoff'));
+        
+        $type_desc_arr = array();
+        foreach($goaltypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+                array_push($type_desc_arr, $item);
+            }
+        }
+        $type_desc_str = implode('<br/><br/>',$type_desc_arr);
+        
+        return view('my-team/my-employees',compact('goals', 'tags', 'employees', 'goaltypes', 'type_desc_str', 'conversationTopics', 'type', 'myEmpTable', 'sharedEmpTable', 'eReasons', 'showSignoff'));
         // return $myEmployeesDataTable->render('my-team/my-employees',compact('goals', 'employees', 'goaltypes', 'conversationTopics', 'participants', 'type'));
     }
 

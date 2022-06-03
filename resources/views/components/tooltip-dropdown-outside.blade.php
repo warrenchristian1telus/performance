@@ -17,7 +17,6 @@ if ($selectedValue != null) {
 $popoverstr = str_replace("&lt;","<",$popoverstr);
 $popoverstr = str_replace("&gt;",">",$popoverstr);
 
-error_log($popoverstr);
 @endphp
 <div class='tooltip-dropdown'>
     <label class="mb-0">

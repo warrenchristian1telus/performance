@@ -80,7 +80,7 @@ class GetODSEmployeeDemographics extends Command
           $this->info( 'Last Pull Date not found.  Using ' . $last_cutoff_time);
         }
       }
- 
+
       $top = 1000;
       $skip = 0;
       $demodata = Http::acceptJson()

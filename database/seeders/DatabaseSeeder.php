@@ -14,32 +14,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+
+        // Seeder for Prod Environment
         $this->call(UserRoleSeeder::class);
-        $this->call(UserTableSeeder::class);
+        $this->call(UserRoleSeederAdmins::class);
         $this->call(GoalTypeSeeder::class);
-        $this->call(SupervisorGoalSeeder::class);
-        $this->call(GoalBankSeeder::class);
         $this->call(TopicSeeder::class);
-        // $this->call(ParticipantSeeder::class);
-        $this->call(AdditionalUsersTableSeeder::class);
-        $this->call(ConversationSeeder::class);
+        $this->call(TagSeeder::class);
         $this->call(ExcusedReasonSeeder::class);
         $this->call(AccessLevelsSeeder::class);
-        // Items below are for user testing in Test environment
-        // $this->call(UserTableSeeder_Additional_20220125::class);
-        // $this->call(SupervisorGoalSeeder_Additional_20220125::class);
-        // $this->call(ConversationSeeder_Additional_20220125::class);
-        // $this->call(UserTableSeeder_Additional_20220126::class);
-        // $this->call(SupervisorGoalSeeder_Additional_20220126::class);
-        // $this->call(ConversationSeeder_Additional_20220126::class);
-        $this->call(UserTableSeeder_Additional_20220307::class);
-        $this->call(SupervisorGoalSeeder_Additional_20220307::class);
-        $this->call(ConversationSeeder_Additional_20220307::class);
-        $this->call(UserTableSeeder_Additional_20220308::class);
-        $this->call(SupervisorGoalSeeder_Additional_20220308::class);
-        $this->call(ConversationSeeder_Additional_20220308::class);
-        // Generic Template
+        $this->call(RoleSeeder_Add_Longnames::class);
+
+
+        // Seeder for Test Environment
+        // Items below need to be removed before Go-Live
+        $this->call(UserTableSeeder::class);
+        $this->call(UserTableSeederAdmins::class);
+        $this->call(SupervisorGoalSeeder::class);
+        $this->call(GoalBankSeeder::class);
+        $this->call(AdditionalUsersTableSeeder::class);
+        $this->call(ConversationSeeder::class);
         $this->call(GenericTemplateSeeder::class);
+        
     }
 }

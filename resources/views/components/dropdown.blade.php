@@ -7,7 +7,7 @@
             <option value="">{{$blankOptionText}}</option>
         @endif
         @foreach ($list as $item)
-            <option value="{{ $item['id'] }}" {{ ($item['selected'] ?? '') || ( $selected !== null && $item['id']==$selected) ? 'selected' : ''}}>
+            <option value="{{ $item['id'] }}" {{ ($item['selected'] ?? '') || $selected != null && ($item['id'] == $selected || (is_array($selected) && (in_array($item['id'], $selected)))) ? 'selected': '' }}>
                 {{ $item['name'] }}
             </option>
         @endforeach

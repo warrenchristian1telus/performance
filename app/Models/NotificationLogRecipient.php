@@ -13,6 +13,7 @@ class NotificationLogRecipient extends Model
     protected $fillable = [
         'notification_log_id',
         'recipient_id',
+        'recipient_type',
     ];
 
     public function notification_log() {

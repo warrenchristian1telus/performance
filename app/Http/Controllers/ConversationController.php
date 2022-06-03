@@ -10,6 +10,7 @@ use App\Models\Conversation;
 use App\Models\ConversationParticipant;
 use App\Models\ConversationTopic;
 use App\Models\Participant;
+use App\Models\SharedProfile;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,7 @@ class ConversationController extends Controller
         $supervisorId = (!$supervisor) ? null : $supervisor->id;
         $conversationMessage = Conversation::warningMessage();
         $conversationTopics = ConversationTopic::all();
-        $participants = Participant::all();
+        // $participants = Participant::all();
         $query = Conversation::with('conversationParticipants');
         $type = 'upcoming';
         if ($request->is('conversation/past') || $request->is('my-team/conversations/past')) {
@@ -84,10 +85,12 @@ class ConversationController extends Controller
             // With My Team
             $myTeamQuery->where('user_id', '<>', $supervisorId);
             // With my Supervisor
-            $query->where(function($query) use ($supervisorId) {
-                $query->where('user_id', $supervisorId)->
-                orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
-                    $query->where('participant_id', $supervisorId);
+            $sharedSupervisorIds = SharedProfile::where('shared_id', Auth::id())->with('sharedWithUser')->get()->pluck('shared_with')->toArray();
+            array_push($sharedSupervisorIds, $supervisorId);
+            $query->where(function($query) use ($sharedSupervisorIds) {
+                $query->whereIn('user_id', $sharedSupervisorIds)->
+                orWhereHas('conversationParticipants', function ($query) use ($sharedSupervisorIds) {
+                    $query->whereIn('participant_id', $sharedSupervisorIds);
                 });
             });
             $type = 'past';
@@ -144,10 +147,12 @@ class ConversationController extends Controller
             });
             
             // get Conversations with my supervisor
-            $query->where(function($query) use ($supervisorId) {
-                $query->where('user_id', $supervisorId)->
-                orWhereHas('conversationParticipants', function ($query) use ($supervisorId) {
-                    $query->where('participant_id', $supervisorId);
+            $sharedSupervisorIds = SharedProfile::where('shared_id', Auth::id())->with('sharedWithUser')->get()->pluck('shared_with')->toArray();
+            array_push($sharedSupervisorIds, $supervisorId);
+            $query->where(function($query) use ($sharedSupervisorIds) {
+                $query->whereIn('user_id', $sharedSupervisorIds)->
+                orWhereHas('conversationParticipants', function ($query) use ($sharedSupervisorIds) {
+                    $query->whereIn('participant_id', $sharedSupervisorIds);
                 });
             });
             
@@ -168,7 +173,7 @@ class ConversationController extends Controller
         } else {
             $textAboveFilter = 'Below are all open conversations between you and your supervisor, and you and your direct reports. Use the filters to search for open conversations by employe name and conversation type. Conversations marked with an "unlocked" icon have been unlocked because of a special request made to your system administrator.';
         }
-        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'participants', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter'));
+        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter'));
     }
 
     /**
@@ -234,11 +239,12 @@ class ConversationController extends Controller
         if(request()->ajax()){
             return response()->json(['success' => true, 'message' => 'Conversation Created successfully']);
         }else{
-            if ($conversation->is_with_supervisor) {
+            return redirect()->route('conversation.upcoming');
+            /* if ($conversation->is_with_supervisor) {
                 return redirect()->route('conversation.upcoming');
             } else {
                 return redirect()->route('my-team.conversations.upcoming');
-            }
+            } */
         }
     }
 
@@ -316,6 +322,10 @@ class ConversationController extends Controller
             $conversation->empl_agree2 = $request->check_two;
             $conversation->empl_agree3 = $request->check_three;
             $conversation->team_member_agreement = $request->team_member_agreement;
+
+            if (!$conversation->initial_signoff) {
+                $conversation->initial_signoff = Carbon::now();
+            }
         }
         $conversation->update();
 
@@ -355,7 +365,8 @@ class ConversationController extends Controller
         $allTemplates = ConversationTopic::all();
         $participants = session()->has('original-auth-id') ? User::where('id', Auth::id())->get() : $user->reportees()->get();
         $reportingManager = $user->reportingManager()->get();
-        $participants = $participants->toBase()->merge($reportingManager);
+        $sharedProfile = SharedProfile::where('shared_with', Auth::id())->with('sharedUser')->get()->pluck('sharedUser');
+        $participants = $participants->toBase()->merge($reportingManager)->merge($sharedProfile);
         return view('conversation.partials.template-detail-modal-body', compact('template','allTemplates','participants','reportingManager'));
     }
 }

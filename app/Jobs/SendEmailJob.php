@@ -61,6 +61,9 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
+
+         echo 'Queued Job Id:'. $this->job->getJobId() . ' ';
+
         //
         $sendMail = new SendMail();
         $sendMail->toRecipients = $this->toRecipients;
@@ -79,5 +82,8 @@ class SendEmailJob implements ShouldQueue
         } else {
             $response = $sendMail->sendMailWithoutGenericTemplate();
         }
+
+        //return $this->job->getJobId();
+
     }
 }

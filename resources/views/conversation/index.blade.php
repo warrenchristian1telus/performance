@@ -95,6 +95,7 @@
                             {{ $c->topic->name }}
                         </h6>
                         <span class="mr-2">
+                            <i class="fa fa-{{ $c->is_locked ? 'lock' : 'unlock'}}"></i>
                             With
                             @foreach ($c->conversationParticipants as $p)
                                 {{$p->participant->name}}&nbsp;
@@ -127,6 +128,7 @@
                             {{ $c->topic->name }}
                         </h6>
                         <span class="mr-2">
+                            <i class="fa fa-{{ $c->is_locked ? 'lock' : 'unlock'}}"></i>
                             With
                             @foreach ($c->conversationParticipants as $p)
                                 {{$p->participant->name}}&nbsp;
@@ -157,14 +159,15 @@
         </div>
     </div>
 
-    @include('conversation.partials.add-conversation-modal')
     @include('conversation.partials.view-conversation-modal')
 
         @include('conversation.partials.delete-hidden-form')
 
     <x-slot name="js">
         <script>
-            $("#participant_id").select2();
+            $("#participant_id").select2({
+                maximumSelectionLength: 1
+            });
             @php
                 $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
                 $user = App\Models\User::find($authId);
@@ -174,7 +177,7 @@
             var conversation_id = 0;
             var toReloadPage = false;
             $('#conv_participant_edit').select2({
-
+                maximumSelectionLength: 2,
                 ajax: {
                     url: '/participant'
                     , dataType: 'json'
@@ -487,6 +490,10 @@
                         $('#info_comment5_edit').val(result.info_comment5);
                         $('#team_member_agreement').prop('checked', result.team_member_agreement ? true : false);
                         $('#team_member_agreement_2').prop('checked', result.team_member_agreement ? true : false);
+
+                        $("#locked-message").addClass("d-none");
+                        $("#unsignoff-form-block").show();
+                        $("#signoff-form-block").show();
                         user1 = result.conversation_participants.find((p) => p.participant_id === currentUser);
                         user2 = result.conversation_participants.find((p) => p.participant_id !== currentUser);
                         let isNotThirdPerson = true;
@@ -605,6 +612,13 @@
                             $('#info_to_capture').removeClass('d-none');
                         }else {
                             $('#info_to_capture').addClass('d-none');
+                        }
+
+                        //Is Locked
+                        if (result.is_locked) {
+                            $("#locked-message").removeClass("d-none");
+                            $("#unsignoff-form-block").hide();
+                            $("#signoff-form-block").hide();
                         }
 
                         //Additional Info to Capture

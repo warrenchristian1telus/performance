@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmployeeDemo extends Model
 {
+    // Use \Awobaz\Compoships\Compoships;
 
     public $table = 'employee_demo';
 
@@ -40,6 +41,10 @@ class EmployeeDemo extends Model
         'date_updated',
         'date_created',
     ];
+
+    public function users() {
+        return $this->belongsToMany('App/Model/User', 'id', 'employee_id');
+    }
 
 //     protected function setKeysForSaveQuery(Builder $query)
 //     {

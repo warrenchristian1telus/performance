@@ -91,8 +91,12 @@ class SyncUserProfile extends Command
 
         $employees = EmployeeDemo::whereNotIn('guid', ['', ' '])
             ->whereNotIn('employee_email', ['', ' '])
-            ->whereNotNull('date_updated')
-            ->where('date_updated', '>=', $last_sync_at )
+            ->where(function ($query) use ($last_sync_at) {
+                $query->whereNull('date_updated');
+                $query->orWhere('date_updated', '>=', $last_sync_at );
+            })
+            //->whereNotNull('date_updated')
+            //->where('date_updated', '>=', $last_sync_at )
             //->whereIn('employee_id',['105823', '060061', '107653',
             //'115637','131116','139238','145894','146113','152843','152921','163102'] )
             ->orderBy('employee_id')
@@ -102,12 +106,13 @@ class SyncUserProfile extends Command
                 'employee_first_name', 'employee_last_name', 'job_indicator',
                 'position_start_date', 'supervisor_emplid', 'date_updated', 'date_deleted']);
 
+
         // Step 1 : Create and Update User Profile (no update on reporting to)
         $this->info( now() );
         $this->info('Step 1 - Create and Update User Profile (but no update on reporting to)' );
 
 
-        $password = Hash::make('mywatchdog');
+        $password = Hash::make(env('SYNC_USER_PROFILE_SECRET'));
         foreach ($employees as $employee) {
 
           //$reporting_to = $this->getReportingUserId($employee);
@@ -204,6 +209,17 @@ class SyncUserProfile extends Command
         $users = User::whereIn('guid',function($query) { 
                     $query->select('guid')->from('employee_demo')->whereNotNull('date_deleted');
             })->update(['acctlock'=>true, 'last_sync_at' => $new_sync_at]);
+
+            
+        // Step 4 : Lock all users except pivot run users
+        $this->info( now() );        
+        $this->info('Step 4 - Lock Out Users except Pivot run based on organization');
+
+        $users = User::whereNotNull('guid')
+            ->whereNotIn('guid',function($query) { 
+                $query->select('guid')->from('employee_demo')
+                    ->whereIn('organization', ['BC Public Service Agency']);
+        })->update(['acctlock'=>true, 'last_sync_at' => $new_sync_at]);
 
         echo now();
     }

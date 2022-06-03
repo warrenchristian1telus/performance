@@ -18,7 +18,9 @@ class SendMail
 {
 
     //public $toAddresses;
-    public $toRecipients;       /* array of user id */
+    public $toRecipients;       /* array of user id (Model: User) */
+    public $ccRecipients;       /* array of user id (Model: User) */
+    public $bccRecipients;      /* array of user id */
     public $sender_id;          /* user id (Model: User) */
 
     public $subject;            /* String */
@@ -50,6 +52,8 @@ class SendMail
     {
         //$this->toAddresses = [];
         $this->toRecipients = [];
+        $this->ccRecipients =[];
+        $this->bccRecipients = [];
         $this->bindvariables = [];
         $this->bodyContentType = 'html';
         $this->saveToSentItems = true;
@@ -108,19 +112,42 @@ class SendMail
         $graph = new Graph();
         $graph->setAccessToken($accessToken);
 
-        $emailAddresses = User::whereIn('id', $this->toRecipients)->pluck('email');
-
-        $attendees = [];
-        foreach ($emailAddresses as $emailAddress) {
-            array_push($attendees, [
-                // Add the email address in the emailAddress property
-                'emailAddress' => [
-                    'address' => $emailAddress,
-                ],
-            ]);
-        }
-
-        if (!App::environment(['production'])) {
+        $a_toRecipients = User::whereIn('id', $this->toRecipients)->pluck('email');
+        $a_ccRecipients = User::whereIn('id', $this->ccRecipients)->pluck('email');
+        $a_bccRecipients = User::whereIn('id', $this->bccRecipients)->pluck('email');
+        $g_toRecipients = [];
+        $g_ccRecipients = [];
+        $g_bccRecipients = [];
+        
+        if (App::environment(['production'])) {
+            // TO
+            foreach ($a_toRecipients as $emailAddress) {
+                array_push($g_toRecipients, [
+                    // Add the email address in the emailAddress property
+                    'emailAddress' => [
+                        'address' => $emailAddress,
+                    ],
+                ]);
+            }
+            // CC
+            foreach ($a_ccRecipients as $emailAddress) {
+                array_push($g_ccRecipients, [
+                    // Add the email address in the emailAddress property
+                    'emailAddress' => [
+                        'address' => $emailAddress,
+                    ],
+                ]);
+            }
+            // Bcc
+            foreach ($a_bccRecipients as $emailAddress) {
+                array_push($g_bccRecipients, [
+                    // Add the email address in the emailAddress property
+                    'emailAddress' => [
+                        'address' => $emailAddress,
+                    ],
+                ]);
+            }
+        } else {
 
             if (App::environment(['local'])) {
                 $this->SendToTestEmail = "jpoon@extest.gov.bc.ca";
@@ -132,12 +159,14 @@ class SendMail
             $this->body = "<h4>Note: The following message is the content was sent out from Performance application (Region: ". App::environment() .")</h4>".      
                           "<hr>".
                           "<p><b>From: </b>". $sender->email . "</p>".
-                          "<p><b>To: </b>". implode('; ', $emailAddresses->toArray() ). "</p>".
+                          "<p><b>To: </b>". implode('; ', $a_toRecipients->toArray() ). "</p>".
+                          "<p><b>CC: </b>". implode('; ', $a_ccRecipients->toArray() ). "</p>".
+                          "<p><b>Bcc: </b>". implode('; ', $a_bccRecipients->toArray() ). "</p>".
                           "<p><b>Subject: </b>" . $this->subject . "</p>".
                           "<p><b>Body : </b>" . $this->body . "</p>".
                           "<hr>";
             $this->subject = "Performance Application -- message sent out from (Region: ". App::environment() .") ";
-            $attendees = [ 
+            $g_toRecipients = [ 
                 [
                     'emailAddress' => [
                     'address' => $this->SendToTestEmail,    /* default account for testing purpose */
@@ -146,7 +175,7 @@ class SendMail
             ];
         }
 
-        // Build message
+        // Build Graph Message
         $newMessage = [
             "message" => [
                 "subject" => $this->subject,
@@ -154,7 +183,9 @@ class SendMail
                     "contentType" => $this->bodyContentType,
                     "content" => $this->body,
                 ],
-                'toRecipients' => $attendees
+                'toRecipients' => $g_toRecipients,
+                'ccRecipients' => $g_ccRecipients,
+                'bccRecipients' => $g_bccRecipients
             ],
             "saveToSentItems" => $this->saveToSentItems ? "true" : "false",
         ];
@@ -200,7 +231,19 @@ class SendMail
             foreach ($this->toRecipients as $recipient_id) {
                 $notification_log->recipients()->updateOrCreate([
                     'recipient_id' => $recipient_id,
-                ]);
+                ],['recipient_type' => 1]);
+            }
+
+            foreach ($this->ccRecipients as $recipient_id) {
+                $notification_log->recipients()->updateOrCreate([
+                    'recipient_id' => $recipient_id,
+                ],['recipient_type' => 2]);
+            }
+
+            foreach ($this->bccRecipients as $recipient_id) {
+                $notification_log->recipients()->updateOrCreate([
+                    'recipient_id' => $recipient_id,
+                ],['recipient_type' => 3]);
             }
 
        }   
@@ -225,7 +268,6 @@ class SendMail
                     'grant_type' => 'client_credentials',
                 ] 
             ]);
-
 
             $contents = $response->getBody()->getContents();
             $token_array = json_decode($contents, true);

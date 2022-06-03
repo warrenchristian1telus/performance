@@ -1,7 +1,7 @@
 <x-side-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $goal['title'] }}
+		{{ $goal['title'] }}
             @if(!$disableEdit && $goal->user_id === Auth::Id())
             <x-button icon="edit" :href="route('goal.edit', $goal->id)">Edit</x-button>
             @endif
@@ -74,14 +74,28 @@
                                 <x-profile-pic></x-profile-pic>
                                 <div class="border flex-fill p-2 rounded">
                                     <b>{{$comment->user->name}}</b> on {{$comment->created_at->format('M d, Y H:i A')}}<br>
-                                    {!!$comment->comment!!}
+                                    <div class="comment-text">
+                                        {!! (!$comment->trashed()) ? $comment->comment : '<i>Comment is deleted.</i>' !!}
+                                    </div>
+                                    <x-button class="btn edit-save d-none" action="submit" :data-comment-id="$comment->id" size="sm">Save</x-button>
+                                    <div>
+                                        @if($comment->canBeEdited())<x-button icon='edit' style="link" class="comment-edit" :data-comment-id="$comment->id" size="sm">Edit</x-button>@endif
+                                        @if(!$comment->trashed() && $comment->canBeDeleted())<x-button icon='trash' style="link" class="comment-delete" :data-comment-id="$comment->id" size="sm">Delete</x-button>@endif
+                                    </div>
                                     <div>
                                         @foreach($comment->replies as $reply)
                                         <div class="card mt-2 p-2 d-flex flex-row bg-light">
                                             <x-profile-pic></x-profile-pic>
                                             <div class="flex-fill">
                                                 <b>{{$reply->user->name}}</b> on {{$reply->created_at->format('M d, Y H:i A')}}<br>
-                                                {!!$reply->comment!!}
+                                                <div class="comment-text">
+                                                    {!! (!$reply->trashed()) ? $reply->comment : '<i>Comment is deleted.</i>' !!}
+                                                </div>
+                                                <x-button class="btn edit-save d-none" action="submit" :data-comment-id="$reply->id" size="sm">Save</x-button>
+                                                <div>
+                                                    @if($reply->canBeEdited())<x-button icon='edit' style="link" class="comment-edit" :data-comment-id="$reply->id" size="sm">Edit</x-button>@endif
+                                                    @if(!$reply->trashed() && $reply->canBeDeleted())<x-button icon='trash' style="link" class="comment-delete" :data-comment-id="$reply->id" size="sm">Delete</x-button>@endif
+                                                </div>
                                             </div>
                                         </div>
                                         @endforeach
@@ -126,6 +140,15 @@
                 </div>
             </div>
         </div>
+        <form action="{{route('goal.comment.delete', 'xxx')}}" method="POST" id="delete-comment-form">
+            @csrf
+            @method("DELETE")
+        </form>
+        <form action="{{route('goal.comment.edit', 'xxx')}}" method="POST" id="edit-comment-form">
+            @csrf
+            <input type="hidden" class="comment" name="comment">
+            @method("PUT")
+        </form>
         @include('goal.partials.supervisor-goal')
 
     @push('js')
@@ -202,6 +225,45 @@
         const commentId = $(this).data("comment-id");
         $(this).siblings(".reply-box").toggleClass("d-none");
     });
+    $(document).on('click','.comment-delete', function(e){
+        if (confirm("Are you sure you want to delete this comment ?")) {
+            const commentId = $(this).data("comment-id");
+            const form = document.getElementById("delete-comment-form");
+            fetch(form.action.replace("xxx", commentId),{method:'POST', body: new FormData(form)});
+            window.location.reload();
+        }
+    });
+
+    $(document).on('click','.comment-edit', function(e) {
+        //if (confirm("Are you sure you want to delete this comment ?")) {
+        const commentId = $(this).data("comment-id");
+        const instance = CKEDITOR.replace($(this).parent().parent().find(".comment-text").get(0), {
+            toolbar: "Custom",
+            toolbar_Custom: [
+                ["Bold", "Italic", "Underline"],
+                ["NumberedList", "BulletedList"],
+                ["Outdent", "Indent"]
+            ],
+        });
+        $(this).parent().parent().find(".edit-save").data("editor", instance.name);
+        $(this).parent().parent().find(".edit-save").removeClass("d-none");
+    });
+    $(document).on('click','.edit-save', function(e) {
+        //if (confirm("Are you sure you want to delete this comment ?")) {
+        const commentId = $(this).data("comment-id");
+        $(this).parent().parent().find(".edit-save").addClass("d-none");
+        const editor = $(this).parent().parent().find(".edit-save").data("editor");
+        const data = CKEDITOR.instances[editor].getData();
+
+        CKEDITOR.instances[editor].destroy();
+
+        const form = document.getElementById("edit-comment-form");
+        $(form).find(".comment").val(data);
+        fetch(form.action.replace("xxx", commentId), {method:'POST', body: new FormData(form)});
+    });
+
+
+    
     $('body').popover({
         selector: '[data-toggle]',
         trigger: 'hover',

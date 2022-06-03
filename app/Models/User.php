@@ -9,10 +9,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\EmployeeDemo;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
+
+    // Use \Awobaz\Compoships\Compoships;
 
     /**
      * The attributes that are mass assignable.
@@ -179,6 +182,34 @@ class User extends Authenticatable
 
     public function reportingTos() {
         return $this->hasMany('App\Models\UserReportingTo', 'user_id');
+    }
+
+    public function employees() {
+        return $this->hasMany('App\Models\EmployeeDemo', 'employee_id', 'id');
+    }
+    
+    public function users() {
+        return $this->hasMany('App\Models\User');
+    }
+    
+    public function usersUserIds() {
+        return $this->users()->pluck('id');
+    }
+
+    public function getAllReporteesAttribute()
+    {
+        return collect($this->flat_reportees($this));
+    }
+
+    function flat_reportees($model) {
+        $result = [];
+        foreach ($model->reportees as $child) {
+          $result[] = $child;
+          if ($child->reportees) {
+            $result = array_merge($result, $this->flat_reportees($child));
+          }
+        }
+        return $result;
     }
 
 }

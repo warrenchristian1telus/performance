@@ -25,6 +25,9 @@
                     <x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type" :selected="request()->goal_type"></x-dropdown>
                 </div>
                 <div class="col">
+                    <x-dropdown :list="$tagsList" label="Tags" name="tag_id" :selected="request()->tag_id"></x-dropdown>
+                </div>
+                <div class="col">
                     <label>
                         Date Added
                         <input type="text" class="form-control" name="date_added" value="{{request()->date_added ?? 'Any'}}">
@@ -56,6 +59,7 @@
                                         </th>
                                         <th style="width:35%"> Goal Title</th>
                                         <th style="width:20%"> Goal Type</th>
+                                        <th style="width:15%"> Tags</th>
                                         <th style="width:15%"> Date Added</th>
                                         <th style="width:15%"> Created By</th>
                                         <th style="width:15%"> Mandatory/Suggested</th>
@@ -67,17 +71,20 @@
                                         <td>
                                             <input type="checkbox" name="goal_ids[]" value="{{$goal->id}}">
                                         </td>
-                                        <td style="width:35%">
+                                        <td style="width:25%">
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->title }}</a>
                                         </td>
-                                        <td style="width:20%">
-                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{$goal->goalType->name}}</a>
+                                        <td style="width:15%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->typename }}</a>
                                         </td>
                                         <td style="width:15%">
-                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at->format('M d, Y') }}</a>
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->tagnames }}</a>
                                         </td>
                                         <td style="width:15%">
-                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->user->name }}</a>
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at == null ?: $goal->created_at->format('M d, Y') }}</a>
+                                        </td>
+                                        <td style="width:15%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->username }}</a>
                                         </td>
                                         <td style="width:15%">
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->is_mandatory ? 'Mandatory' : 'Suggested' }}</a>
@@ -90,6 +97,7 @@
                                     </tr>
                                     @endforeach
                                 </tbody>
+                                {{ $bankGoals->links() }}
                             </table>
                         </div>
                     </div>
@@ -101,6 +109,7 @@
         </form>
         @if(Auth::user()->hasSupervisorRole())
         @php $shareWithLabel = 'Audience' @endphp
+        @php $doNotShowInfo = true @endphp
         <div>
             <b>Team Goal Bank</b> <br>
         </div>
@@ -205,10 +214,12 @@
     
     @push('css')
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
     @endpush
     @push('js')
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
         <script>
             $('#filter-menu select, #filter-menu input').change(function () {
                 $("#filter-menu").submit();
@@ -276,6 +287,13 @@
                     }
                 });
 
+            });
+            
+            $(document).ready(() => {
+                $(".tags").multiselect({
+                    enableFiltering: true,
+                    enableCaseInsensitiveFiltering: true
+                });
             });
         </script>
     @endpush

@@ -44,7 +44,9 @@ class GetODSEmployeeDemographics extends Command
     public function handle()
     {
 
-      $start_time = Carbon::now();
+      $start_time = Carbon::now()->format('c');
+      $this->info( 'Employee Demographic Data pull from ODS, Started: '. $start_time);
+
       $job_name = 'command:GetODSEmployeeDemographics';
       $audit_id = JobSchedAudit::insertGetId(
         [
@@ -54,32 +56,51 @@ class GetODSEmployeeDemographics extends Command
         ]
       );
 
+      $stored = DB::table('stored_dates')
+      ->where('name', 'ODS Employee Demo Last Pull')
+      ->first();
+
+      if(is_null($stored)){
+        $last_cutoff_time = Carbon::create(1900, 1, 1, 0, 0, 0, 'PDT')->format('c');
+        $this->info( 'Last Pull Date not found.  Using ' . $last_cutoff_time);
+        $stored = DB::table('stored_dates')->updateOrInsert(
+          [
+            'name' => 'ODS Employee Demo Last Pull',
+          ],
+          [
+            'value' => Carbon::create(1900, 1, 1, 0, 0, 0, 'PDT')->format('c'),
+          ]
+        );
+      } else {  
+        if($stored->value){
+          $last_cutoff_time = $stored->value;
+          $this->info( 'Last Pull Date:  ' . $last_cutoff_time);
+        }else{
+          $last_cutoff_time = Carbon::create(1900, 1, 1, 0, 0, 0, 'PDT')->format('c');
+          $this->info( 'Last Pull Date not found.  Using ' . $last_cutoff_time);
+        }
+      }
+ 
       $top = 1000;
       $skip = 0;
-      $demodata = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))
-      ->get( env('ODS_EMPLOYEE_DEMO_URI') . '?$top=' . $top . '&$skip=' . $skip );
+      $demodata = Http::acceptJson()
+      ->withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])
+      ->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))
+      ->withOptions(['query' => [
+        '$top' => $top, 
+        '$skip' => $skip, 
+        '$filter' => "date_updated gt '" . $last_cutoff_time . "'",
+        '$orderby' => 'EMPLID,EMPL_RCD,EFFDT,EFFSEQ',
+      ], 
+      ])
+->get( env('ODS_EMPLOYEE_DEMO_URI') . '?$top=' . $top . '&$skip=' . $skip );
       $data = $demodata['value'];
       $total = 0;
-
-      $this->info( 'Employee Demographic Data pull from ODS, Started: '. $start_time);
 
       do {
 
         $total += count($data);
         $this->info( '$top = ' . $top . ' : $skip = ' . $skip . ' : $data = ' . count($data) . ' : Count = ' . $total);
-        $skip += $top;
-
-        $demodata = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))
-        ->get( env('ODS_EMPLOYEE_DEMO_URI') . '?$top=' . $top . '&$skip=' . $skip );
-        $data = $demodata['value'];
-
-
-      // $demodata = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))
-      //   ->get(env('ODS_EMPLOYEE_DEMO_URI') );
-
-        $cutoff_time = Carbon::now();
-
-      //   $data = $demodata['value'];
 
         foreach($data as $item){
           DB::table('employee_demo')->updateOrInsert(
@@ -164,7 +185,32 @@ class GetODSEmployeeDemographics extends Command
           );
         };
 
+        $skip += $top;
+
+        $demodata = Http::acceptJson()
+        ->withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])
+        ->withBasicAuth(env('ODS_DEMO_CLIENT_ID'),env('ODS_DEMO_CLIENT_SECRET'))
+        ->withOptions(['query' => [
+          '$top' => $top, 
+          '$skip' => $skip, 
+          '$filter' => "date_updated gt '" . $last_cutoff_time . "'",
+          '$orderby' => 'EMPLID,EMPL_RCD,EFFDT,EFFSEQ',
+        ], 
+        ])
+  ->get( env('ODS_EMPLOYEE_DEMO_URI') . '?$top=' . $top . '&$skip=' . $skip );
+        $data = $demodata['value'];
+  
     } while(count($data)!=0);
+
+    DB::table('stored_dates')->updateOrInsert(
+      [
+        'name' => 'ODS Employee Demo Last Pull',
+      ],
+      [
+        'value' => $start_time,
+      ]
+    );
+    $this->info( 'Last Pull Date Updated to: ' . $start_time);
 
     $end_time = Carbon::now();
     DB::table('job_sched_audit')->updateOrInsert(
@@ -175,8 +221,9 @@ class GetODSEmployeeDemographics extends Command
         'job_name' => $job_name,
         'start_time' => date('Y-m-d H:i:s', strtotime($start_time)),
         'end_time' => date('Y-m-d H:i:s', strtotime($end_time)),
-        'cutoff_time' => date('Y-m-d H:i:s', strtotime($cutoff_time)),
-        'status' => 'Completed'
+        'cutoff_time' => date('Y-m-d H:i:s', strtotime($last_cutoff_time)),
+        'status' => 'Completed',
+        'details' => 'Processed ' . $total . ' rows from ' . $last_cutoff_time . '.',
       ]
     );
 

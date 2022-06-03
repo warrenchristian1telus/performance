@@ -17,14 +17,14 @@ class SendDailyNotification extends Command
      *
      * @var string
      */
-    protected $signature = 'daily:notification';
+    protected $signature = 'notify:daily';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Respectively notify people who has  overdue conversation daily via email.';
+    protected $description = 'Daily email notification';
     
     /**
      * Create a new command instance.
@@ -49,7 +49,7 @@ class SendDailyNotification extends Command
         $graph = new Graph();
         $graph->setAccessToken($accessToken);
 
-        $attendeeAddresses = ['james.poon@telus.com', 'myphd2@gmail.com', 'employee11@extest.gov.bc.ca', 'employee12@extest.gov.bc.ca'];
+        $attendeeAddresses = ['james.poon@gov.bc.ca', 'james.poon@telus.com', 'myphd2@gmail.com', 'employee11@extest.gov.bc.ca', 'employee12@extest.gov.bc.ca'];
         $subject = 'ePerformance Application - schedule daily notification testing';
         $body = 'Test message -- daily notification send out from server for testing purpose, please ignore.';
 

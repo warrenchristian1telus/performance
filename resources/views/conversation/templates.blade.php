@@ -76,7 +76,9 @@
 
             function setTemplateModalContent(content) {
                 $("#conversationTemplateDetail").find('.modal-content').html(content);
-                $("#participant_id").select2();
+                $("#participant_id").select2({
+                    maximumSelectionLength: 1
+                });
 
             }
 

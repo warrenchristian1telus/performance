@@ -15,7 +15,8 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y openssl zip unzip 
     ucf \
     zlib1g \
     sudo \
-    wget  
+    wget  \
+    vim
 
 RUN apt install ca-certificates apt-transport-https wget gnupg -y
 RUN wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
@@ -31,6 +32,11 @@ WORKDIR /app
 COPY . /app
 
 RUN composer update --ignore-platform-reqs
+
+RUN composer require kalnoy/nestedset --ignore-platform-reqs
+RUN composer require doctrine/dbal --ignore-platform-reqs
+RUN composer require awobaz/compoships --ignore-platform-reqs
+
 RUN php artisan config:clear
 
 EXPOSE 8000

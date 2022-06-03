@@ -1,4 +1,3 @@
-
 <x-side-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -13,8 +12,13 @@
             @method('PUT')
             <div class="row">
                 <div class="col-12">
-                    <x-tooltip-dropdown name="goal_type_id" :options="$goaltypes" label="Goal Type" tooltipField="description" displayField="name" :selectedValue="$goal->goal_type_id" />
+                    <x-tooltip-dropdown-outside name="goal_type_id" :options="$goaltypes" label="Goal Type" popoverstr="{{$type_desc_str}}" tooltipField="description" displayField="name" />
                     <x-input label="Goal Title" name="title" :value="$goal->title"/>
+                </div>                                
+                <div class="col-12">
+                    <x-xdropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goal->tags->toArray(), 'id')" class="tags" multiple/>
+                </div>
+                <div class="col-12">
                     <!-- <x-textarea id="what" label="What" name="what" :value="$goal->what" /> -->
                     <label for='what'>Description</label>
                     <textarea id="what" name="what" :value="$goal->what">{!!$goal->what!!}</textarea>
@@ -34,16 +38,28 @@
             </div>
         </form>
     </div>
+    @push('css')
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
+    @endpush
 
     @push('js')
+    <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
 
+    <script>
+        $(document).ready(() => {
+            $('.tags').multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true
+            });
+        });
+    </script>
     <script src="//cdn.ckeditor.com/4.17.2/basic/ckeditor.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             CKEDITOR.replace('what', {
-                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false  });
             CKEDITOR.replace('measure_of_success', {
-                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ] });
+                toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false  });
         });
     </script>
     <script>
@@ -72,6 +88,11 @@
                 return "If you continue you will lose any unsaved information";
             }
         };
+        
+        $('body').popover({
+            selector: '[data-toggle-select]',
+            trigger: 'click',
+        });
     </script>
     @endpush
 </x-side-layout>

@@ -17,7 +17,6 @@
     @include('my-team.partials.share-my-goals-modal')
     @include('my-team.partials.edit-suggested-goal-modal')
     @include('my-team.partials.add-goal-to-library-modal')
-    @include('conversation.partials.add-conversation-modal')
     @include('conversation.partials.view-conversation-modal')
     @include('my-team.partials.employee-profile-sharing-modal')
     @include('my-team.partials.employee-excused-modal')

@@ -104,7 +104,9 @@ class DashboardController extends Controller
          Auth::loginUsingId($oldUserId);
          $request->session()->forget('existing_user_id');
          $request->session()->forget('user_is_switched');
-         return redirect()->back();
+         //return redirect()->back();
+         return redirect()->to('/');
+
     }
 
 }

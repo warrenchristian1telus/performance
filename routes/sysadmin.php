@@ -12,6 +12,7 @@ use App\Http\Controllers\ManageGoalBankController;
 use App\Http\Controllers\SysAdmin\UnlockConversationController;
 use App\Http\Controllers\SysAdmin\GoalBankController;
 use App\Http\Controllers\SysAdmin\NotificationController;
+use App\Http\Controllers\SysAdmin\ExcuseEmployeesController;
 use App\Http\Controllers\SysAdmin\ExcusedEmployeesController;
 use App\Http\Controllers\SysAdmin\AccessPermissionsController;
 use App\Http\Controllers\SysAdmin\EmployeeSharesController;
@@ -71,15 +72,6 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::post('/sysadmin/unlock/manageunlocked', [UnlockConversationController::class, 'indexManageUnlocked'])->name('sysadmin.unlock.manageunlocked.search');
         Route::get('/sysadmin/unlock/unlocked-conversation-list', [UnlockConversationController::class, 'getDatatableManagedUnlocked'])->name('sysadmin.unlock.unlockconversation.list');
     });
-
-
-    // Route::get('/hradmin/notifications/employee-list', [NotificationController::class, 'getDatatableEmployees'])->name('hradmin.notifications.employee.list');
-    Route::get('sysadmin/access/employee-list', [CreateAccessController::class, 'getDatatableEmployees'])->name('sysadmin.access.employee.list');
-    Route::get('sysadmin/access/createaccess', [CreateAccessController::class, 'index'])->name('sysadmin.access.createaccess');
-    Route::get('sysadmin/access/org-tree', [CreateAccessController::class,'loadOrganizationTree']);
-    Route::get('sysadmin/access/users', [CreateAccessController::class, 'getUsers'])->name('sysadmin.access.users.list');
-    // Route::get('sysadmin/access/manageaccess', [ManageExistingAccessController::class, 'manageaccess'])->name('sysadmin.access.manageaccess');
-
 
 
     Route::get('sysadmin/statistics/goalsummary', [SysadminController::class, 'goalsummary'])->name('sysadmin.statistics.goalsummary');
@@ -156,6 +148,33 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
     //     Route::get('/sysadmin/sharedemployees/employee-list', [SharedEmployeesController::class, 'getDatatableEmployees'])->name('sysadmin.sharedemployees.employee.list');
         
     // });
+
+
+    //Excuse Employees
+    Route::group(['middleware' => ['auth']], function() {    
+        Route::get('/sysadmin/excuseemployees', [ExcuseEmployeesController::class, 'addindex'])->name('sysadmin.excuseemployees');
+        Route::get('/sysadmin/excuseemployees/addindex', [ExcuseEmployeesController::class, 'addindex'])->name('sysadmin.excuseemployees.addindex');
+        Route::post('/sysadmin/excuseemployees/saveexcuse', [ExcuseEmployeesController::class, 'saveexcuse'])->name('sysadmin.excuseemployees.saveexcuse');
+        Route::post('/sysadmin/excuseemployees/addindex', [ExcuseEmployeesController::class, 'addindex'])->name('sysadmin.excuseemployees.search');
+        Route::get('/sysadmin/excuseemployees/employee-list', [ExcuseEmployeesController::class, 'getDatatableEmployees'])->name('sysadmin.excuseemployees.employee.list');
+
+
+        Route::get('/sysadmin/excuseemployees/manageindex', [ExcuseEmployeesController::class, 'manageindex'])->name('sysadmin.excuseemployees.manageindex');
+        Route::get('/sysadmin/excuseemployees/manageindexlist', [ExcuseEmployeesController::class, 'manageindexlist'])->name('sysadmin.excuseemployees.manageindexlist');
+        Route::get('/sysadmin/excuseemployees/manageindexedit/{id}', [ExcuseEmployeesController::class, 'manageindexedit'])->name('sysadmin.excuseemployees.manageindexedit');
+        Route::post('/sysadmin/excuseemployees/manageindexupdate/{id}', [ExcuseEmployeesController::class, 'manageindexupdate']);
+        Route::get('sysadmin/excuseemployees/manageexistingaccessdelete/{id}', [ExcuseEmployeesController::class, 'manageDestroy']);
+
+
+        Route::get('/sysadmin/excuseemployees/org-tree', [ExcuseEmployeesController::class,'loadOrganizationTree']);
+        Route::get('/sysadmin/excuseemployees/org-organizations', [ExcuseEmployeesController::class,'getOrganizations']);
+        Route::get('/sysadmin/excuseemployees/org-programs', [ExcuseEmployeesController::class,'getPrograms']);
+        Route::get('/sysadmin/excuseemployees/org-divisions', [ExcuseEmployeesController::class,'getDivisions']);
+        Route::get('/sysadmin/excuseemployees/org-branches', [ExcuseEmployeesController::class,'getBranches']);
+        Route::get('/sysadmin/excuseemployees/org-level4', [ExcuseEmployeesController::class,'getLevel4']);
+
+
+    });
 
 
     //Excused Employees
@@ -243,12 +262,12 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::get('/sysadmin/accesspermissions/users', [AccessPermissionsController::class, 'getUsers'])->name('sysadmin.accesspermissions.users.list');
         
         Route::get('/sysadmin/accesspermissions/org-tree', [AccessPermissionsController::class,'loadOrganizationTree']);
-        Route::get('/sysadmin/accesspermissions/eorg-tree', [AccessPermissionsController::class,'eloadOrganizationTree']);
         Route::get('/sysadmin/accesspermissions/org-organizations', [AccessPermissionsController::class,'getOrganizations']);
         Route::get('/sysadmin/accesspermissions/org-programs', [AccessPermissionsController::class,'getPrograms']);
         Route::get('/sysadmin/accesspermissions/org-divisions', [AccessPermissionsController::class,'getDivisions']);
         Route::get('/sysadmin/accesspermissions/org-branches', [AccessPermissionsController::class,'getBranches']);
         Route::get('/sysadmin/accesspermissions/org-level4', [AccessPermissionsController::class,'getLevel4']);
+        Route::get('/sysadmin/accesspermissions/eorg-tree', [AccessPermissionsController::class,'eloadOrganizationTree']);
         Route::get('/sysadmin/accesspermissions/eorg-organizations', [AccessPermissionsController::class,'geteOrganizations']);
         Route::get('/sysadmin/accesspermissions/eorg-programs', [AccessPermissionsController::class,'getePrograms']);
         Route::get('/sysadmin/accesspermissions/eorg-divisions', [AccessPermissionsController::class,'geteDivisions']);

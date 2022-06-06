@@ -352,8 +352,8 @@ return [
                 // ],
                 [
                     'text' => 'Excuse Employees',
-                    'url'  => 'sysadmin/excusedemployees/notify',
-                    'active' => ['sysadmin/excusedemployees/*']
+                    'url'  => 'sysadmin/excuseemployees/addindex',
+                    'active' => ['sysadmin/excuseemployees/*']
                 ],
                 [
                     'text' => 'Goal Bank',

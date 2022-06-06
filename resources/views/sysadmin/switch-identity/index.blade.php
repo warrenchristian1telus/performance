@@ -108,6 +108,7 @@
                             [
                                 
                                 {
+                                "title": "Action",    
                                 "data":"id",
                                 "render": function(data, type, row, meta){
                                     if(type === 'display'){

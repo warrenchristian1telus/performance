@@ -8,8 +8,8 @@
             </div>
         </div>
         <div>
-            <b>My Goal Bank</b> <br>
-            The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile.
+            <!-- <b>My Goal Bank</b> <br> -->
+            The goals below have been created for you by your supervisor or organization. Click on a goal to view it and add it to your own profile. If needed, you can edit the goal to personalize it once it is in your profile. 
             <br>
             <br>
         </div>

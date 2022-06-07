@@ -69,7 +69,7 @@
                     <x-tooltip-dropdown-outside name="goal_type_id" :options="$goaltypes" label="Goal Type" popoverstr="{{$type_desc_str}}" tooltipField="description" displayField="name" />
                     </div>
                        <div class="col-6">
-                    <x-input-modal label="Goal Title" id="goal_title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
+                    <x-input-modal label="Goal Title" id="goal_title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance Development Platform.' />
                     <small class="text-danger error-title"></small>
                     </div>
                     <div class="col-sm-6">
@@ -79,7 +79,7 @@
                        <div class="col-12">
                         <label style="font-weight: normal;">
                             <b>Goal Description</b>
-                            <p class="py-2">Each goal should include a description of <b>WHAT</b><x-tooltip-modal text='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' /> you will accomplish, <b>WHY</b><x-tooltip-modal text='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".' /> it is important, and <b>HOW</b><x-tooltip-modal text='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the need of their employees in advance of each phase of the performance management cycle".'/> you will achieve it.</p>
+                            <p class="py-2">Each goal should include a description of <b>WHAT</b><x-tooltip-modal text='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative Performance Development sessions to ministry audiences".' /> you will accomplish, <b>WHY</b><x-tooltip-modal text='Why this goal is important to you and the organization (value of achievement). For example, "This will improve the consistency and quality of the employee experience across the BCPS".' /> it is important, and <b>HOW</b><x-tooltip-modal text='A few high level steps to achieve your goal. For example, "I will do this by working closely with ministry colleagues to develop presentations that respond to the needs of their employees in each aspect of the Performance Development process".'/> you will achieve it.</p>
                             <textarea id="what" label="Goal Description" name="what" ></textarea>
                             <small class="text-danger error-what"></small>
                         </label>

@@ -52,7 +52,7 @@ class MyTeamController extends Controller
         $type_desc_arr = array();
         foreach($goaltypes as $goalType) {
             if(isset($goalType['description']) && isset($goalType['name'])) {
-                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];                
                 array_push($type_desc_arr, $item);
             }
         }

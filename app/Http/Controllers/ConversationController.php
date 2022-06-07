@@ -175,12 +175,9 @@ class ConversationController extends Controller
         $reportees = $user->reportees()->get();
         $topics = ConversationTopic::all();
         if ($type === 'past') {
-            $textAboveFilter = 'Below are all completed conversations between you and your supervisor, and you and your direct reports. Use the filters to search for conversations by employee
-            name, conversation type, and completion date range. Conversations marked with an "unlocked" icon are still within the two-week window of time that allows for any
-            additional content edits by either conversation participant. Conversations marked with a locked icon have passed the two-week window of time to allow for any
-            additonal content edits by either conversation participant. If you need to unlock the conversation, contact your system administrator.';
-        } else {
-            $textAboveFilter = 'Below are all open conversations between you and your supervisor, and you and your direct reports. Use the filters to search for open conversations by employe name and conversation type. Conversations marked with an "unlocked" icon have been unlocked because of a special request made to your system administrator.';
+            $textAboveFilter = 'The list below contains all conversations that have been signed by both employee and supervisor. There is a two week period from the date of sign-off when either participant can un-sign the conversation and return it to the Open Conversations tab for further edits. Conversations marked with a locked icon have passed the two-week time period and require approval and assistance to re-open. If you need to unlock a conversation, submit an AskMyHR request to Myself > HR Software Systems Support > Performance Development Platform.';            
+        } else {            
+            $textAboveFilter = 'The list below contains all planned conversations that have yet to be signed-off by both employee and supervisor. Once a conversation has been signed-off by both participants, it will move to the Completed Conversations tab and become an official performance development record for the employee.';
         }
         return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter'));
     }

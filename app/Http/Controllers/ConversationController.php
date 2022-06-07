@@ -12,6 +12,7 @@ use App\Models\ConversationTopic;
 use App\Models\Participant;
 use App\Models\SharedProfile;
 use App\Models\User;
+use App\Models\EmployeeDemo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -308,6 +309,16 @@ class ConversationController extends Controller
     public function signOff(SignoffRequest $request, Conversation $conversation)
     {
         $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+        $current_employee = DB::table('employee_demo')
+                            ->select('employee_id')
+                            ->join('users', 'employee_demo.guid', '=', 'users.guid')
+                            ->where('users.id', $authId)
+                            ->get();
+        
+        if ($current_employee[0]->employee_id != $request->employee_id) {
+            return response()->json(['success' => false, 'Message' => 'Invalide Employee ID', 'data' => $conversation]);            
+        }
+        
         if (!$conversation->is_with_supervisor) {
             $conversation->supervisor_signoff_id = $authId;
             $conversation->supervisor_signoff_time = Carbon::now();
@@ -334,6 +345,17 @@ class ConversationController extends Controller
 
     public function unsignOff(UnSignoffRequest $request, Conversation $conversation)
     {
+        $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+        $current_employee = DB::table('employee_demo')
+                            ->select('employee_id')
+                            ->join('users', 'employee_demo.guid', '=', 'users.guid')
+                            ->where('users.id', $authId)
+                            ->get();
+        
+        if ($current_employee[0]->employee_id != $request->employee_id) {
+            return response()->json(['success' => false, 'Message' => 'Invalide Employee ID', 'data' => $conversation]);            
+        }
+        
         if (!$conversation->is_with_supervisor) {
             $conversation->supervisor_signoff_id = null;
             $conversation->supervisor_signoff_time = null;

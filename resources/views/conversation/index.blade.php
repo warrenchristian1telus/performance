@@ -370,6 +370,8 @@
                     , success: function(result) {
                         if (result.success) {
                             location.reload();
+                        } else {
+                            $('.error').html(result.Message);
                         }
                     }
                     , error: function(error) {

@@ -315,7 +315,7 @@ return [
                 //     'active' => ['hradmin/notifications/*']
                 // ],
                 [
-                    'text' => 'Statiscts and Reports',
+                    'text' => 'Statistic and Reports',
                     'url'  => 'hradmin/statistics/goalsummary',
                     'active' => ['hradmin/statistics/*']
                 ]

@@ -15,6 +15,7 @@
             </div>
         </div>    
     </div>   
+
     @include('sysadmin/employeeshares/partials/share-edit-modal')
 
     @push('css')
@@ -50,6 +51,7 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
         <script type="text/javascript">
+
 			$(document).ready( function() {
 
                 $('#btn_search').click(function(e) {
@@ -96,51 +98,17 @@
                     } );
                 } );
 
-                $('#editModal').on('show.bs.modal', function(event) {
-                    var button = $(event.relatedTarget);
-                    console.log($(event.relatedTarget));
-                    var user_id = button.data('userid');
-                    var username = button.data('username');
-                    // console.log('ASDRFVBHBNJN');
-                    $('#shareDetailLabel').text('View Employee Shares:  '+username);
-                    $('#admintable').show();
-                    $('#admintable').DataTable ( {
-                        processing: true,
-                        serverSide: false,
-                        scrollX: true,
-                        stateSave: false,
-                        deferRender: false,
-                        ajax: {
-                            type: 'GET',
-                            url: "/sysadmin/employeeshares/manageindexviewshares/"+user_id,
-                        },                        
-                        columns: [
-                            {title: 'Item Type', ariaTitle: 'Item Type', target: 0, type: 'string', data: 'item_type', name: 'item_type', searchable: true, className: 'dt-nowrap'},
-                            {title: 'Shared With ID', ariaTitle: 'Shared With ID', target: 0, type: 'string', data: 'employee_id2', name: 'employee_id2', searchable: true, className: 'dt-nowrap'},
-                            {title: 'Shared With Name', ariaTitle: 'Shared With Name', target: 0, type: 'string', data: 'employee_name2', name: 'employee_name2', searchable: true, className: 'dt-nowrap'},
-                            {title: 'Item ID', ariaTitle: 'Item ID', target: 0, type: 'string', data: 'item_id', name: 'item_id', searchable: true, className: 'dt-nowrap'},
-                            {title: 'Shared With User ID', ariaTitle: 'Shared With User ID', target: 0, type: 'string', data: 'shared_with_id', name: 'shared_with_id', searchable: true, className: 'dt-nowrap'},
-                            // {title: 'User ID', ariaTitle: 'User ID', target: 0, type: 'num', data: 'user_id', name: 'user_id', searchable: false, visible: false, className: 'dt-nowrap'},
-                        ],  
-                    } );
+                $('#btn_search').click();
+
+                $('#cancelButton').on('click', function(e) {
+                    if($.fn.dataTable.isDataTable('#admintable')) {
+                        $('#admintable').DataTable().clear();
+                        $('#admintable').DataTable().destroy();
+                        $('#admintable').empty();
+                    }
                 });
 
-                $('#editModal').on('hidden.bs.modal', function(event) {
-                    if($.fn.DataTable.isDataTable( '#admintable' )) {
-                        table = $('#admintable').DataTable();
-                        table.clear();
-                        table.draw();
-                    };
-                });
-
-                $('#cancelButton').on('click', function(event) {
-                    if($.fn.DataTable.isDataTable( '#admintable' )) {
-                        table = $('#admintable').DataTable();
-                        table.destroy();
-                    };
-                });
-
-                $('#removeButton').on('click', function(event) {
+                $('#removeButton').on('click', function(e) {
                     console.log('Delete button clicked');
                     // var model_id = $('#model_id').val();
                     // var token = $('meta[name="csrf-token"]').attr('content');
@@ -159,7 +127,7 @@
                     // });
                 });
 
-                $(window).on('beforeunload', function(){
+                $(window).on('beforeunload', function(e){
                     $('#pageLoader').show();
                 });
 

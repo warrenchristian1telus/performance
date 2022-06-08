@@ -936,8 +936,9 @@ class EmployeeSharesController extends Controller
 
         $criteriaList = $this->search_criteria_list();
         $sharedElements = array("A" => "All", "C" => "Conversation", "G" => "Goals" );
+        $sampleText = 'THIS IS A TEST ELEMENT.';
 
-        return view('sysadmin.employeeshares.manageindex', compact ('request', 'criteriaList', 'sharedElements'));
+        return view('sysadmin.employeeshares.manageindex', compact ('request', 'criteriaList', 'sharedElements', 'sampleText'));
     }
 
     public function manageindexlist(Request $request) {
@@ -1029,8 +1030,8 @@ class EmployeeSharesController extends Controller
             return Datatables::of($both)
             ->addIndexColumn()
             ->addcolumn('action', function($row) {
-                $btn = '<button class="btn btn-xs btn-primary modalbutton" role="button" data-userid="' . $row->user_id . '" data-username="' . $row->employee_name . '" data-toggle="modal" data-target="#editModal" role="button">View</button>';
-                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="/sysadmin/employeeshare/deleteshare/' . $row->item_type . '/' . $row->item_id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->item_type . $row->id .'"><i class="fa fa-trash"></i></a>';
+                $btn = '<button class="btn btn-xs btn-primary modalbutton" role="button" data-userid="' . $row->user_id . '" data-username="' . $row->employee_name . '" data-toggle="modal" data-target="#editModal" role="button">Edit</button>';
+                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="' . route('sysadmin.employeeshares.deleteshare', ['type' => $row->item_type, 'id' => $row->item_id]) . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->item_type . '_' . $row->id .'"><i class="fa fa-trash"></i></a>';
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -1038,58 +1039,57 @@ class EmployeeSharesController extends Controller
         }
     }
 
-    public function manageindexviewshares($id) {
-        $queryConv = User::withoutGlobalScopes()
-        ->join('conversations', 'conversations.user_id', '=', 'users.id')
-        ->join('conversation_participants', 'conversation_participants.conversation_id', '=', 'conversations.id')
-        ->join('users as u2', 'conversation_participants.participant_id', '=', 'u2.id')
-        ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
-        ->leftjoin('employee_demo as ed2', 'u2.guid', '=', 'ed2.guid')
-        ->select (
-            'employee_demo.employee_id',
-            'employee_demo.employee_name', 
-            'users.id as user_id',
-            'conversations.id as item_id',
-            'u2.id as shared_with_id',
-            'ed2.employee_id as employee_id2',
-            'ed2.employee_name as employee_name2',
-        )
-        ->selectRaw('"Conversation" as item_type')
-        ->distinct();
-
-        $queryGoal = User::withoutGlobalScopes()
-        ->join('goals', 'goals.user_id', '=', 'users.id')
-        ->join('goals_shared_with', 'goals_shared_with.goal_id', '=', 'goals.id')
-        ->join('users as u2', 'goals_shared_with.user_id', '=', 'u2.id')
-        ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
-        ->leftjoin('employee_demo as ed2', 'u2.guid', '=', 'ed2.guid')
-        ->select (
-            'employee_demo.employee_id',
-            'employee_demo.employee_name', 
-            'users.id as user_id',
-            'goals.id as item_id',
-            'u2.id as shared_with_id',
-            'ed2.employee_id as employee_id2',
-            'ed2.employee_name as employee_name2',
-        )
-        ->selectRaw('"Goal" as item_type')
-        ->distinct();
-        $both = $queryConv->union($queryGoal); 
-
-        // return Datatables::of($both)
-        // ->addIndexColumn()
-        // ->addcolumn('action', function($row) {
-        //     $btn = '<button class="btn btn-xs btn-primary modalbutton" role="button" data-userid="' . $row->user_id . '" data-username="' . $row->employee_name . '" data-toggle="modal" data-target="#editModal" role="button">View</button>';
-        //     $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="/sysadmin/employeeshare/deleteshare/' . $row->item_type . '/' . $row->item_id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->item_type . $row->id .'"><i class="fa fa-trash"></i></a>';
-        //     return $btn;
-        // })
-        // ->rawColumns(['action'])
-        // ->make(true);
-
-
-
-
-        return $both;
+    public function manageindexviewshares(Request $request, $id) {
+        if ($request->ajax()) {
+            $queryConv = User::withoutGlobalScopes()
+            ->join('conversations', 'conversations.user_id', '=', 'users.id')
+            ->join('conversation_participants', 'conversation_participants.conversation_id', '=', 'conversations.id')
+            ->join('users as u2', 'conversation_participants.participant_id', '=', 'u2.id')
+            ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
+            ->leftjoin('employee_demo as ed2', 'u2.guid', '=', 'ed2.guid')
+            ->where('users.id', '=', $id)
+            ->select (
+                'employee_demo.employee_id',
+                'employee_demo.employee_name', 
+                'users.id as user_id',
+                'conversations.id as item_id',
+                'u2.id as shared_with_id',
+                'ed2.employee_id as employee_id2',
+                'ed2.employee_name as employee_name2',
+                'conversation_participants.participant_id as part_id',
+            )
+            ->selectRaw('"Conversation" as item_type')
+            ->distinct();
+            $queryGoal = User::withoutGlobalScopes()
+            ->join('goals', 'goals.user_id', '=', 'users.id')
+            ->join('goals_shared_with', 'goals_shared_with.goal_id', '=', 'goals.id')
+            ->join('users as u2', 'goals_shared_with.user_id', '=', 'u2.id')
+            ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
+            ->leftjoin('employee_demo as ed2', 'u2.guid', '=', 'ed2.guid')
+            ->select (
+                'employee_demo.employee_id',
+                'employee_demo.employee_name', 
+                'users.id as user_id',
+                'goals.id as item_id',
+                'u2.id as shared_with_id',
+                'ed2.employee_id as employee_id2',
+                'ed2.employee_name as employee_name2',
+                'goals.id as part_id',
+            )
+            ->where('users.id', '=', $id)
+            ->selectRaw('"Goal" as item_type')
+            ->distinct();
+            $data = $queryConv->union($queryGoal); 
+            return Datatables::of($data)
+            ->addIndexColumn()
+            ->addcolumn('action', function($row) {
+                $btn = '<a href="' . route('sysadmin.employeeshares.deleteitem', ['type' => $row->item_type, 'id' => $row->item_id, 'part' => $row->part_id]) . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->item_type . '_' . $row->id . '_' . $row->part_id .'"><i class="fa fa-trash"></i></a>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        };
+        // return $both;
     }
 
     public function editpage(Request $request, $type, $id) 
@@ -1110,7 +1110,7 @@ class EmployeeSharesController extends Controller
 
         $details = Goal::withoutGlobalScopes()->find($request->id);
 
-        return view('sysadmin.employeeshare.editshare', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
+        return view('sysadmin.employeeshares.editshare', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
     
     }
 
@@ -1185,8 +1185,8 @@ class EmployeeSharesController extends Controller
             return Datatables::of($query)
             ->addIndexColumn()
             ->addcolumn('action', function($row) {
-                $btn = '<a href="' . route('sysadmin.employeeshare.editpage', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Share" value="'. $row->id .'">Edit</a>';
-                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="/sysadmin/employeeshare/deleteshare/' . $row->item_type . '/' . $row->item_id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->item_type . $row->id .'"><i class="fa fa-trash"></i></a>';
+                $btn = '<a href="' . route('sysadmin.employeeshares.editpage', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Share" value="'. $row->id .'">Edit</a>';
+                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="' . route('sysadmin.employeeshares.deleteshare', ['type' => $row->item_type, 'id' => $row->item_id]) . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->item_type . $row->id .'"><i class="fa fa-trash"></i></a>';
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -1203,6 +1203,21 @@ class EmployeeSharesController extends Controller
         if($type == 'Goal') {
             $query2 = DB::table('goals_shared_with')
             ->where('conversation_id', '=', $id)
+            ->delete();
+        }
+        return redirect()->back();
+    }
+
+    public function deleteitem(Request $request, $type, $id, $part) {
+        if($type == 'Conversation') {
+            $query1 = DB::table('goals_shared_with')
+            ->where('id', '=', $id)
+            ->delete();
+        }
+        if($type == 'Goal') {
+            $query2 = DB::table('goals_shared_with')
+            ->where('conversation_id', '=', $id)
+            ->where('participant_id', '=', $part)
             ->delete();
         }
         return redirect()->back();

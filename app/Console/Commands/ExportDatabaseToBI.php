@@ -58,7 +58,7 @@ class ExportDatabaseToBI extends Command
      *
      * @var string
      */
-    protected $description = 'Sending Greenfield database to Datawarehouse vis ODS';
+    protected $description = 'Sending Performance database to Datawarehouse vis ODS';
 
     /**
      * Create a new command instance.
@@ -114,9 +114,6 @@ class ExportDatabaseToBI extends Command
                 $this->info( 'Last Bulk Upload Date not found.  Using ' . $last_cutoff_time);
             }
         }
-
-
-
   
         $this->info( now() );
 
@@ -158,9 +155,6 @@ class ExportDatabaseToBI extends Command
           );
       
           $this->info( 'Bulk Database Upload to ODS, Completed: ' . $end_time);
-        
-      
-
 
         return 0;
     }

@@ -19,9 +19,9 @@
                 <table class="table table-bordered admintable" id="admintable" name="admintable" style="width: 100%; overflow-x: auto; "></table>
             </div>
             <div class="modal-footer p-3">
-                <div class="col">
+                {{-- <div class="col">
                     <button id="removeButton" name="removeButton" type="button" class="btn btn-outline-danger float-left" onClick="return confirm('Are you sure?')" aria-label="Remove All Shares">Remove All Shares</button>
-                </div>
+                </div> --}}
                 <div class="col">
                     <button id="cancelButton" name="cancelButton" type="button" class="btn btn-secondary float-right" style="margin:5px;" data-dismiss="modal" aria-label="Close">Close</button>                    
                 </div>

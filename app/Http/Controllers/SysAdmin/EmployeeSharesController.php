@@ -1092,27 +1092,27 @@ class EmployeeSharesController extends Controller
         // return $both;
     }
 
-    public function editpage(Request $request, $type, $id) 
-    {
-        $goalTypes = GoalType::all()->toArray();
-        $this->getDropdownValues($mandatoryOrSuggested);
+    // public function editpage(Request $request, $type, $id) 
+    // {
+    //     $goalTypes = GoalType::all()->toArray();
+    //     $this->getDropdownValues($mandatoryOrSuggested);
 
-        // Matched Employees 
-        $demoWhere = $this->baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4);
-        $sql = clone $demoWhere; 
-        $matched_emp_ids = $sql->select([ 'employee_demo.employee_id', 'employee_demo.employee_name', 'employee_demo.job_title', 'employee_demo.employee_email', 
-                'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division',
-                'employee_demo.level3_branch','employee_demo.level4', 'employee_demo.deptid', 'employee_demo.job_title'])
-            ->orderBy('employee_id')
-                ->pluck('employee_demo.employee_id');        
+    //     // Matched Employees 
+    //     $demoWhere = $this->baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4);
+    //     $sql = clone $demoWhere; 
+    //     $matched_emp_ids = $sql->select([ 'employee_demo.employee_id', 'employee_demo.employee_name', 'employee_demo.job_title', 'employee_demo.employee_email', 
+    //             'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division',
+    //             'employee_demo.level3_branch','employee_demo.level4', 'employee_demo.deptid', 'employee_demo.job_title'])
+    //         ->orderBy('employee_id')
+    //             ->pluck('employee_demo.employee_id');        
         
-        $goal_id = $id;
+    //     $goal_id = $id;
 
-        $details = Goal::withoutGlobalScopes()->find($request->id);
+    //     $details = Goal::withoutGlobalScopes()->find($request->id);
 
-        return view('sysadmin.employeeshares.editshare', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
+    //     return view('sysadmin.employeeshares.editshare', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
     
-    }
+    // }
 
     private function getDropdownValues(&$mandatoryOrSuggested) {
         $mandatoryOrSuggested = [
@@ -1132,76 +1132,76 @@ class EmployeeSharesController extends Controller
 
     }
 
-    public function getList(Request $request) {
-        if ($request->ajax()) {
-            $level0 = $request->dd_level0 ? OrganizationTree::where('id', $request->dd_level0)->first() : null;
-            $level1 = $request->dd_level1 ? OrganizationTree::where('id', $request->dd_level1)->first() : null;
-            $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
-            $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
-            $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
+    // public function getList(Request $request) {
+    //     if ($request->ajax()) {
+    //         $level0 = $request->dd_level0 ? OrganizationTree::where('id', $request->dd_level0)->first() : null;
+    //         $level1 = $request->dd_level1 ? OrganizationTree::where('id', $request->dd_level1)->first() : null;
+    //         $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
+    //         $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
+    //         $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
 
-            $query = User::withoutGlobalScopes()
-            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
-            ->where('model_has_roles.model_type', 'App\Models\User')
-            ->whereIn('model_has_roles.role_id', [3, 4])
-            ->when($level0, function($q) use($level0) {return $q->where('organization', $level0->name);})
-            ->when($level1, function($q) use($level1) {return $q->where('level1_program', $level1->name);})
-            ->when($level2, function($q) use($level2) {return $q->where('level2_division', $level2->name);})
-            ->when($level3, function($q) use($level3) {return $q->where('level3_branch', $level3->name);})
-            ->when($level4, function($q) use($level4) {return $q->where('level4', $level4->name);})
-            ->when($request->criteria == 'name', function($q) use($request){return $q->where('employee_name', 'like', "%" . $request->search_text . "%");})
-            ->when($request->criteria == 'emp', function($q) use($request){return $q->where('employee_id', 'like', "%" . $request->search_text . "%");})
-            ->when($request->criteria == 'job', function($q) use($request){return $q->where('jobcode_desc', 'like', "%" . $request->search_text . "%");})
-            ->when($request->criteria == 'dpt', function($q) use($request){return $q->where('deptid', 'like', "%" . $request->search_text . "%");})
-            // ->when([$request->criteria == 'all', $request->search_text], function($q) use ($request) 
-            ->when($request->criteria == 'all', function($q) use ($request) {
-                return $q->where(function ($query2) use ($request) {
-                    if($request->search_text) {
-                        $query2->where('employee_id', 'like', "%" . $request->search_text . "%")
-                        ->orWhere('employee_name', 'like', "%" . $request->search_text . "%")
-                        ->orWhere('jobcode_desc', 'like', "%" . $request->search_text . "%")
-                        ->orWhere('deptid', 'like', "%" . $request->search_text . "%");
-                    }
-                });
-            })
-            ->select (
-                'employee_demo.employee_id',
-                'employee_demo.employee_name', 
-                'users.email',
-                'employee_demo.jobcode_desc',
-                'employee_demo.organization',
-                'employee_demo.level1_program',
-                'employee_demo.level2_division',
-                'employee_demo.level3_branch',
-                'employee_demo.level4',
-                'employee_demo.deptid',
-                'model_has_roles.role_id',
-                'model_has_roles.reason',
-                'roles.longname',
-                'model_has_roles.model_id',
-            );
-            return Datatables::of($query)
-            ->addIndexColumn()
-            ->addcolumn('action', function($row) {
-                $btn = '<a href="' . route('sysadmin.employeeshares.editpage', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Share" value="'. $row->id .'">Edit</a>';
-                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="' . route('sysadmin.employeeshares.deleteshare', ['type' => $row->item_type, 'id' => $row->item_id]) . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->item_type . $row->id .'"><i class="fa fa-trash"></i></a>';
-                return $btn;
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-        }
-    }
+    //         $query = User::withoutGlobalScopes()
+    //         ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+    //         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+    //         ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
+    //         ->where('model_has_roles.model_type', 'App\Models\User')
+    //         ->whereIn('model_has_roles.role_id', [3, 4])
+    //         ->when($level0, function($q) use($level0) {return $q->where('organization', $level0->name);})
+    //         ->when($level1, function($q) use($level1) {return $q->where('level1_program', $level1->name);})
+    //         ->when($level2, function($q) use($level2) {return $q->where('level2_division', $level2->name);})
+    //         ->when($level3, function($q) use($level3) {return $q->where('level3_branch', $level3->name);})
+    //         ->when($level4, function($q) use($level4) {return $q->where('level4', $level4->name);})
+    //         ->when($request->criteria == 'name', function($q) use($request){return $q->where('employee_name', 'like', "%" . $request->search_text . "%");})
+    //         ->when($request->criteria == 'emp', function($q) use($request){return $q->where('employee_id', 'like', "%" . $request->search_text . "%");})
+    //         ->when($request->criteria == 'job', function($q) use($request){return $q->where('jobcode_desc', 'like', "%" . $request->search_text . "%");})
+    //         ->when($request->criteria == 'dpt', function($q) use($request){return $q->where('deptid', 'like', "%" . $request->search_text . "%");})
+    //         // ->when([$request->criteria == 'all', $request->search_text], function($q) use ($request) 
+    //         ->when($request->criteria == 'all', function($q) use ($request) {
+    //             return $q->where(function ($query2) use ($request) {
+    //                 if($request->search_text) {
+    //                     $query2->where('employee_id', 'like', "%" . $request->search_text . "%")
+    //                     ->orWhere('employee_name', 'like', "%" . $request->search_text . "%")
+    //                     ->orWhere('jobcode_desc', 'like', "%" . $request->search_text . "%")
+    //                     ->orWhere('deptid', 'like', "%" . $request->search_text . "%");
+    //                 }
+    //             });
+    //         })
+    //         ->select (
+    //             'employee_demo.employee_id',
+    //             'employee_demo.employee_name', 
+    //             'users.email',
+    //             'employee_demo.jobcode_desc',
+    //             'employee_demo.organization',
+    //             'employee_demo.level1_program',
+    //             'employee_demo.level2_division',
+    //             'employee_demo.level3_branch',
+    //             'employee_demo.level4',
+    //             'employee_demo.deptid',
+    //             'model_has_roles.role_id',
+    //             'model_has_roles.reason',
+    //             'roles.longname',
+    //             'model_has_roles.model_id',
+    //         );
+    //         return Datatables::of($query)
+    //         ->addIndexColumn()
+    //         ->addcolumn('action', function($row) {
+    //             $btn = '<a href="' . route('sysadmin.employeeshares.editpage', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Share" value="'. $row->id .'">Edit</a>';
+    //             $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="' . route('sysadmin.employeeshares.deleteshare', ['type' => $row->item_type, 'id' => $row->item_id]) . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->item_type . $row->id .'"><i class="fa fa-trash"></i></a>';
+    //             return $btn;
+    //         })
+    //         ->rawColumns(['action'])
+    //         ->make(true);
+    //     }
+    // }
 
     public function deleteshare(Request $request, $type, $id) {
-        if($type == 'Conversation') {
+        if($type == 'Goal') {
             $query1 = DB::table('goals_shared_with')
             ->where('id', '=', $id)
             ->delete();
         }
-        if($type == 'Goal') {
-            $query2 = DB::table('goals_shared_with')
+        if($type == 'Conversation') {
+            $query2 = DB::table('conversation_participants')
             ->where('conversation_id', '=', $id)
             ->delete();
         }
@@ -1209,13 +1209,13 @@ class EmployeeSharesController extends Controller
     }
 
     public function deleteitem(Request $request, $type, $id, $part) {
-        if($type == 'Conversation') {
+        if($type == 'Goal') {
             $query1 = DB::table('goals_shared_with')
             ->where('id', '=', $id)
             ->delete();
         }
-        if($type == 'Goal') {
-            $query2 = DB::table('goals_shared_with')
+        if($type == 'Conversation') {
+            $query2 = DB::table('conversation_participants')
             ->where('conversation_id', '=', $id)
             ->where('participant_id', '=', $part)
             ->delete();
@@ -1223,23 +1223,23 @@ class EmployeeSharesController extends Controller
         return redirect()->back();
     }
 
-    public function getAdminOrgs(Request $request, $model_id) {
-        if ($request->ajax()) {
-            $query = AdminOrg::where('user_id', '=', $model_id)
-            ->where('version', '=', '1')
-            ->select (
-                'organization',
-                'level1_program',
-                'level2_division',
-                'level3_branch',
-                'level4',
-                'user_id',
-            );
-            return Datatables::of($query)
-            ->addIndexColumn()
-            ->make(true);
-        }
-    }
+    // public function getAdminOrgs(Request $request, $model_id) {
+    //     if ($request->ajax()) {
+    //         $query = AdminOrg::where('user_id', '=', $model_id)
+    //         ->where('version', '=', '1')
+    //         ->select (
+    //             'organization',
+    //             'level1_program',
+    //             'level2_division',
+    //             'level3_branch',
+    //             'level4',
+    //             'user_id',
+    //         );
+    //         return Datatables::of($query)
+    //         ->addIndexColumn()
+    //         ->make(true);
+    //     }
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -1262,57 +1262,57 @@ class EmployeeSharesController extends Controller
         return view('sysadmin.employeeshares.partials.access-edit-modal', compact('roles', 'access', 'email'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function manageUpdate(Request $request) {
-        // if($request->accessselect) {
-        //     if($request->accessselect == 4) {
-        //         $query = DB::table('model_has_roles')
-        //         ->where('model_id', '=', $request->model_id)
-        //         ->whereIn('role_id', [3, 4])
-        //         ->update(['role_id' => $request->accessselect, 'reason' => $request->reason]);
-        //         $orgs = DB::table('admin_orgs')
-        //         ->where('user_id', '=', $request->input('model_id'))
-        //         ->delete();
-        //     }
-        //     if($request->accessselect == 3) {
-        //         $query = DB::table('model_has_roles')
-        //         ->where('model_id', '=', $request->model_id)
-        //         ->where('role_id', 3)
-        //         ->update(['reason' => $request->reason]);
-        //     }
-        // } else {
-        //     $query = DB::table('model_has_roles')
-        //     ->where('model_id', '=', $request->model_id)
-        //     ->update(['reason' => $request->reason]);
-        // }
+    // /**
+    //  * Update the specified resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function manageUpdate(Request $request) {
+    //     // if($request->accessselect) {
+    //     //     if($request->accessselect == 4) {
+    //     //         $query = DB::table('model_has_roles')
+    //     //         ->where('model_id', '=', $request->model_id)
+    //     //         ->whereIn('role_id', [3, 4])
+    //     //         ->update(['role_id' => $request->accessselect, 'reason' => $request->reason]);
+    //     //         $orgs = DB::table('admin_orgs')
+    //     //         ->where('user_id', '=', $request->input('model_id'))
+    //     //         ->delete();
+    //     //     }
+    //     //     if($request->accessselect == 3) {
+    //     //         $query = DB::table('model_has_roles')
+    //     //         ->where('model_id', '=', $request->model_id)
+    //     //         ->where('role_id', 3)
+    //     //         ->update(['reason' => $request->reason]);
+    //     //     }
+    //     // } else {
+    //     //     $query = DB::table('model_has_roles')
+    //     //     ->where('model_id', '=', $request->model_id)
+    //     //     ->update(['reason' => $request->reason]);
+    //     // }
 
-        return redirect()->back();
-    }
+    //     return redirect()->back();
+    // }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function manageDestroy(Request $request) {
-        $query = DB::table('model_has_roles')
-        ->where('model_id', '=', $request->input('model_id'))
-        ->wherein('role_id', [3, 4])
-        ->delete();
-        // if($query) {
-            $orgs = DB::table('admin_orgs')
-            ->where('user_id', '=', $request->input('model_id'))
-            ->delete();
-        // }
-        return redirect()->back();
-    }
+    // /**
+    //  * Remove the specified resource from storage.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function manageDestroy(Request $request) {
+    //     $query = DB::table('model_has_roles')
+    //     ->where('model_id', '=', $request->input('model_id'))
+    //     ->wherein('role_id', [3, 4])
+    //     ->delete();
+    //     // if($query) {
+    //         $orgs = DB::table('admin_orgs')
+    //         ->where('user_id', '=', $request->input('model_id'))
+    //         ->delete();
+    //     // }
+    //     return redirect()->back();
+    // }
 
 
 }

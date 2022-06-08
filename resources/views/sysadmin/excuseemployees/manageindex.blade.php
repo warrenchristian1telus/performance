@@ -76,7 +76,7 @@
                         columns: [
                             {title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_demo.employee_id', searchable: true},
                             {title: 'Name', ariaTitle: 'Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_demo.employee_name', searchable: true},
-                            {title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'employee_demo.job_title', searchable: true},
+                            {title: 'Classification', ariaTitle: 'Classification', target: 0, type: 'string', data: 'job_title', name: 'employee_demo.job_title', searchable: true},
                             {title: 'Excused Start Date', ariaTitle: 'Excused Start Date', target: 0, type: 'num', data: 'excused_start_date', name: 'excused_start_date', searchable: true, visible: true},
                             {title: 'Excused End Date', ariaTitle: 'Excused End Date', target: 0, type: 'num', data: 'excused_end_date', name: 'excused_end_date', searchable: true, visible: true},
                             {title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'employee_demo.organization', searchable: true},
@@ -126,10 +126,10 @@
             });
 
             $('#cancelButton').on('click', function(event) {
-                if($.fn.DataTable.isDataTable( '#admintable' )) {
-                    table = $('#admintable').DataTable();
-                    table.destroy();
-                };
+                // if($.fn.DataTable.isDataTable( '#admintable' )) {
+                //     table = $('#admintable').DataTable();
+                //     table.destroy();
+                // };
             });
 
             $('#accessselect').on('change', function(event) {
@@ -151,14 +151,14 @@
                 event.preventDefault();
                 $.ajax ( {
                     type: 'POST',
-                    url: 'manageexistingaccessdelete/'+model_id,
+                    url: 'manageindexclear/'+model_id,
                     data: {
                         'model_id':model_id,
                         '_token':token,
                         '_method':"DELETE",
                     },
                     success: function (result) {
-                        window.location.href = 'manageexistingaccess';
+                        window.location.href = 'manageindex';
                     }
                 });
             });

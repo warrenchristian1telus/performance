@@ -331,37 +331,16 @@ class ExcuseEmployeesController extends Controller
 
     public function saveexcuse(Request $request) 
     {
-        // $request->validate([
-        //     'start_date' => 'required|date',
-        //     'target_date' => 'required|date|after_or_equal:start_date',
-        //     'excused_reason' => 'required'
-        // ]);
-
-            $this->validate($request, [
-            'start_date' => 'required|date',
-            'target_date' => 'required|date|after_or_equal:start_date',
-            'excused_reason' => 'required'
-            ]);
-
-        // $request->start_date = isset($old['start_date']) ? $old['start_date'] : null;
-        // $request->target_date = isset($old['target_date']) ? $old['target_date'] : null;
-        // $request->excused_reason = isset($old['excused_reason']) ? $old['excused_reason'] : null;
+        $this->validate($request, [
+        'start_date' => 'required|date',
+        'target_date' => 'required|date|after_or_equal:start_date',
+        'excused_reason' => 'required'
+        ]);
 
         $selected_emp_ids = $request->selected_emp_ids ? json_decode($request->selected_emp_ids) : [];
         $request->userCheck = $selected_emp_ids;
         $selected_org_nodes = $request->selected_org_nodes ? json_decode($request->selected_org_nodes) : [];
         $employee_ids = ($request->userCheck) ? $request->userCheck : [];
-
-        // $validator = Validator::make($request->all(), [
-        //     'start_date' => 'required|date',
-        //     'target_date' => 'required|date|after_or_equal:start_date',
-        //     'excused_reason' => 'required',
-        // ]);
-        // if($validator->fails()) {
-        //     return redirect()->back()
-        //     ->withErrors($validator)
-        //     ->withInput();
-        // }
 
         $selection = EmployeeDemo::select('users.id')
             ->join('users', 'employee_demo.guid', 'users.guid')
@@ -707,7 +686,7 @@ class ExcuseEmployeesController extends Controller
             'all' => 'All',
             'emp' => 'Employee ID', 
             'name'=> 'Employee Name',
-            'job' => 'Job Title', 
+            'job' => 'Classification', 
             'dpt' => 'Department ID'
         ];
     }
@@ -742,13 +721,13 @@ class ExcuseEmployeesController extends Controller
             return $q->whereRaw("LOWER(employee_demo.employee_id) LIKE '%" . strtolower($request->search_text) . "%'");
         })
         ->when( $request->search_text && $request->criteria == 'name', function ($q) use($request) {
-            return $q->orWhereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'");
+            return $q->whereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'");
         })
         ->when( $request->search_text && $request->criteria == 'job', function ($q) use($request) {
-            return $q->orWhereRaw("LOWER(employee_demo.job_title) LIKE '%" . strtolower($request->search_text) . "%'");
+            return $q->whereRaw("LOWER(employee_demo.job_title) LIKE '%" . strtolower($request->search_text) . "%'");
         })
         ->when( $request->search_text && $request->criteria == 'dpt', function ($q) use($request) {
-            return $q->orWhereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
+            return $q->whereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
         });
 
         return $demoWhere;

@@ -107,7 +107,7 @@
                 </div>
             </div>
         </form>
-        @if(Auth::user()->hasSupervisorRole())
+        @if(Auth::user()->hasRole('Supervisor'))
         @php $shareWithLabel = 'Audience' @endphp
         @php $doNotShowInfo = true @endphp
         <div>

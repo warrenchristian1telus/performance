@@ -36,7 +36,6 @@ class ConversationController extends Controller
         $conversationTopics = ConversationTopic::all();
         // $participants = Participant::all();
         $query = Conversation::with('conversationParticipants');
-                
         $type = 'upcoming';
         if ($request->is('conversation/past') || $request->is('my-team/conversations/past')) {
             $query->where(function($query) use ($authId, $supervisorId, $viewType) {
@@ -180,8 +179,7 @@ class ConversationController extends Controller
         } else {            
             $textAboveFilter = 'The list below contains all planned conversations that have yet to be signed-off by both employee and supervisor. Once a conversation has been signed-off by both participants, it will move to the Completed Conversations tab and become an official performance development record for the employee.';
         }
-                
-        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter', 'user'));
+        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter'));
     }
 
     /**

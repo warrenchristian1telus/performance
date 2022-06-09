@@ -52,7 +52,7 @@
                     No Conversations
                 </div>
             @endforelse
-            @if($user->hasRole('Supervisor'))
+            @if(Auth::user()->hasSupervisorRole())
             <b class="p-2">Conversations with My Team</b>
             @forelse ($myTeamConversations as $c)
             <div class="col-12 col-md-12">

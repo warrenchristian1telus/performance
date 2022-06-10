@@ -3,20 +3,20 @@
 use App\Http\Controllers\SysadminController;
 use App\Http\Controllers\CurrentEmployeesController;
 use App\Http\Controllers\PastEmployeesController;
-use App\Http\Controllers\CreateAccessController;
+// use App\Http\Controllers\CreateAccessController;
 use App\Http\Controllers\GenericTemplateController;
-use App\Http\Controllers\ManageExistingAccessController;
+// use App\Http\Controllers\ManageExistingAccessController;
 // use App\Http\Controllers\ManageExistingSharesController;
-use App\Http\Controllers\ManageExistingExcusedController;
-use App\Http\Controllers\ManageGoalBankController;
+// use App\Http\Controllers\ManageExistingExcusedController;
+// use App\Http\Controllers\ManageGoalBankController;
 use App\Http\Controllers\SysAdmin\UnlockConversationController;
 use App\Http\Controllers\SysAdmin\GoalBankController;
 use App\Http\Controllers\SysAdmin\NotificationController;
 use App\Http\Controllers\SysAdmin\ExcuseEmployeesController;
-use App\Http\Controllers\SysAdmin\ExcusedEmployeesController;
+// use App\Http\Controllers\SysAdmin\ExcusedEmployeesController;
 use App\Http\Controllers\SysAdmin\AccessPermissionsController;
 use App\Http\Controllers\SysAdmin\EmployeeSharesController;
-use App\Http\Controllers\SysAdmin\SharedEmployeesController;
+// use App\Http\Controllers\SysAdmin\SharedEmployeesController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -36,17 +36,17 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
     Route::get('sysadmin/employees/pastemployeeslist', [PastEmployeesController::class, 'getList'])->name('sysadmin.employees.pastemployeeslist');
     Route::post('sysadmin/employees/pastemployees', [PastEmployeesController::class, 'index'])->name('sysadmin.employees.pastemployees');
 
-    Route::get('sysadmin/shared/shareemployee', [SysadminController::class, 'shareemployee'])->name('sysadmin.shared.shareemployee');
+    // Route::get('sysadmin/shared/shareemployee', [SysadminController::class, 'shareemployee'])->name('sysadmin.shared.shareemployee');
 
-    Route::get('sysadmin/shared/manageexistingshares', [ManageExistingSharesController::class, 'index'])->name('sysadmin.shared.manageexistingshares');
+    // Route::get('sysadmin/shared/manageexistingshares', [ManageExistingSharesController::class, 'index'])->name('sysadmin.shared.manageexistingshares');
     Route::get('sysadmin/employees/manageexistingshareslist', [ManageExistingSharesController::class, 'getList'])->name('sysadmin.employees.manageexistingshareslist');
-    Route::post('sysadmin/shared/manageexistingshares', [ManageExistingSharesController::class, 'index'])->name('sysadmin.shared.manageexistingshares');
+    // Route::post('sysadmin/shared/manageexistingshares', [ManageExistingSharesController::class, 'index'])->name('sysadmin.shared.manageexistingshares');
 
-    Route::get('sysadmin/excused/excuseemployee', [SysadminController::class, 'excuseemployee'])->name('sysadmin.excused.excuseemployee');
+    // Route::get('sysadmin/excused/excuseemployee', [SysadminController::class, 'excuseemployee'])->name('sysadmin.excused.excuseemployee');
 
-    Route::get('sysadmin/excused/manageexistingexcused', [ManageExistingExcusedController::class, 'index'])->name('sysadmin.excused.manageexistingexcused');
-    Route::get('sysadmin/excused/manageexistingexcusedlist', [ManageExistingExcusedController::class, 'getList'])->name('sysadmin.excused.manageexistingexcusedlist');
-    Route::post('sysadmin/excused/manageexistingexcused', [ManageExistingExcusedController::class, 'index'])->name('sysadmin.excused.manageexistingexcused');
+    // Route::get('sysadmin/excused/manageexistingexcused', [ManageExistingExcusedController::class, 'index'])->name('sysadmin.excused.manageexistingexcused');
+    // Route::get('sysadmin/excused/manageexistingexcusedlist', [ManageExistingExcusedController::class, 'getList'])->name('sysadmin.excused.manageexistingexcusedlist');
+    // Route::post('sysadmin/excused/manageexistingexcused', [ManageExistingExcusedController::class, 'index'])->name('sysadmin.excused.manageexistingexcused');
 
     // Route::get('sysadmin/goals/managegoalbank', [ManageGoalBankController::class, 'index'])->name('sysadmin.goals.managegoalbank');
     // Route::post('sysadmin/goals/managegoalbank', [ManageGoalBankController::class, 'index'])->name('sysadmin.goals.managegoalbank');
@@ -82,7 +82,7 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
     Route::get('sysadmin/get-identities', [SysadminController::class, 'getIdentities'])->name('sysadmin.get-identities');
     Route::get('sysadmin/switch-identity-action', [SysadminController::class, 'switchIdentityAction'])->name('sysadmin.switch-identity-action');
     Route::get('sysadmin/identity-list', [SysadminController::class, 'identityList'])->name('sysadmin.identity-list');
-
+ 
     //Goal Bank
     Route::group(['middleware' => ['auth']], function() {    
         Route::get('/sysadmin/goalbank', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank');
@@ -113,11 +113,11 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::get('/sysadmin/goalbank/org-branches', [GoalBankController::class,'getBranches']);
         Route::get('/sysadmin/goalbank/org-level4', [GoalBankController::class,'getLevel4']);
         Route::get('/sysadmin/goalbank/eorg-tree', [GoalBankController::class,'eloadOrganizationTree']);
-        Route::get('/sysadmin/goalbank/eorg-organizations', [GoalBankController::class,'geteOrganizations']);
-        Route::get('/sysadmin/goalbank/eorg-programs', [GoalBankController::class,'getePrograms']);
-        Route::get('/sysadmin/goalbank/eorg-divisions', [GoalBankController::class,'geteDivisions']);
-        Route::get('/sysadmin/goalbank/eorg-branches', [GoalBankController::class,'geteBranches']);
-        Route::get('/sysadmin/goalbank/eorg-level4', [GoalBankController::class,'geteLevel4']);
+        Route::get('/sysadmin/goalbank/eorg-organizations', [GoalBankController::class,'egetOrganizations']);
+        Route::get('/sysadmin/goalbank/eorg-programs', [GoalBankController::class,'egetPrograms']);
+        Route::get('/sysadmin/goalbank/eorg-divisions', [GoalBankController::class,'egetDivisions']);
+        Route::get('/sysadmin/goalbank/eorg-branches', [GoalBankController::class,'egetBranches']);
+        Route::get('/sysadmin/goalbank/eorg-level4', [GoalBankController::class,'egetLevel4']);
         Route::get('/sysadmin/goalbank/manageexistinggoal', [GoalBankController::class, 'manageindex'])->name('sysadmin.goalbank.manageindex');
         Route::get('/sysadmin/goalbank/managegetlist', [GoalBankController::class, 'managegetList'])->name('sysadmin.goalbank.managegetlist');
         Route::get('/sysadmin/goalbank/getgoalorgs/{goal_id}', [GoalBankController::class, 'getgoalorgs'])->name('sysadmin.goalbank.getgoalorgs');
@@ -176,26 +176,26 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
     });
 
 
-    //Excused Employees
-    Route::group(['middleware' => ['auth']], function() {    
-        Route::get('/sysadmin/excusedemployees', [ExcusedEmployeesController::class, 'index'])->name('sysadmin.excusedemployees');
-        Route::get('/sysadmin/excusedemployees/detail/{notification_id}', [ExcusedEmployeesController::class, 'show']);
-        Route::get('/sysadmin/excusedemployees/notify', [ExcusedEmployeesController::class, 'notify'])->name('sysadmin.excusedemployees.notify');
-        Route::post('/sysadmin/excusedemployees/notify', [ExcusedEmployeesController::class, 'notify'])->name('sysadmin.excusedemployees.search');
-        Route::post('/sysadmin/excusedemployees/notify-send', [ExcusedEmployeesController::class, 'send'])->name('sysadmin.excusedemployees.send');
-        Route::get('/sysadmin/excusedemployees/users', [ExcusedEmployeesController::class, 'getUsers'])->name('sysadmin.excusedemployees.users.list');
+    // //Excused Employees
+    // Route::group(['middleware' => ['auth']], function() {    
+    //     Route::get('/sysadmin/excusedemployees', [ExcusedEmployeesController::class, 'index'])->name('sysadmin.excusedemployees');
+    //     Route::get('/sysadmin/excusedemployees/detail/{notification_id}', [ExcusedEmployeesController::class, 'show']);
+    //     Route::get('/sysadmin/excusedemployees/notify', [ExcusedEmployeesController::class, 'notify'])->name('sysadmin.excusedemployees.notify');
+    //     Route::post('/sysadmin/excusedemployees/notify', [ExcusedEmployeesController::class, 'notify'])->name('sysadmin.excusedemployees.search');
+    //     Route::post('/sysadmin/excusedemployees/notify-send', [ExcusedEmployeesController::class, 'send'])->name('sysadmin.excusedemployees.send');
+    //     Route::get('/sysadmin/excusedemployees/users', [ExcusedEmployeesController::class, 'getUsers'])->name('sysadmin.excusedemployees.users.list');
         
-        Route::get('/sysadmin/excusedemployees/org-tree', [ExcusedEmployeesController::class,'loadOrganizationTree']);
-        Route::get('/sysadmin/excusedemployees/org-organizations', [ExcusedEmployeesController::class,'getOrganizations']);
-        Route::get('/sysadmin/excusedemployees/org-programs', [ExcusedEmployeesController::class,'getPrograms']);
-        Route::get('/sysadmin/excusedemployees/org-divisions', [ExcusedEmployeesController::class,'getDivisions']);
-        Route::get('/sysadmin/excusedemployees/org-branches', [ExcusedEmployeesController::class,'getBranches']);
-        Route::get('/sysadmin/excusedemployees/org-level4', [ExcusedEmployeesController::class,'getLevel4']);
-        Route::get('/sysadmin/excusedemployees/job-titles', [ExcusedEmployeesController::class,'getJobTitles']);
-        Route::get('/sysadmin/excusedemployees/employees/{id}', [ExcusedEmployeesController::class,'getEmployees']);
-        Route::get('/sysadmin/excusedemployees/employee-list', [ExcusedEmployeesController::class, 'getDatatableEmployees'])->name('sysadmin.excusedemployees.employee.list');
+    //     Route::get('/sysadmin/excusedemployees/org-tree', [ExcusedEmployeesController::class,'loadOrganizationTree']);
+    //     Route::get('/sysadmin/excusedemployees/org-organizations', [ExcusedEmployeesController::class,'getOrganizations']);
+    //     Route::get('/sysadmin/excusedemployees/org-programs', [ExcusedEmployeesController::class,'getPrograms']);
+    //     Route::get('/sysadmin/excusedemployees/org-divisions', [ExcusedEmployeesController::class,'getDivisions']);
+    //     Route::get('/sysadmin/excusedemployees/org-branches', [ExcusedEmployeesController::class,'getBranches']);
+    //     Route::get('/sysadmin/excusedemployees/org-level4', [ExcusedEmployeesController::class,'getLevel4']);
+    //     Route::get('/sysadmin/excusedemployees/job-titles', [ExcusedEmployeesController::class,'getJobTitles']);
+    //     Route::get('/sysadmin/excusedemployees/employees/{id}', [ExcusedEmployeesController::class,'getEmployees']);
+    //     Route::get('/sysadmin/excusedemployees/employee-list', [ExcusedEmployeesController::class, 'getDatatableEmployees'])->name('sysadmin.excusedemployees.employee.list');
         
-    });
+    // });
 
 
     //Notifications

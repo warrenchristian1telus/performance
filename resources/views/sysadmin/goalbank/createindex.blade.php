@@ -23,8 +23,7 @@
 				</div>
 				<div class="col col-md-8">
 					<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
-						{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
-							<small class="text-danger error-title"></small>
+					<small class="text-danger error-title"></small>
 				</div>
 				<div class="col col-md-2">
 					<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
@@ -39,15 +38,13 @@
 			<div class="row">
 				<div class="col">
 					<x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
-						{{-- <x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" /> --}}
-							<small class="text-danger error-what"></small>
+					<small class="text-danger error-what"></small>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
 					<x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'/>
-						{{-- <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$bankgoal->measure_of_success" /> --}}
-							<small class="text-danger error-measure_of_success"></small>
+					<small class="text-danger error-measure_of_success"></small>
 				</div>
 			</div>
 			<div class="row">
@@ -69,9 +66,7 @@
 
 			<div class="card col-md-4" >
 				<div class="card-body">
-					{{-- <h6 class="text-bold mt-1">Target Audience</h6> --}}
 					<div class="row">
-						{{-- <div class="row form-group pl-3 pb-n3 mb-n2"> --}}
 						<div class="col">
 							<label>
 								<input type="radio" id="opt_audience1" name="opt_audience" value="byEmp" checked> Individual(s)
@@ -333,18 +328,12 @@
                                     type: 'GET',
                                     data: $("#notify-form").serialize(),
                                     dataType: 'html',
-                                    // beforeSend: function() {
-                                    //     $("#tree-loading-spinner").show();                    
-                                    // },
                                     success: function (result) {
                                         $(target).html(''); 
                                         $(target).html(result);
 
                                         $('#nav-tree').attr('loaded','loaded');
                                     },
-                                    // complete: function() {
-                                    //     $(".tree-loading-spinner").hide();
-                                    // },
                                     error: function () {
                                         alert("error");
                                         $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
@@ -513,8 +502,6 @@
 					}
 				}
 
-			// });
-
 				$('#btn_search').click(function(e) {
 					e.preventDefault();
 					$('#employee-list-table').DataTable().destroy();
@@ -551,44 +538,6 @@
 							{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4'},
 							{title: 'Dept', ariaTitle: 'Dept', target: 0, type: 'string', data: 'deptid', data: 'deptid', name: 'deptid'},
 						],
-						// columnDefs: [
-						// 	{
-						// 	},
-						// 	{
-						// 	},
-						// 	{
-						// 		className: "dt-nowrap",
-						// 		targets: 2
-						// 	},
-						// 	{
-						// 		className: "dt-nowrap",
-						// 		targets: 3
-						// 	},
-						// 	{
-						// 		className: "dt-nowrap",
-						// 		targets: 4
-						// 	},
-						// 	{
-						// 		className: "dt-nowrap",
-						// 		targets: 5
-						// 	},        
-						// 	{
-						// 		className: "dt-nowrap",
-						// 		targets: 6
-						// 	},
-						// 	{
-						// 		className: "dt-nowrap",
-						// 		targets: 7
-						// 	},        
-						// 	{
-						// 		className: "dt-nowrap",
-						// 		targets: 8
-						// 	},        
-						// 	{
-						// 		className: "dt-nowrap",
-						// 		targets: 9
-						// 	}        
-						// ]
 					});
 				});
 
@@ -648,7 +597,6 @@
                     return;
                 });
 
-
 				$('#ebtn_search').click(function(e) {
 					e.preventDefault();
 					target = $('#enav-tree'); 
@@ -663,9 +611,6 @@
 								data: $("#notify-form").serialize(),
 								dataType: 'html',
 
-								// beforeSend: function() {
-								// 	$("#etree-loading-spinner").show();                    
-								// },
 
 								success: function (result) {
 									$('#enav-tree').html(''); 
@@ -673,9 +618,6 @@
 									$('#enav-tree').attr('loaded','loaded');
 								},
 
-								// complete: function() {
-								// 	$("#etree-loading-spinner").hide();
-								// },
 
 								error: function () {
 									alert("error");

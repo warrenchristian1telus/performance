@@ -11,9 +11,8 @@
         <div class="card-body">
             <div class="h5">{{__('Manage Goals in Goal Bank')}}</div>
             @include('sysadmin.goalbank.partials.filter')
-            {{-- <p></p> --}}
-            <div class="p-3">  
-                <table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
+            <div class="p-3" id='datagrid'>  
+                <table class="table table-bordered filtertable" id="filtertable" name="filtertable" style="width: 100%; overflow-x: auto; "></table>
             </div>
         </div>    
     </div>   
@@ -75,17 +74,32 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
     <script type="text/javascript">
+
         function confirmDeleteModal(){
             $('#saveGoalModal .modal-body p').html('Are you sure to delete goal?');
             $('#saveGoalModal').modal();
         }
 
-        jq = jQuery.noConflict();
-        jq(function( $ ) {
-            var table = $('.filtertable').DataTable
-            (
-                {
-                    processing: true,
+        $(document).ready(function() {
+
+            $('#lvlgroup0').hide();
+            $('#lvlgroup1').hide();
+            $('#lvlgroup2').hide();
+            $('#lvlgroup3').hide();
+            $('#lvlgroup4').hide();
+            $('#blank5th').hide();
+            $('#datagrid').hide();
+
+            $('#btn_search').click(function(e) {
+                e.preventDefault();
+                $('#datagrid').show();
+                if($.fn.dataTable.isDataTable('#filtertable')) {
+                    $('#filtertable').DataTable().clear();
+                    $('#filtertable').DataTable().destroy();
+                    $('#filtertable').empty();
+                }
+                $('#filtertable').DataTable ( {
+        processing: true,
                     serverSide: true,
                     scrollX: true,
                     stateSave: true,
@@ -95,116 +109,48 @@
                         url: "{{ route('sysadmin.goalbank.managegetlist') }}",
                         data: function (d) 
                         {
-                            // d.dd_level0 = $('#dd_level0').val();
-                            // d.dd_level1 = $('#dd_level1').val();
-                            // d.dd_level2 = $('#dd_level2').val();
-                            // d.dd_level3 = $('#dd_level3').val();
-                            // d.dd_level4 = $('#dd_level4').val();
-                            // d.criteria = $('#criteria').val();
-                            // d.search_text = $('#search_text').val();
+                            d.criteria = $('#criteria').val();
+                            d.search_text = $('#search_text').val();
                         }
                     },
                     columns: 
                     [
-                        {title: 'Goal Title', ariaTitle: 'Goal Title', target: 0, type: 'string', data: 'title', name: 'title', searchable: true},
-                        {title: 'Goal Type', ariaTitle: 'Goal Type', target: 0, type: 'string', data: 'goal_type_name', name: 'goal_type_name', searchable: false},
-                        {title: 'Mandatory', ariaTitle: 'Mandatory', target: 0, type: 'string', data: 'mandatory', name: 'mandatory', searchable: false},
-                        {title: 'Goal Creation Date', ariaTitle: 'Goal Creation Date', target: 0, type: 'date', data: 'created_at', name: 'goals.created_at', searchable: true},
+                        {title: 'Goal Title', ariaTitle: 'Goal Title', target: 0, type: 'string', data: 'title', name: 'title', searchable: true, className: 'dt-nowrap'},
+                        {title: 'Goal Type', ariaTitle: 'Goal Type', target: 0, type: 'string', data: 'goal_type_name', name: 'goal_type_name', searchable: false, className: 'dt-nowrap'},
+                        {title: 'Mandatory', ariaTitle: 'Mandatory', target: 0, type: 'string', data: 'mandatory', name: 'mandatory', searchable: false, className: 'dt-nowrap'},
+                        {title: 'Goal Creation Date', ariaTitle: 'Goal Creation Date', target: 0, type: 'date', data: 'created_at', name: 'created_at', searchable: true, className: 'dt-nowrap'},
                         {title: 'Created By', ariaTitle: 'Created By', target: 0, type: 'string', data: 'creator_name', name: 'creator_name', searchable: false},
-                        {title: 'Audience', ariaTitle: 'Audience', target: 0, type: 'num', data: 'audience', name: 'audience', searchable: false},
-                        {title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
+                        {title: 'Audience', ariaTitle: 'Audience', target: 0, type: 'num', data: 'audience', name: 'audience', searchable: false, className: 'dt-nowrap'},
+                        {title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false, className: 'dt-nowrap'},
                         {title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'string', data: 'id', name: 'id', searchable: false, visible: false},
                     ]
+                } );
+            });
+
+            $('#btn_search').click();
+
+            $('#criteria').change(function (e){
+                e.preventDefault();
+                $('#btn_search').click();
+            });
+
+            $('#search_text').change(function (e){
+                e.preventDefault();
+                $('#btn_search').click();
+            });
+
+            $('#search_text').keydown(function (e){
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    $('#btn_search').click();
                 }
-            );
+            });
 
-            $('#lvlgroup0').hide();
-            $('#lvlgroup1').hide();
-            $('#lvlgroup2').hide();
-            $('#lvlgroup3').hide();
-            $('#lvlgroup4').hide();
-            $('#blank5th').hide();
-
-        });
-
-        $('#editModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var reason = button.data('reason');
-            var role_id = parseInt(button.data('roleid'));
-            var email = button.data('email');
-            var model_id = button.data('modelid');
-            var current = {{ auth()->user()->id }};
-            $('#reason').val(reason);
-            $('#accessselect').val(role_id);
-            $('#model_id').val(model_id);
-            $('#accessDetailLabel').text('Edit Employee Access Level:  '+email);
-            $('#saveButton').prop('disabled', current == model_id);
-            $('removeButton').prop('disabled', current == model_id);
-            $('#accessselect').prop('disabled', current == model_id);
-            $('#reason').prop('disabled', current == model_id);
-            if($('#accessselect').val() == 4) {
-                $('#accessselect').prop('disabled', true);
-            }
-            if($('#accessselect').val() == 3) {
-                $('#admintable').show();
-                var table = $('#admintable').DataTable
-                (
-                    {
-                        processing: true,
-                        serverSide: false,
-                        scrollX: true,
-                        stateSave: false,
-                        deferRender: false,
-                        ajax: {
-                            type: 'GET',
-                            url: "/sysadmin/goalbank/manageexistingaccessadmin/"+model_id,
-                        },                        
-                        columns: [
-                            {title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},
-                            {title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true},
-                            {title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true},
-                            {title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true},
-                            {title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
-                            {title: 'User ID', ariaTitle: 'User ID', target: 0, type: 'num', data: 'user_id', name: 'user_id', searchable: false, visible: false},
-                        ],  
-                    }
-                );
-            } else {
-                $('#admintable').hide();
-            };
-        });
-
-        $('#editModal').on('hidden.bs.modal', function(event) {
-            if($.fn.DataTable.isDataTable( '#admintable' )) {
-                table = $('#admintable').DataTable();
-                table.clear();
-                table.draw();
-            };
-        });
-
-        $('#cancelButton').on('click', function(event) {
-            if($.fn.DataTable.isDataTable( '#admintable' )) {
-                table = $('#admintable').DataTable();
-                table.destroy();
-            };
-        });
-
-        $('#removeButton').on('click', function(event) {
-            console.log('Delete button clicked');
-            var model_id = $('#model_id').val();
-            var token = $('meta[name="csrf-token"]').attr('content');
-            event.preventDefault();
-            $.ajax ( {
-                type: 'POST',
-                url: 'manageexistingaccessdelete/'+model_id,
-                data: {
-                    'model_id':model_id,
-                    '_token':token,
-                    '_method':"DELETE",
-                },
-                success: function (result) {
-                    window.location.href = 'manageexistingaccess';
-                }
+            $('#btn_search_reset').click(function(e) {
+                e.preventDefault();
+                $('#criteria').val('all');
+                $('#search_text').val(null);
+                $('#btn_search').click();
             });
         });
 

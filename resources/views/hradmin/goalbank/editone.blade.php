@@ -1,9 +1,9 @@
 <x-side-layout title="{{ __('Dashboard') }}">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary leading-tight" role="banner">
-            Goal Bank
-        </h2> 
-    </x-slot>
+    <div name="header" class="container-header p-n2 "> 
+        <div class="container-fluid">
+            <h3>Goal Bank</h3>
+        </div>
+    </div>
 
 	<small><a href=" {{ route('hradmin.goalbank.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
 
@@ -22,12 +22,6 @@
 
 		<div class="row">
 			<div class="col m-2">
-				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goaldetail->tags->toArray(), 'id')" class="tags" multiple />
-				<small  class="text-danger error-tag_ids"></small>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col m-2">
 				<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" :selected="$goaldetail->goal_type_id" />
 			</div>
 			<div class="col m-2">
@@ -36,6 +30,12 @@
 			</div>
 			<div class="col m-2">
 				<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="$goaldetail->goal_type_id" ></x-dropdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col m-2">
+				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goaldetail->tags->toArray(), 'id')" class="tags" multiple />
+				<small  class="text-danger error-tag_ids"></small>
 			</div>
 		</div>
 		<div class="row">
@@ -104,7 +104,7 @@
 
 		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
 
-		@include('hradmin.goalbank.partials.filter')
+		@include('hradmin.goalbank.partials.filter2')
 
         <div class="p-3">
             <nav>
@@ -202,7 +202,7 @@
 				$('#saveGoalModal').modal();
 			}
 
-			$(document).ready(function(){
+			$(document).ready(function() {
 
 
 				var table = $('.currenttable').DataTable

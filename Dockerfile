@@ -16,7 +16,8 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y openssl zip unzip 
     zlib1g \
     sudo \
     wget  \
-    vim
+    vim \
+    cron
 
 RUN apt install ca-certificates apt-transport-https wget gnupg -y
 RUN wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -

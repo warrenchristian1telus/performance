@@ -54,14 +54,13 @@
             <label for="esearch_text">Search Text</label>
             <input type="text" id="esearch_text" name="esearch_text" class="form-control" value="{{ old('esearch_text') }}" placeholder="Search Text">
         </div>
-            <div class="form-group col-md-2 p-3 float-left float-bottom" style="text-align:left; vertical-align:bottom;">
-                <div class="form-group row"> </div>
-                <div class="form-group row">
-                    <span class="float-left float-bottom align-self-end" style="float: left; vertical-align: bottom;">  
-                        <button type="button" class="align-self-end btn btn-primary" id="ebtn_search" name="ebtn_search">Filter</button>
-                        <button type="button" class="align-self-end btn btn-secondary" id="ebtn_search_reset" name="ebtn_reset" value="ebtn_reset">Reset</button>
-                    </span>
-                </div>
+        <div class="form-group col-md-2 p-3 float-left float-bottom" style="text-align:left; vertical-align:bottom;">
+            <div class="form-group row"> </div>
+            <div class="form-group row">
+                <span class="float-left float-bottom align-self-end" style="float: left; vertical-align: bottom;">  
+                    <button type="button" class="align-self-end btn btn-primary" id="ebtn_search" name="ebtn_search">Filter</button>
+                    <button type="button" class="align-self-end btn btn-secondary" id="ebtn_search_reset" name="ebtn_reset" value="ebtn_reset">Reset</button>
+                </span>
             </div>
         </div>
     </div>
@@ -237,14 +236,6 @@
             // Do something
             $('#edd_level4').val(null).trigger('change');
         });
-
-        // $('#ebtn_search').click(function() {
-        //     $('#edd_level0').val(null).trigger('change');
-        //     $('#edd_level1').val(null).trigger('change');
-        //     $('#edd_level2').val(null).trigger('change');
-        //     $('#edd_level3').val(null).trigger('change');
-        //     $('#edd_level4').val(null).trigger('change');
-        // });
 
         $('#ebtn_search_reset').click(function() {
             $('#edd_level0').val(null).trigger('change');

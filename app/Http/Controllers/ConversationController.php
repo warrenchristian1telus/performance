@@ -98,8 +98,8 @@ class ConversationController extends Controller
             });
             $type = 'past';
 
-            $conversations = $query->orderBy('date', 'asc')->paginate(10);
-            $myTeamConversations = $myTeamQuery->orderBy('date', 'asc')->paginate(10);
+            $conversations = $query->orderBy('id', 'DESC')->paginate(10);
+            $myTeamConversations = $myTeamQuery->orderBy('id', 'DESC')->paginate(10);
 
         } else { // Upcoming
             $conversations = $query->where(function($query) use ($authId, $supervisorId, $viewType) {
@@ -167,8 +167,8 @@ class ConversationController extends Controller
             });
             
 
-            $conversations = $query->orderBy('date', 'asc')->paginate(10);
-            $myTeamConversations = $myTeamQuery->orderBy('date', 'asc')->paginate(10);
+            $conversations = $query->orderBy('id', 'DESC')->paginate(10);
+            $myTeamConversations = $myTeamQuery->orderBy('id', 'DESC')->paginate(10);
             
         }
 

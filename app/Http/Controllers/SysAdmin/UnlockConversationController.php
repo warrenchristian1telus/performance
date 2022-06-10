@@ -373,13 +373,13 @@ class UnlockConversationController extends Controller
                                 return $q->whereRaw("LOWER(employee_demo.employee_id) LIKE '%" . strtolower($request->search_text) . "%'");
                             })
                             ->when( $request->search_text && $request->criteria == 'name', function ($q) use($request) {
-                                return $q->orWhereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'");
+                                return $q->whereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'");
                             })
                             ->when( $request->search_text && $request->criteria == 'cls', function ($q) use($request) {
-                                return $q->orWhereRaw("LOWER(employee_demo.classification_group) LIKE '%" . strtolower($request->search_text) . "%'");
+                                return $q->whereRaw("LOWER(employee_demo.classification_group) LIKE '%" . strtolower($request->search_text) . "%'");
                             })
                             ->when( $request->search_text && $request->criteria == 'dpt', function ($q) use($request) {
-                                return $q->orWhereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
+                                return $q->whereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
                             });
                 });
             });    

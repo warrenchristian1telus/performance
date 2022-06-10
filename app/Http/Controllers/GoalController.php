@@ -46,8 +46,8 @@ class GoalController extends Controller
         
         $type_desc_arr = array();
         foreach($goaltypes as $goalType) {
-            if(isset($goalType['description']) && isset($goalType['name'])) {
-                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+            if(isset($goalType['description']) && isset($goalType['name'])) {                
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". str_replace($goalType['name'] . " Goals","",$goalType['description']);
                 array_push($type_desc_arr, $item);
             }
         }
@@ -181,8 +181,8 @@ class GoalController extends Controller
         
         $type_desc_arr = array();
         foreach($goaltypes as $goalType) {
-            if(isset($goalType['description']) && isset($goalType['name'])) {
-                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+            if(isset($goalType['description']) && isset($goalType['name'])) {                
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". str_replace($goalType['name'] . " Goals","",$goalType['description']);
                 array_push($type_desc_arr, $item);
             }
         }
@@ -342,8 +342,8 @@ class GoalController extends Controller
         // dd($merged);
         $type_desc_arr = array();
         foreach($goalTypes as $goalType) {
-            if(isset($goalType['description']) && isset($goalType['name'])) {
-                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+            if(isset($goalType['description']) && isset($goalType['name'])) {                
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". str_replace($goalType['name'] . " Goals","",$goalType['description']);
                 array_push($type_desc_arr, $item);
             }
         }

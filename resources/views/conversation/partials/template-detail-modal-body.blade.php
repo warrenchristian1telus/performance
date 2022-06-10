@@ -5,7 +5,7 @@
     </button>
 </div>
 
-
+<!----
 <div class="mt-4 p-3">
     <div class="row">
         <div class="col-12">
@@ -15,7 +15,7 @@
         </div>
     </div>
 </div>
-
+----->
 
 <div class="modal-body p-3">
     <button class="btn w-100 d-flex align-items-center text-primary p-2" style="background-color: #ddd;" data-toggle="collapse" data-target="#when_to_use">
@@ -23,7 +23,7 @@
         <div class="flex-fill"></div>
         <i class="fa fa-chevron-down"></i>
     </button>
-    <div id="when_to_use"  class="collapse p-3 border">
+    <div id="when_to_use"  class="collapse p-3 border show">
         {!!$template->when_to_use!!}
     </div>
 

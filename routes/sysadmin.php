@@ -60,7 +60,7 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
     // Route::get('sysadmin/goals/goal-edit/{id}', [SysadminController::class, 'goaledit'])->name('sysadmin.goals.goal-edit');
     // Route::post('sysadmin/goals/goaladd', [SysadminController::class, 'goaladd'])->name('sysadmin.goals.goaladd');
     // Route::post('sysadmin/goals/goalupdate/{id}', [SysadminController::class, 'goalupdate'])->name('sysadmin.goal.goalupdate');
-
+  
 
     Route::group(['middleware' => ['auth']], function() 
     {    

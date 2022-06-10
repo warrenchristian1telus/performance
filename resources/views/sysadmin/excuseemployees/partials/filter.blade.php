@@ -60,7 +60,7 @@
                 <div class="form-group row">
                     <span class="float-left float-bottom">  
                         <button type="submit" class="btn btn-primary" name="btn_search" 
-                            value="btn_search" formaction="{{ route('hradmin.goalbank.search') }}">Filter</button>
+                            value="btn_search" formaction="{{ route('sysadmin.excuseemployees.search') }}">Filter</button>
                         <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">Reset</button>
                     </span>
                 </div>
@@ -98,7 +98,7 @@
             placeholder: 'Select Organization',
             allowClear: true,
             ajax: {
-                url: '/hradmin/goalbank/org-organizations'
+                url: '/sysadmin/excuseemployees/org-organizations'
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -120,7 +120,7 @@
             placeholder: 'Select Level 1',
             allowClear: true,
             ajax: {
-                url: '/hradmin/goalbank/org-programs' 
+                url: '/sysadmin/excuseemployees/org-programs' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -143,7 +143,7 @@
             placeholder: 'Select Level 2',
             allowClear: true,
             ajax: {
-                url: '/hradmin/goalbank/org-divisions' 
+                url: '/sysadmin/excuseemployees/org-divisions' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -167,7 +167,7 @@
             placeholder: 'Select Level 3',
             allowClear: true,
             ajax: {
-                url: '/hradmin/goalbank/org-branches' 
+                url: '/sysadmin/excuseemployees/org-branches' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -192,7 +192,7 @@
             placeholder: 'Select level 4',
             allowClear: true,
             ajax: {
-                url: '/hradmin/goalbank/org-level4' 
+                url: '/sysadmin/excuseemployees/org-level4' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {

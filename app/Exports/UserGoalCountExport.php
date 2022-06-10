@@ -3,10 +3,11 @@
 namespace App\Exports;
 
 use App\Models\User;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use App\Models\EmployeeDemo;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
 class UserGoalCountExport implements FromCollection, WithHeadings, WithMapping, WithStrictNullComparison
 {
@@ -33,18 +34,29 @@ class UserGoalCountExport implements FromCollection, WithHeadings, WithMapping, 
     // this method will iterate over each collection item
     public function map($user): array
     {
+
+        $emp = EmployeeDemo::where('guid', $user->guid)->first();
+
         return [
-            $user->id,
-            $user->name,
+            $emp ? $emp->employee_id : '',
+            $emp ? $emp->employee_name : '',
             $user->email,
-            $user->reportingManager->name,
             $user->goals_count,
+            $emp ? $emp->organization : '',
+            $emp ? $emp->level1_program : '',
+            $emp ? $emp->level2_division : '',
+            $emp ? $emp->level3_branch : '',
+            $emp ? $emp->level4 : '',
+            $user->reportingManager->name,
+
         ];
     }
 
 
     public function headings(): array
     {
-        return ["id", "Name", "Email", "Reporting To", 'Active Goals Count'];
+        return ["Employee ID", "Name", "Email", 'Active Goals Count', 
+                "Organziation", "Program", "Division", "Branch", "Level 4", "Reporting To",
+            ];
     }
 }

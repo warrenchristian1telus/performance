@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', function () {
         // return view('welcome');
         return redirect('/login');
-    });
+    })->middleware('cache.headers:no_cache,private,max_age=300;etag');
 
     Route::middleware(['ViewShare'])->group(function () {
         Route::match(['get', 'post', 'delete', 'put'], '/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
@@ -40,6 +40,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/my-performance', function () {
         return view('my-performance');
     })->middleware(['auth'])->name('my-performance');
-    
+
     require __DIR__.'/auth.php';
     Route::get('dashboard/revert-identity', [DashboardController::class, 'revertIdentity'])->name('dashboard.revert-identity');

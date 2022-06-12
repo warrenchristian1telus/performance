@@ -60,7 +60,7 @@ jobs:
           echo "BUILIDING ${APP} with tag: ${BUILD_TAG}"
                 oc -n ${BUILD_NAMESPACE} process -f docker-build.yml \
                 -p TAG=${BUILD_TAG} -p SOURCE_REPOSITORY_REF=${BRANCH} \
-                -p BASE_IMAGE_NAME="php" -p BASE_IMAGE_TAG="prod-cache" \
+                -p BASE_IMAGE_NAME="php" -p BASE_IMAGE_TAG="8" \
                 -p BASE_IMAGE_REPO="aro.jfrog.io/performance-app/" \
                 -p GITHUB_AUTH_TOKEN=${{secrets.AUTH_TOKEN}} \
                 -p SOURCE_CONTEXT_DIR=. \
@@ -121,7 +121,7 @@ jobs:
                 -p DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
                 -p GIT_PROJECT=performance \
                 -p BUILD_NAMESPACE="332842-tools" \
-                -p IMAGE_STREAM_TAG="performance:dev" \
+                -p IMAGE_STREAM_TAG="performance:latest" \
                 -p GIT_URL="https://github.com/performance.git" \
                 -p GIT_TAG=openshift \
                 -p GITHUB_AUTH_TOKEN="${{ secrets.AUTH_TOKEN }}" | \
@@ -196,7 +196,7 @@ jobs:
                 -p DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
                 -p GIT_PROJECT=performance \
                 -p BUILD_NAMESPACE="332842-tools" \
-                -p IMAGE_STREAM_TAG="performance:test" \
+                -p IMAGE_STREAM_TAG="performance:latest" \
                 -p GIT_URL="https://github.com/performance.git" \
                 -p GIT_TAG=openshift \
                 -p GITHUB_AUTH_TOKEN="${{ secrets.AUTH_TOKEN }}" | \

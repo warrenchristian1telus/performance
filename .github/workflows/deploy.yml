@@ -121,7 +121,7 @@ jobs:
                 -p DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
                 -p GIT_PROJECT=performance \
                 -p BUILD_NAMESPACE="332842-tools" \
-                -p IMAGE_STREAM_TAG="performance:latest" \
+                -p IMAGE_STREAM_TAG="performance:dev" \
                 -p GIT_URL="https://github.com/performance.git" \
                 -p GIT_TAG=openshift \
                 -p GITHUB_AUTH_TOKEN="${{ secrets.AUTH_TOKEN }}" | \
@@ -196,7 +196,7 @@ jobs:
                 -p DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
                 -p GIT_PROJECT=performance \
                 -p BUILD_NAMESPACE="332842-tools" \
-                -p IMAGE_STREAM_TAG="performance:latest" \
+                -p IMAGE_STREAM_TAG="performance:test" \
                 -p GIT_URL="https://github.com/performance.git" \
                 -p GIT_TAG=openshift \
                 -p GITHUB_AUTH_TOKEN="${{ secrets.AUTH_TOKEN }}" | \

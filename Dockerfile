@@ -105,4 +105,4 @@ EXPOSE 8000
 
 #ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]
 
-CMD apachectl -D FOREGROUND
+CMD ["apachectl", "-D",  "FOREGROUND"]

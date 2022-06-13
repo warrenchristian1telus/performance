@@ -94,7 +94,7 @@ COPY --chown=www-data:www-data config/server_files/opcache.ini /usr/local/etc/ph
 # # Enable "mod_rewrite" – http://httpd.apache.org/docs/current/mod/mod_rewrite.html
 # RUN a2enmod rewrite
 # # Enable "mod_headers" – http://httpd.apache.org/docs/current/mod/mod_headers.html
-# RUN a2enmod headers
+# RUN a2enmod headersg;fbx.c¿
 # # Enable "mod_expires" – http://httpd.apache.org/docs/current/mod/mod_expires.html
 # RUN a2enmod expires
 
@@ -103,4 +103,4 @@ COPY --chown=www-data:www-data config/server_files/opcache.ini /usr/local/etc/ph
 
 EXPOSE 8000
 
-ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]
+ENTRYPOINT ["/usr/sbin/apachectl", "-D", "FOREGROUND"]

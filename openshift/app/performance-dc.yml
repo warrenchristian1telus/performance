@@ -107,8 +107,6 @@ objects:
                   value: '${SITE_NAME}'
                 - name: SITE_URL
                   value: 'https://${SITE_URL}'
-                - name: APACHE_DOCUMENT_ROOT
-                  value: '${APACHE_DOCUMENT_ROOT}'
                 - name: PERFORMANCE_MEMORY_LIMIT
                   value: '${PERFORMANCE_MEMORY_LIMIT}'
                 - name: PERFORMANCE_DATA_PATH
@@ -275,11 +273,6 @@ parameters:
     name: GIT_TAG
     required: true
     value: '${GIT_TAG}'
-  - description: Apache document root directory.
-    displayName: Apache Root
-    name: APACHE_DOCUMENT_ROOT
-    required: true
-    value: '${APACHE_DOCUMENT_ROOT}'
   - description: GitHub Authorization Token (oAuth)
     displayName: GitHub oAuth
     name: GITHUB_AUTH_TOKEN

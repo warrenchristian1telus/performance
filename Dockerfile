@@ -52,12 +52,12 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     zip \
     unzip
 
-# Enable "mod_rewrite" – http://httpd.apache.org/docs/current/mod/mod_rewrite.html
-RUN a2enmod rewrite
-# Enable "mod_headers" – http://httpd.apache.org/docs/current/mod/mod_headers.html
-RUN a2enmod headers
-# Enable "mod_expires" – http://httpd.apache.org/docs/current/mod/mod_expires.html
-RUN a2enmod expires
+# # Enable "mod_rewrite" – http://httpd.apache.org/docs/current/mod/mod_rewrite.html
+# RUN a2enmod rewrite
+# # Enable "mod_headers" – http://httpd.apache.org/docs/current/mod/mod_headers.html
+# RUN a2enmod headers
+# # Enable "mod_expires" – http://httpd.apache.org/docs/current/mod/mod_expires.html
+# RUN a2enmod expires
 
 #INSTALL APCU
 #RUN pecl install apcu-${APCU_VERSION} && docker-php-ext-enable apcu
@@ -78,6 +78,8 @@ RUN echo '\
 RUN echo "deb https://packages.sury.org/php/ buster main" | tee /etc/apt/sources.list.d/php.list
 RUN docker-php-ext-install pdo pdo_mysql opcache
 
+
+
 USER root
 
 COPY --chown=www-data:www-data --from=composer /app /var/www/html
@@ -88,6 +90,13 @@ COPY --chown=www-data:www-data config/server_files/ports.conf /etc/apache2/ports
 COPY --chown=www-data:www-data config/server_files/.htaccess /var/www/html/public/.htaccess
 COPY --chown=www-data:www-data config/server_files/php.ini /usr/local/etc/php/php.ini
 COPY --chown=www-data:www-data config/server_files/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
+# Enable "mod_rewrite" – http://httpd.apache.org/docs/current/mod/mod_rewrite.html
+RUN a2enmod rewrite
+# Enable "mod_headers" – http://httpd.apache.org/docs/current/mod/mod_headers.html
+RUN a2enmod headers
+# Enable "mod_expires" – http://httpd.apache.org/docs/current/mod/mod_expires.html
+RUN a2enmod expires
 
 # For Debug Purposes - Comment out for production
 # COPY --chown=www-data:www-data config/server_files/info.php /var/www/html/public/info.php

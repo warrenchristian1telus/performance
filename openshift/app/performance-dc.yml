@@ -91,7 +91,7 @@ objects:
                 - containerPort: 8000
               volumeMounts:
                 - name: config-vol
-                  mountPath: /app/.env
+                  mountPath: /var/www/html/.env
                   subPath: .env
               resources:
                 limits:

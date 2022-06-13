@@ -13,7 +13,7 @@ WORKDIR /app
 COPY . /app
 
 
-RUN composer config --global process-timeout 2000
+#RUN composer config --global process-timeout 2000
 RUN composer update --ignore-platform-reqs
 RUN composer require kalnoy/nestedset --ignore-platform-reqs
 RUN composer require doctrine/dbal --ignore-platform-reqs

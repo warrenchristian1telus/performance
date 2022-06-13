@@ -12,7 +12,10 @@ ENV http_proxy=http://198.161.14.25:8080
 WORKDIR /app
 COPY . /app
 
-RUN COMPOSER_PROCESS_TIMEOUT=30000 composer update --ignore-platform-reqs
+
+RUN composer install --optimize-autoloader --no-interaction --prefer-dist
+
+#RUN COMPOSER_PROCESS_TIMEOUT=30000 composer update --ignore-platform-reqs
 RUN composer require kalnoy/nestedset --ignore-platform-reqs
 RUN composer require doctrine/dbal --ignore-platform-reqs
 RUN composer require awobaz/compoships --ignore-platform-reqs

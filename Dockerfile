@@ -30,6 +30,40 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     zip \
     unzip
 
+RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
+    ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
+	apt-get update -y && \
+	apt-get upgrade -y --fix-missing && \
+	apt-get dist-upgrade -y && \
+	dpkg --configure -a && \
+	apt-get -f install && \
+	apt-get install -y zlib1g-dev libicu-dev g++ && \
+	apt-get install rsync grsync && \
+	apt-get install tar && \
+	set -eux; \
+	\
+	if command -v a2enmod; then \
+		a2enmod rewrite; \
+	fi; \
+	\
+	savedAptMark="$(apt-mark showmanual)"; \
+	\
+	docker-php-ext-install -j "$(nproc)" \
+	; \
+	\
+# reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
+	apt-mark auto '.*' > /dev/null; \
+	apt-mark manual $savedAptMark; \
+	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
+		| awk '/=>/ { print $3 }' \
+		| sort -u \
+		| xargs -r dpkg-query -S \
+		| cut -d: -f1 \
+		| sort -u \
+		| xargs -rt apt-mark manual; \
+	\
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false;
+
 RUN echo '\
   opcache.interned_strings_buffer=16\n\
   opcache.load_comments=Off\n\
@@ -54,6 +88,4 @@ COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apach
 
 EXPOSE 8000
 
-# ENTRYPOINT [“docker-php-entrypoint”]
-# CMD [“apache2-foreground”]
- ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]
+CMD ["apache2-foreground"]

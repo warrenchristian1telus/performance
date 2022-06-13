@@ -103,4 +103,6 @@ COPY --chown=www-data:www-data config/server_files/opcache.ini /usr/local/etc/ph
 
 EXPOSE 8000
 
-ENTRYPOINT ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
+#ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]
+
+CMD apachectl -D FOREGROUND

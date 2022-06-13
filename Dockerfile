@@ -53,11 +53,11 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     unzip
 
 # Enable "mod_rewrite" – http://httpd.apache.org/docs/current/mod/mod_rewrite.html
-RUN /usr/sbin/a2enmod rewrite
+RUN sudo /usr/sbin/a2enmod rewrite
 # Enable "mod_headers" – http://httpd.apache.org/docs/current/mod/mod_headers.html
-RUN /usr/sbin/a2enmod headers
+RUN sudo /usr/sbin/a2enmod headers
 # Enable "mod_expires" – http://httpd.apache.org/docs/current/mod/mod_expires.html
-RUN /usr/sbin/a2enmod expires
+RUN sudo /usr/sbin/a2enmod expires
 
 #INSTALL APCU
 #RUN pecl install apcu-${APCU_VERSION} && docker-php-ext-enable apcu

@@ -12,9 +12,7 @@ WORKDIR /app
 COPY . /app
 
 RUN composer update --ignore-platform-reqs
-RUN composer require kalnoy/nestedset --ignore-platform-reqs
-RUN composer require doctrine/dbal --ignore-platform-reqs
-RUN composer require awobaz/compoships --ignore-platform-reqs
+RUN composer require kalnoy/nestedset doctrine/dbal awobaz/compoships --ignore-platform-reqs
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app
 
@@ -27,9 +25,7 @@ FROM php:8.0-apache
 # ENV http_proxy=http://198.161.14.25:8080
 
 RUN apt-get update -y && apt -y upgrade && apt-get install -y \
-    openssl
-
-RUN apt-get install -y \
+    openssl \
     ssh-client \
     zip \
     unzip
@@ -44,8 +40,6 @@ RUN echo '\
 RUN echo "deb https://packages.sury.org/php/ buster main" | tee /etc/apt/sources.list.d/php.list
 RUN docker-php-ext-install pdo pdo_mysql opcache
 
-USER root
-
 COPY --chown=www-data:www-data --from=composer /app /var/www/html
 
 # Copy Server Config files (Apache / PHP)
@@ -59,3 +53,6 @@ COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apach
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 EXPOSE 8000
+
+ENTRYPOINT [“docker-php-entrypoint”]
+CMD [“apache2-foreground”]

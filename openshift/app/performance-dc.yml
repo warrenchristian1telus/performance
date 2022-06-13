@@ -107,8 +107,6 @@ objects:
                   value: '${SITE_NAME}'
                 - name: SITE_URL
                   value: 'https://${SITE_URL}'
-                - name: APACHE_DOCUMENT_ROOT
-                  value: '${APACHE_DOCUMENT_ROOT}'
                 - name: PERFORMANCE_MEMORY_LIMIT
                   value: '${PERFORMANCE_MEMORY_LIMIT}'
                 - name: PERFORMANCE_DATA_PATH
@@ -141,10 +139,8 @@ objects:
                   value: '${GIT_PROJECT}'
                 - name: GIT_TAG
                   value: '${GIT_TAG}'
-                - name: UPSTREAM_URI
-                  value: 'http://performance:8000'
                 - name: HOST_NAME
-                  value: performance-950003-dev.apps.silver.devops.gov.bc.ca
+                  value: '${HOST_NAME}'
                 - name: MYSQL_USER
                   valueFrom:
                     secretKeyRef:
@@ -275,11 +271,6 @@ parameters:
     name: GIT_TAG
     required: true
     value: '${GIT_TAG}'
-  - description: Apache document root directory.
-    displayName: Apache Root
-    name: APACHE_DOCUMENT_ROOT
-    required: true
-    value: '${APACHE_DOCUMENT_ROOT}'
   - description: GitHub Authorization Token (oAuth)
     displayName: GitHub oAuth
     name: GITHUB_AUTH_TOKEN

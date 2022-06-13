@@ -12,6 +12,7 @@ ENV COMPOSER_MEMORY_LIMIT=-1
 WORKDIR /app
 COPY . /app
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 #RUN composer config --global process-timeout 2000
 RUN composer update --ignore-platform-reqs

@@ -4,7 +4,7 @@
 FROM composer as composer
 
 # Local proxy config (remove for server deployment)
-ENV http_proxy=http://198.161.14.25:8080
+# ENV http_proxy=http://198.161.14.25:8080
 
 ENV COMPOSER_MEMORY_LIMIT=-1
 
@@ -22,7 +22,7 @@ RUN chgrp -R 0 /app && \
 FROM php:8.0-apache
 
 # Local proxy config (remove for server deployment)
-ENV http_proxy=http://198.161.14.25:8080
+# ENV http_proxy=http://198.161.14.25:8080
 
 RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     openssl \

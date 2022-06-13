@@ -21,6 +21,8 @@ RUN chgrp -R 0 /app && \
 #
 FROM php:8.0-apache
 
+WORKDIR /
+
 # Local proxy config (remove for server deployment)
 # ENV http_proxy=http://198.161.14.25:8080
 

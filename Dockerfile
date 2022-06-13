@@ -25,13 +25,29 @@ RUN chgrp -R 0 /app && \
 #
 FROM php:8.0-apache
 
-# Local proxy config (remove for server deployment)
-ENV http_proxy=http://198.161.14.25:8080
+RUN apt-get update -y && apt -y upgrade && apt-get install -y openssl zip unzip git \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libfreetype6 \
+    libc6 \
+    libgd3 \
+    libjpeg62-turbo \
+    libpng16-16 \
+    libwebp6 \
+    libx11-6 \
+    libxpm4 \
+    ucf \
+    zlib1g \
+    sudo \
+    wget  \
+    vim \
+    cron
 
 RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     openssl
 
-RUN apt-get install -y \
+RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     ssh-client \
     zip \
     unzip

@@ -11,7 +11,7 @@ ENV COMPOSER_MEMORY_LIMIT=-1
 WORKDIR /app
 COPY . /app
 
-RUN composer update --ignore-platform-reqs
+RUN COMPOSER_PROCESS_TIMEOUT=600 composer update --ignore-platform-reqs
 RUN composer require kalnoy/nestedset doctrine/dbal awobaz/compoships --ignore-platform-reqs
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app

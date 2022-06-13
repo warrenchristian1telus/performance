@@ -124,6 +124,12 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::get('/sysadmin/goalbank/org-divisions', [GoalBankController::class,'getDivisions']);
         Route::get('/sysadmin/goalbank/org-branches', [GoalBankController::class,'getBranches']);
         Route::get('/sysadmin/goalbank/org-level4', [GoalBankController::class,'getLevel4']);
+        Route::get('/sysadmin/goalbank/aorg-tree', [GoalBankController::class,'aloadOrganizationTree']);
+        Route::get('/sysadmin/goalbank/aorg-organizations', [GoalBankController::class,'agetOrganizations']);
+        Route::get('/sysadmin/goalbank/aorg-programs', [GoalBankController::class,'agetPrograms']);
+        Route::get('/sysadmin/goalbank/aorg-divisions', [GoalBankController::class,'agetDivisions']);
+        Route::get('/sysadmin/goalbank/aorg-branches', [GoalBankController::class,'agetBranches']);
+        Route::get('/sysadmin/goalbank/aorg-level4', [GoalBankController::class,'agetLevel4']);
         Route::get('/sysadmin/goalbank/eorg-tree', [GoalBankController::class,'eloadOrganizationTree']);
         Route::get('/sysadmin/goalbank/eorg-organizations', [GoalBankController::class,'egetOrganizations']);
         Route::get('/sysadmin/goalbank/eorg-programs', [GoalBankController::class,'egetPrograms']);
@@ -135,7 +141,13 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::get('/sysadmin/goalbank/getgoalorgs/{goal_id}', [GoalBankController::class, 'getgoalorgs'])->name('sysadmin.goalbank.getgoalorgs');
         Route::get('/sysadmin/goalbank/getgoalinds/{goal_id}', [GoalBankController::class, 'getgoalinds'])->name('sysadmin.goalbank.getgoalinds');
         Route::get('/sysadmin/goalbank/employees/{id}', [GoalBankController::class,'getEmployees']);
+        Route::get('/sysadmin/goalbank/eemployees/{id}', [GoalBankController::class,'egetEmployees']);
+        Route::get('/sysadmin/goalbank/aemployees/{id}', [GoalBankController::class,'agetEmployees']);
+        // Route::get('/sysadmin/goalbank/employee-list/{loaded?}', [GoalBankController::class, 'getDatatableEmployees'])->name('sysadmin.goalbank.employee.list');
         Route::get('/sysadmin/goalbank/employee-list', [GoalBankController::class, 'getDatatableEmployees'])->name('sysadmin.goalbank.employee.list');
+        Route::get('/sysadmin/goalbank/eemployee-list', [GoalBankController::class, 'egetDatatableEmployees'])->name('sysadmin.goalbank.eemployee.list');
+        Route::get('/sysadmin/goalbank/aemployee-list', [GoalBankController::class, 'agetDatatableEmployees'])->name('sysadmin.goalbank.aemployee.list');
+        // Route::get('/sysadmin/goalbank/employee-listempty', [GoalBankController::class, 'getDatatableEmployeesEmpty'])->name('sysadmin.goalbank.employee.listempty');
     });
 
 

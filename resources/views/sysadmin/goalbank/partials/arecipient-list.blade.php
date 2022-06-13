@@ -13,7 +13,7 @@
     <div class="card" id="listdata">
         <div class="card-body">
             <h6></h6>
-            <table class="table table-bordered" id="employee-list-table"></table>
+            <table class="table table-bordered" id="aemployee-list-table"></table>
         </div>    
     </div>   
 </div>
@@ -23,7 +23,7 @@
 
     <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 	<style>
-	#employee-list-table_filter label {
+	#aemployee-list-table_filter label {
 		text-align: right !important;
         padding-right: 10px;
 	} 
@@ -39,7 +39,7 @@
         $(document).ready(function() {
             var user_selected = [];
 
-            var oTable = $('#employee-list-table').DataTable({
+            var oTable = $('#aemployee-list-table').DataTable({
                 scrollX: true,
                 retrieve: true,
                 searching: false,
@@ -48,21 +48,21 @@
                 select: true,
                 order: [[1, 'asc']],
                 ajax: {
-                    url: '{{ route('sysadmin.goalbank.employee.list') }}',
+                    url: '{{ route('sysadmin.goalbank.aemployee.list') }}',
                     data: function (d) {
-                        d.dd_level0 = $('#dd_level0').val();
-                        d.dd_level1 = $('#dd_level1').val();
-                        d.dd_level2 = $('#dd_level2').val();
-                        d.dd_level3 = $('#dd_level3').val();
-                        d.dd_level4 = $('#dd_level4').val();
-                        d.criteria = $('#criteria').val();
-                        d.search_text = $('#search_text').val();
+                        d.add_level0 = $('#add_level0').val();
+                        d.add_level1 = $('#add_level1').val();
+                        d.add_level2 = $('#add_level2').val();
+                        d.add_level3 = $('#add_level3').val();
+                        d.add_level4 = $('#add_level4').val();
+                        d.acriteria = $('#acriteria').val();
+                        d.asearch_text = $('#asearch_text').val();
                     }
                 },
                 "fnDrawCallback": function() {
-                    list = ( $('#employee-list-table input:checkbox') );
+                    list = ( $('#aemployee-list-table input:checkbox') );
                     $.each(list, function( index, item ) {
-                        var index = $.inArray( item.value , g_selected_employees);
+                        var index = $.inArray( item.value , ag_selected_employees);
                         if ( index === -1 ) {
                             $(item).prop('checked', false); // unchecked
                         } else {
@@ -71,10 +71,10 @@
                     });
 
                     // update the check all checkbox status 
-                    if (g_selected_employees.length == 0) {
+                    if (ag_selected_employees.length == 0) {
                         $('#employee-list-select-all').prop("checked", false);
                         $('#employee-list-select-all').prop("indeterminate", false);   
-                    } else if (g_selected_employees.length == g_matched_employees.length) {
+                    } else if (ag_selected_employees.length == ag_matched_employees.length) {
                         $('#employee-list-select-all').prop("checked", true);
                         $('#employee-list-select-all').prop("indeterminate", false);   
                     } else {
@@ -86,7 +86,7 @@
                 "rowCallback": function( row, data ) {
                 },
                 columns: [
-                    {title: '<input name="select_all" value="1" id="employee-list-select-all" type="checkbox" />', ariaTitle: 'employee-list-select-all', target: 0, type: 'string', data: 'select_users', name: 'select_users', orderable: false, searchable: false},
+                    {title: '<input name="aselect_all" value="1" id="aemployee-list-select-all" type="checkbox" />', ariaTitle: 'aemployee-list-select-all', target: 0, type: 'string', data: 'aselect_users', name: 'aselect_users', orderable: false, searchable: false},
                     {title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id', className: 'dt-nowrap'},
                     {title: 'Name', ariaTitle: 'Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name', className: 'dt-nowrap'},
                     {title: 'Classification', ariaTitle: 'Classification', target: 0, type: 'string', data: 'jobcode_desc', name: 'jobcode_desc', className: 'dt-nowrap'},
@@ -101,22 +101,22 @@
             });
 
 
-            $('#employee-list-table tbody').on( 'click', 'input:checkbox', function () {
+            $('#aemployee-list-table tbody').on( 'click', 'input:checkbox', function () {
 
                 // if the input checkbox is selected 
                 var id = this.value;
-                var index = $.inArray(id, g_selected_employees);
+                var index = $.inArray(id, ag_selected_employees);
                 if(this.checked) {
-                    g_selected_employees.push( id );
+                    ag_selected_employees.push( id );
                 } else {
-                    g_selected_employees.splice( index, 1 );
+                    ag_selected_employees.splice( index, 1 );
                 }
 
                 // update the check all checkbox status 
-                if (g_selected_employees.length == 0) {
+                if (ag_selected_employees.length == 0) {
                     $('#employee-list-select-all').prop("checked", false);
                     $('#employee-list-select-all').prop("indeterminate", false);   
-                } else if (g_selected_employees.length == g_matched_employees.length) {
+                } else if (ag_selected_employees.length == ag_matched_employees.length) {
                     $('#employee-list-select-all').prop("checked", true);
                     $('#employee-list-select-all').prop("indeterminate", false);   
                 } else {

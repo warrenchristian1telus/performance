@@ -27,6 +27,7 @@ WORKDIR /
 # ENV http_proxy=http://198.161.14.25:8080
 
 RUN apt-get update -y && apt -y upgrade && apt-get install -y \
+    apache2 \
     openssl \
     ssh-client \
     zip \

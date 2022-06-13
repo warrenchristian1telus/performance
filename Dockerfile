@@ -12,7 +12,7 @@ ENV COMPOSER_MEMORY_LIMIT=-1
 WORKDIR /app
 COPY . /app
 
-RUN COMPOSER_PROCESS_TIMEOUT=30000 composer update --ignore-platform-reqs --prefer-dist
+RUN COMPOSER_PROCESS_TIMEOUT=30000 composer update --ignore-platform-reqs --prefer-dist --no-dev
 RUN composer require kalnoy/nestedset --ignore-platform-reqs
 RUN composer require doctrine/dbal --ignore-platform-reqs
 RUN composer require awobaz/compoships --ignore-platform-reqs

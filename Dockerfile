@@ -91,12 +91,12 @@ COPY --chown=www-data:www-data config/server_files/.htaccess /var/www/html/publi
 COPY --chown=www-data:www-data config/server_files/php.ini /usr/local/etc/php/php.ini
 COPY --chown=www-data:www-data config/server_files/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
-# Enable "mod_rewrite" – http://httpd.apache.org/docs/current/mod/mod_rewrite.html
-RUN a2enmod rewrite
-# Enable "mod_headers" – http://httpd.apache.org/docs/current/mod/mod_headers.html
-RUN a2enmod headers
-# Enable "mod_expires" – http://httpd.apache.org/docs/current/mod/mod_expires.html
-RUN a2enmod expires
+# # Enable "mod_rewrite" – http://httpd.apache.org/docs/current/mod/mod_rewrite.html
+# RUN a2enmod rewrite
+# # Enable "mod_headers" – http://httpd.apache.org/docs/current/mod/mod_headers.html
+# RUN a2enmod headers
+# # Enable "mod_expires" – http://httpd.apache.org/docs/current/mod/mod_expires.html
+# RUN a2enmod expires
 
 # For Debug Purposes - Comment out for production
 # COPY --chown=www-data:www-data config/server_files/info.php /var/www/html/public/info.php

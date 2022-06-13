@@ -89,5 +89,3 @@ COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apach
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 EXPOSE 8000
-
-CMD ["apache2-foreground"]

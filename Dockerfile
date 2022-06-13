@@ -7,15 +7,14 @@ FROM composer as composer
 
 # Local proxy config (remove for server deployment)
 ENV http_proxy=http://198.161.14.25:8080
-#ENV COMPOSER_MEMORY_LIMIT=-1
+ENV COMPOSER_MEMORY_LIMIT=-1
 
 WORKDIR /app
 COPY . /app
 
 
-RUN composer install --optimize-autoloader --no-interaction --prefer-dist
-
-#RUN COMPOSER_PROCESS_TIMEOUT=30000 composer update --ignore-platform-reqs
+RUN composer config --global process-timeout 2000
+RUN composer update --ignore-platform-reqs
 RUN composer require kalnoy/nestedset --ignore-platform-reqs
 RUN composer require doctrine/dbal --ignore-platform-reqs
 RUN composer require awobaz/compoships --ignore-platform-reqs

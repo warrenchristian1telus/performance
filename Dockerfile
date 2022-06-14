@@ -68,13 +68,6 @@ RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
 	\
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false;
 
-RUN echo '\
-  opcache.interned_strings_buffer=16\n\
-  opcache.load_comments=Off\n\
-  opcache.max_accelerated_files=16000\n\
-  opcache.save_comments=Off\n\
-  ' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
-
 RUN echo "deb https://packages.sury.org/php/ buster main" | tee /etc/apt/sources.list.d/php.list
 RUN docker-php-ext-install pdo pdo_mysql opcache
 

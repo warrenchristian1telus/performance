@@ -14,6 +14,7 @@ COPY . /app
 
 RUN composer update --ignore-platform-reqs
 RUN composer require kalnoy/nestedset doctrine/dbal awobaz/compoships --ignore-platform-reqs
+
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app
 
@@ -80,10 +81,6 @@ RUN docker-php-ext-install pdo pdo_mysql opcache
 COPY --chown=www-data:www-data --from=composer /app /var/www/html
 RUN chmod -R 777 /var/www/html/storage
 
-RUN cd /var/www/html && \
-	php artisan config:cache && \
-	php artisan route:cache
-
 # Copy Server Config files (Apache / PHP)
 COPY --chown=www-data:www-data server_files/apache2.conf /etc/apache2/apache2.conf
 COPY --chown=www-data:www-data server_files/ports.conf /etc/apache2/ports.conf
@@ -93,5 +90,9 @@ COPY --chown=www-data:www-data server_files/opcache.ini /usr/local/etc/php/conf.
 COPY --chown=www-data:www-data server_files/mods-enabled/expires.load /etc/apache2/mods-enabled/expires.load
 COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apache2/mods-enabled/headers.load
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
+
+RUN cd /var/www/html && \
+	php artisan config:clear && \
+	php artisan config:cache
 
 EXPOSE 8000

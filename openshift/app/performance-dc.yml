@@ -101,7 +101,7 @@ objects:
                 - containerPort: 8000
               volumeMounts:
                 - name: config-vol
-                  mountPath: /app/.env
+                  mountPath: /var/www/html/.env
                   subPath: .env
                 - name: web-app-storage
                   mountPath: /var/www/html/storage
@@ -151,10 +151,8 @@ objects:
                   value: '${GIT_PROJECT}'
                 - name: GIT_TAG
                   value: '${GIT_TAG}'
-                - name: UPSTREAM_URI
-                  value: 'http://performance:8000'
                 - name: HOST_NAME
-                  value: performance-950003-dev.apps.silver.devops.gov.bc.ca
+                  value: '${HOST_NAME}'
                 - name: MYSQL_USER
                   valueFrom:
                     secretKeyRef:

@@ -80,6 +80,10 @@ RUN docker-php-ext-install pdo pdo_mysql opcache
 COPY --chown=www-data:www-data --from=composer /app /var/www/html
 RUN chmod -R 777 /var/www/html/storage
 
+RUN cd /var/www/html && \
+	php artisan config:cache && \
+	php artisan route:cache
+
 # Copy Server Config files (Apache / PHP)
 COPY --chown=www-data:www-data server_files/apache2.conf /etc/apache2/apache2.conf
 COPY --chown=www-data:www-data server_files/ports.conf /etc/apache2/ports.conf

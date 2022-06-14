@@ -56,10 +56,11 @@
                     value="{{ old('search_text') }}" placeholder="Search Text">
         </div>
         <div class="form-group col-md-2 p-3 float-left float-bottom" style="display: flex; flex-direction: column;">
-            <div class="form-group row"> </div>
+            <div class="form-group row"> 
+            </div>
                 <div class="form-group row">
                     <span class="float-left float-bottom">  
-                        <button type="submit" class="btn btn-primary" formaction="{{ route('hradmin.employeeshares.addindex') }}" name="btn_search" value="button" >Filter</button>
+                        <button type="button" class="btn btn-primary" id="btn_search" name="btn_search" value="button" >Filter</button>
                         <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_search_reset" value="btn_reset">Reset</button>
                     </span>
                 </div>
@@ -93,7 +94,59 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
-        $('#dd_level0').select2({
+
+$(document).ready(function() {
+
+$('#dd_level0').change(function (e){
+    e.preventDefault();
+});
+
+$('#dd_level1').change(function (e){
+    e.preventDefault();
+});
+
+$('#dd_level2').change(function (e){
+    e.preventDefault();
+});
+
+$('#dd_level3').change(function (e){
+    e.preventDefault();
+});
+
+$('#dd_level4').change(function (e){
+    e.preventDefault();
+    $('#btn_search').click();
+});
+
+$('#criteria').change(function (e){
+    e.preventDefault();
+    $('#btn_search').click();
+});
+
+$('#search_text').change(function (e){
+    e.preventDefault();
+    $('#btn_search').click();
+});
+
+$('#search_text').keydown(function (e){
+    if (e.keyCode == 13) {
+        e.preventDefault();
+        $('#btn_search').click();
+    }
+});
+
+$('#btn_search_reset').click(function (e){
+    e.preventDefault();
+    $('#criteria').val('all');
+    $('#search_text').val(null);
+    $('#dd_level0').val(null).trigger('change');
+    $('#dd_level1').val(null).trigger('change');
+    $('#dd_level2').val(null).trigger('change');
+    $('#dd_level3').val(null).trigger('change');
+    $('#dd_level4').val(null).trigger('change');
+});
+
+$('#dd_level0').select2({
             placeholder: 'Select Organization',
             allowClear: true,
             ajax: {
@@ -214,7 +267,7 @@
         });
         
         $('#dd_level0').on('select2:select', function (e) {
-            // Do something
+            e.preventDefault();
             $('#dd_level1').val(null).trigger('change');
             $('#dd_level2').val(null).trigger('change');
             $('#dd_level3').val(null).trigger('change');
@@ -222,24 +275,31 @@
         });
 
         $('#dd_level1').on('select2:select', function (e) {
-            // Do something
+            e.preventDefault();
             $('#dd_level2').val(null).trigger('change');
             $('#dd_level3').val(null).trigger('change');
             $('#dd_level4').val(null).trigger('change');
         });
 
         $('#dd_level2').on('select2:select', function (e) {
-            // Do something
+            e.preventDefault();
             $('#dd_level3').val(null).trigger('change');
             $('#dd_level4').val(null).trigger('change');
         });
 
         $('#dd_level3').on('select2:select', function (e) {
-            // Do something
+            e.preventDefault();
             $('#dd_level4').val(null).trigger('change');
         });
 
-        $('#btn_search_reset').click(function() {
+        $('#dd_level4').on('select2:select', function (e) {
+                e.preventDefault();
+                console.log('#dd_level4.select2:select');
+            });
+
+            $('#dd_level0').on('select2:unselect', function (e) {
+                e.preventDefault();
+                console.log('#dd_level0.select2:unselect');
             $('#dd_level0').val(null).trigger('change');
             $('#dd_level1').val(null).trigger('change');
             $('#dd_level2').val(null).trigger('change');
@@ -248,7 +308,38 @@
             $('#search_text').val(null);
         });
 
+        $('#dd_level1').on('select2:unselect', function (e) {
+                e.preventDefault();
+                console.log('#dd_level1.select2:unselect');
+                $('#dd_level1').val(null).trigger('change');
+                $('#dd_level2').val(null).trigger('change');
+                $('#dd_level3').val(null).trigger('change');
+                $('#dd_level4').val(null).trigger('change');
+            });
 
+            $('#dd_level2').on('select2:unselect', function (e) {
+                e.preventDefault();
+                console.log('#dd_level2.select2:unselect');
+                $('#dd_level2').val(null).trigger('change');
+                $('#dd_level3').val(null).trigger('change');
+                $('#dd_level4').val(null).trigger('change');
+            });
+
+            $('#dd_level3').on('select2:unselect', function (e) {
+                e.preventDefault();
+                console.log('#dd_level3.select2:unselect');
+                $('#dd_level3').val(null).trigger('change');
+                $('#dd_level4').val(null).trigger('change');
+            });
+
+            $('#dd_level4').on('select2:unselect', function (e) {
+                e.preventDefault();
+                console.log('#dd_level4.select2:unselect');
+                $('#dd_level4').val(null).trigger('change');
+                $('#btn_search').click();
+            });
+
+        });
 
     </script>
 

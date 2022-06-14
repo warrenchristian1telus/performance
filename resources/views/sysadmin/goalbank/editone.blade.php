@@ -73,6 +73,9 @@
 
 		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
 		<input type="hidden" id="goal_id" name="goal_id" value={{$goaldetail->id}}>
+		<input type="hidden" id="aselected_emp_ids" name="aselected_emp_ids" value="">
+		<input type="hidden" id="aselected_org_nodes" name="aselected_org_nodes" value="">
+		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
 
 		<!----modal starts here--->
 		<div id="saveGoalModal" class="modal" role='dialog'>
@@ -102,7 +105,6 @@
 		<h6 class="text-bold">Step 2. Select additional individual audience</h6>
 		<br>
 
-		<input type="hidden" id="aselected_org_nodes" name="aselected_org_nodes" value="">
 
 		@include('sysadmin.goalbank.partials.afilter')
 
@@ -199,6 +201,8 @@
 
 			function confirmSaveChangesModal(){
 				let count = ag_selected_employees.length;
+				$('#aselected_emp_ids').val(ag_selected_employees);
+
 				if (count == 0) {
 					$('#saveGoalModal .modal-body p').html('Are you sure to update goal without additional audience?');
 				} else {
@@ -209,8 +213,7 @@
 
 			$(document).ready(function(){
 
-
-				var table = $('.currenttable').DataTable
+				$('.currenttable').DataTable
 				(
 					{
 						processing: true,
@@ -348,10 +351,11 @@
 				$('#notify-form').submit(function() {
 					// console.log('Search Button Clicked');			
 					// assign back the selected employees to server
-					var text = JSON.stringify(g_selected_employees);
-					$('#selected_emp_ids').val( text );
-					var text2 = JSON.stringify(g_selected_orgnodes);
-					$('#selected_org_nodes').val( text2 );
+					var text = JSON.stringify(ag_selected_employees);
+					$('#aselected_emp_ids').val( text );
+					var text2 = JSON.stringify(ag_selected_orgnodes);
+					$('#aselected_org_nodes').val( text2 );
+					// dd(g_selected_orgnodes);
 					return true; // return false to cancel form action
 				});
 
@@ -362,36 +366,42 @@
 					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
 
 				// Tab  -- LIST Page  activate
-				$("#nav-list-tab").on("click", function(e) {
-					table  = $('#employee-list-table').DataTable();
+				$("#anav-list-tab").on("click", function(e) {
+					let ag_selected_employees = [];
+					// let aselected_emp_ids = [];
+					$('#aselected_emp_ids').val( null );
+					table  = $('#aemployee-list-table').DataTable();
 					table.rows().invalidate().draw();
 				});
 
 				// Tab  -- TREE activate
-				$("#nav-tree-tab").on("click", function(e) {
-					target = $('#nav-tree'); 
-                    ddnotempty = $('#dd_level0').val() + $('#dd_level1').val() + $('#dd_level2').val() + $('#dd_level3').val() + $('#dd_level4').val();
+				$("#anav-tree-tab").on("click", function(e) {
+					target = $('#anav-tree'); 
+					let ag_selected_employees = [];
+					// let aselected_emp_ids = [];
+					$('#aselected_emp_ids').val( null );
+                    ddnotempty = $('#add_level0').val() + $('#add_level1').val() + $('#add_level2').val() + $('#add_level3').val() + $('#add_level4').val();
                     if(ddnotempty) {
                         // To do -- ajax called to load the tree
                         if($.trim($(target).attr('loaded'))=='') {
                             $.when( 
                                 $.ajax({
-                                    url: '/sysadmin/goalbank/org-tree',
+                                    url: '/sysadmin/goalbank/aorg-tree',
                                     type: 'GET',
                                     data: $("#notify-form").serialize(),
                                     dataType: 'html',
-                                    beforeSend: function() {
-                                        $("#tree-loading-spinner").show();                    
-                                    },
+                                    // beforeSend: function() {
+                                    //     $("#tree-loading-spinner").show();                    
+                                    // },
                                     success: function (result) {
                                         $(target).html(''); 
                                         $(target).html(result);
 
                                         $('#nav-tree').attr('loaded','loaded');
                                     },
-                                    complete: function() {
-                                        $(".tree-loading-spinner").hide();
-                                    },
+                                    // complete: function() {
+                                    //     $(".tree-loading-spinner").hide();
+                                    // },
                                     error: function () {
                                         alert("error");
                                         $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
@@ -400,12 +410,12 @@
                                 
                             ).then(function( data, textStatus, jqXHR ) {
                                 //alert( jqXHR.status ); // Alerts 200
-                                nodes = $('#accordion-level0 input:checkbox');
-                                redrawTreeCheckboxes();	
+                                anodes = $('#aaccordion-level0 input:checkbox');
+                                aredrawTreeCheckboxes();	
                             }); 
                         
                         } else {
-                            redrawTreeCheckboxes();
+                            aredrawTreeCheckboxes();
                         }
                     } else {
 						// alert("error");
@@ -450,8 +460,7 @@
 
 				function aredrawTreeCheckboxes() {
 					// redraw the selection 
-					//console.log('eredraw triggered');
-					enodes = $('#aaccordion-level0 input:checkbox');
+					anodes = $('#aaccordion-level0 input:checkbox');
 					$.each( anodes, function( index, chkbox ) {
 						if (ag_employees_by_org.hasOwnProperty(chkbox.value)) {
 							aall_emps = ag_employees_by_org[ chkbox.value ].map( function(x) {return x.employee_id} );
@@ -562,43 +571,45 @@
 
 				$('#abtn_search').click(function(e) {
 					e.preventDefault();
+					$('#aemployee-list-table').DataTable().rows().invalidate().draw();
+
 					//List
-					$('#aemployee-list-table').DataTable().destroy();
-					$('#aemployee-list-table').empty();
-					$('#aemployee-list-table').DataTable(
-						{
-							processing: true,
-							serverSide: true,
-							scrollX: true,
-							stateSave: true,
-							deferRender: true,
-							ajax: {
-								url: "{{ route('sysadmin.goalbank.aemployee.list') }}",
-								type: 'GET',
-								data: function(d) {
-									d.add_level0 = $('#add_level0').val();
-									d.add_level1 = $('#add_level1').val();
-									d.add_level2 = $('#add_level2').val();
-									d.add_level3 = $('#add_level3').val();
-									d.add_level4 = $('#add_level4').val();
-									d.acriteria = $('#acriteria').val();
-									d.asearch_text = $('#asearch_text').val();
-								}
-							},
-							columns: [
-		                    	{title: '<input name="aselect_all" value="1" id="aemployee-list-select-all" type="checkbox" />', ariaTitle: 'aemployee-list-select-all', target: 0, type: 'string', data: 'aselect_users', name: 'aselect_users', orderable: false, searchable: false},
-								{title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id', searchable: true, className: 'dt-nowrap'},
-								{title: 'Name', ariaTitle: 'Employee Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name', searchable: true, className: 'dt-nowrap'},
-								{title: 'Classification', ariaTitle: 'Classification', target: 0, type: 'string', data: 'jobcode_desc', name: 'jobcode_desc', searchable: true, className: 'dt-nowrap'},
-								{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true, className: 'dt-nowrap'},
-								{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true, className: 'dt-nowrap'},
-								{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true, className: 'dt-nowrap'},
-								{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true, className: 'dt-nowrap'},
-								{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true, className: 'dt-nowrap'},
-								{title: 'Dept ID', ariaTitle: 'Dept ID', target: 0, type: 'string', data: 'deptid', name: 'deptid', searchable: true, className: 'dt-nowrap'},
-							]
-						}
-					);
+					// $('#aemployee-list-table').DataTable().destroy();
+					// $('#aemployee-list-table').empty();
+					// $('#aemployee-list-table').DataTable(
+					// 	{
+					// 		processing: true,
+					// 		serverSide: true,
+					// 		scrollX: true,
+					// 		stateSave: true,
+					// 		deferRender: true,
+					// 		ajax: {
+					// 			url: "{{ route('sysadmin.goalbank.aemployee.list') }}",
+					// 			type: 'GET',
+					// 			data: function(d) {
+					// 				d.add_level0 = $('#add_level0').val();
+					// 				d.add_level1 = $('#add_level1').val();
+					// 				d.add_level2 = $('#add_level2').val();
+					// 				d.add_level3 = $('#add_level3').val();
+					// 				d.add_level4 = $('#add_level4').val();
+					// 				d.acriteria = $('#acriteria').val();
+					// 				d.asearch_text = $('#asearch_text').val();
+					// 			}
+					// 		},
+					// 		columns: [
+		            //         	{title: '<input name="aselect_all" value="1" id="aemployee-list-select-all" type="checkbox" />', ariaTitle: 'aemployee-list-select-all', target: 0, type: 'string', data: 'aselect_users', name: 'aselect_users', orderable: false, searchable: false},
+					// 			{title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id', searchable: true, className: 'dt-nowrap'},
+					// 			{title: 'Name', ariaTitle: 'Employee Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name', searchable: true, className: 'dt-nowrap'},
+					// 			{title: 'Classification', ariaTitle: 'Classification', target: 0, type: 'string', data: 'jobcode_desc', name: 'jobcode_desc', searchable: true, className: 'dt-nowrap'},
+					// 			{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true, className: 'dt-nowrap'},
+					// 			{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true, className: 'dt-nowrap'},
+					// 			{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true, className: 'dt-nowrap'},
+					// 			{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true, className: 'dt-nowrap'},
+					// 			{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true, className: 'dt-nowrap'},
+					// 			{title: 'Dept ID', ariaTitle: 'Dept ID', target: 0, type: 'string', data: 'deptid', name: 'deptid', searchable: true, className: 'dt-nowrap'},
+					// 		]
+					// 	}
+					// );
 					//Tree
 					target = $('#anav-tree'); 
 					ddnotempty = $('#add_level0').val() + $('#add_level1').val() + $('#add_level2').val() + $('#add_level3').val() + $('#add_level4').val();
@@ -634,8 +645,8 @@
 							
 						).then(function( data, textStatus, jqXHR ) {
 							//alert( jqXHR.status ); // Alerts 200
-							enodes = $('#aaccordion-level0 input:checkbox');
-							eredrawTreeCheckboxes();	
+							anodes = $('#aaccordion-level0 input:checkbox');
+							aredrawTreeCheckboxes();	
 						}); 
 					} else {
 						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
@@ -713,20 +724,17 @@
 
 				$('#acriteria').change(function (e){
 					e.preventDefault();
-					console.log('#acriteria.change');
 					$('#abtn_search').click();
 				});
 
 				$('#asearch_text').change(function (e){
 					e.preventDefault();
-					console.log('#asearch_text.change');
 					$('#abtn_search').click();
 				});
 
 				$('#asearch_text').keydown(function (e){
 					if (e.keyCode == 13) {
 						e.preventDefault();
-						console.log('#asearch_text.keydown');
 						$('#abtn_search').click();
 					}
 				});

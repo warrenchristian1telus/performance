@@ -211,7 +211,6 @@
 		<script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
 		<script src="//cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 	
-	
 		<script>
 			let g_matched_employees = {!!json_encode($matched_emp_ids)!!};
 			let g_selected_employees = {!!json_encode($old_selected_emp_ids)!!};
@@ -606,53 +605,44 @@
 
 				$('#dd_level0').change(function (e){
 					e.preventDefault();
-					console.log('#dd_level0.change');
 				});
 
 				$('#dd_level1').change(function (e){
 					e.preventDefault();
-					console.log('#dd_level1.change');
 				});
 
 				$('#dd_level2').change(function (e){
 					e.preventDefault();
-					console.log('#dd_level2.change');
 				});
 
 				$('#dd_level3').change(function (e){
 					e.preventDefault();
-					console.log('#dd_level3.change');
 				});
 
 				$('#dd_level4').change(function (e){
 					e.preventDefault();
-					console.log('#dd_level4.change');
 					$('#btn_search').click();
 				});
 
 				$('#criteria').change(function (e){
 					e.preventDefault();
-					console.log('#criteria.change');
 					$('#btn_search').click();
 				});
 
 				$('#search_text').change(function (e){
 					e.preventDefault();
-					console.log('#search_text.change');
 					$('#btn_search').click();
 				});
 
 				$('#search_text').keydown(function (e){
 					if (e.keyCode == 13) {
 						e.preventDefault();
-						console.log('#search_text.keydown');
 						$('#btn_search').click();
 					}
 				});
 
 				$('#btn_search_reset').click(function (e){
 					e.preventDefault();
-					console.log('#btn_search_reset.click');
 					$('#criteria').val('all');
 					$('#search_text').val(null);
 					$('#dd_level0').val(null).trigger('change');
@@ -664,22 +654,18 @@
 
 				$('#edd_level0').change(function (e) {
 					e.preventDefault();
-					// $('#ebtn_search').click();
 				});
 
 				$('#edd_level1').change(function (e) {
 					e.preventDefault();
-					// $('#ebtn_search').click();
 				});
 
 				$('#edd_level2').change(function (e) {
 					e.preventDefault();
-					// $('#ebtn_search').click();
 				});
 
 				$('#edd_level3').change(function (e) {
 					e.preventDefault();
-					// $('#ebtn_search').click();
 				});
 				$('#edd_level4').change(function (e) {
 					e.preventDefault();

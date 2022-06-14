@@ -33,6 +33,7 @@
 @push('js')
     <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
     
@@ -62,7 +63,7 @@
                 "fnDrawCallback": function() {
                     list = ( $('#aemployee-list-table input:checkbox') );
                     $.each(list, function( index, item ) {
-                        var index = $.inArray( item.value , ag_selected_employees);
+                        var index = $.inArray( item.value , g_selected_employees);
                         if ( index === -1 ) {
                             $(item).prop('checked', false); // unchecked
                         } else {
@@ -71,10 +72,10 @@
                     });
 
                     // update the check all checkbox status 
-                    if (ag_selected_employees.length == 0) {
+                    if (g_selected_employees.length == 0) {
                         $('#employee-list-select-all').prop("checked", false);
                         $('#employee-list-select-all').prop("indeterminate", false);   
-                    } else if (ag_selected_employees.length == ag_matched_employees.length) {
+                    } else if (g_selected_employees.length == ag_matched_employees.length) {
                         $('#employee-list-select-all').prop("checked", true);
                         $('#employee-list-select-all').prop("indeterminate", false);   
                     } else {
@@ -111,35 +112,34 @@
                 } else {
                     ag_selected_employees.splice( index, 1 );
                 }
-
+                console.log(ag_selected_employees);
                 // update the check all checkbox status 
                 if (ag_selected_employees.length == 0) {
-                    $('#employee-list-select-all').prop("checked", false);
-                    $('#employee-list-select-all').prop("indeterminate", false);   
+                    $('#aemployee-list-select-all').prop("checked", false);
+                    $('#aemployee-list-select-all').prop("indeterminate", false);   
                 } else if (ag_selected_employees.length == ag_matched_employees.length) {
-                    $('#employee-list-select-all').prop("checked", true);
-                    $('#employee-list-select-all').prop("indeterminate", false);   
+                    $('#aemployee-list-select-all').prop("checked", true);
+                    $('#aemployee-list-select-all').prop("indeterminate", false);   
                 } else {
-                    $('#employee-list-select-all').prop("checked", false);
-                    $('#employee-list-select-all').prop("indeterminate", true);    
+                    $('#aemployee-list-select-all').prop("checked", false);
+                    $('#aemployee-list-select-all').prop("indeterminate", true);    
                 }
             });
 
-            // // Handle click on "Select all" control
-            // $('#employee-list-select-all').on('click', function() {
-            //     console.log('Selected All BBB');
-            //     // Check/uncheck all checkboxes in the table
-            //     $('#employee-list-table tbody input:checkbox').prop('checked', this.checked);
-            //     if (this.checked) {
-            //         g_selected_employees = g_matched_employees.map((x) => x);
-            //         $('#employee-list-select-all').prop("checked", true);
-            //         $('#employee-list-select-all').prop("indeterminate", false);    
-            //     } else {
-            //         g_selected_employees = [];
-            //         $('#employee-list-select-all').prop("checked", false);
-            //         $('#employee-list-select-all').prop("indeterminate", false);    
-            //     }    
-            // });
+            // Handle click on "Select all" control
+            $('#aemployee-list-select-all').on('click', function() {
+                // Check/uncheck all checkboxes in the table
+                $('#aemployee-list-table tbody input:checkbox').prop('checked', this.checked);
+                if (this.checked) {
+                    ag_selected_employees = ag_matched_employees.map((x) => x);
+                    $('#aemployee-list-select-all').prop("checked", true);
+                    $('#aemployee-list-select-all').prop("indeterminate", false);    
+                } else {
+                    ag_selected_employees = [];
+                    $('#aemployee-list-select-all').prop("checked", false);
+                    $('#aemployee-list-select-all').prop("indeterminate", false);    
+                }    
+            });
 
         });
 

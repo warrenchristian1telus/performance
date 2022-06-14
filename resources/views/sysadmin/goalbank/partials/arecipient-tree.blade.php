@@ -402,9 +402,8 @@ $(document).ready(function() {
                     $(target).html(''); 
                     $(target).html(result);
 
-                    nodes = $(target).find('input:checkbox');
-                    $.each( nodes, function( index, chkbox ) {
-                        console.log( chkbox.value )
+                    anodes = $(target).find('input:checkbox');
+                    $.each( anodes, function( index, chkbox ) {
 						if (ag_selected_employees.includes(chkbox.value)) {
 							$(chkbox).prop('checked', true);
                         } 
@@ -463,17 +462,17 @@ $(document).ready(function() {
                     } 
                 }
 
-                node  = $(e.target).val();
-                if (ag_employees_by_org.hasOwnProperty( node )) {
-                    $.each(ag_employees_by_org[ node  ], function(index, emp) {
+                anode  = $(e.target).val();
+                if (ag_employees_by_org.hasOwnProperty( anode )) {
+                    $.each(ag_employees_by_org[ anode  ], function(index, emp) {
                         if (!ag_selected_employees.includes(emp.employee_id)) {
                             ag_selected_employees.push( emp.employee_id );    
                         } 
                     })  
                 }
 
-                nodes = $(location).find('input:checkbox')
-                $.each( nodes, function( index, chkbox ) {
+                anodes = $(location).find('input:checkbox')
+                $.each( anodes, function( index, chkbox ) {
                     if (ag_employees_by_org.hasOwnProperty(chkbox.value)) {
                         $.each(ag_employees_by_org[chkbox.value], function(index, emp) {
                             if (!ag_selected_employees.includes(emp.employee_id)) {
@@ -510,17 +509,17 @@ $(document).ready(function() {
                     }
                 }
 
-                node = $(e.target).val();
-                if (ag_employees_by_org.hasOwnProperty( node )) {
-                    $.each(ag_employees_by_org[ node  ], function(index, emp) {
+                anode = $(e.target).val();
+                if (ag_employees_by_org.hasOwnProperty( anode )) {
+                    $.each(ag_employees_by_org[ anode  ], function(index, emp) {
                         if (!ag_selected_employees.includes(emp.employee_id)) {
                             ag_selected_employees.push( emp.employee_id );    
                         } 
                     })  
                 }
 
-                nodes = $(location).find('input:checkbox');
-                $.each( nodes, function( index, chkbox ) {
+                anodes = $(location).find('input:checkbox');
+                $.each( anodes, function( index, chkbox ) {
                     if (ag_employees_by_org.hasOwnProperty(chkbox.value)) {
                         $.each(ag_employees_by_org[chkbox.value], function(index, emp) {
                             var index = $.inArray(emp.employee_id, ag_selected_employees);
@@ -540,7 +539,7 @@ $(document).ready(function() {
                 
             }      
 
-            //console.log( g_selected_employees);     
+            // console.log( ag_selected_employees);     
 
             pid = $(this).find('input:first').attr('pid');
             do {
@@ -580,14 +579,14 @@ $(document).ready(function() {
         b_active =  $( e.target ).hasClass( "active" );
         
         if (b_active) {
-            nodes = $('div.collapse.show');
+            anodes = $('div.collapse.show');
             $.each( nodes, function( index, item ) {
                 $(item).collapse('hide');
             });
             $( e.target ).removeClass( "active" );
         } else {
-            nodes = $('div.collapse');
-            $.each( nodes, function( index, item ) {
+            anodes = $('div.collapse');
+            $.each( anodes, function( index, item ) {
                 $(item).collapse('show');
             });
             $( e.target ).addClass( "active" );

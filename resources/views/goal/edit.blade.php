@@ -27,10 +27,10 @@
                     <textarea id="measure_of_success" name="measure_of_success" :value="$goal->measure_of_success">{!!$goal->measure_of_success!!}</textarea>
                 </div>
                 <div class="col-sm-6">
-                    <x-input label="Start Date" type="date" name="start_date" :value="$goal->start_date ? $goal->start_date->format('Y-m-d') : ''" />
+                    <x-input label="Start Date" type="date" name="start_date" id="start_date" :value="$goal->start_date ? $goal->start_date->format('Y-m-d') : ''" />
                 </div>
                 <div class="col-sm-6">
-                    <x-input label="End Date" type="date" name="target_date" :value="$goal->target_date ? $goal->target_date->format('Y-m-d') : ''" />
+                    <x-input label="End Date" type="date" name="target_date" id="target_date" :value="$goal->target_date ? $goal->target_date->format('Y-m-d') : ''" />
                 </div>
                 <div class="col-12 text-center mb-3">
                     <x-button type="submit" class="btn-lg"> Save </x-button>
@@ -96,3 +96,21 @@
     </script>
     @endpush
 </x-side-layout>
+
+
+
+<script>    
+        $( "#start_date" ).change(function() {
+            var start_date = $( "#start_date" ).val();
+            $( "#target_date" ).attr("min",start_date);            
+        });
+        
+        $( "#target_date" ).change(function() {
+            var start_date = $( "#start_date" ).val();
+            if (start_date === '') {
+                alert('Please choose start date first.');
+                $( "#target_date" ).val('');
+            }           
+        });
+        
+</script>    

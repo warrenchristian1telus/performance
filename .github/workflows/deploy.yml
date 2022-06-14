@@ -107,7 +107,7 @@ jobs:
           oc -n ${NAMESPACE} process -f openshift/app/performance-dc.yml \
                 -p APP_NAME=${APP} \
                 -p SITE_URL=${APP_HOST} \
-                -p DB_HOST=mysql \
+                -p DB_HOST=mysql-0.mysql \
                 -p PERFORMANCE_MEMORY_LIMIT=2Gi \
                 -p PROJECT_NAMESPACE=332842-dev \
                 -p DB_SERVICE_NAME=mysql-0.mysql \
@@ -182,7 +182,7 @@ jobs:
           oc -n ${NAMESPACE} process -f openshift/app/performance-dc.yml \
                 -p APP_NAME=${APP} \
                 -p SITE_URL=${APP_HOST} \
-                -p DB_HOST=mysql \
+                -p DB_HOST=mysql-0.mysql \
                 -p PERFORMANCE_MEMORY_LIMIT=2Gi \
                 -p PROJECT_NAMESPACE=332842-test \
                 -p DB_SERVICE_NAME=mysql-0.mysql \
@@ -256,7 +256,7 @@ jobs:
           oc -n ${NAMESPACE} process -f openshift/app/performance-dc.yml \
                 -p APP_NAME=${APP} \
                 -p SITE_URL=${APP_HOST} \
-                -p DB_HOST=mysql \
+                -p DB_HOST=mysql-0.mysql \
                 -p PERFORMANCE_MEMORY_LIMIT=2Gi \
                 -p PROJECT_NAMESPACE=332842-prod \
                 -p DB_SERVICE_NAME=mysql-0.mysql \

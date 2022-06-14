@@ -56,6 +56,16 @@ objects:
       resources:
         requests:
           storage: 250Mi
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: web-app-storage
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 25Gi
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
@@ -93,6 +103,8 @@ objects:
                 - name: config-vol
                   mountPath: /app/.env
                   subPath: .env
+                - name: web-app-storage
+                  mountPath: /var/www/html/storage
               resources:
                 limits:
                   memory: '${PERFORMANCE_MEMORY_LIMIT}'
@@ -170,6 +182,9 @@ objects:
                 items:
                   - key: .env
                     path: .env
+            - name: web-app-storage
+              persistentVolumeClaim:
+                claimName: web-app-storage
       triggers:
         - type: ConfigChange
       revisionHistoryLimit: 10

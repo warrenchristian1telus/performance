@@ -127,7 +127,7 @@
 
             // // Handle click on "Select all" control
             // $('#employee-list-select-all').on('click', function() {
-            //     console.log('Selected All BBB');
+            //     console.log('Selected All');
             //     // Check/uncheck all checkboxes in the table
             //     $('#employee-list-table tbody input:checkbox').prop('checked', this.checked);
             //     if (this.checked) {

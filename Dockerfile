@@ -7,6 +7,7 @@ FROM composer as composer
 # ENV http_proxy=http://198.161.14.25:8080
 
 ENV COMPOSER_MEMORY_LIMIT=-1
+ENV COMPOSER_PROCESS_TIMEOUT=2000
 
 WORKDIR /app
 COPY . /app

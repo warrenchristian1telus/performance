@@ -31,7 +31,9 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     openssl \
     ssh-client \
     zip \
-    unzip
+    unzip \
+    vim \
+    cron
 
 RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \

@@ -21,7 +21,7 @@ jobs:
           echo Git Pull Request Ref: ${{ github.event.pull_request.head.sha }}
           echo OC CLI Version: $(oc version)
           echo Git branch name: ${{ github.ref_name }}
-  
+
   #Build the app
 
   build:
@@ -135,11 +135,11 @@ jobs:
            ATTEMPTS=$((attempts + 1))
            sleep 10
           done
-          oc project ${NAMESPACE}     
+          oc project ${NAMESPACE}
           echo "Listing pods.."
           oc get pods|grep ${APP}
           export ROUTE="$(oc get route ${APP} -o jsonpath='{.spec.host}')"
-          echo "${APP} is exposed at 'https://'${ROUTE}" 
+          echo "${APP} is exposed at 'https://'${ROUTE}"
 
 
   # Deploy App images in Test
@@ -210,11 +210,11 @@ jobs:
            ATTEMPTS=$((attempts + 1))
            sleep 10
           done
-          oc project ${NAMESPACE}     
+          oc project ${NAMESPACE}
           echo "Listing pods.."
           oc get pods|grep ${APP}
           export ROUTE="$(oc get route ${APP} -o jsonpath='{.spec.host}')"
-          echo "${APP} is exposed at 'https://'${ROUTE}" 
+          echo "${APP} is exposed at 'https://'${ROUTE}"
 
  # Deploy App images in Prod
   deployProd:
@@ -284,7 +284,7 @@ jobs:
            ATTEMPTS=$((attempts + 1))
            sleep 10
           done
-          oc project ${NAMESPACE}     
+          oc project ${NAMESPACE}
           echo "Listing pods.."
           oc get pods|grep ${APP}
           export ROUTE="$(oc get route ${APP} -o jsonpath='{.spec.host}')"

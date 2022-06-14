@@ -296,7 +296,7 @@ return [
                 ],
                 [
                     'text' => 'Share Employees',
-                    'url'  => 'hradmin/employeeshares/addindex',
+                    'url'  => 'hradmin/employeeshares/addnew',
                     'active' => ['hradmin/employeeshares/*']
                 ],
                 [

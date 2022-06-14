@@ -1064,7 +1064,7 @@ class EmployeeSharesController extends Controller
         $criteriaList = $this->search_criteria_list();
         $sharedElements = array("A" => "All", "C" => "Conversation", "G" => "Goals" );
 
-        return view('sysadmin.employeeshares.manageindex', compact ('request', 'criteriaList', 'sharedElements', 'sampleText'));
+        return view('sysadmin.employeeshares.manageindex', compact ('request', 'criteriaList', 'sharedElements'));
     }
 
     public function manageindexlist(Request $request) {

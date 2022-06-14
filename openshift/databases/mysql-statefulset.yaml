@@ -79,8 +79,12 @@ spec:
         - name: conf
           mountPath: /etc/mysql/conf.d
         resources:
+          limits:
+              cpu: 250m
+              memory: 1Gi
           requests:
-            memory: 1Gi
+              cpu: 125m
+              memory: 500Mi
         livenessProbe:
           exec:
             command: ["mysqladmin", "ping"]
@@ -151,6 +155,9 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 200Mi
       volumes:
       - name: conf
         emptyDir: {}

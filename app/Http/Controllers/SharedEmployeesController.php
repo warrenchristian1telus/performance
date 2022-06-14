@@ -79,7 +79,7 @@ class SharedEmployeesController extends Controller
             ->when($request->criteria == 'name', function($q){return $q->where('employee_name', 'like', "%" . $request->search_text . "%");})
             ->when($request->criteria == 'job', function($q){return $q->where('job_title', 'like', "%" . $request->search_text . "%");})
             ->when($request->criteria == 'dpt', function($q){return $q->where('deptid', 'like', "%" . $request->search_text . "%");})
-            ->when($request->criteria == 'all', function($q) use ($request) 
+            ->when([$request->criteria == 'all', $request->search_text], function($q) use ($request) 
             {
                 return $q->where(function ($query2) use ($request) 
                 {

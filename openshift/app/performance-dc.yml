@@ -56,6 +56,16 @@ objects:
       resources:
         requests:
           storage: 250Mi
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: web-app-storage
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 25Gi
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
@@ -66,7 +76,7 @@ objects:
       labels:
         service: '${APP_NAME}'
     spec:
-      replicas: 1
+      replicas: 4
       selector:
         deploymentconfig: '${APP_NAME}'
       strategy:
@@ -91,14 +101,16 @@ objects:
                 - containerPort: 8000
               volumeMounts:
                 - name: config-vol
-                  mountPath: /app/.env
+                  mountPath: /var/www/html/.env
                   subPath: .env
+                - name: web-app-storage
+                  mountPath: /var/www/html/storage
               resources:
                 limits:
                   memory: '${PERFORMANCE_MEMORY_LIMIT}'
                   cpu: 500m
                 requests:
-                  memory: '${PERFORMANCE_MEMORY_LIMIT}'
+                  memory: 256Mi
                   cpu: 100m
               env:
                 - name: APP_NAME
@@ -107,8 +119,6 @@ objects:
                   value: '${SITE_NAME}'
                 - name: SITE_URL
                   value: 'https://${SITE_URL}'
-                - name: APACHE_DOCUMENT_ROOT
-                  value: '${APACHE_DOCUMENT_ROOT}'
                 - name: PERFORMANCE_MEMORY_LIMIT
                   value: '${PERFORMANCE_MEMORY_LIMIT}'
                 - name: PERFORMANCE_DATA_PATH
@@ -141,10 +151,8 @@ objects:
                   value: '${GIT_PROJECT}'
                 - name: GIT_TAG
                   value: '${GIT_TAG}'
-                - name: UPSTREAM_URI
-                  value: 'http://performance:8000'
                 - name: HOST_NAME
-                  value: performance-950003-dev.apps.silver.devops.gov.bc.ca
+                  value: '${HOST_NAME}'
                 - name: MYSQL_USER
                   valueFrom:
                     secretKeyRef:
@@ -172,6 +180,9 @@ objects:
                 items:
                   - key: .env
                     path: .env
+            - name: web-app-storage
+              persistentVolumeClaim:
+                claimName: web-app-storage
       triggers:
         - type: ConfigChange
       revisionHistoryLimit: 10
@@ -275,11 +286,6 @@ parameters:
     name: GIT_TAG
     required: true
     value: '${GIT_TAG}'
-  - description: Apache document root directory.
-    displayName: Apache Root
-    name: APACHE_DOCUMENT_ROOT
-    required: true
-    value: '${APACHE_DOCUMENT_ROOT}'
   - description: GitHub Authorization Token (oAuth)
     displayName: GitHub oAuth
     name: GITHUB_AUTH_TOKEN

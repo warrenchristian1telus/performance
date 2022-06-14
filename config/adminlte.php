@@ -45,10 +45,10 @@ return [
     |
     */
 
-    'logo' => 'Performance',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
-    'logo_img_xl' => null,
+    'logo' => '',
+    'logo_img' => 'img/PDPLogo_143x296.png',
+    'logo_img_class' => 'brand-image elevation-3',
+    'logo_img_xl' => 'img/PDPLogo_1143x561.png',
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Performance',
 
@@ -144,7 +144,7 @@ return [
     |
     */
 
-    'sidebar_mini' => true,
+    'sidebar_mini' => 'lg',
     'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
@@ -187,7 +187,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -274,11 +274,11 @@ return [
                     'url'  => 'my-team/my-employees',
                     'active' => ['my-team/my-employees/*'],
                 ],
-                [
-                    'text' => 'Notify Team Members',
-                    'url'  => 'my-team/notify-team-members',
-                    'active' => ['my-team/members/*'],
-                ]
+                // [
+                //     'text' => 'Notify Team Members',
+                //     'url'  => 'my-team/notify-team-members',
+                //     'active' => ['my-team/members/*'],
+                // ]
             ]
         ],
         [
@@ -296,8 +296,8 @@ return [
                 ],
                 [
                     'text' => 'Share Employees',
-                    'url'  => 'hradmin/shared/shareemployee',
-                    'active' => ['hradmin/shared/*']
+                    'url'  => 'hradmin/employeeshares/addindex',
+                    'active' => ['hradmin/employeeshares/*']
                 ],
                 [
                     'text' => 'Excuse Employees',
@@ -306,14 +306,20 @@ return [
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'hradmin/goals/addgoals',
-                    'active' => ['hradmin/goals/*']
+                    'url'  => 'hradmin/goalbank/createindex',
+                    'active' => ['hradmin/goalbank/*']
                 ],
+                // [
+                //     'text' => 'Notifications',
+                //     'url'  => 'hradmin/notifications',
+                //     'active' => ['hradmin/notifications/*']
+                // ],
                 [
-                    'text' => 'Notifications',
-                    'url'  => 'hradmin/notifications',
-                    'active' => ['hradmin/notifications/*']
-                ],
+                    'text' => 'Statistic and Reports',
+                    'url'  => 'hradmin/statistics/goalsummary',
+                    'active' => ['hradmin/statistics/*']
+                ]
+
             ],
         ],
         [
@@ -329,36 +335,59 @@ return [
                     'url'  => 'sysadmin/employees/currentemployees',
                     'active' => ['sysadmin/employees/*']
                 ],
+                // [
+                //     'text' => 'Share Employees (Old)',
+                //     'url'  => 'sysadmin/shared/shareemployee',
+                //     'active' => ['sysadmin/shared/*']
+                // ],
                 [
                     'text' => 'Share Employees',
-                    'url'  => 'sysadmin/shared/shareemployee',
-                    'active' => ['sysadmin/shared/*']
+                    'url'  => 'sysadmin/employeeshares/addindex',
+                    'active' => ['sysadmin/employeeshares/*']
                 ],
+                // [
+                //     'text' => 'Excuse Employees (Old)',
+                //     'url'  => 'sysadmin/excused/excuseemployee',
+                //     'active' => ['sysadmin/excused/*']
+                // ],
                 [
                     'text' => 'Excuse Employees',
-                    'url'  => 'sysadmin/excused/excuseemployee',
-                    'active' => ['sysadmin/excused/*']
+                    'url'  => 'sysadmin/excuseemployees/addindex',
+                    'active' => ['sysadmin/excuseemployees/*']
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'sysadmin/goals/goal-bank',
-                    'active' => ['sysadmin/goals/*']
+                    'url'  => 'sysadmin/goalbank/createindex',
+                    'active' => ['sysadmin/goalbank/*']
                 ],
                 [
                     'text' => 'Unlock Conversations',
                     'url'  => 'sysadmin/unlock/unlockconversation',
                     'active' => ['sysadmin/unlock/*']
                 ],
-                [
-                    'text' => 'Notifications',
-                    'url'  => 'sysadmin/notifications/createnotification',
-                    'active' => ['sysadmin/notifications/*']
-                ],
+                // [
+                //     // 'text' => 'Notifications',
+                //     // 'url'  => 'sysadmin/notifications/createnotification',
+                //     // 'active' => ['sysadmin/notifications/*']
+                //     'text' => 'Notifications',
+                //     'url'  => 'sysadmin/notifications',
+                //     'active' => ['sysadmin/notifications/*']
+                // ],
+                // [
+                //     'text' => 'Access and Permissions (Old)',
+                //     'url'  => 'sysadmin/access/createaccess',
+                //     'active' => ['sysadmin/access/*']
+                // ],
                 [
                     'text' => 'Access and Permissions',
-                    'url'  => 'sysadmin/access/createaccess',
-                    'active' => ['sysadmin/access/*']
+                    'url'  => 'sysadmin/accesspermissions/index',
+                    'active' => ['sysadmin/accesspermissions/*']
                 ],
+                [
+                    'text' => 'Switch Identity',
+                    'url'  => 'sysadmin/switch-identity',
+                    'active' => ['sysadmin/switch-identity/*']
+                ]
             ],
         ],
         [

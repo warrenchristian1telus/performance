@@ -1,9 +1,9 @@
-<div class="card" style="width: 1530px">
+<div class="card" style="width: 100%">
     <form action="" method="get">
-        <table class="uk-table m-3" style="overflow-x: auto; width: 1500px">
+        <table class="uk-table m-3" style="overflow-x: auto; width: 98%">
             <tbody>
                 <tr style="text-align: left;" class="p-1 form-group">
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level0'>Organization</label>
                         <select class="form-control" name="dd_level0" id="dd_level0">
                             @if ( old('dd_level0') && session()->get('level0') )
@@ -11,7 +11,7 @@
                             @endif
                         </select>
                     </td>
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level1'>Level 1</label>
                         <select class="form-control" name="dd_level1" id="dd_level1">
                             @if ( old('dd_level1') && session()->get('level1') )
@@ -19,7 +19,7 @@
                             @endif
                         </select>
                     </td>
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level2'>Level 2</label>
                         <select class="form-control" name="dd_level2" id="dd_level2">
                             @if ( old('dd_level2') && session()->get('level2') )
@@ -27,7 +27,7 @@
                             @endif
                         </select>
                     </td>
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level3'>Level 3</label>
                         <select class="form-control" name="dd_level3" id="dd_level3">
                             @if ( old('dd_level3') && session()->get('level3') )
@@ -35,7 +35,7 @@
                             @endif
                         </select>
                     </td>
-                    <td class="p-1 form-group" style="text-align: left; width: 300px; ">
+                    <td class="p-1 form-group" style="text-align: left; width: 20%; ">
                         <label for='dd_level4'>Level 4</label>
                         <select class="form-control" name="dd_level4" id="dd_level4">
                             @if ( old('dd_level4') && session()->get('level4') )
@@ -59,7 +59,7 @@
                     </td>
                     <td style="text-align: left; align: center; vertical-align: bottom; width: 300px; " class="p-1 form-group">
                         <span class="float-left float-bottom">  
-                            {{-- <button type="submit" class="btn btn-primary" name="btn_search" value="btn_search" id="btn_search" style="width: 140px; " formaction="{{ route('hradmin.myorg') }}">Search</button> --}}
+                            {{-- <button type="submit" class="btn btn-primary" name="btn_search" value="btn_search" id="btn_search" style="width: 140px; " formaction="{{ route('sysadmin.myorg') }}">Search</button> --}}
                             <button type="submit" class="btn btn-primary" name="btn_search" value="btn_search" id="btn_search" style="width: 140px; " formaction="">Search</button>
                             <button type="reset" class="btn btn-secondary" name="btn_search_reset" value="btn_reset" id="btn_search_reset" style="width: 140px; " formaction="">Reset</button>
                         </span>
@@ -100,7 +100,7 @@
         placeholder: 'Select Organization',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-organizations'
+            url: '/sysadmin/org-organizations'
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -122,7 +122,7 @@
         placeholder: 'Select Level 1',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-programs' 
+            url: '/sysadmin/org-programs' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -145,7 +145,7 @@
         placeholder: 'Select Level 2',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-divisions' 
+            url: '/sysadmin/org-divisions' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -169,7 +169,7 @@
         placeholder: 'Select Level 3',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-branches' 
+            url: '/sysadmin/org-branches' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -194,7 +194,7 @@
         placeholder: 'Select Level 4',
         allowClear: true,
         ajax: {
-            url: '/hradmin/org-level4' 
+            url: '/sysadmin/org-level4' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -248,7 +248,7 @@
         $('#dd_level2').val(null).trigger('change');
         $('#dd_level3').val(null).trigger('change');
         $('#dd_level4').val(null).trigger('change');
-        // $('#criteria').val('all').trigger('change');
+        $('#criteria').val('all').trigger('change');
         $('#search_text').val(null);
     });
 

@@ -28,31 +28,30 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('notify:daily')
-            ->daily()
-            ->at('10:00');
+        ->dailyAt('08:00');
 
-        $schedule->command('notify:weekly')    
-            ->weeklyOn(1, '6:00');
+        // $schedule->command('notify:weekly')    
+        // ->weeklyOn(1, '6:00');
 
-        $schedule->command('command:getODSOrganizations')
-          ->timezone('America/Vancouver')
-          ->dailyAt('00:25')
-          ->runInBackground();
+        $schedule->command('command:ExportDatabaseToBI')
+        ->timezone('America/Vancouver')
+        ->dailyAt('00:00')
+        ->runInBackground();
 
         $schedule->command('command:GetODSEmployeeDemographics')
-          ->timezone('America/Vancouver')
-          ->dailyAt('00:00')
-          ->runInBackground();
+        ->timezone('America/Vancouver')
+        ->dailyAt('00:10')
+        ->runInBackground();
 
-        // $schedule->command('command:StoreODSData')
-        //   ->timezone('America/Vancouver')
-        //   ->hourlyAt(1)
-        //   ->runInBackground();
-
-        $schedule->command('command:getODSOrgNodes')
-          ->timezone('America/Vancouver')
-          ->dailyAt('00:15')
-          ->runInBackground();
+        $schedule->command('command:BuildOrgTree')
+        ->timezone('America/Vancouver')
+        ->dailyAt('00:20')
+        ->runInBackground();
+  
+        $schedule->command('command:SyncUserProfile')
+        ->timezone('America/Vancouver')
+        ->dailyAt('00:25')
+        ->runInBackground();
 
     }
 

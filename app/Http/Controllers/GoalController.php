@@ -14,6 +14,7 @@ use App\Scopes\NonLibraryScope;
 use App\DataTables\GoalsDataTable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\DashboardNotification;
 use App\Http\Requests\Goals\CreateGoalRequest;
 use App\Http\Requests\Goals\EditSuggestedGoalRequest;
@@ -34,7 +35,7 @@ class GoalController extends Controller
         $goaltypes = GoalType::all()->toArray();
         $tags = Tag::all()->toArray();
         $user = User::find($authId);
-
+        
         $myTeamController = new MyTeamController(); 
         $employees = $myTeamController->myEmployeesAjax();
 
@@ -42,11 +43,21 @@ class GoalController extends Controller
         ->with('user')
         ->with('goalType');
         $type = 'past';
+        
+        $type_desc_arr = array();
+        foreach($goaltypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {                
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". str_replace($goalType['name'] . " Goals","",$goalType['description']);
+                array_push($type_desc_arr, $item);
+            }
+        }
+        $type_desc_str = implode('<br/><br/>',$type_desc_arr);
+        
         if ($request->is("goal/current")) {
             $goals = $query->where('status', 'active')
             ->paginate(8);
             $type = 'current';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags', 'type_desc_str'));
         } else if ($request->is("goal/supervisor")) {
             //$user = Auth::user();
             // TO remove already copied goals.
@@ -55,11 +66,12 @@ class GoalController extends Controller
             /* ->whereNotIn('goals.id', $referencedGoals ) */
             ->paginate(8);
             $type = 'supervisor';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags', 'type_desc_str'));
         }
         $goals = $query->where('status', '<>', 'active')
         ->paginate(4);
-        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags'));
+        
+        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags', 'type_desc_str'));
     }
 
     /**
@@ -82,13 +94,18 @@ class GoalController extends Controller
     public function store(CreateGoalRequest $request)
     {
         $input = $request->validated();
-
+        $tags = '';
         $input['user_id'] = Auth::id();
-        $tags = $input['tag_ids'];
-        unset($input['tag_ids']);
+        
+        if(isset($input['tag_ids'])) {
+            $tags = $input['tag_ids'];
+            unset($input['tag_ids']);
+        }
 
         $goal = Goal::create($input);
-        $goal->tags()->sync($tags);
+        if ($tags != '') {
+            $goal->tags()->sync($tags);
+        }
         return response()->json(['success' => true, 'message' => 'Goal Created successfully']);
     }
 
@@ -156,12 +173,22 @@ class GoalController extends Controller
         ->where('user_id', Auth::id())
         ->where('id', $id)
         ->with('goalType')
+        ->with('tags')        
         ->firstOrFail();
 
-        $goaltypes = GoalType::all(['id', 'name']);
-        $tags = Tag::all(["id","name"])->toArray();
+        $goaltypes = GoalType::all()->toArray();
+        $tags = Tag::all(["id","name", "description"])->toArray();
+        
+        $type_desc_arr = array();
+        foreach($goaltypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {                
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". str_replace($goalType['name'] . " Goals","",$goalType['description']);
+                array_push($type_desc_arr, $item);
+            }
+        }
+        $type_desc_str = implode('<br/><br/>',$type_desc_arr);
 
-        return view('goal.edit', compact("goal", "goaltypes", "tags"));
+        return view('goal.edit', compact("goal", "goaltypes", "type_desc_str", "tags"));
         // return redirect()->route('goal.edit', $id);
     }
 
@@ -221,10 +248,35 @@ class GoalController extends Controller
     }
 
     public function goalBank(Request $request) {
+        $tags = Tag::all()->toArray();
+        $tags_input = $request->tag_ids;     
+
+        $adminGoals = Goal::withoutGlobalScopes()
+        ->join('users', 'goals.user_id', '=', 'users.id')  
+        ->join('goal_bank_orgs', 'goals.id', '=', 'goal_bank_orgs.goal_id')
+        ->join('admin_orgs', function($join) use ($request) {
+            $join->on('admin_orgs.organization', '=', 'goal_bank_orgs.organization')
+            ->on('admin_orgs.level1_program', '=', 'goal_bank_orgs.level1_program')
+            ->on('admin_orgs.level2_division', '=', 'goal_bank_orgs.level2_division')
+            ->on('admin_orgs.level3_branch', '=', 'goal_bank_orgs.level3_branch')
+            ->on('admin_orgs.level4', '=', 'goal_bank_orgs.level4');
+        })
+        ->where('admin_orgs.user_id', '=', Auth::id())
+        ->where('admin_orgs.version', '=', 1)
+        ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
+        ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id')    
+        ->leftjoin('goal_types', 'goal_types.id', '=', 'goals.goal_type_id')            
+        ->select('goals.id', 'goals.title', 'goals.goal_type_id', 'goals.created_at', 'goals.user_id', 'goals.is_mandatory','goal_types.name as typename','users.name as username',DB::raw('group_concat(tags.name) as tagnames'));
+        $adminGoals = $adminGoals->groupBy('goals.id', 'goals.title', 'goals.goal_type_id', 'goals.created_at', 'goals.user_id', 'users.name', 'goals.is_mandatory');
+        // ->paginate(10);
+
         $query = Goal::withoutGlobalScope(NonLibraryScope::class)
         ->where('is_library', true)
-        ->with('goalType')
-        ->with('user');
+        ->join('users', 'goals.user_id', '=', 'users.id')          
+        ->leftjoin('goal_types', 'goal_types.id', '=', 'goals.goal_type_id')    
+        ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
+        ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id');    
+        
         if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
             if ($request->is_mandatory == "1") {
                 $query = $query->where('is_mandatory', $request->is_mandatory);
@@ -239,12 +291,16 @@ class GoalController extends Controller
 
         if ($request->has('goal_type') && $request->goal_type) {
             $query = $query->whereHas('goalType', function($query) use ($request) {
-                return $query->where('id', $request->goal_type);
+                return $query->where('goal_type_id', $request->goal_type);
             });
+        }
+        
+        if ($request->has('tag_id') && $request->tag_id) {
+            $query = $query->where('goal_tags.tag_id', "=", "$request->tag_id");
         }
 
         if ($request->has('title') && $request->title) {
-            $query = $query->where('title', "LIKE", "%$request->title%");
+            $query = $query->where('goal_tags.goal_id', "LIKE", "%$request->title%");
         }
 
         if ($request->has('date_added') && $request->date_added && Str::lower($request->date_added) !== 'any') {
@@ -266,18 +322,37 @@ class GoalController extends Controller
         $query->whereHas('sharedWith', function($query) {
             $query->where('user_id', Auth::id());
         });
-
-        $bankGoals = $query->get();
-        $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
+        $query->groupBy('goals.id', 'goals.title', 'goals.goal_type_id', 'goals.created_at', 'goals.user_id', 'goals.is_mandatory');
+        // $bankGoals = $query->get();
+        
+        // $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
+        $query = $query->select('goals.id', 'goals.title', 'goals.goal_type_id', 'goals.created_at', 'goals.user_id', 'goals.is_mandatory','goal_types.name as typename','users.name as username',DB::raw('group_concat(tags.name) as tagnames'));
+        $query = $query->union($adminGoals);
+        // $query = $query->groupBy('goals.id');
+        $bankGoals = $query->paginate(10);
+        $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
 
 
         $myTeamController = new MyTeamController();
         $suggestedGoalsData = $myTeamController->showSugggestedGoals('my-team.goals.bank', false);
 
-        return view('goal.bank', array_merge(compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        // $compacted = compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy');
+        // dd($compacted);
+        // $merged = array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData);
+        // dd($merged);
+        $type_desc_arr = array();
+        foreach($goalTypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {                
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". str_replace($goalType['name'] . " Goals","",$goalType['description']);
+                array_push($type_desc_arr, $item);
+            }
+        }
+        $type_desc_str = implode('<br/><br/>',$type_desc_arr);
+
+        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'type_desc_str', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
     }
 
-    private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes) {
+    private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes, &$tagsList) {
         $mandatoryOrSuggested = [
             [
                 "id" => '',
@@ -310,6 +385,12 @@ class GoalController extends Controller
 
         $goalTypes = GoalType::all()->toArray();
         array_unshift($goalTypes, [
+            "id" => "0",
+            "name" => "Any"
+        ]);
+        
+        $tagsList = Tag::all()->toArray();
+        array_unshift($tagsList, [
             "id" => "0",
             "name" => "Any"
         ]);

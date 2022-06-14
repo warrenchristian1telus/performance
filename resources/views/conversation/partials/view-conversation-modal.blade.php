@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                @if ($type == 'upcoming')
+                                @if ($type == 'upcoming' && 1 === 0)
                                 <x-edit-cancel-save name="conversation_participant_id" id="conv_participant" />
                                 @endif
                             </div>
@@ -62,7 +62,7 @@
 
                 <div class=" d-none" id="info_to_capture">
                     <h6><u>Information to Capture</u></h6>
-
+                    
                     <h6 id="info_capture1">What date will a follow up meeting occur?</h6>
 
                     <div class="row">
@@ -106,6 +106,23 @@
                             @endif
                         </div>
                     </div>
+                    
+                    <div id="comment_area6" style="display: none">
+                    <h6 id="info_capture4" >Supervisor Comments (optional) – provide feedback on area(s) for growth identified by employee above </h6>
+                    <div class="row" >
+                        <div class="col-md-8">
+                             <textarea class="form-control supervisor-comment info_comment6 mb-4 d-none" name="info_comment6" id="info_comment6_edit"></textarea>
+                             <textarea class="form-control supervisor-comment info_comment6 mb-4 btn-conv-edit" name="info_comment6" id="info_comment6" data-id="info_comment6" data-name="info_comment6"></textarea>
+
+                        </div>
+                        <div class="col-md-4">
+                             @if ($type == 'upcoming')
+                             <x-edit-cancel-save name="info_comment6" id="info_comment6" hideEdit="true" />
+                             @endif
+                        </div>
+                    </div>
+                    </div>
+                
                 </div>
 
                 <div>
@@ -230,7 +247,8 @@
                     </form>
                 </div>
                 <div class="mt-3 alert alert-default-warning d-none" id="locked-message">
-                    Conversation records can be un-signed and edited for up to two weeks from initial completion date. After the two week period, a request to unlock the conversation record will need to be submitted to your HR Administrator if changes are required.
+                    <!-- Conversation records can be un-signed and edited for up to two weeks from initial completion date. After the two week period, a request to unlock the conversation record will need to be submitted to your HR Administrator if changes are required. -->
+                    Conversation records can be un-signed and edited for up to two weeks from initial completion date. After the two week period, an AskMyHR request to unlock the conversation record will need to be submitted to Myself > HR Software Systems Support > Performance Development Platform.
                 </div>
                 @endif
                 <div class="mt-3 alert alert-default-warning alert-dismissible" id="supervisor-signoff-message">

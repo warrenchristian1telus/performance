@@ -7,6 +7,7 @@ FROM composer as composer
 # ENV http_proxy=http://198.161.14.25:8080
 
 ENV COMPOSER_MEMORY_LIMIT=-1
+ENV COMPOSER_PROCESS_TIMEOUT=2000
 
 WORKDIR /app
 COPY . /app
@@ -27,7 +28,6 @@ WORKDIR /
 # ENV http_proxy=http://198.161.14.25:8080
 
 RUN apt-get update -y && apt -y upgrade && apt-get install -y \
-    apache2 \
     openssl \
     ssh-client \
     zip \
@@ -78,6 +78,7 @@ RUN echo "deb https://packages.sury.org/php/ buster main" | tee /etc/apt/sources
 RUN docker-php-ext-install pdo pdo_mysql opcache
 
 COPY --chown=www-data:www-data --from=composer /app /var/www/html
+RUN chmod -R 777 /var/www/html/storage
 
 # Copy Server Config files (Apache / PHP)
 COPY --chown=www-data:www-data server_files/apache2.conf /etc/apache2/apache2.conf
@@ -90,5 +91,3 @@ COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apach
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 EXPOSE 8000
-
-CMD ["apache2-foreground"]

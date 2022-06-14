@@ -7,7 +7,7 @@ spec:
     matchLabels:
       app: performance-mysql
   serviceName: mysqlh
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       labels:
@@ -80,10 +80,10 @@ spec:
           mountPath: /etc/mysql/conf.d
         resources:
           limits:
-              cpu: 600m
+              cpu: 1500m
               memory: 2Gi
           requests:
-              cpu: 300m
+              cpu: 750m
               memory: 1Gi
         livenessProbe:
           exec:

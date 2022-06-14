@@ -91,8 +91,4 @@ COPY --chown=www-data:www-data server_files/mods-enabled/expires.load /etc/apach
 COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apache2/mods-enabled/headers.load
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
-RUN cd /var/www/html && \
-	php artisan config:clear && \
-	php artisan config:cache
-
 EXPOSE 8000

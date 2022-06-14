@@ -80,11 +80,11 @@ spec:
           mountPath: /etc/mysql/conf.d
         resources:
           limits:
-              cpu: 250m
-              memory: 1Gi
+              cpu: 600m
+              memory: 2Gi
           requests:
-              cpu: 125m
-              memory: 500Mi
+              cpu: 300m
+              memory: 1Gi
         livenessProbe:
           exec:
             command: ["mysqladmin", "ping"]

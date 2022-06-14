@@ -108,10 +108,10 @@ objects:
               resources:
                 limits:
                   memory: '${PERFORMANCE_MEMORY_LIMIT}'
-                  cpu: 3000m
+                  cpu: 2000m
                 requests:
-                  memory: 6Gi
-                  cpu: 1500m
+                  memory: 2Gi
+                  cpu: 1000m
               env:
                 - name: APP_NAME
                   value: '${APP_NAME}'

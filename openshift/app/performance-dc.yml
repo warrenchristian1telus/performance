@@ -76,7 +76,7 @@ objects:
       labels:
         service: '${APP_NAME}'
     spec:
-      replicas: 3
+      replicas: 2
       selector:
         deploymentconfig: '${APP_NAME}'
       strategy:
@@ -108,10 +108,10 @@ objects:
               resources:
                 limits:
                   memory: '${PERFORMANCE_MEMORY_LIMIT}'
-                  cpu: 1000m
+                  cpu: 3000m
                 requests:
-                  memory: 256Mi
-                  cpu: 100m
+                  memory: 6Gi
+                  cpu: 1500m
               env:
                 - name: APP_NAME
                   value: '${APP_NAME}'

@@ -110,6 +110,7 @@ jobs:
                 -p SITE_URL=${APP_HOST} \
                 -p DB_HOST=mysql-0.mysql \
                 -p PERFORMANCE_MEMORY_LIMIT=4Gi \
+                -p REPLICA_COUNT=1 \
                 -p PROJECT_NAMESPACE=332842-dev \
                 -p DB_SERVICE_NAME=mysql-0.mysql \
                 -p PERFORMANCE_VOLUME_CAPACITY=10Gi \
@@ -185,6 +186,7 @@ jobs:
                 -p SITE_URL=${APP_HOST} \
                 -p DB_HOST=mysql-0.mysql \
                 -p PERFORMANCE_MEMORY_LIMIT=4Gi \
+                -p REPLICA_COUNT=1 \
                 -p PROJECT_NAMESPACE=332842-test \
                 -p DB_SERVICE_NAME=mysql-0.mysql \
                 -p PERFORMANCE_VOLUME_CAPACITY=10Gi \
@@ -259,6 +261,7 @@ jobs:
                 -p SITE_URL=${APP_HOST} \
                 -p DB_HOST=mysql-0.mysql \
                 -p PERFORMANCE_MEMORY_LIMIT=4Gi \
+                -p REPLICA_COUNT=2 \
                 -p PROJECT_NAMESPACE=332842-prod \
                 -p DB_SERVICE_NAME=mysql-0.mysql \
                 -p PERFORMANCE_VOLUME_CAPACITY=10Gi \

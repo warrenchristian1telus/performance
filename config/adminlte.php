@@ -306,7 +306,7 @@ return [
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'hradmin/goalbank/createindex',
+                    'url'  => 'hradmin/goalbank/creategoal',
                     'active' => ['hradmin/goalbank/*']
                 ],
                 // [
@@ -347,7 +347,7 @@ return [
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'sysadmin/goalbank/createindex',
+                    'url'  => 'sysadmin/goalbank/creategoal',
                     'active' => ['sysadmin/goalbank/*']
                 ],
                 [

@@ -64,8 +64,8 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
     //Goal Bank
     Route::group(['middleware' => ['auth']], function() {    
         Route::get('/sysadmin/goalbank', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank');
-        Route::get('/sysadmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.createindex');
-        Route::post('/sysadmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.search');
+        Route::get('/sysadmin/goalbank/creategoal', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.createindex');
+        Route::post('/sysadmin/goalbank/creategoal', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.search');
         Route::get('/sysadmin/goalbank/editpage/{id}', [GoalBankController::class, 'editpage'])->name('sysadmin.goalbank.editpage');
         Route::post('/sysadmin/goalbank/editpage/{id}', [GoalBankController::class, 'editpage'])->name('sysadmin.goalbank.editpagepost');
         Route::get('/sysadmin/goalbank/editone/{id}', [GoalBankController::class, 'editone'])->name('sysadmin.goalbank.editone');
@@ -112,7 +112,7 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::get('/sysadmin/goalbank/eemployees/{id}', [GoalBankController::class,'egetEmployees']);
         Route::get('/sysadmin/goalbank/eemployee-list', [GoalBankController::class, 'egetDatatableEmployees'])->name('sysadmin.goalbank.eemployee.list');
 
-        Route::get('/sysadmin/goalbank/manageexistinggoal', [GoalBankController::class, 'manageindex'])->name('sysadmin.goalbank.manageindex');
+        Route::get('/sysadmin/goalbank/managegoals', [GoalBankController::class, 'manageindex'])->name('sysadmin.goalbank.manageindex');
         Route::get('/sysadmin/goalbank/managegetlist', [GoalBankController::class, 'managegetList'])->name('sysadmin.goalbank.managegetlist');
         Route::get('/sysadmin/goalbank/getgoalorgs/{goal_id}', [GoalBankController::class, 'getgoalorgs'])->name('sysadmin.goalbank.getgoalorgs');
         Route::get('/sysadmin/goalbank/getgoalinds/{goal_id}', [GoalBankController::class, 'getgoalinds'])->name('sysadmin.goalbank.getgoalinds');

@@ -39,8 +39,8 @@ Route::group(['middleware' => ['role:HR Admin']], function ()
     //Goal Bank
     Route::group(['middleware' => ['auth']], function() {    
         Route::get('/hradmin/goalbank', [GoalBankController::class, 'createindex'])->name('hradmin.goalbank');
-        Route::get('/hradmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('hradmin.goalbank.createindex');
-        Route::post('/hradmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('hradmin.goalbank.search');
+        Route::get('/hradmin/goalbank/creategoal', [GoalBankController::class, 'createindex'])->name('hradmin.goalbank.createindex');
+        Route::post('/hradmin/goalbank/creategoal', [GoalBankController::class, 'createindex'])->name('hradmin.goalbank.search');
         Route::get('/hradmin/goalbank/editpage/{id}', [GoalBankController::class, 'editpage'])->name('hradmin.goalbank.editpage');
         Route::post('/hradmin/goalbank/editpage/{id}', [GoalBankController::class, 'editpage'])->name('hradmin.goalbank.editpagepost');
         Route::get('/hradmin/goalbank/editone/{id}', [GoalBankController::class, 'editone'])->name('hradmin.goalbank.editone');
@@ -87,7 +87,7 @@ Route::group(['middleware' => ['role:HR Admin']], function ()
         Route::get('/hradmin/goalbank/eemployees/{id}', [GoalBankController::class,'egetEmployees']);
         Route::get('/hradmin/goalbank/eemployee-list', [GoalBankController::class, 'egetDatatableEmployees'])->name('hradmin.goalbank.eemployee.list');
 
-        Route::get('/hradmin/goalbank/manageexistinggoal', [GoalBankController::class, 'manageindex'])->name('hradmin.goalbank.manageindex');
+        Route::get('/hradmin/goalbank/managegoals', [GoalBankController::class, 'manageindex'])->name('hradmin.goalbank.manageindex');
         Route::get('/hradmin/goalbank/managegetlist', [GoalBankController::class, 'managegetList'])->name('hradmin.goalbank.managegetlist');
         Route::get('/hradmin/goalbank/getgoalorgs/{goal_id}', [GoalBankController::class, 'getgoalorgs'])->name('hradmin.goalbank.getgoalorgs');
         Route::get('/hradmin/goalbank/getgoalinds/{goal_id}', [GoalBankController::class, 'getgoalinds'])->name('hradmin.goalbank.getgoalinds');

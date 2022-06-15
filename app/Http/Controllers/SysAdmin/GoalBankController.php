@@ -1947,7 +1947,7 @@ public function agetOrganizations(Request $request) {
                 $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="/sysadmin/goalbank/deletegoal/' . $row->id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
                 return $btn;
             })
-            ->rawColumns(['goal_type_name', 'created_by', 'action'])
+            ->rawColumns(['goal_type_name', 'created_by', 'action', 'title-link'])
             ->make(true);
         }
     }

@@ -35,6 +35,15 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     vim \
     cron
 
+# Copy cron file to the cron.d directory
+COPY /laravelcron /etc/cron.d/laravelcron
+
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/laravelcron
+
+# Apply cron job
+RUN crontab /etc/cron.d/laravelcron
+
 RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
 	apt-get update -y && \
@@ -94,3 +103,6 @@ COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apach
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 EXPOSE 8000
+
+# Add a command to base-image entrypont script
+RUN sed -i 's/^exec /service cron start\n\nexec /' /usr/local/bin/apache2-foreground

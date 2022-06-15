@@ -72,7 +72,6 @@ RUN echo "deb https://packages.sury.org/php/ buster main" | tee /etc/apt/sources
 RUN docker-php-ext-install pdo pdo_mysql opcache
 
 COPY --chown=www-data:www-data --from=composer /app /var/www/html
-RUN chmod -R 777 /var/www/html/storage
 
 # Copy Server Config files (Apache / PHP)
 COPY --chown=www-data:www-data server_files/apache2.conf /etc/apache2/apache2.conf
@@ -83,5 +82,8 @@ COPY --chown=www-data:www-data server_files/opcache.ini /usr/local/etc/php/conf.
 COPY --chown=www-data:www-data server_files/mods-enabled/expires.load /etc/apache2/mods-enabled/expires.load
 COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apache2/mods-enabled/headers.load
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
+
+# Create cache and session storage structure
+COPY --chown=www-data:www-data server_files/storage /var/www/html
 
 EXPOSE 8000

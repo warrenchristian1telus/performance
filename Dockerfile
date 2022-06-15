@@ -3,8 +3,6 @@
 #
 FROM composer as composer
 
-# Local proxy config (remove for server deployment)
-# ENV http_proxy=http://198.161.14.25:8080
 
 ENV COMPOSER_MEMORY_LIMIT=-1
 ENV COMPOSER_PROCESS_TIMEOUT=2000
@@ -12,10 +10,12 @@ ENV COMPOSER_PROCESS_TIMEOUT=2000
 WORKDIR /app
 COPY . /app
 
-RUN COMPOSER_PROCESS_TIMEOUT=600 composer update --ignore-platform-reqs
+RUN composer update --ignore-platform-reqs
 RUN composer require kalnoy/nestedset doctrine/dbal awobaz/compoships --ignore-platform-reqs
+
 RUN chgrp -R 0 /app && \
     chmod -R g=u /app
+
 
 #
 # Build Server Deployment Image
@@ -31,7 +31,18 @@ RUN apt-get update -y && apt -y upgrade && apt-get install -y \
     openssl \
     ssh-client \
     zip \
-    unzip
+    unzip \
+    vim \
+    cron
+
+# Copy cron file to the cron.d directory
+COPY /laravelcron /etc/cron.d/laravelcron
+
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/laravelcron
+
+# Apply cron job
+RUN crontab /etc/cron.d/laravelcron
 
 RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
@@ -80,6 +91,7 @@ RUN docker-php-ext-install pdo pdo_mysql opcache
 COPY --chown=www-data:www-data --from=composer /app /var/www/html
 RUN chmod -R 777 /var/www/html/storage
 
+
 # Copy Server Config files (Apache / PHP)
 COPY --chown=www-data:www-data server_files/apache2.conf /etc/apache2/apache2.conf
 COPY --chown=www-data:www-data server_files/ports.conf /etc/apache2/ports.conf
@@ -91,3 +103,6 @@ COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apach
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 EXPOSE 8000
+
+# Add a command to base-image entrypont script
+RUN sed -i 's/^exec /service cron start\n\nexec /' /usr/local/bin/apache2-foreground

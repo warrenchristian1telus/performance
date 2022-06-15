@@ -84,6 +84,6 @@ COPY --chown=www-data:www-data server_files/mods-enabled/headers.load /etc/apach
 COPY --chown=www-data:www-data server_files/mods-enabled/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 # Create cache and session storage structure
-COPY --chown=www-data:www-data server_files/storage /var/www/html
+RUN bash -c 'mkdir -p /var/www/html/storage{app,framework,logs}'
 
 EXPOSE 8000

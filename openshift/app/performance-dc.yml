@@ -295,4 +295,3 @@ parameters:
     displayName: Number of Replicas
     name: REPLICA_COUNT
     required: true
-    value: '${REPLICA_COUNT}'

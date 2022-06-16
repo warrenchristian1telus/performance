@@ -71,13 +71,17 @@
                     <x-goal-status :status="$goal->status"></x-goal-status>
                 @endif
                 <span style="float: right">
-                <x-button size="md" type="button" icon='trash' class="ml-1 text-light" aria-label="Delete button" tooltip="Click to permanently delete this goal" style="danger" data-action="delete-goal" data-goal-id="{{$goal->id}}" data-confirmation="{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}"></x-button>    
-                    
-                <x-button
-                :href='route("goal.show", $goal->id)'
-                :tooltip="__('Click to view the details of this goal.')"
-                tooltipPosition="bottom" class="ml-2">{{__('View')}}</x-button>
-                </span>
+                <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}')">
+                    @csrf
+                    @method('DELETE')
+                    <x-button size="md" icon='trash' class="ml-1 text-light" aria-label="Delete button" tooltip="Click to permanently delete this goal" style="danger"></x-button>
+                    <x-button
+                    :href='route("goal.show", $goal->id)'
+                    :tooltip="__('Click to view the details of this goal.')"
+                    tooltipPosition="bottom" class="ml-2">{{__('View')}}</x-button>
+                    </span>
+                </form>  
+                
             </div>
             @endif
             

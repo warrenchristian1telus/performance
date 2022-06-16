@@ -19,9 +19,7 @@
                     <x-xdropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goal->tags->toArray(), 'id')" class="tags" multiple/>
                 </div>
                 <div class="col-12">
-                    <!-- <x-textarea id="what" label="What" name="what" :value="$goal->what" /> -->
-                    <label for='what'>Description</label>
-                    <textarea id="what" name="what" :value="$goal->what">{!!$goal->what!!}</textarea>
+                   <x-textarea id="what" label="What" name="what" :value="$goal->what" />
                     <!-- <x-textarea id="measure_of_success" class="content' label="Measures of Success" name="measure_of_success" :value="$goal->measure_of_success" /> -->
                     <label for='measure_of_success'>Measure of Success</label>
                     <textarea id="measure_of_success" name="measure_of_success" :value="$goal->measure_of_success">{!!$goal->measure_of_success!!}</textarea>

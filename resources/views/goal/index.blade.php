@@ -70,7 +70,6 @@
                     </div>
                        <div class="col-6">
                     <x-input-modal label="Goal Title" id="goal_title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance Development Platform.' />
-                    <small class="text-danger error-title"></small>
                     </div>
                     <div class="col-sm-6">
                         <x-xdropdown :list="$tags" label="Tags" name="tag_ids[]"  class="tags" tooltipField="description" displayField="name" multiple/>
@@ -89,11 +88,11 @@
                     <small class="text-danger error-measure_of_success"></small>
                 </div>
                 <div class="col-sm-6">
-                    <x-input label="Start Date " class="error-start" type="date" name="start_date"  />
+                    <x-input label="Start Date " class="error-start" type="date" name="start_date" id="start_date" />
                     <small  class="text-danger error-start_date"></small>
                 </div>
                 <div class="col-sm-6">
-                    <x-input label="End Date " class="error-target" type="date" name="target_date"  />
+                    <x-input label="End Date " class="error-target" type="date" name="target_date" id="target_date" />
                      <small  class="text-danger error-target_date"></small>
                 </div>
                 
@@ -324,8 +323,32 @@
                     }
                 });
             });
-        });
+        });        
     </script>
     </x-slot>
 
 </x-side-layout>
+
+<script>    
+        $( "#start_date" ).change(function() {
+            var start_date = $( "#start_date" ).val();
+            $( "#target_date" ).attr("min",start_date);            
+        });
+        
+        $( "#target_date" ).change(function() {
+            var start_date = $( "#start_date" ).val();
+            if (start_date === '') {
+                alert('Please choose start date first.');
+                $( "#target_date" ).val('');
+            }           
+        });
+              
+</script>    
+
+<style>
+    .multiselect {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 275px;
+    }
+</style>    

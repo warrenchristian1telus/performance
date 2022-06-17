@@ -85,11 +85,11 @@
 					<div class="row">
 						<div class="col col-2">
 							<label for='elements' title='Elements to Share Tooltip'>Elements to Share
-								<select name="elements" class="form-control" id="elements">
-									@foreach($sharedElements as $rid => $desc)
-										<option value = {{ $rid }} > {{ $desc }} </option>
-									@endforeach
-								</select>
+                                <select name="elements" class="form-control" id="elements">
+                                    @foreach($sharedElements as $shareElement)
+                                        <option value = {{ $shareElement->id }} > {{ $shareElement->name }} </option>
+                                    @endforeach
+                                </select>
 							</label>
 						</div>
 						<div class="col col-10">

@@ -123,7 +123,7 @@
                     columns: 
                     [
                         {title: 'Goal Title', ariaTitle: 'Goal Title', target: 0, type: 'string', data: 'title'
-                            , name: 'goal_type_name', searchable: false, className: 'dt-nowrap show-modal'
+                            , name: 'title', searchable: false, className: 'dt-nowrap show-modal'
                             , render: function(data, type, row) { return '<a href="#' + row.id + '" onclick="showModal(' + row.id 
                             + ')" class="button edit-button">' + row.title + '</a>' }},
                         {title: 'Goal Type', ariaTitle: 'Goal Type', target: 0, type: 'string', data: 'goal_type_name'

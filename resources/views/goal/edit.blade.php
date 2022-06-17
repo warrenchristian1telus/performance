@@ -24,7 +24,7 @@
                    <x-textarea-modal id="what" name="what" :value="$goal->what" />
                    </div>
                 <div class = "col-12">
-                    <x-textarea-modal id="measure_of_success" label="Measure of Success" name="measure_of_success" class="content" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$goal->measure_of_success" />
+                    <x-textarea-modal id="measure_of_success" label="Measures of Success" name="measure_of_success" class="content" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$goal->measure_of_success" />
                 </div>                                        
                 <div class="col-sm-6">
                     <x-input label="Start Date" type="date" name="start_date" id="start_date" :value="$goal->start_date ? $goal->start_date->format('Y-m-d') : ''" />

@@ -268,7 +268,7 @@
         }
     });
 
-        $(document).ready(() => {
+        $(document).ready(() => {            
             $(".tags").multiselect({
                 enableFiltering: true,
                 enableCaseInsensitiveFiltering: true
@@ -342,6 +342,11 @@
                 $( "#target_date" ).val('');
             }           
         });
+        
+        $(document).ready(function(){
+            $(":button").removeClass('text-center');
+            $(":button").addClass('text-left');
+        });
               
 </script>    
 
@@ -352,3 +357,5 @@
             width: 275px;
     }
 </style>    
+ 
+    

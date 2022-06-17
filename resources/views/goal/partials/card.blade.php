@@ -4,14 +4,12 @@
                 <a href="{{route("goal.show", $goal->id)}}" class="p-2">
                     <p class="card-title">
                         {{ $goal->start_date_human}}
-                            <span class="mx-4"><x-svg-icon icon="arrow-right" /></span>
+                            <span class="mx-4">&#8212;</span>
                         {{ $goal->target_date_human}}
                     </p>
                 </a>
                 <div class="flex-fill"></div>
-                @if ($allowEditModal ?? false)
-                    <x-button icon='edit' class="text-light edit-suggested-goal" data-goal-id="{{$goal->id}}" aria-label="Edit button" data-toggle="modal" data-target="#edit-suggested-goal-modal"></x-button>
-                @endif
+                
                 @if (($type ?? '') !== 'supervisor' && !$disableEdit && 1 == 0)
                 <form id="delete-goal-{{$goal->id}}" action="{{ route('goal.destroy', $goal->id)}}" method="POST" onsubmit="return confirm('{{ $goalDeleteConfirmationText ?? 'Are you sure you want to permanently delete this goal?' }}')">
                     @csrf

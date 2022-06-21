@@ -9,7 +9,7 @@ use App\Http\Controllers\SysAdmin\GoalBankController;
 use App\Http\Controllers\SysAdmin\NotificationController;
 use App\Http\Controllers\SysAdmin\EmployeeSharesController;
 use App\Http\Controllers\SysAdmin\ExcuseEmployeesController;
-use App\Http\Controllers\SysAdmin\StatisticsReportController;
+use App\Http\Controllers\SysAdmin\SysadminStatisticsReportController;
 use App\Http\Controllers\SysAdmin\AccessPermissionsController;
 use App\Http\Controllers\SysAdmin\UnlockConversationController;
 
@@ -45,14 +45,14 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
     });
 
 
-    Route::get('sysadmin/statistics/goalsummary', [StatisticsReportController::class, 'goalsummary'])->name('sysadmin.statistics.goalsummary');
-    Route::get('sysadmin/statistics/goalsummary-export', [StatisticsReportController::class, 'goalSummaryExport'])->name('sysadmin.statistics.goalsummary.export');
-    Route::get('sysadmin/statistics/conversationsummary', [StatisticsReportController::class, 'conversationsummary'])->name('sysadmin.statistics.conversationsummary');
-    Route::get('sysadmin/statistics/conversationsummary-export', [StatisticsReportController::class, 'conversationSummaryExport'])->name('sysadmin.statistics.conversationsummary.export');
-    Route::get('sysadmin/statistics/sharedsummary', [StatisticsReportController::class, 'sharedsummary'])->name('sysadmin.statistics.sharedsummary');
-    Route::get('sysadmin/statistics/sharedsummary-export', [StatisticsReportController::class, 'sharedSummaryExport'])->name('sysadmin.statistics.sharedsummary.export');
-    Route::get('sysadmin/statistics/excusedsummary', [StatisticsReportController::class, 'excusedsummary'])->name('sysadmin.statistics.excusedsummary');
-    Route::get('sysadmin/statistics/excusedsummary-export', [StatisticsReportController::class, 'excusedSummaryExport'])->name('sysadmin.statistics.excusedsummary.export');
+    Route::get('sysadmin/statistics/goalsummary', [SysadminStatisticsReportController::class, 'goalsummary'])->name('sysadmin.statistics.goalsummary');
+    Route::get('sysadmin/statistics/goalsummary-export', [SysadminStatisticsReportController::class, 'goalSummaryExport'])->name('sysadmin.statistics.goalsummary.export');
+    Route::get('sysadmin/statistics/conversationsummary', [SysadminStatisticsReportController::class, 'conversationsummary'])->name('sysadmin.statistics.conversationsummary');
+    Route::get('sysadmin/statistics/conversationsummary-export', [SysadminStatisticsReportController::class, 'conversationSummaryExport'])->name('sysadmin.statistics.conversationsummary.export');
+    Route::get('sysadmin/statistics/sharedsummary', [SysadminStatisticsReportController::class, 'sharedsummary'])->name('sysadmin.statistics.sharedsummary');
+    Route::get('sysadmin/statistics/sharedsummary-export', [SysadminStatisticsReportController::class, 'sharedSummaryExport'])->name('sysadmin.statistics.sharedsummary.export');
+    Route::get('sysadmin/statistics/excusedsummary', [SysadminStatisticsReportController::class, 'excusedsummary'])->name('sysadmin.statistics.excusedsummary');
+    Route::get('sysadmin/statistics/excusedsummary-export', [SysadminStatisticsReportController::class, 'excusedSummaryExport'])->name('sysadmin.statistics.excusedsummary.export');
 
 
 
